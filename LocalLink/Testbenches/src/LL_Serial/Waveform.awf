@@ -1,0 +1,136 @@
+$WAVE4
+$RESOLUTION 1000
+I 1 "e#9#std_logicc9 UX01ZWLH-"
+$IN 1 1 "UUT/U3/ARESET"
+$IN 2 1 7 0 CLK
+I 2 "r#11#t_ll_mosi326 SOF e#9#std_logicc9 UX01ZWLH-EOF e#9#std_logicc9 UX01ZWLH-DATA a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-DREM a#28#std_logic_vector(1 downto 0)1 ricd1 0 e#9#std_logicc9 UX01ZWLH-DVAL e#9#std_logicc9 UX01ZWLH-SUPPORT_BUSY e#9#std_logicc9 UX01ZWLH-"
+I 3 "a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-"
+I 4 "a#28#std_logic_vector(1 downto 0)1 ricd1 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS IN 3 2 6 7 0 TX_MOSI
+$CHILD 6 2 3
+$CHILD 6 2 3
+$CHILD 39 3 3
+$SC 4 5 7-38 +2-+3
+I 5 "r#9#t_ll_miso2 AFULL e#9#std_logicc9 UX01ZWLH-BUSY e#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 5 2 11 0 ISO
+$SC +1 +1
+I 6 "a#28#std_logic_vector(8 downto 0)1 ricd8 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS S 543 6 9 5 0 "12/fifo_wr_count_512"
+$SC +1-+8
+$OUT 541 1 8 0 WR_ERR
+$OUT +1 1 8 0 FULL
+$BUS OUT 47 2 6 5 0 "3/RX_MOSI"
+$CHILD +3 2 47
+$CHILD 83 3 47
+$SC +1 +1 +2-82 +2-+3
+$S +1 1 7 0 rx_afull_previous
+$BUS IN +1 5 2 7 0 RX_MISO
+$SC +1 +1
+$S +1 1 7 0 tx_busy
+$S +1 1 14 0 _tx
+$S +1 1 15 1 r
+$S +1 1 10 0 dval
+$VARIABLE 553 1 7 0 waiting_for_ack
+$VARIABLE +1 1 7 0 nfc_flow_pending
+$VARIABLE +1 1 11 8 stop
+$VARIABLE 708 1 7 0 tx_data_ready
+I 7 "a#20#byte_array_t(1 to 5)1 rict1 5 a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-"
+I 8 "a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS VARIABLE 557 7 5 10 1 byte_arra
+$CHILD +1 0 557
+$CHILD +2 1 557
+$CHILD +3 2 557
+$CHILD +4 3 557
+$CHILD +5 4 557
+$SC +6-+39
+$BUS VARIABLE +87 8 8 7 0 last_request
+$SC +1-+7
+$S 470 1 7 0 rx_afull_previous
+$IN +70 1 7 0 CLK
+$VARIABLE 453 1 7 0 need_to_send_ack
+$VARIABLE +82 1 15 4 toggle
+$S 454 1 8 0 fc_ack_received
+$BUS VARIABLE 144 8 8 7 0 "rxloop/byte"
+$SC +1-+7
+$BUS VARIABLE +1 7 5 14 0 rx_byte_array
+$CHILD +1 0 153
+$CHILD +10 1 153
+$CHILD +19 2 153
+$CHILD +28 3 153
+$CHILD +37 4 153
+$SC +2-+7 +2-+7 +2-+7 +2-+7 +2-+7
+$S 536 1 7 0 need_to_toggle_dval
+I 9 "f#4#realrrct-1e+308 1e+308 "
+$S 199 9 7 0 baud_rate_uart
+$S +1 1 7 0 serial_tx_i
+$OUT 532 1 7 0 SERIAL_TX
+$IN +1 1 14 1 R
+$NOMODE 201 0 "" -1 0 200000000
+$IN +1 1 "UUT/U9/CLK"
+$IN +1 1 7 0 ARESET
+$BUS IN 407 2 6 7 0 TX_MOSI
+$CHILD +3 2 407
+$CHILD +36 3 407
+$SC +1 +1 +2-+31 +2-+3
+$BUS OUT +1 5 2 11 0 ISO
+$SC +1 +1
+$BUS OUT 204 2 6 7 0 RX_MOSI
+$CHILD +3 2 204
+$CHILD +3 2 204
+$CHILD +36 3 204
+$SC +1 +1 +2-+31 +2-+3
+$BUS IN +1 5 2 11 0 ISO
+$SC +1 +1
+$S 539 1 7 0 need_to_toggle_dval
+$BUS S 248 2 6 7 0 rx_mosi_i
+$CHILD +3 2 248
+$CHILD +3 2 248
+$CHILD +36 3 248
+$SC +1 +1 +2-+31 +2-+3
+$BUS S +1 6 9 5 0 "11/fifo_wr_count_512"
+$SC +1-+8
+$OUT +1 1 8 0 WR_ERR
+$OUT +1 1 8 0 FULL
+$S 529 1 5 0 "9/tx_busy_tx"
+$S +1 1 15 1 r
+$S +1 1 14 0 ""
+$VARIABLE +72 1 7 0 waiting_for_ack
+$VARIABLE +1 1 7 0 nfc_flow_pending
+$VARIABLE +1 1 11 8 stop
+$VARIABLE 709 1 7 0 tx_data_ready
+$VARIABLE 606 1 11 0 val_i
+$BUS VARIABLE +1 7 5 10 0 byte_array
+$CHILD +1 0 607
+$CHILD +2 1 607
+$CHILD +3 2 607
+$CHILD +4 3 607
+$CHILD +5 4 607
+$SC +6-+39
+$BUS VARIABLE +46 8 8 7 0 last_request
+$SC +1-+7
+$S 348 1 7 0 rx_afull_previous
+$VARIABLE 538 1 7 0 need_to_toggle_ack
+$S 451 1 8 0 fc_ack_received
+$VARIABLE +1 1 8 0 eed_to_send_ack
+$BUS VARIABLE 350 8 8 7 0 "rxloop/byte"
+$SC +1-+7
+$BUS VARIABLE +1 7 5 14 0 rx_byte_array
+$CHILD +1 0 359
+$CHILD +10 1 359
+$CHILD +19 2 359
+$CHILD +28 3 359
+$CHILD +37 4 359
+$SC +2-+7 +2-+7 +2-+7 +2-+7 +2-+7
+$S 710 1 7 0 serial_tx_i
+$OUT 405 1 7 0 SERIAL_TX
+$IN +1 1 14 1 R
+P 0 1-95 +49-300 +48 +2-454 +16 +59-+4 +2 +1 +2-+17 +2-+95 +37-+17 +2-+2 CS "0"
+P 0 451 +3 +81 +3 Color "33554432"
+P 0 453 Color "33587200"
+P 0 +-1 Color "8388608"
+P 0 201 EmptyRow "1"
+P 0 +50 +38 543 Radix "10"
+P 0 6 207 Radix "16"
+P 0 540 Radix "2"
+P 0 +0 Shape "3"
+$ENDWAVE

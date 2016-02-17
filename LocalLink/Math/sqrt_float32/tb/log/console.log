@@ -1,0 +1,577 @@
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  78.0 [ms]
+comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB.vhd" 
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  63.0 [ms]
+asim TESTBENCH_FOR_fp32_sqrt_tb 
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.1 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: You do not have a license to run VHDL performance optimized simulation. Contact Aldec for ordering information - sales@aldec.com.
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4955 kB (elbread=1024 elab2=3509 kernel=420 sdf=0)
+#  13:26, 1 juin 2010
+#  Simulation has been initialized
+#  Selected Top-Level: testbench_for_fp32_sqrt_tb
+# #wave 
+# #wave -noreg CLK
+# #wave -noreg RANDOM
+# #wave -noreg RST
+# # The following lines can be used for timing simulation
+# # acom <backannotated_vhdl_file_name>
+# # comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB_tim_cfg.vhd" 
+# # asim TIMING_FOR_fp32_sqrt_tb 
+open -wave "$dsn/src/Waveform1.awf"
+run 1 us
+# KERNEL: WARNING: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+# KERNEL: Time: 0 ps,  Iteration: 0,  Instance: /UUT/U2/gen_sqrt_float_l8/u0_fp_sqrt_float32_l8/U0/op_inst/FP_OP,  Process: line__319.
+# KERNEL: stopped at time: 1 us
+endsim
+#  Simulation has been stopped
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# DRC: Checking file 'd:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\sqrt_float32_tb.bde'.
+# DRC: Warning: sqrt_float32_tb.bde - 0 error(s), 8 warning(s)
+# DRC: DRC process completed in 1 second(s).
+# DRC: The results have been written to the log file. Double click on this line to view the log.
+# Generating d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\compile\sqrt_float32_tb.vhd from d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\sqrt_float32_tb.bde ...
+# Generation successful
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Error: COMP96_0367: sqrt_float32_tb.bde(sqrt_float32_tb.vhd) : (120, 23): Improper array length. Actual length is 71. Expected length is 67.
+# Error: COMP96_0367: sqrt_float32_tb.bde(sqrt_float32_tb.vhd) : (121, 23): Improper array length. Actual length is 71. Expected length is 67.
+# Compile failure 2 Errors 0 Warnings  Analysis time :  16.0 [ms]
+# Error: DO_001 in file d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do line 2
+# Error: Cannot run d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# DRC: Checking file 'd:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\sqrt_float32_tb.bde'.
+# DRC: Warning: sqrt_float32_tb.bde - 0 error(s), 8 warning(s)
+# DRC: DRC process completed in 1 second(s).
+# DRC: The results have been written to the log file. Double click on this line to view the log.
+# Generating d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\compile\sqrt_float32_tb.vhd from d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\sqrt_float32_tb.bde ...
+# Generation successful
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  46.0 [ms]
+comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB.vhd" 
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  79.0 [ms]
+asim TESTBENCH_FOR_fp32_sqrt_tb 
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.1 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: You do not have a license to run VHDL performance optimized simulation. Contact Aldec for ordering information - sales@aldec.com.
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4955 kB (elbread=1024 elab2=3509 kernel=420 sdf=0)
+#  13:27, 1 juin 2010
+#  Simulation has been initialized
+#  Selected Top-Level: testbench_for_fp32_sqrt_tb
+# #wave 
+# #wave -noreg CLK
+# #wave -noreg RANDOM
+# #wave -noreg RST
+# # The following lines can be used for timing simulation
+# # acom <backannotated_vhdl_file_name>
+# # comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB_tim_cfg.vhd" 
+# # asim TIMING_FOR_fp32_sqrt_tb 
+open -wave "$dsn/src/Waveform1.awf"
+run 1 us
+# KERNEL: WARNING: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+# KERNEL: Time: 0 ps,  Iteration: 0,  Instance: /UUT/U2/gen_sqrt_float_l8/u0_fp_sqrt_float32_l8/U0/op_inst/FP_OP,  Process: line__319.
+# KERNEL: stopped at time: 1 us
+endsim
+#  Simulation has been stopped
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  62.0 [ms]
+comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB.vhd" 
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]
+asim TESTBENCH_FOR_fp32_sqrt_tb 
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.1 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: You do not have a license to run VHDL performance optimized simulation. Contact Aldec for ordering information - sales@aldec.com.
+# ELAB2: Elaboration final pass complete - time: 0.1 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4955 kB (elbread=1024 elab2=3509 kernel=420 sdf=0)
+#  13:46, 1 juin 2010
+#  Simulation has been initialized
+#  Selected Top-Level: testbench_for_fp32_sqrt_tb
+# #wave 
+# #wave -noreg CLK
+# #wave -noreg RANDOM
+# #wave -noreg RST
+# # The following lines can be used for timing simulation
+# # acom <backannotated_vhdl_file_name>
+# # comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB_tim_cfg.vhd" 
+# # asim TIMING_FOR_fp32_sqrt_tb 
+open -wave "$dsn/src/Waveform1.awf"
+run 1 us
+# KERNEL: WARNING: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+# KERNEL: Time: 0 ps,  Iteration: 0,  Instance: /UUT/U2/gen_sqrt_float_l8/u0_fp_sqrt_float32_l8/U0/op_inst/FP_OP,  Process: line__319.
+# KERNEL: stopped at time: 1 us
+endsim
+#  Simulation has been stopped
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  78.0 [ms]
+comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB.vhd" 
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  63.0 [ms]
+asim TESTBENCH_FOR_fp32_sqrt_tb 
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: You do not have a license to run VHDL performance optimized simulation. Contact Aldec for ordering information - sales@aldec.com.
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4955 kB (elbread=1024 elab2=3509 kernel=420 sdf=0)
+#  14:04, 1 juin 2010
+#  Simulation has been initialized
+#  Selected Top-Level: testbench_for_fp32_sqrt_tb
+# #wave 
+# #wave -noreg CLK
+# #wave -noreg RANDOM
+# #wave -noreg RST
+# # The following lines can be used for timing simulation
+# # acom <backannotated_vhdl_file_name>
+# # comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB_tim_cfg.vhd" 
+# # asim TIMING_FOR_fp32_sqrt_tb 
+open -wave "$dsn/src/Waveform1.awf"
+run 10 us
+# KERNEL: WARNING: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+# KERNEL: Time: 0 ps,  Iteration: 0,  Instance: /UUT/U2/gen_sqrt_float_l8/u0_fp_sqrt_float32_l8/U0/op_inst/FP_OP,  Process: line__319.
+# KERNEL: stopped at time: 10 us
+endsim
+#  Simulation has been stopped
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]
+comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB.vhd" 
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  62.0 [ms]
+asim TESTBENCH_FOR_fp32_sqrt_tb 
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.1 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: You do not have a license to run VHDL performance optimized simulation. Contact Aldec for ordering information - sales@aldec.com.
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4955 kB (elbread=1024 elab2=3509 kernel=420 sdf=0)
+#  14:05, 1 juin 2010
+#  Simulation has been initialized
+#  Selected Top-Level: testbench_for_fp32_sqrt_tb
+# #wave 
+# #wave -noreg CLK
+# #wave -noreg RANDOM
+# #wave -noreg RST
+# # The following lines can be used for timing simulation
+# # acom <backannotated_vhdl_file_name>
+# # comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB_tim_cfg.vhd" 
+# # asim TIMING_FOR_fp32_sqrt_tb 
+open -wave "$dsn/src/Waveform1.awf"
+run 10 us
+# KERNEL: WARNING: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+# KERNEL: Time: 0 ps,  Iteration: 0,  Instance: /UUT/U2/gen_sqrt_float_l8/u0_fp_sqrt_float32_l8/U0/op_inst/FP_OP,  Process: line__319.
+# KERNEL: stopped at time: 10 us
+endsim
+#  Simulation has been stopped
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]
+comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB.vhd" 
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  62.0 [ms]
+asim TESTBENCH_FOR_fp32_sqrt_tb 
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: You do not have a license to run VHDL performance optimized simulation. Contact Aldec for ordering information - sales@aldec.com.
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4955 kB (elbread=1024 elab2=3509 kernel=420 sdf=0)
+#  14:06, 1 juin 2010
+#  Simulation has been initialized
+#  Selected Top-Level: testbench_for_fp32_sqrt_tb
+# #wave 
+# #wave -noreg CLK
+# #wave -noreg RANDOM
+# #wave -noreg RST
+# # The following lines can be used for timing simulation
+# # acom <backannotated_vhdl_file_name>
+# # comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB_tim_cfg.vhd" 
+# # asim TIMING_FOR_fp32_sqrt_tb 
+open -wave "$dsn/src/Waveform1.awf"
+run 10 us
+# KERNEL: WARNING: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+# KERNEL: Time: 0 ps,  Iteration: 0,  Instance: /UUT/U2/gen_sqrt_float_l8/u0_fp_sqrt_float32_l8/U0/op_inst/FP_OP,  Process: line__319.
+# KERNEL: stopped at time: 10 us
+endsim
+#  Simulation has been stopped
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  78.0 [ms]
+comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB.vhd" 
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]
+asim TESTBENCH_FOR_fp32_sqrt_tb 
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.1 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: You do not have a license to run VHDL performance optimized simulation. Contact Aldec for ordering information - sales@aldec.com.
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4955 kB (elbread=1024 elab2=3509 kernel=420 sdf=0)
+#  14:08, 1 juin 2010
+#  Simulation has been initialized
+#  Selected Top-Level: testbench_for_fp32_sqrt_tb
+# #wave 
+# #wave -noreg CLK
+# #wave -noreg RANDOM
+# #wave -noreg RST
+# # The following lines can be used for timing simulation
+# # acom <backannotated_vhdl_file_name>
+# # comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB_tim_cfg.vhd" 
+# # asim TIMING_FOR_fp32_sqrt_tb 
+open -wave "$dsn/src/Waveform1.awf"
+run 10 us
+# KERNEL: WARNING: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+# KERNEL: Time: 0 ps,  Iteration: 0,  Instance: /UUT/U2/gen_sqrt_float_l8/u0_fp_sqrt_float32_l8/U0/op_inst/FP_OP,  Process: line__319.
+# KERNEL: stopped at time: 10 us
+endsim
+#  Simulation has been stopped
+# Updating diagrams...
+# Updating diagram d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\sqrt_float32_tb.bde...
+# Updating instances of symbol 'LL_file_input' from library 'Common_HDL' (U1)
+# ...Diagram updated.
+# ...Updating diagrams done
+acom -work FP_SQRT_TB -2002  $dsn/src/TestBench/fp32_sqrt_tb_TB.vhd
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Error: COMP96_0015: fp32_sqrt_tb_TB.vhd : (35, 11): ';' expected.
+# Error: COMP96_0019: fp32_sqrt_tb_TB.vhd : (35, 11): Keyword 'end' expected.
+# Error: COMP96_0016: fp32_sqrt_tb_TB.vhd : (35, 13): Design unit declaration expected.
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile failure 3 Errors 0 Warnings  Analysis time :  31.0 [ms]
+acom -work FP_SQRT_TB -2002  $dsn/src/TestBench/fp32_sqrt_tb_TB.vhd
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Warning: ELAB1_0026: fp32_sqrt_tb_TB.vhd : (39, 0): There is no default binding for component "fp32_sqrt_tb".(Port "STALL" is not on the entity).
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Error: ELAB1_0030: fp32_sqrt_tb_TB.vhd : (65, 0): Port "STALL" is on component "fp32_sqrt_tb" but not on the entity "fp32_sqrt_tb".
+# Error: COMP96_0203: fp32_sqrt_tb_TB.vhd : (66, 4): Binding indication has neither a generic map aspect nor a port map aspect.
+# Error: ELAB1_0030: fp32_sqrt_tb_TB.vhd : (66, 0): Port "STALL" is on component "fp32_sqrt_tb" but not on the entity "fp32_sqrt_tb".
+# Compile failure 3 Errors 1 Warnings  Analysis time :  78.0 [ms]
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# DRC: Checking file 'd:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\sqrt_float32_tb.bde'.
+# DRC: Warning: sqrt_float32_tb.bde - 0 error(s), 8 warning(s)
+# DRC: DRC process completed in 1 second(s).
+# DRC: The results have been written to the log file. Double click on this line to view the log.
+# Generating d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\compile\sqrt_float32_tb.vhd from d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\sqrt_float32_tb.bde ...
+# Generation successful
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  62.0 [ms]
+comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB.vhd" 
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  46.0 [ms]
+asim TESTBENCH_FOR_fp32_sqrt_tb 
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: You do not have a license to run VHDL performance optimized simulation. Contact Aldec for ordering information - sales@aldec.com.
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4958 kB (elbread=1024 elab2=3513 kernel=421 sdf=0)
+#  14:28, 1 juin 2010
+#  Simulation has been initialized
+#  Selected Top-Level: testbench_for_fp32_sqrt_tb
+# #wave 
+# #wave -noreg CLK
+# #wave -noreg RANDOM
+# #wave -noreg RST
+# # The following lines can be used for timing simulation
+# # acom <backannotated_vhdl_file_name>
+# # comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB_tim_cfg.vhd" 
+# # asim TIMING_FOR_fp32_sqrt_tb 
+open -wave "$dsn/src/Waveform1.awf"
+run 10 us
+# KERNEL: WARNING: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+# KERNEL: Time: 0 ps,  Iteration: 0,  Instance: /UUT/U2/gen_sqrt_float_l8/u0_fp_sqrt_float32_l8/U0/op_inst/FP_OP,  Process: line__319.
+# KERNEL: stopped at time: 10 us
+endsim
+#  Simulation has been stopped
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  0.1 [s]
+comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB.vhd" 
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]
+asim TESTBENCH_FOR_fp32_sqrt_tb 
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: You do not have a license to run VHDL performance optimized simulation. Contact Aldec for ordering information - sales@aldec.com.
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4958 kB (elbread=1024 elab2=3513 kernel=421 sdf=0)
+#  14:30, 1 juin 2010
+#  Simulation has been initialized
+#  Selected Top-Level: testbench_for_fp32_sqrt_tb
+# #wave 
+# #wave -noreg CLK
+# #wave -noreg RANDOM
+# #wave -noreg RST
+# # The following lines can be used for timing simulation
+# # acom <backannotated_vhdl_file_name>
+# # comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB_tim_cfg.vhd" 
+# # asim TIMING_FOR_fp32_sqrt_tb 
+open -wave "$dsn/src/Waveform1.awf"
+run 10 us
+# KERNEL: WARNING: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+# KERNEL: Time: 0 ps,  Iteration: 0,  Instance: /UUT/U2/gen_sqrt_float_l8/u0_fp_sqrt_float32_l8/U0/op_inst/FP_OP,  Process: line__319.
+# KERNEL: stopped at time: 10 us
+runscript -do "d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB_runtest.do"
+SetActiveLib -work
+comp -include "$dsn\src\sqrt_float32_tb.bde" 
+# Compile...
+# File: .\sqrt_float32_tb.vhd
+# Compile Entity "fp32_sqrt_tb"
+# Compile Architecture "fp32_sqrt_tb" of Entity "fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  63.0 [ms]
+comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB.vhd" 
+# Compile...
+# File: d:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\TestBench\fp32_sqrt_tb_TB.vhd
+# Compile Entity "fp32_sqrt_tb_tb"
+# Compile Architecture "TB_ARCHITECTURE" of Entity "fp32_sqrt_tb_tb"
+# Compile Configuration "TESTBENCH_FOR_fp32_sqrt_tb"
+# Compile success 0 Errors 0 Warnings  Analysis time :  62.0 [ms]
+asim TESTBENCH_FOR_fp32_sqrt_tb 
+#  Simulation has been stopped
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: You do not have a license to run VHDL performance optimized simulation. Contact Aldec for ordering information - sales@aldec.com.
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4958 kB (elbread=1024 elab2=3513 kernel=421 sdf=0)
+#  14:30, 1 juin 2010
+#  Simulation has been initialized
+#  Selected Top-Level: testbench_for_fp32_sqrt_tb
+# #wave 
+# #wave -noreg CLK
+# #wave -noreg RANDOM
+# #wave -noreg RST
+# # The following lines can be used for timing simulation
+# # acom <backannotated_vhdl_file_name>
+# # comp -include "$dsn\src\TestBench\fp32_sqrt_tb_TB_tim_cfg.vhd" 
+# # asim TIMING_FOR_fp32_sqrt_tb 
+open -wave "$dsn/src/Waveform1.awf"
+run 10 us
+# KERNEL: WARNING: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+# KERNEL: Time: 0 ps,  Iteration: 0,  Instance: /UUT/U2/gen_sqrt_float_l8/u0_fp_sqrt_float32_l8/U0/op_inst/FP_OP,  Process: line__319.
+# KERNEL: stopped at time: 10 us
+endsim
+#  Simulation has been stopped

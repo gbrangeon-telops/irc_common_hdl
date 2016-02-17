@@ -1,0 +1,20 @@
+cd .\fixtofp32_9s
+call .\scripts\make_ngc.bat
+cd ..\fixtofp32_10u
+call .\scripts\make_ngc.bat
+cd ..\fixtofp32_11s
+call .\scripts\make_ngc.bat
+cd ..\fixtofp32_11u
+call .\scripts\make_ngc.bat
+cd ..\fixtofp32_12s
+call .\scripts\make_ngc.bat
+cd ..\fixtofp32_12u
+call .\scripts\make_ngc.bat
+cd ..\fixtofp32_17s
+call .\scripts\make_ngc.bat
+cd ..\fixtofp32_16s
+call .\scripts\make_ngc.bat
+cd ..\fixtofp32_16u
+call .\scripts\make_ngc.bat
+cd ..
+pause

@@ -1,0 +1,55 @@
+V 000047 56 1211 1182968722924 mt46v128m4fn_5b
+(_unit mt46v128m4fn_5b
+	(_specify
+		(_specparam tDQSL real 1.75)
+		(_specparam tDSS real 1.0)
+		(_specparam tIH real 0.600)
+		(_specparam tDQSH real 1.75)
+		(_specparam tIS real 0.600)
+		(_specparam tDSH real 1.0)
+		(_tchk width 0 1385
+			(_port Dqs_in (_constant \0\) (posedge) (_code  40 wdqs_valid))
+		)
+		(_tchk width 0 1386
+			(_port Dqs_in (_constant \1\) (posedge) (_code  41 wdqs_valid))
+		)
+		(_tchk width 0 1387
+			(_port Dqs_in (_constant \0\) (negedge) (_code  42 wdqs_valid))
+		)
+		(_tchk width 0 1388
+			(_port Dqs_in (_constant \1\) (negedge) (_code  43 wdqs_valid))
+		)
+		(_tchk setuphold 0 1389
+			(_port Clk (posedge))
+			(_port Cke ())
+		)
+		(_tchk setuphold 0 1390
+			(_port Clk (posedge))
+			(_port Cs_n ())
+		)
+		(_tchk setuphold 0 1391
+			(_port Clk (posedge))
+			(_port Cas_n ())
+		)
+		(_tchk setuphold 0 1392
+			(_port Clk (posedge))
+			(_port Ras_n ())
+		)
+		(_tchk setuphold 0 1393
+			(_port Clk (posedge))
+			(_port We_n ())
+		)
+		(_tchk setuphold 0 1394
+			(_port Clk (posedge))
+			(_port Addr ())
+		)
+		(_tchk setuphold 0 1395
+			(_port Clk (posedge))
+			(_port Ba ())
+		)
+		(_tchk setuphold 0 1396
+			(_port Clk (posedge))
+			(_port Dqs (negedge) (_code  44 wdqs_valid))
+		)
+	)
+)

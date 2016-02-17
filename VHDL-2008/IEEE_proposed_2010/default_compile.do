@@ -1,0 +1,7 @@
+acom "$DSN/../fixed_pkg_c.vhd"
+acom "$DSN/../float_pkg_c.vhd"
+acom "$DSN/../numeric_std_additions.vhd"
+acom "$DSN/../numeric_std_unsigned_c.vhd"
+acom "$DSN/../standard_additions_c.vhd"
+acom "$DSN/../standard_textio_additions_c.vhd"
+acom "$DSN/../std_logic_1164_additions.vhd"

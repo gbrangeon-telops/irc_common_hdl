@@ -1,0 +1,260 @@
+********************************************************************************
+** DDR controller modifications
+********************************************************************************
+
+Here are the modifications done on "MIG v1.7 DDR DIMM 1GB x4 s-rank CL3 BL4"
+controller to support dual-rank DDR DIMM memory modules, and to use the direct
+clocking method used in the DDR2 controller. These modifications are based on
+the difference between single rank and dual rank MIG DDR2 DIMM memory
+controller, and between DDR and DDR2 controllers direct clocking.
+
+mem_interface_top.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- cntrl0_DDR_CKE and cntrl0_DDR_CS_N ports are changed for vectors with widths
+  of 2.
+- mem_interface_top_top_0 ports DDR_CKE and DDR_CS_N changed for vectors with
+  widths of 2.
+
+mem_interface_top_backend_fifos_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- init_or_app_Wdf_data and init_or_app_Wdf_WrEn logic (~100 lines) and signals
+  (13 signals) added.
+- app_Wdf_data and app_Wdf_WrEn changed for init_or_app_Wdf_data and
+  init_or_app_Wdf_WrEn in mem_interface_top_wr_data_fifo_16(8) instantiations.
+
+mem_interface_top_controller_iobs_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- ctrl_ddr_cs_L, ctrl_ddr_cke, DDR_CKE and ddr_cs_l ports changed for vectors
+  with widths of cke_width and cs_width.
+- OBUF_cs1 and OBUF_cke1 OBUF components created. Index 0 "(0)" added on
+  OBUF_cs0 and OBUF_cke0 components' signals.
+
+mem_interface_top_data_path_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- dummy_write_pattern port removed.
+- CTRL_DUMMY_WR_SEL and dummy_write_flag signals added.
+- data_idelay_*** and dqs_idelay_*** widths changed for data_width and
+  data_strobe_width.
+- mem_interface_top_data_write_0 port dummy_write_pattern removed.
+- mem_interface_top_tap_logic_0 port calibration_dq added.
+- mem_interface_top_tap_logic_0 ports data_idelay_*** and dqs_idelay_*** widths
+  changed for data_width and data_strobe_width.
+- dummy_write_pattern removed in mem_interface_top_data_write_0 instantiation.
+- calibration_dq removed in mem_interface_top_tap_logic_0 instantiation.
+
+mem_interface_top_data_path_iobs_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- RESET0 port added.
+- dqs_idelay_*** and data_idelay_*** ports widths changed for data_strobe_width
+  and data_width.
+- mem_interface_top_v4_dqs_iob port RESET added.
+- mem_interface_top_idelay_rd_en_io component declaration removed.
+- mem_interface_top_v4_dqs_iob instantiation added for each dqs (for loop) with
+  RESET port.
+- mem_interface_top_v4_dq_iob instantiation added for each dq (for loop).
+
+mem_interface_top_data_tap_inc.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- File changed entirely. Taken from ddr2 controller.
+
+mem_interface_top_data_write_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- dummy_write_pattern port removed.
+- dqs_rst_r2 and dqs_en_r3 signals added.
+- dummy_* and pat* signals removed. Corresponding logic removed as well.
+- dqs_rst_r2 and dqs_en_r3 assigned to dqs_rst and dqs_en.
+- dqs_rst_r2 and dqs_en_r3 delays added in dqs_en_r2 process.
+- wr_data_rise, wr_data_fall, mask_data_rise and mask_data_fall assignations
+  changed (taken from ddr2 controller).
+
+mem_interface_top_ddr_controller_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- ctrl_dummy_wr_sel port added.
+- dummy_write_pattern port removed.
+- dummy_write_flag part added.
+- ctrl_ddr_cs_L and ctrl_ddr_cke ports changed for vectors with widths of
+  cke_width and cs_width.
+- initial values of '0' added to following ports to remove simulation warnings :
+  state, refi_count, wrburst_cnt, ctrl_WrEn_cnt, rdburst_cnt, burst_cnt,
+  load_mode_reg, BURST_LENGTH_VALUE, rst_r('1'), init_state
+- ctrl_Wdf_RdEn_int signal added.
+- ddr_cs_r, ddr_cs_r1 and ddr_cs_r_out vectors added.
+- ddr_cke_r signal changed for vector with width of cke_width.
+- ctrl_dummy_write and dummy_write_flag_r signals added.
+- comp_done_r signal added.
+- dummy_write_pattern_1 and dummy_write_pattern_2 signals removed.
+- cs_width0, cs_width1, auto_cnt and pre_cnt vectors added.
+- INIT_DUMMY_WRITE1 and INIT_DUMMY_WRITE2 constants replaced with single
+  INIT_DUMMY_WRITE constant with value of x"A".
+- INIT_PATTERN_WRITE1, INIT_PATTERN_WRITE2 and INIT_PATTERN_WRITE_READ constants
+  added with values of x"16" to x"18".
+- dummy_write_state generation modified for INIT_DUMMY_WRITE,
+  INIT_PATTERN_WRITE1 and INIT_PATTERN_WRITE2.
+- dummy_write_pattern_1 generation removed.
+- dummy_write_pattern_2 generation process removed.
+- cs_width1 generation logic (from cs_width0) added.
+- dummy_write_flag assignation added from dummy_write_flag_r.
+- ctrl_dummy_write and comp_done_r generation processes added.
+- initial value of cke_200us_cnt (when in reset) modified for "11111".
+- auto_cnt and pre_cnt generation logic (processes) added.
+- wrburst_cnt process modified to include INIT_PATTERN_WRITE1 and
+  INIT_PATTERN_WRITE1 conditions.
+- ctrl_Dqs_Rst_r generatino process clock removed (now a latch) and
+  INIT_PATTERN_WRITE1 condition added.
+- ctrl_Dqs_En_r generatino process clock removed (now a latch), and
+  INIT_PATTERN_WRITE1 and INIT_PATTERN_WRITE2 conditions added.
+- wdf_rden_r process modified to include INIT_DUMMY_WRITE, INIT_PATTERN_WRITE1
+  and INIT_PATTERN_WRITE2 conditions.
+- dummy_write_flag_r process modified to include comp_done_r condition.
+- count5 process modified to include INIT_PATTERN_WRITE_READ condition.
+- cs_width0 generation logic (from cs_width) added.
+- cs_width0 added and dummy_write_flag removed from the initialisation state
+  machine process' sensibility list.
+- (no_of_cs-1) replaced by cs_width0 in the INIT_DEEP_MEMORY_ST condition of the
+  initialisation state machine.
+- INIT_DUMMY_ACTIVE_WAIT state switches to INIT_DUMMT_WRITE when cntnext is
+  reached.
+- burst_cnt and phy_Dly_Slct_Done conditions added to INIT_DUMMY_FIRST_READ
+  state.
+- INTI_DUMMY_WRITE1 replaced with INIT_PATTERN_WRITE1 in INIT_DUMMY_READ_WAIT
+  state.
+- INIT_DUMMY_WRITE1 and INIT_DUMMY_WRITE2 states replaced by single
+  INIT_DUMMY_WRITE state.
+- INIT_PATTERN_READ1 replaced with INIT_DUMMY_FIRST_READ in
+  INIT_DUMMY_WRITE_READ state.
+- INIT_PATTERN_WRITE1, INIT_PATTERN_WRITE2 and INIT_PATTERN_WRITE_READ states
+  added.
+- comp_done replaced with comp_done_r in INIT_PATTERN_READ_WAIT state.
+- auto_ref and dummy_write_flag conditions removed from INIT_PRECHARGE_WAIT
+  state.
+- phy_Dly_Slct_Done condition removed from INIT_AUTO_REFRESH_WAIT state.
+- auto_cnt and cs_width1 added in the main state machine process' sensibility
+  list.
+- pre_cnt condition added to repeat precharge for each chip-select (cs).
+- auto_cnt condition added to repeat auto-refresh for each chip-select (cs).
+- ddr_cas_r process modified to include INIT_PATTERN_WRITE1 and
+  INIT_PATTERN_WRITE2 conditions.
+- ddr_we_r process modified to include INIT_PATTERN_WRITE1 and
+  INIT_PATTERN_WRITE2 conditions.
+- ddr_cs_r generation logic (process) added.
+- ddr_address_r1 process modified to replace INIT_DUMMY_WRITE1 and
+  INIT_DUMMY_WRITE2 conditions with INIT_PATTERN_WRITE1 and INIT_PATTERN_WRITE2.
+- ddr_cs_r1 generation logic (process) added.
+- ddr_cs_r_out generation logic (process) added.
+- ddr_cke_r generation logic (process), constants '0' and '1' changed for
+  cs_h0(cke_width-1 downto 0) and cs_hF(cke_width-1 downto 0).
+- ctrl_ddr_cs_L assigned to ddr_cs_r_out instead of '0'.
+- ctrl_dummy_wr_sel assignation added.
+
+mem_interface_top_infrastructure_iobs_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- oddr_clk0: ODDR output (Q) changed to DDR_CK(0).
+- OBUFDS0 : OBUFDS replaced by a second ODDR (oddr_clk0n) with output DDR_CK_N(0), and inverted inputs (D1, D2).
+
+mem_interface_top_iobs_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- RESET0 port added.
+- dqs_idelay_*** and data_idelay_*** ports widths changed for data_strobe_width
+  and data_width.
+- ctrl_ddr_cs_L, ctrl_ddr_cke, DDR_CKE and ddr_cs_l ports changed for vectors
+  with widths of cke_width and cs_width.
+- mem_interface_top_data_path_iobs_0 port RESET0 added.
+- mem_interface_top_data_path_iobs_0 ports dqs_idelay_*** and data_idelay_***
+  changed for widths of data_strobe_width and data_width.
+- mem_interface_top_controller_iobs_0 ports ctrl_ddr_cs_L, ctrl_ddr_cke, DDR_CKE
+  and ddr_cs_l changed for vectors with widths of cke_width and cs_width.
+- RESET0 port added in mem_interface_top_data_path_iobs_0 instantiation.
+
+mem_interface_top_parameters_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- no_of_cs and cke_width constants modified to value 2.
+- cs_width constant added (value 2).
+- DatabitsPerStrobe constant added (value 4).
+- burst_length value is "001".
+- load_mode_register value is "0000000110001"
+- tby4tapvalue constant added (value "010001").
+- rfc_count_value constant modified for "001101" (1 added)
+- cs_h1, cs_h2 and cs_h3 constants added.
+
+mem_interface_top_pattern_compare8.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- File replaced by mem_interface_top_pattern_compare4.vhd from ddr2 controller.
+
+mem_interface_top_rd_data_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- File changed entirely. Taken from ddr2 controller.
+
+mem_interface_top_rd_wr_addr_fifo_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- fifo_input_write_addr, fifo_output_write_addr, compare_value_r, app_af_addr_r,
+  fifo_input_addr_r and rst_r given initial valures of '0' ('1' for rst_r) to
+  remove simulation warnings.
+
+mem_interface_top_tap_ctrl_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- File changed entirely. Taken from ddr2 controller.
+
+mem_interface_top_tap_logic_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- calibratio_dq port added.
+- data_dly_*** and dqs_dly_*** widths changed for data width and
+  data_strobe_width.
+- mem_interface_top_tap_ctrl and mem_interface_top_data_tap_inc component
+  declarations changed according to new entities taken from ddr2 controller.
+- data_tap_select, dqs_tap_sel_done, valid_tap_count, data_tap_count0,
+  data_tap_count1, data_tap_count2, data_tap_count3 and data_tap_count4 signal
+  removed.
+- dlyinc_dqs, dlyce_dqs, dlyinc_global_flags_dqs, chan_done_dqs,
+  compare_bit_dqs, dq_data_dqs, bit_boundary_check_dqs and calib_done_dqs
+  signals added.
+- dqs_idelay_inc, dqs_idelay_ce and dqs_idelay_rst assigned to '0'.
+- data_tap_inc_done generation modified (taken from ddr2 controller)
+- mem_interface_top_tap_ctrl and mem_interface_top_data_tap_inc instantiations
+  replaced by those from ddr2 controller and generated in for loop.
+
+mem_interface_top_top_0.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- DDR_CKE and DDR_CS_N ports are changed for vectors with widths of cke_width
+  and cs_width.
+- mem_interface_top_data_path_0 port dummy_write_pattern removed.
+- mem_interface_top_data_path_0 ports CTRL_DUMMY_WR_SEL, dummy_write_flag and
+  calibration_dq added.
+- mem_interface_top_data_path_0 ports data_idelay_*** and dqs_idelay_*** widths
+  changed for data_width and data_strobe_width.
+- mem_interface_top_iobs_0 port RESET0 added.
+- mem_interface_top_iobs_0 ports data_idelay_*** and dqs_idelay_*** widths
+  changed for data_width and data_strobe_width.
+- mem_interface_top_iobs_0 ports ctrl_ddr_cs_L, ctrl_ddr_cke, DDR_CKE and
+  ddr_cs_l changed for vectors with widths of cke_width and cs_width.
+- mem_interface_top_ddr_controller_0 port ctrl_dummy_wr_sel and dummy_write_flag
+  ports added.
+- mem_interface_top_ddr_controller_0 ports ctrl_ddr_cs_L and ctrl_ddr_cke
+  changed for vectors with widths of cke_width and cs_width.
+- mem_interface_top_ddr_controller_0 dummy_write_pattern port removed.
+- dqs_idelay_*** and data_idelay_*** signals widths changed for
+  data_strobe_width and data_width.
+- ctrl_ddr_cs_L and ctrl_ddr_cke signals changed for vectors with widths of
+  cke_width and cs_width.
+- dummy_write_pattern signal removed.
+- ctrl_dummy_wr_sel and dummy_write_flag signals added.
+- APP_MASK_DATA assigned to '0'.
+- dummy_write_pattern port removed in mem_interface_top_data_path_0
+  instantiation.
+- CTRL_DUMMY_WR_SEL, dummy_write_flag and calibration_dq ports added in
+  mem_interface_top_data_path_0 instantiation.
+- RESET0 port added in mem_interface_top_iobs_0 instantiation.
+- ctrl_dummy_wr_sel and dummy_write_flag ports added in
+  mem_interface_top_ddr_controller_0 instantiation.
+- dummy_write_pattern port removed in mem_interface_top_ddr_controller_0
+  instantiation.
+
+mem_interface_top_v4_dqs_iob.vhd
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- RESET port added.
+- dqs_out_1 signal removed.
+- dqs_int_signal removed.
+- DQS_UNUSED and RESET_r1 signals added.
+- REST_r1 generation process added.
+- ddr_pipe1 and ddr_pipe2 flipflops replaced with iddr_dqs.
+
+********************************************************************************

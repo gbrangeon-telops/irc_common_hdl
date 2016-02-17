@@ -1,0 +1,3096 @@
+$WAVE4
+$RESOLUTION 1000
+$ENDTIME 125000000
+I 1 "e#12#Diag_State_ts4 waitexttrig triggerframe diagframeinprogress singleframe "
+$VARIABLE 3 1 "PAT_GEN32_WB/PATTERN_GEN_KERNEL/gen_fsm/diag_fsm/Diag_State"
+I 2 "a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-"
+I 3 "e#9#std_logicc9 UX01ZWLH-"
+$BUS S 4 2 8 16 0 "GEN_WB_INTERF/Control"
+$SC 5-+7
+$S +1 3 30 0 Status
+I 4 "e#22#WSHB_Interface_SM_types3 run wait_ppc idle "
+$S +1 4 30 0 WSHB_Interface_SM
+I 5 "r#12#PatGenConfig9 Trig e#9#std_logicc9 UX01ZWLH-FrameType a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-XSize a#27#UNSIGNED((XLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-YSize a#27#UNSIGNED((YLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-ZSize a#27#UNSIGNED((ZLEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-DiagSize a#34#UNSIGNED((DIAGSIZELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-PayloadSize a#28#UNSIGNED((PLLEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-TagSize a#29#UNSIGNED((TAGLEN-1) downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-DiagMode a#42#std_logic_vector((DIAGMODELEN-1) downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-"
+I 6 "a#27#UNSIGNED((XLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-"
+I 7 "a#27#UNSIGNED((YLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-"
+I 8 "a#27#UNSIGNED((ZLEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-"
+I 9 "a#34#UNSIGNED((DIAGSIZELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-"
+I 10 "a#28#UNSIGNED((PLLEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-"
+I 11 "a#29#UNSIGNED((TAGLEN-1) downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-"
+I 12 "a#42#std_logic_vector((DIAGMODELEN-1) downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 5 9 30 0 Cfg
+$CHILD +2 1 15
+$CHILD 26 2 15
+$CHILD 37 3 15
+$CHILD 48 4 15
+$CHILD 73 5 15
+$CHILD 90 6 +9
+$CHILD 115 7 +8
+$CHILD 124 8 +7
+$SC +1 +2-+7 +2-+9 +2-+9 +2-72 +2-89 +2-+23 +2-+7 +2-+2
+$BUS S +1 2 8 31 1 onfi
+$SC +1-+7
+$IN 1 3 RST
+$IN 2 3 CLK
+I 13 "r#13#new_type_name15 f0 e#9#std_logicc9 UX01ZWLH-f1 r#9#t_wb_miso2 DAT a#29#std_logic_vector(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-ACK e#9#std_logicc9 UX01ZWLH-f2 r#12#PatGenConfig9 Trig e#9#std_logicc9 UX01ZWLH-FrameType a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-XSize a#27#UNSIGNED((XLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-YSize a#27#UNSIGNED((YLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-ZSize a#27#UNSIGNED((ZLEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-DiagSize a#34#UNSIGNED((DIAGSIZELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-PayloadSize a#28#UNSIGNED((PLLEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-TagSize a#29#UNSIGNED((TAGLEN-1) downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-DiagMode a#42#std_logic_vector((DIAGMODELEN-1) downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-f3 r#17#ROIC_DCube_Header7 Direction e#9#std_logicc9 UX01ZWLH-Acq_Number a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-Code_Rev a#29#std_logic_vector(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-Xmin a#28#UNSIGNED((RXLEN-1) downto 0)1 ricd8 0 e#9#std_logicc9 UX01ZWLH-Ymin a#28#UNSIGNED((RYLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-TimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-f4 r#17#ROIC_DCube_Footer8 Direction e#9#std_logicc9 UX01ZWLH-Acq_Number a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-Write_No a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-Trig_No a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-ZPDPosition a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-ZPDPeakVal a#21#UNSIGNED(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-TimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-f5 a#16#DPConfig_array321 rict1 20 a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-f6 e#9#std_logicc9 UX01ZWLH-f7 e#9#std_logicc9 UX01ZWLH-f8 e#9#std_logicc9 UX01ZWLH-f9 r#9#t_wb_mosi5 DAT a#29#std_logic_vector(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-WE e#9#std_logicc9 UX01ZWLH-ADR a#29#std_logic_vector(11 downto 0)1 ricd11 0 e#9#std_logicc9 UX01ZWLH-CYC e#9#std_logicc9 UX01ZWLH-STB e#9#std_logicc9 UX01ZWLH-f10 r#12#PatGenConfig9 Trig e#9#std_logicc9 UX01ZWLH-FrameType a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-XSize a#27#UNSIGNED((XLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-YSize a#27#UNSIGNED((YLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-ZSize a#27#UNSIGNED((ZLEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-DiagSize a#34#UNSIGNED((DIAGSIZELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-PayloadSize a#28#UNSIGNED((PLLEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-TagSize a#29#UNSIGNED((TAGLEN-1) downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-DiagMode a#42#std_logic_vector((DIAGMODELEN-1) downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-f11 a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-f12 a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-f13 e#9#std_logicc9 UX01ZWLH-f14 e#22#WSHB_Interface_SM_types3 run wait_ppc idle "
+I 14 "r#9#t_wb_miso2 DAT a#29#std_logic_vector(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-ACK e#9#std_logicc9 UX01ZWLH-"
+I 15 "a#29#std_logic_vector(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-"
+I 16 "r#17#ROIC_DCube_Header7 Direction e#9#std_logicc9 UX01ZWLH-Acq_Number a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-Code_Rev a#29#std_logic_vector(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-Xmin a#28#UNSIGNED((RXLEN-1) downto 0)1 ricd8 0 e#9#std_logicc9 UX01ZWLH-Ymin a#28#UNSIGNED((RYLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-TimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-"
+I 17 "a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-"
+I 18 "a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-"
+I 19 "a#28#UNSIGNED((RXLEN-1) downto 0)1 ricd8 0 e#9#std_logicc9 UX01ZWLH-"
+I 20 "a#28#UNSIGNED((RYLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-"
+I 21 "a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-"
+I 22 "r#17#ROIC_DCube_Footer8 Direction e#9#std_logicc9 UX01ZWLH-Acq_Number a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-Write_No a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-Trig_No a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-ZPDPosition a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-ZPDPeakVal a#21#UNSIGNED(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-TimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-"
+I 23 "a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-"
+I 24 "a#21#UNSIGNED(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-"
+I 25 "a#16#DPConfig_array321 rict1 20 a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-"
+I 26 "r#9#t_wb_mosi5 DAT a#29#std_logic_vector(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-WE e#9#std_logicc9 UX01ZWLH-ADR a#29#std_logic_vector(11 downto 0)1 ricd11 0 e#9#std_logicc9 UX01ZWLH-CYC e#9#std_logicc9 UX01ZWLH-STB e#9#std_logicc9 UX01ZWLH-"
+I 27 "a#29#std_logic_vector(11 downto 0)1 ricd11 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS VBUS 137 13 15 PATGEN_WB_INTERF
+$OUT +1 3 "PAT_GEN32_WB/PATGEN_WB_INTERF/DONE" 137 0
+$BUS OUT +1 14 2 30 0 WB_MISO 137 1
+$CHILD +1 0 139
+$SC +2-+16
+$BUS OUT +1 5 9 30 0 PG_CTRL 137 2
+$CHILD +2 1 158
+$CHILD +11 2 158
+$CHILD +22 3 158
+$CHILD +33 4 158
+$CHILD +58 5 158
+$CHILD +75 6 158
+$CHILD 258 7 158
+$CHILD 267 8 158
+$SC +1 +2-+7 +2-+9 +2-+9 +2-+23 +2-+15 +2-+23 +2-+7 +2-+2
+$BUS OUT +1 16 7 30 0 ROIC_HEADER 137 3
+$CHILD +2 1 271
+$CHILD +26 2 271
+$CHILD +43 3 271
+$CHILD +76 4 271
+$CHILD +86 5 271
+$CHILD +97 6 271
+$SC +1 +2-+22 +2-+15 +2-+31 +2-+8 +2-+9 +2-+31
+$BUS OUT +1 22 8 35 2 FOOT 137 4
+$CHILD +2 1 401
+$CHILD +26 2 401
+$CHILD +51 3 401
+$CHILD +76 4 401
+$CHILD 510 5 401
+$CHILD 535 6 401
+$CHILD 552 7 401
+$SC +1 +2-+22 +2-+23 +2-+23 +2-+31 +2-+23 +2-+15 +2-+31
+$BUS OUT +1 25 20 30 0 DP_CONF_ARRAY32 137 5
+$CHILD +1 0 585
+$CHILD +34 1 585
+$CHILD +67 2 585
+$CHILD 685 3 585
+$CHILD 718 4 585
+$CHILD 751 5 585
+$CHILD 784 6 585
+$CHILD 817 7 585
+$CHILD 850 8 585
+$CHILD 883 9 585
+$CHILD 916 10 585
+$CHILD 949 11 585
+$CHILD 982 12 585
+$CHILD +430 13 585
+$CHILD +463 14 585
+$CHILD +496 15 585
+$CHILD +529 16 585
+$CHILD +562 17 585
+$CHILD +595 18 585
+$CHILD +628 19 585
+$SC +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31
+$IN +1 3 30 0 CLK 137 6
+$IN +1 3 30 0 KERNEL_DONE 137 7
+$IN +1 3 30 0 RESET 137 8
+$BUS IN +1 26 5 30 0 WB_MOSI 137 9
+$CHILD +1 0 1249
+$CHILD +19 2 1249
+$SC +2-+16 +2-+13
+$BUS S +1 5 9 30 0 Cfg 137 10
+$CHILD +2 1 1283
+$CHILD +11 2 1283
+$CHILD +22 3 1283
+$CHILD +33 4 1283
+$CHILD +58 5 1283
+$CHILD +75 6 1283
+$CHILD +100 7 1283
+$CHILD +109 8 1283
+$SC +1 +2-+7 +2-+9 +2-+9 +2-+23 +2-+15 +2-+23 +2-+7 +2-+2
+$BUS S +1 2 8 31 1 onfi 137 11
+$SC +1-+7
+$BUS S +1 2 8 33 0 trol 137 12
+$SC +1-+7
+$S +1 3 30 0 Status 137 13
+$S +1 4 30 0 WSHB_Interface_SM 137 14
+I 28 "r#13#new_type_name11 f0 e#9#std_logicc9 UX01ZWLH-f1 r#11#t_ll_mosi326 SOF e#9#std_logicc9 UX01ZWLH-EOF e#9#std_logicc9 UX01ZWLH-DATA a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-DREM a#28#std_logic_vector(1 downto 0)1 ricd1 0 e#9#std_logicc9 UX01ZWLH-DVAL e#9#std_logicc9 UX01ZWLH-SUPPORT_BUSY e#9#std_logicc9 UX01ZWLH-f2 e#9#std_logicc9 UX01ZWLH-f3 r#12#PatGenConfig9 Trig e#9#std_logicc9 UX01ZWLH-FrameType a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-XSize a#27#UNSIGNED((XLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-YSize a#27#UNSIGNED((YLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-ZSize a#27#UNSIGNED((ZLEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-DiagSize a#34#UNSIGNED((DIAGSIZELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-PayloadSize a#28#UNSIGNED((PLLEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-TagSize a#29#UNSIGNED((TAGLEN-1) downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-DiagMode a#42#std_logic_vector((DIAGMODELEN-1) downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-f4 e#9#std_logicc9 UX01ZWLH-f5 r#17#ROIC_DCube_Header7 Direction e#9#std_logicc9 UX01ZWLH-Acq_Number a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-Code_Rev a#29#std_logic_vector(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-Xmin a#28#UNSIGNED((RXLEN-1) downto 0)1 ricd8 0 e#9#std_logicc9 UX01ZWLH-Ymin a#28#UNSIGNED((RYLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-TimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-f6 r#17#ROIC_DCube_Footer8 Direction e#9#std_logicc9 UX01ZWLH-Acq_Number a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-Write_No a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-Trig_No a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-ZPDPosition a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-ZPDPeakVal a#21#UNSIGNED(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-TimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-f7 r#16#DPB_DCube_Header4 DUI a#29#UNSIGNED((DUILEN-1) downto 0)1 ricd28 0 e#9#std_logicc9 UX01ZWLH-VP30Status r#14#VP30StatusInfo3 ExtTemp a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-IntTemp a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-Stat a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-ROICHeader r#17#ROIC_DCube_Header7 Direction e#9#std_logicc9 UX01ZWLH-Acq_Number a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-Code_Rev a#29#std_logic_vector(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-Xmin a#28#UNSIGNED((RXLEN-1) downto 0)1 ricd8 0 e#9#std_logicc9 UX01ZWLH-Ymin a#28#UNSIGNED((RYLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-TimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-ROICFooter r#17#ROIC_DCube_Footer8 Direction e#9#std_logicc9 UX01ZWLH-Acq_Number a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-Write_No a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-Trig_No a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-ZPDPosition a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-ZPDPeakVal a#21#UNSIGNED(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-TimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-f8 r#11#CLinkConfig10 Valid e#7#booleans2 false true LValSize a#30#UNSIGNED((LVALLEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-FValSize a#30#UNSIGNED((FVALLEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-HeaderSize a#32#UNSIGNED((HEADERLEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-LValPause a#32#UNSIGNED((LPAUSELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-FramesPerCube a#39#UNSIGNED((FRAMESPERCUBELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-CLinkMode a#35#UNSIGNED((CLINKMODELEN-1) downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-HeaderVersion a#28#std_logic_vector(3 downto 0)1 ricd3 0 e#9#std_logicc9 UX01ZWLH-Mode a#28#std_logic_vector(2 downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-DiagSize a#34#UNSIGNED((DIAGSIZELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-f9 a#16#DPConfig_array321 rict1 20 a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-f10 r#9#t_ll_miso2 AFULL e#9#std_logicc9 UX01ZWLH-BUSY e#9#std_logicc9 UX01ZWLH-"
+I 29 "r#11#t_ll_mosi326 SOF e#9#std_logicc9 UX01ZWLH-EOF e#9#std_logicc9 UX01ZWLH-DATA a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-DREM a#28#std_logic_vector(1 downto 0)1 ricd1 0 e#9#std_logicc9 UX01ZWLH-DVAL e#9#std_logicc9 UX01ZWLH-SUPPORT_BUSY e#9#std_logicc9 UX01ZWLH-"
+I 30 "a#28#std_logic_vector(1 downto 0)1 ricd1 0 e#9#std_logicc9 UX01ZWLH-"
+I 31 "r#16#DPB_DCube_Header4 DUI a#29#UNSIGNED((DUILEN-1) downto 0)1 ricd28 0 e#9#std_logicc9 UX01ZWLH-VP30Status r#14#VP30StatusInfo3 ExtTemp a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-IntTemp a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-Stat a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-ROICHeader r#17#ROIC_DCube_Header7 Direction e#9#std_logicc9 UX01ZWLH-Acq_Number a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-Code_Rev a#29#std_logic_vector(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-Xmin a#28#UNSIGNED((RXLEN-1) downto 0)1 ricd8 0 e#9#std_logicc9 UX01ZWLH-Ymin a#28#UNSIGNED((RYLEN-1) downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-TimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-ROICFooter r#17#ROIC_DCube_Footer8 Direction e#9#std_logicc9 UX01ZWLH-Acq_Number a#29#UNSIGNED((ACQLEN-1) downto 0)1 ricd22 0 e#9#std_logicc9 UX01ZWLH-Write_No a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-Trig_No a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-ZPDPosition a#32#UNSIGNED((FRINGELEN-1) downto 0)1 ricd23 0 e#9#std_logicc9 UX01ZWLH-ZPDPeakVal a#21#UNSIGNED(15 downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-TimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-"
+I 32 "a#29#UNSIGNED((DUILEN-1) downto 0)1 ricd28 0 e#9#std_logicc9 UX01ZWLH-"
+I 33 "r#14#VP30StatusInfo3 ExtTemp a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-IntTemp a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-Stat a#29#std_logic_vector(31 downto 0)1 ricd31 0 e#9#std_logicc9 UX01ZWLH-"
+I 34 "r#11#CLinkConfig10 Valid e#7#booleans2 false true LValSize a#30#UNSIGNED((LVALLEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-FValSize a#30#UNSIGNED((FVALLEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-HeaderSize a#32#UNSIGNED((HEADERLEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-LValPause a#32#UNSIGNED((LPAUSELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-FramesPerCube a#39#UNSIGNED((FRAMESPERCUBELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-CLinkMode a#35#UNSIGNED((CLINKMODELEN-1) downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-HeaderVersion a#28#std_logic_vector(3 downto 0)1 ricd3 0 e#9#std_logicc9 UX01ZWLH-Mode a#28#std_logic_vector(2 downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-DiagSize a#34#UNSIGNED((DIAGSIZELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-"
+I 35 "e#7#booleans2 false true "
+I 36 "a#30#UNSIGNED((LVALLEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-"
+I 37 "a#30#UNSIGNED((FVALLEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-"
+I 38 "a#32#UNSIGNED((HEADERLEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-"
+I 39 "a#32#UNSIGNED((LPAUSELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-"
+I 40 "a#39#UNSIGNED((FRAMESPERCUBELEN-1) downto 0)1 ricd15 0 e#9#std_logicc9 UX01ZWLH-"
+I 41 "a#35#UNSIGNED((CLINKMODELEN-1) downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-"
+I 42 "a#28#std_logic_vector(3 downto 0)1 ricd3 0 e#9#std_logicc9 UX01ZWLH-"
+I 43 "a#28#std_logic_vector(2 downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-"
+I 44 "r#9#t_ll_miso2 AFULL e#9#std_logicc9 UX01ZWLH-BUSY e#9#std_logicc9 UX01ZWLH-"
+$BUS VBUS +1 28 11 PATGEN_KERNEL
+$OUT +1 3 "PAT_GEN32_WB/PATTERN_GEN_KERNEL/DONE" 1416 0
+$BUS OUT +1 29 6 32 0 TX_LL_MOSI 1416 1
+$CHILD +3 2 1418
+$CHILD 3065 3 1418
+$SC +1 +1 +2-+31 3066 +1 1457 +1
+$IN +1 3 32 0 CLK 1416 2
+$BUS IN +1 5 9 32 0 PG_CTRL 1416 3
+$CHILD +2 1 1460
+$CHILD +11 2 1460
+$CHILD +22 3 1460
+$CHILD +33 4 1460
+$CHILD +58 5 1460
+$CHILD +75 6 1460
+$CHILD +100 7 1460
+$CHILD +109 8 1460
+$SC +1 +2-+7 +2-+9 +2-+9 +2-+23 +2-+15 +2-+23 +2-+7 +2-+2
+$IN +1 3 32 0 ODD_EVENn 1416 4
+$BUS IN +1 16 7 32 0 ROIC_HEADER 1416 5
+$CHILD +2 1 1574
+$CHILD +26 2 1574
+$CHILD +43 3 1574
+$CHILD +76 4 1574
+$CHILD +86 5 1574
+$CHILD +97 6 1574
+$SC +1 +2-+22 +2-+15 +2-+31 +2-+8 +2-+9 +2-+31
+$BUS IN +1 22 8 37 2 FOOT 1416 6
+$CHILD +2 1 1704
+$CHILD +26 2 1704
+$CHILD +51 3 1704
+$CHILD +76 4 1704
+$CHILD +109 5 1704
+$CHILD +134 6 1704
+$CHILD +151 7 1704
+$SC +1 +2-+22 +2-+23 +2-+23 +2-+31 +2-+23 +2-+15 +2-+31
+$BUS IN +1 31 4 32 2 PROC_HEAD 1416 7
+$CHILD +1 0 1888
+$CHILD +31 1 1888
+$CHILD +32 0 1 1888
+$CHILD +41 1 1 1888
+$CHILD +50 2 1 1888
+$CHILD +83 2 1888
+$CHILD +85 1 2 1888
+$CHILD +109 2 2 1888
+$CHILD +126 3 2 1888
+$CHILD +159 4 2 1888
+$CHILD +169 5 2 1888
+$CHILD +180 6 2 1888
+$CHILD +213 3 1888
+$CHILD +215 1 3 1888
+$CHILD +239 2 3 1888
+$CHILD +264 3 3 1888
+$CHILD +289 4 3 1888
+$CHILD +322 5 3 1888
+$CHILD +347 6 3 1888
+$CHILD +364 7 3 1888
+$SC +2-+28 +3-+7 +2-+7 +2-+31 +2 +2-+22 +2-+15 +2-+31 +2-+8 +2-+9 +2-+31 +2 +2-+22 +2-+23 +2-+23 +2-+31 +2-+23 +2-+15 +2-+31
+$BUS IN +1 34 10 32 0 CLINK_CONF 1416 8
+$CHILD +2 1 2285
+$CHILD +19 2 2285
+$CHILD +36 3 2285
+$CHILD +53 4 2285
+$CHILD +70 5 2285
+$CHILD +783 6 2285
+$CHILD +90 7 2285
+$CHILD +95 8 2285
+$CHILD +99 9 2285
+$SC +1 +2-+15 +2-+15 +2-+15 +2-+15 +2-+15 +698 2373 +1 +2-+3 +2-+2 +2-+15
+$BUS IN +1 25 20 32 0 DP_CONF_ARRAY32 1416 9
+$CHILD +1 0 2401
+$CHILD +34 1 2401
+$CHILD +67 2 2401
+$CHILD +100 3 2401
+$CHILD +133 4 2401
+$CHILD +166 5 2401
+$CHILD +199 6 2401
+$CHILD +232 7 2401
+$CHILD +265 8 2401
+$CHILD +298 9 2401
+$CHILD +331 10 2401
+$CHILD +364 11 2401
+$CHILD +397 12 2401
+$CHILD +430 13 2401
+$CHILD +463 14 2401
+$CHILD +496 15 2401
+$CHILD +529 16 2401
+$CHILD +562 17 2401
+$CHILD +595 18 2401
+$CHILD +628 19 2401
+$SC +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31
+$BUS IN +1 44 2 32 0 TX_LL_MISO 1416 10
+$SC +1 +1
+P 0 3 4 +9-+2 128 +9 +2 1249 +167 Bold "1"
+P 0 1-1453 +4-+914 +2-+696 CS "0"
+P 0 137 1416 Color "33555711"
+P 0 139 1249 Color "33567900"
+P 0 3 4 +9-+2 128 Color "33586432"
+P 0 +9 1416 Shape "2"
+P 0 2 Stimulator "FRM:FRM:Override:0 0ns 1 5ns -r 10ns:Formula:1:"
+P 0 3063 +1 Stimulator "FRM:FRM:Override:0:Formula:1:"
+P 0 1 Stimulator "FRM:FRM:Override:1 0 ns, 0 40ns:Formula:1:"
+$WAVES 1
+=0 T 0
+=1 T 40k
+$VALUES
+V 2
+1
+0
+$END
+$WAVES 2 1246 +213
+*0
+R 1 25000 =2 T 5k
+$VALUES
+R 2 12500 0 1
+V 1
+0
+$END
+$WAVES 5-+6 1406-+6
+*0
+=3 D 1235k 1
+=4 D 7480k 1
+=5 D 10120k 1
+$VALUES
+V 4
+U
+0
+1
+0
+$SOURCES
+V 1
+0
+R 1 3 22
+$END
+$WAVES 12 1413
+*0
+=6 D 5k 1
+=7 D 8710k 1
+*5
+$VALUES
+V 4
+U
+0
+1
+0
+$SOURCES
+V 2
+0
+14
+R 1 2 22
+$END
+$WAVES 13 1414
+*0
+*6
+=8 D 18140k 1
+=9 D 710k 1
+$VALUES
+V 4
+U
+0
+1
+0
+$SOURCES
+V 4
+0
+10
+73
+76
+$END
+$WAVES 16 1284
+*0
+*6
+=10 D 8720k 1
+=11 D 10k 1
+$VALUES
+V 4
+U
+0
+1
+0
+$SOURCES
+V 4
+0
+11
+60
+63
+$END
+$WAVES 18-+4 +2 +1 1286-+4 +2 +1
+*0
+=12 D 2125k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+38
+$END
+$WAVES 23 1291
+*0
+*12
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+38
+$END
+$WAVES 27-+6 +2 +1 1295-+6 +2 +1
+*0
+=13 D 3875k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+47
+$END
+$WAVES 34 1302
+*0
+*13
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+47
+$END
+$WAVES 38-+5 1306-+5
+*0
+=14 D 4755k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+49
+$END
+$WAVES 44-+3 1312-+3
+*0
+*14
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+49
+$END
+$WAVES 49-+7 1317-+7
+*0
+=15 D 2555k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+41
+$END
+$WAVES 57-68 1325-+11
+*0
+=16 D 2995k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+45
+$END
+$WAVES 69-+3 1337-+3
+*0
+*16
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+45
+$END
+$WAVES 74-88 1342-+14
+*0
+=17 D 6515k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+53
+$END
+$WAVES 89 1357
+*0
+*17
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+53
+$END
+$WAVES 91-+7 1359-+7
+*0
+=18 D 6955k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+55
+$END
+$WAVES 99-+8 +2-+5 1367-+8 +2-+5
+*0
+=19 D 7395k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+57
+$END
+$WAVES 108 1376
+*0
+*19
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+57
+$END
+$WAVES 116-+4 +2 +1 1384-+4 +2 +1
+*0
+=20 D 5635k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+51
+$END
+$WAVES 121 1389
+*0
+*20
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+51
+$END
+$WAVES 125 1393
+*0
+=21 D 2115k 2
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+24
+$END
+$WAVES 126 +1 1394 +1
+*0
+*21
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+24
+$END
+$WAVES 129-+6 1397-+6
+*0
+=22 D 8275k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+59
+$END
+$WAVES 136 1404
+*0
+*6
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+13
+$END
+$WAVES 138 587-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +36 +609-+28 +3-+7 +2-+7 +2-+31 +2 +2-+22 +2-+15 +2-+31 +2-+8 +2-+9 +2-+31 +2 +2-+22 +2-+23 +2-+23 +2-+31 +2-+23 +2-+15 +2-+31 +4-+15 +2-+15 +2-+15 +2-+15 +2-+15 +2 +1 +2-+3 +2-+2 +2-+15 +3-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +8
+*0
+$VALUES
+V 1
+U
+$END
+$WAVES 141-+5
+*0
+*6
+=23 D 1210k 1
+=24 D 1760k 1
+=25 D 30k 1
+=26 D 3490k 1
+*25
+=27 D 850k 1
+*25
+$VALUES
+V 2
+U
+1
+R 2 3 0 U
+V 1
+0
+$SOURCES
+V 3
+0
+15
+20
+R 1 2 44
+R 1 2 52
+R 1 2 56
+$END
+$WAVES +1 +1
+*0
+*6
+*23
+*24
+R 2 2 *25 *27
+*25
+=28 D 1730k 1
+*25
+*27
+*25
+$VALUES
+V 2
+U
+1
+R 2 5 0 U
+V 1
+0
+$SOURCES
+V 3
+0
+15
+20
+R 1 2 44
+R 1 2 46
+R 1 2 48
+R 1 2 52
+R 1 2 56
+$END
+$WAVES +1 +2 +1
+*0
+*6
+*23
+*25
+=29 D 1290k 1
+*25
+=30 D 410k 1
+R 2 4 *25 *27
+R 2 2 *25 *30
+*25
+*27
+*25
+=31 D 440k 1
+=32 D 130k 1
+=33 D 9960k 1
+*25
+$VALUES
+V 2
+U
+1
+R 2 10 U 0
+R 2 2 1 0
+$SOURCES
+V 2
+0
+15
+R 1 2 20
+R 1 2 40
+R 1 2 44
+R 1 2 46
+R 1 2 48
+R 1 2 50
+R 1 2 52
+R 1 2 54
+R 1 2 56
+R 1 2 58
+V 2
+20
+39
+R 1 2 20
+$END
+$WAVES +-2
+*0
+*6
+*23
+*25
+*29
+*25
+*30
+R 2 4 *25 *27
+R 2 2 *25 *30
+*25
+*32
+=34 D 720k 1
+*25
+*31
+*32
+*33
+*25
+$VALUES
+V 2
+U
+1
+R 2 8 U 0
+V 4
+U
+1
+0
+U
+R 2 2 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+15
+R 1 2 20
+R 1 2 40
+R 1 2 44
+R 1 2 46
+R 1 2 48
+R 1 2 50
+R 1 2 52
+R 1 2 54
+R 1 2 56
+V 1
+39
+R 1 2 58
+V 2
+20
+39
+R 1 2 20
+$END
+$WAVES +3
+*0
+*6
+*23
+*25
+*29
+*25
+*30
+*25
+*32
+*34
+*25
+*27
+*25
+*32
+*34
+*25
+*27
+R 2 2 *25 *30
+*25
+*27
+*25
+*31
+*32
+*33
+*25
+$VALUES
+V 2
+U
+1
+R 2 2 U 0
+V 2
+U
+1
+R 2 2 0 U
+V 1
+1
+R 2 5 0 U
+R 2 2 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+15
+R 1 2 20
+R 1 2 40
+R 1 2 44
+V 1
+39
+R 1 2 46
+R 1 2 48
+V 1
+39
+R 1 2 50
+R 1 2 52
+R 1 2 54
+R 1 2 56
+R 1 2 58
+V 2
+20
+39
+R 1 2 20
+$END
+$WAVES +1
+*0
+*6
+*23
+*25
+*27
+*25
+*32
+=35 D 280k 1
+*25
+*30
+R 3 4 *25 *32 *34
+R 2 2 *25 *30
+*25
+*27
+*25
+*31
+*32
+*33
+*25
+$VALUES
+V 6
+U
+1
+U
+0
+U
+1
+R 2 2 0 U
+R 3 4 1 0 U
+R 2 3 0 U
+R 2 2 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+15
+R 1 2 20
+R 1 2 23
+V 1
+39
+R 1 2 40
+R 1 2 44
+V 1
+39
+R 1 2 46
+V 1
+39
+R 1 2 48
+V 1
+39
+R 1 2 50
+V 1
+39
+R 1 2 52
+R 1 2 54
+R 1 2 56
+R 1 2 58
+V 2
+20
+39
+R 1 2 20
+$END
+$WAVES +1
+*0
+*6
+*23
+*25
+*27
+R 2 2 *25 *30
+*25
+*32
+*34
+*25
+*27
+*25
+*32
+*34
+*25
+*27
+R 2 2 *25 *30
+*25
+*27
+*25
+*31
+*32
+*33
+*25
+$VALUES
+V 2
+U
+1
+R 2 3 U 0
+V 2
+U
+1
+R 2 2 0 U
+V 1
+1
+R 2 5 0 U
+R 2 2 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+15
+R 1 2 20
+R 1 2 23
+R 1 2 40
+R 1 2 44
+V 1
+39
+R 1 2 46
+R 1 2 48
+V 1
+39
+R 1 2 50
+R 1 2 52
+R 1 2 54
+R 1 2 56
+R 1 2 58
+V 2
+20
+39
+R 1 2 20
+$END
+$WAVES +1
+*0
+*6
+*23
+=36 D 880k 1
+R 2 2 *25 *30
+*25
+*32
+*34
+*25
+*27
+*25
+*32
+*34
+*25
+*27
+*25
+*32
+*35
+*25
+*30
+*25
+=37 D 1320k 1
+*32
+=38 D 9480k 1
+=39 D 200k 1
+*35
+*25
+$VALUES
+V 2
+U
+1
+R 2 3 0 U
+V 1
+1
+R 2 2 0 U
+V 1
+1
+R 2 2 0 U
+V 1
+1
+R 2 2 0 U
+R 2 3 0 1
+V 1
+0
+$SOURCES
+V 3
+0
+15
+20
+R 1 2 23
+R 1 2 40
+R 1 2 44
+V 1
+39
+R 1 2 46
+R 1 2 48
+V 1
+39
+R 1 2 50
+R 1 2 52
+V 1
+39
+R 1 2 54
+R 1 2 56
+V 4
+20
+39
+74
+39
+R 1 2 20
+$END
+$WAVES +1
+*0
+*6
+=40 D 1230k 1
+R 2 17 =41 D 20k 1 =42 D 420k 1
+*41
+=43 D 380k 1
+R 2 21 *41 *42
+*41
+=44 D 460k 1
+*41
+$VALUES
+V 1
+U
+R 2 41 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 1 83 16
+$END
+$WAVES +2 1461
+*0
+=45 D 5k 2
+=46 D 8720k 2
+=47 D 10k 2
+$VALUES
+V 4
+U
+0
+1
+0
+$SOURCES
+V 1
+0
+R 1 3 17
+$END
+$WAVES 161-+4 +2 +1 1463-+4 +2 +1
+*0
+=48 D 2125k 2
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 166 1468
+*0
+*48
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 170-+6 +2 +1 1472-+6 +2 +1
+*0
+=49 D 3875k 2
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 177 1479
+*0
+*49
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 181-+5 1483-+5
+*0
+=50 D 4755k 2
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 187-+3 1489-+3
+*0
+*50
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 192-+7 1494-+7
+*0
+=51 D 2555k 2
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 200-+11 1502-+11
+*0
+=52 D 2995k 2
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 212-+3 1514-+3
+*0
+*52
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 217-+14 1519-+14
+*0
+=53 D 6515k 2
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 232 1534
+*0
+*53
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 234-+7 1536-+7
+*0
+=54 D 6955k 2
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 242-+8 +2-+5 1544-+8 +2-+5
+*0
+=55 D 7395k 2
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 251 1553
+*0
+*55
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 259-+4 +2 +1 1561-+4 +2 +1
+*0
+=56 D 5635k 2
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 264 1566
+*0
+*56
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 268 1570
+*0
+=57 D 2115k 3
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 269 +1 1571 +1
+*0
+*57
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+17
+$END
+$WAVES 272 1575
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+37
+$END
+$WAVES 274-+6 1577-+6
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+36
+$END
+$WAVES 281-+14 1584-+14
+*0
+=58 D 6525k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+36
+$END
+$WAVES 296 1599
+*0
+*58
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+36
+$END
+$WAVES 298 +1 +7 +1 +2-+3 1601 +1 +7 +1 +2-+3
+*0
+*12
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+35
+$END
+$WAVES 300-+5 +3 +5 1603-+5 +3 +5
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+35
+$END
+$WAVES 315-+2 +2 +1 +2-+2 +3 +2-+2 +2 +2 +3 +1 +5-+2 1618-+2 +2 +1 +2-+2 +3 +2-+2 +2 +2 +3 +1 +5-+2
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+34
+$END
+$WAVES 318 +3 +4 +1 +2 +4-+4/2 +1 +3-+3 1621 +3 +4 +1 +2 +4-+4/2 +1 +3-+3
+*0
+*12
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+34
+$END
+$WAVES 348 +1 +2-+2 +2 +1 1651 +1 +2-+2 +2 +1
+*0
+*12
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+33
+$END
+$WAVES 350 +4 1653 +4
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+33
+$END
+$WAVES 358 +4 +1 +3 +1 1661 +4 +1 +3 +1
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+32
+$END
+$WAVES 359-+2 +3 +1 1662-+2 +3 +1
+*0
+*12
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+32
+$END
+$WAVES 369-+6/2 +1-+2 +3 +1 +2-+3 +2-+3 +3 +4 +1 1672-+6/2 +1-+2 +3 +1 +2-+3 +2-+3 +3 +4 +1
+*0
+*12
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+31
+$END
+$WAVES 370-+4/2 +5 +1 +3-+10/5 +1 +2-+2 1673-+4/2 +5 +1 +3-+10/5 +1 +2-+2
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+31
+$END
+$WAVES 402 1705
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+30
+$END
+$WAVES 404-+6 1707-+6
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+29
+$END
+$WAVES 411-+14 1714-+14
+*0
+*58
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+29
+$END
+$WAVES 426 1729
+*0
+*58
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+29
+$END
+$WAVES 428-+7 1731-+7
+*0
+=59 D 2565k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+43
+$END
+$WAVES 436-+11 1739-+11
+*0
+=60 D 3005k 1
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+43
+$END
+$WAVES 448-+3 1751-+3
+*0
+*60
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+43
+$END
+$WAVES 453-+7 1756-+7
+*0
+*59
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+42
+$END
+$WAVES 461-+11 1764-+11
+*0
+*60
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+42
+$END
+$WAVES 473-+3 1776-+3
+*0
+*60
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+42
+$END
+$WAVES 478-+2 +2 +1 +2-+2 +3 +2-+2 +2 +2 +3 +1 +5-+2 1781-+2 +2 +1 +2-+2 +3 +2-+2 +2 +2 +3 +1 +5-+2
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+28
+$END
+$WAVES 481 +3 +4 +1 +2 +4-+4/2 +1 +3-+3 1784 +3 +4 +1 +2 +4-+4/2 +1 +3-+3
+*0
+*12
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+28
+$END
+$WAVES 511-+22 1814-+22
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+27
+$END
+$WAVES 534 1837
+*0
+*12
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+27
+$END
+$WAVES 536-+6/2 +1-+2 +3 +1 +2 1839-+6/2 +1-+2 +3 +1 +2
+*0
+*12
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+26
+$END
+$WAVES 537-+4/2 +5 +1 +3 1840-+4/2 +5 +1 +3
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+26
+$END
+$WAVES 553-+4 +2-+3 +3 +1 +2 +4 +3 +4 +1 +2 1856-+4 +2-+3 +3 +1 +2 +4 +3 +4 +1 +2
+*0
+*12
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+25
+$END
+$WAVES 558 +5 +1 +3 +2-+2 +2 +1 +2-+2 +3 +2 +1 1861 +5 +1 +3 +2-+2 +2 +1 +2-+2 +3 +2 +1
+*0
+*12
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+25
+$END
+$WAVES 1247 +170
+*0
+*6
+=61 D 8730k 1
+=62 D 9390k 1
+$VALUES
+V 4
+U
+1
+0
+1
+$SOURCES
+V 4
+0
+9
+62
+9
+$END
+$WAVES 1251-+8 +2 +1
+*0
+=63 D 15k 5
+=64 D 1190k 3
+=65 D 7480k 3
+=66 D 160k 3
+$VALUES
+V 5
+U
+X
+0
+1
+0
+$SOURCES
+V 1
+0
+R 1 4 19
+$END
+$WAVES +-2
+*0
+*63
+*64
+=67 D 6160k 3
+*66
+=68 D 1160k 3
+*66
+$VALUES
+V 2
+U
+X
+R 2 2 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 1 6 19
+$END
+$WAVES +3 +2
+*0
+*63
+*64
+=69 D 1760k 3
+*66
+=70 D 1600k 3
+*66
+=71 D 3800k 3
+*66
+$VALUES
+V 2
+U
+X
+R 2 3 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 1 8 19
+$END
+$WAVES +-1
+*0
+*63
+*64
+=72 D 880k 3
+R 2 4 *66 =73 D 720k 3
+*66
+=74 D 2920k 3
+*66
+$VALUES
+V 2
+U
+X
+R 2 6 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 1 14 19
+$END
+$WAVES +2
+*0
+*63
+*64
+*69
+R 2 2 *66 *70
+*66
+=75 D 2040k 3
+*66
+$VALUES
+V 2
+U
+X
+R 2 4 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 1 10 19
+$END
+$WAVES +1
+*0
+=76 D 1215k 3
+=77 D 7880k 3
+=78 D 9720k 3
+$VALUES
+V 4
+U
+1
+0
+1
+$SOURCES
+V 1
+0
+R 1 3 21
+$END
+$WAVES +2 +1 +2-+3
+*0
+*63
+*64
+$VALUES
+V 3
+U
+X
+0
+$SOURCES
+V 1
+0
+R 1 2 18
+$END
+$WAVES +-4
+*0
+*63
+*64
+R 2 17 *66 =79 D 280k 3
+*66
+R 2 22 =80 D 240k 3 =81 D 200k 3
+*79
+*66
+$VALUES
+V 2
+U
+X
+R 2 41 1 0
+$SOURCES
+V 1
+0
+R 1 83 18
+$END
+$WAVES +5
+*0
+*63
+*64
+*66
+=82 D 7320k 3
+*66
+R 2 22 *80 *81
+*79
+*66
+$VALUES
+V 2
+U
+X
+R 2 25 1 0
+$SOURCES
+V 1
+0
+R 1 51 18
+$END
+$WAVES +1
+*0
+*63
+*64
+=83 D 3960k 3
+R 2 7 *66 *79
+*66
+$VALUES
+V 2
+U
+X
+R 2 8 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 1 18 18
+$END
+$WAVES +1
+*0
+*63
+*64
+=84 D 2200k 3
+R 2 3 *66 *79
+*66
+*75
+R 2 3 *66 *79
+*66
+$VALUES
+V 2
+U
+X
+R 2 8 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 1 18 18
+$END
+$WAVES +1
+*0
+*63
+*64
+=85 D 1320k 3
+R 4 3 *66 *79 *66 *68
+*66
+*79
+*66
+$VALUES
+V 2
+U
+X
+R 2 8 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 1 18 18
+$END
+$WAVES +1
+*0
+*63
+*64
+*72
+R 2 7 *66 *73
+*66
+=86 D 680k 3
+R 2 21 *81 *80
+*81
+$VALUES
+V 2
+U
+X
+R 2 30 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 1 62 18
+$END
+$WAVES +2
+*0
+=87 D 0 1
+=88 D 1225k 4
+R 2 17 =89 D 20k 4 =90 D 420k 4
+*89
+=91 D 380k 4
+R 2 21 *89 *90
+*89
+=92 D 460k 4
+*89
+$VALUES
+V 1
+U
+R 2 41 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 1 83 1
+$END
+$WAVES +137
+*0
+*6
+=93 D 8760k 1
+*11
+=94 D 80k 1
+R 2 14 *11 =95 D 600k 1
+*11
+=96 D 630k 1
+*11
+$VALUES
+V 1
+U
+R 2 17 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+5
+R 1 2 64
+R 1 30 68
+R 1 2 64
+$END
+$WAVES +1
+*0
+*6
+=97 D 8810k 1
+*11
+*96
+R 2 14 *11 *95
+*11
+=98 D 100k 1
+*11
+$VALUES
+V 1
+U
+R 2 17 0 1
+V 1
+0
+$SOURCES
+V 4
+0
+4
+67
+4
+R 1 29 71
+V 3
+4
+67
+4
+$END
+$WAVES +2
+*0
+*6
+*97
+*11
+=99 D 9280k 1
+*11
+$VALUES
+V 1
+U
+R 2 2 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 2 2 8 66
+V 1
+8
+$END
+$WAVES +1
+*0
+*6
+D 18100k 1
+*11
+$VALUES
+V 4
+U
+0
+1
+0
+$SOURCES
+V 4
+0
+8
+66
+8
+$END
+$WAVES +1
+*0
+*6
+*97
+*11
+D 4920k 1
+R 2 6 *95 *11
+*95
+*98
+*11
+$VALUES
+V 1
+U
+R 2 9 0 1
+V 1
+0
+$SOURCES
+V 4
+0
+8
+66
+8
+R 1 13 70
+V 3
+8
+66
+8
+$END
+$WAVES +1 +16
+*0
+*6
+D 8790k 1
+*11
+D 2500k 1
+R 2 3 *95 *11
+*95
+D 2450k 1
+R 2 2 *95 *11
+*95
+D 70k 1
+*11
+*41
+*11
+$VALUES
+V 1
+U
+R 2 10 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 2 66
+R 1 13 70
+V 1
+8
+R 1 3 66
+V 1
+8
+$END
+$WAVES +-15
+*0
+*6
+*97
+*11
+D 1260k 1
+R 4 3 *95 *11 *95 *40
+*95
+*98
+*11
+$VALUES
+V 1
+U
+R 2 9 0 1
+V 1
+0
+$SOURCES
+V 4
+0
+8
+66
+8
+R 1 13 70
+V 3
+8
+66
+8
+$END
+$WAVES +1
+*0
+*6
+*93
+*11
+*94
+*11
+R 2 7 *95 D 620k 1
+$VALUES
+V 1
+U
+R 2 9 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 2 66
+R 1 16 70
+$END
+$WAVES +1
+*0
+*6
+D 8790k 1
+R 1 3 *11
+D 9210k 1
+*11
+*25
+*11
+*41
+*11
+$VALUES
+V 1
+U
+R 2 5 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 4 2 8 66 66 66
+R 1 2 66
+V 1
+8
+$END
+$WAVES +1
+*0
+*6
+*93
+*11
+*25
+*41
+D 360k 1
+R 2 14 *35 D 330k 1
+*35
+*25
+*11
+D 60k 1
+*11
+$VALUES
+V 1
+U
+R 2 19 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 3 66
+V 1
+8
+R 1 29 70
+V 1
+8
+R 1 3 66
+V 1
+8
+$END
+$WAVES +1
+*0
+*6
+D 8800k 1
+*41
+*39
+R 1 2 D 160k 1
+R 4 14 D 120k 1 D 170k 1 D 160k 1 D 160k 1
+D 120k 1
+*98
+*11
+$VALUES
+V 1
+U
+R 2 32 0 1
+V 1
+0
+$SOURCES
+V 4
+0
+8
+66
+8
+R 1 59 70
+V 3
+8
+66
+8
+$END
+$WAVES +1
+*0
+*6
+*97
+*11
+D 120k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+D 90k 1
+R 1 6 *94
+D 40k 1
+*98
+*11
+$VALUES
+V 1
+U
+R 2 62 0 1
+V 1
+0
+$SOURCES
+V 4
+0
+8
+66
+8
+R 1 119 70
+V 3
+8
+66
+8
+$END
+$WAVES +1
+*0
+*6
+D 8790k 1
+*41
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 110k 1
+*11
+$VALUES
+V 1
+U
+R 2 107 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 2 66
+R 1 210 70
+R 1 2 66
+$END
+$WAVES +1
+*0
+*6
+D 8790k 1
+*41
+D 9260k 1
+*11
+$VALUES
+V 1
+U
+R 2 2 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 4 66
+$END
+$WAVES +1
+*0
+*6
+D 8800k 1
+*41
+D 60k 1
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*98
+*11
+$VALUES
+V 1
+U
+R 2 227 0 1
+V 1
+0
+$SOURCES
+V 4
+0
+8
+66
+8
+R 1 449 70
+V 3
+8
+66
+8
+$END
+$WAVES +1
+*0
+*6
+D 8790k 1
+R 1 3 *11
+D 50k 1
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+D 70k 1
+*11
+*41
+*11
+$VALUES
+V 1
+U
+R 2 454 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 3 66
+V 1
+8
+R 1 899 70
+V 1
+8
+R 1 3 66
+V 1
+8
+$END
+$WAVES +1
+*0
+*6
+D 8800k 1
+*11
+D 50k 1
+R 2 14 *95 *11
+*95
+$VALUES
+V 1
+U
+R 2 16 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 2 66
+R 1 29 70
+V 1
+8
+$END
+$WAVES +1
+*0
+*6
+D 8800k 1
+*41
+*99
+*11
+$VALUES
+V 1
+U
+R 2 2 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 2 2 8 66
+V 1
+8
+$END
+$WAVES +1
+*0
+*6
+D 8780k 1
+*11
+*41
+*11
+D 9270k 1
+*11
+$VALUES
+V 1
+U
+R 2 3 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 3 66
+V 1
+8
+R 1 2 66
+$END
+$WAVES +1
+*0
+*6
+D 8780k 1
+*41
+R 1 2 *11
+D 9250k 1
+*11
+$VALUES
+V 1
+U
+R 2 3 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 3 66
+V 1
+8
+R 1 2 66
+$END
+$WAVES +1
+*0
+*6
+*97
+*11
+D 4920k 1
+R 2 6 *95 *11
+*95
+D 90k 1
+*11
+$VALUES
+V 1
+U
+R 2 9 0 1
+V 1
+0
+$SOURCES
+V 4
+0
+8
+66
+8
+R 1 13 70
+V 1
+8
+R 1 2 66
+$END
+$WAVES +2
+*0
+*6
+*97
+*11
+D 1260k 1
+R 4 3 *95 *11 *95 *40
+*95
+D 90k 1
+*11
+$VALUES
+V 1
+U
+R 2 9 0 1
+V 1
+0
+$SOURCES
+V 4
+0
+8
+66
+8
+R 1 13 70
+V 1
+8
+R 1 2 66
+$END
+$WAVES +1
+*0
+*6
+D 8790k 1
+R 1 3 *11
+D 650k 1
+R 2 6 *95 D 620k 1
+*95
+D 680k 1
+*11
+$VALUES
+V 1
+U
+R 2 10 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 3 66
+V 1
+8
+R 1 14 70
+R 1 2 66
+$END
+$WAVES +1
+*0
+*6
+D 8790k 1
+R 1 3 *11
+D 9250k 1
+R 1 2 *11
+*41
+$VALUES
+V 1
+U
+R 2 4 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 4 2 8 66 66 66
+V 1
+8
+$END
+$WAVES +1
+*0
+*6
+D 8800k 1
+*41
+D 360k 1
+R 2 14 *35 D 330k 1
+*35
+D 90k 1
+*11
+$VALUES
+V 1
+U
+R 2 17 0 1
+V 1
+0
+$SOURCES
+V 4
+0
+8
+66
+8
+R 1 29 70
+V 1
+8
+R 1 2 66
+$END
+$WAVES +1
+*0
+*6
+D 8780k 1
+R 1 3 *11
+D 210k 1
+R 1 2 D 160k 1
+R 4 14 D 120k 1 D 170k 1 D 160k 1 D 160k 1
+D 120k 1
+D 90k 1
+*11
+$VALUES
+V 1
+U
+R 2 33 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 4 66
+R 1 59 70
+V 1
+8
+R 1 2 66
+$END
+$WAVES +1
+*0
+*6
+D 8780k 1
+*25
+D 40k 1
+*11
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 50k 1
+R 1 7 *94
+D 40k 1
+D 70k 1
+R 1 3 *11
+$VALUES
+V 1
+U
+R 2 64 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 2 66
+R 1 121 70
+V 1
+8
+R 1 4 66
+$END
+$WAVES +1
+*0
+*6
+D 8790k 1
+R 1 3 *11
+*94
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 90k 1
+R 1 13 D 40k 1
+D 110k 1
+*11
+*41
+*11
+$VALUES
+V 1
+U
+R 2 109 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 3 66
+V 1
+8
+R 1 210 70
+R 1 3 66
+V 1
+8
+$END
+$WAVES +1
+*0
+*6
+D 8780k 1
+*41
+D 9270k 1
+*11
+*41
+*11
+$VALUES
+V 1
+U
+R 2 3 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 5 66
+V 1
+8
+$END
+$WAVES +1
+*0
+*6
+D 8780k 1
+*25
+D 70k 1
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+*25
+R 1 29 *41
+D 50k 1
+*25
+R 1 2 *11
+$VALUES
+V 1
+U
+R 2 228 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 2 66
+R 1 449 70
+V 1
+8
+R 1 4 66
+$END
+$WAVES +1
+*0
+*6
+*93
+R 1 5 *11
+D 60k 1
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*41
+R 1 59 *11
+*25
+R 1 2 *11
+R 1 3 *41
+$VALUES
+V 1
+U
+R 2 456 0 1
+V 1
+0
+$SOURCES
+V 2
+0
+8
+R 1 6 66
+R 1 899 70
+V 1
+8
+R 1 5 66
+V 1
+8
+$END
+$WAVES +1
+*0
+*6
+D 8780k 1
+*11
+*41
+*11
+D 9210k 1
+R 1 2 *11
+*41
+$VALUES
+V 1
+U
+R 2 4 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 4 2 8 66 66 66
+V 1
+66
+$END
+$WAVES +1
+*0
+*6
+*93
+*41
+*25
+*11
+D 9210k 1
+D 40k 1
+*11
+*41
+$VALUES
+V 1
+U
+R 2 4 0 1
+V 1
+0
+$SOURCES
+V 1
+0
+R 4 2 8 66 66 66
+V 1
+66
+$END
+$WAVES +4
+*0
+*6
+*93
+D 60k 1
+*25
+D 9150k 1
+*25
+*94
+$VALUES
+V 1
+U
+R 2 3 0 1
+V 1
+0
+$SOURCES
+V 8
+0
+7
+65
+7
+69
+7
+65
+7
+$END
+$WAVES +1
+*0
+*87
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+2
+$END
+$WAVES +115
+*0
+D 0 2
+$VALUES
+V 2
+U
+0
+$SOURCES
+V 2
+0
+3
+$END
+$WAVES 3063 +1
+*0
+$VALUES
+V 1
+0
+$END
+$WAVES +2 +1
+*0
+*6
+$VALUES
+V 2
+U
+1
+$SOURCES
+V 2
+0
+6
+$END
+$WAVES 14 1415
+*0
+*6
+*10
+D 9410k 1
+*9
+$VALUES
+V 5
+run
+idle
+run
+wait_ppc
+idle
+$SOURCES
+V 5
+0
+12
+61
+72
+75
+$END
+$WAVES +871
+*0
+$VALUES
+V 1
+false
+$END
+$ENDWAVE

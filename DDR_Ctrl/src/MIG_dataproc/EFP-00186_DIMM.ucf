@@ -1,0 +1,275 @@
+######################################################################################################
+# EFP-00186 FFT BOARD DDR DIMM UCF constraints
+# Author : Olivier Bourgois																						 
+######################################################################################################
+
+############################################################################
+# Clock constraints                                                        #
+############################################################################
+
+NET "CLK_200" TNM_NET = "DDR_CLK_200";
+TIMESPEC "TS_DDR_CLK_200" = PERIOD "DDR_CLK_200" 5.00 ns HIGH 50 %;
+
+NET "CLK_100" TNM_NET = "DDR_CLK_100";
+TIMESPEC "TS_DDR_CLK_100" = PERIOD "DDR_CLK_100" 10.00 ns HIGH 50 %;
+
+NET "CLK_50" TNM_NET = "DDR_CLK_50";
+TIMESPEC "TS_DDR_CLK_50" = PERIOD "DDR_CLK_50" 20.00 ns HIGH 50 %;
+
+
+######################################################################################################
+# I/O STANDARDS																						 
+######################################################################################################
+
+NET  "DDR_CLK_P"           IOSTANDARD = DIFF_SSTL2_II_DCI;
+NET  "DDR_CLK_N"           IOSTANDARD = DIFF_SSTL2_II_DCI;
+NET  "DDR_CKE[*]"          IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_RESET_N"         IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_CS_N[*]"         IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_RAS_N"           IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_CAS_N"           IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_WE_N"            IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_BA[*]"           IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_ADD[*]"          IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_DQS[*]"          IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_DQ[*]"           IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_SA[*]"           IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_SCL"             IOSTANDARD = SSTL2_II_DCI;
+NET  "DDR_SDA"             IOSTANDARD = SSTL2_II_DCI;
+
+######################################################################################################
+# Area Group Constraints																			  
+######################################################################################################
+
+######################################################################################################
+# Area Group Constraints																			  
+######################################################################################################
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob0*" AREA_GROUP=dqs_gp0;
+AREA_GROUP "dqs_gp0" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob1*" AREA_GROUP=dqs_gp1;
+AREA_GROUP "dqs_gp1" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob2*" AREA_GROUP=dqs_gp2;
+AREA_GROUP "dqs_gp2" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob3*" AREA_GROUP=dqs_gp3;
+AREA_GROUP "dqs_gp3" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob4*" AREA_GROUP=dqs_gp4;
+AREA_GROUP "dqs_gp4" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob5*" AREA_GROUP=dqs_gp5;
+AREA_GROUP "dqs_gp5" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob6*" AREA_GROUP=dqs_gp6;
+AREA_GROUP "dqs_gp6" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob7*" AREA_GROUP=dqs_gp7;
+AREA_GROUP "dqs_gp7" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob8*" AREA_GROUP=dqs_gp8;
+AREA_GROUP "dqs_gp8" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob9*" AREA_GROUP=dqs_gp9;
+AREA_GROUP "dqs_gp9" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob10*" AREA_GROUP=dqs_gp10;
+AREA_GROUP "dqs_gp10" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob11*" AREA_GROUP=dqs_gp11;
+AREA_GROUP "dqs_gp11" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob12*" AREA_GROUP=dqs_gp12;
+AREA_GROUP "dqs_gp12" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob13*" AREA_GROUP=dqs_gp13;
+AREA_GROUP "dqs_gp13" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob14*" AREA_GROUP=dqs_gp14;
+AREA_GROUP "dqs_gp14" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob15*" AREA_GROUP=dqs_gp15;
+AREA_GROUP "dqs_gp15" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob16*" AREA_GROUP=dqs_gp16;
+AREA_GROUP "dqs_gp16" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/iobs_00/data_path_iobs_00/v4_dqs_iob17*" AREA_GROUP=dqs_gp17;
+AREA_GROUP "dqs_gp17" COMPRESSION = 0;  # no compression
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/data_path_00/tap_logic_00/data_tap_inc_0*" AREA_GROUP=data_tap_gp0;
+AREA_GROUP "data_tap_gp0" COMPRESSION = 0;  # no compression
+
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/data_path_00/tap_logic_00/data_tap_inc_1*" AREA_GROUP=data_tap_gp1;
+AREA_GROUP "data_tap_gp1" COMPRESSION = 0;  # no compression
+
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/data_path_00/tap_logic_00/data_tap_inc_2*" AREA_GROUP=data_tap_gp2;
+AREA_GROUP "data_tap_gp2" COMPRESSION = 0;  # no compression
+
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/data_path_00/tap_logic_00/data_tap_inc_3*" AREA_GROUP=data_tap_gp3;
+AREA_GROUP "data_tap_gp3" COMPRESSION = 0;  # no compression
+
+
+INST "DDR/ddr/DDR_Controller/mig_core/top_00/data_path_00/tap_logic_00/data_tap_inc_4*" AREA_GROUP=data_tap_gp4;
+AREA_GROUP "data_tap_gp4" COMPRESSION = 0;  # no compression
+
+######################################################################################################
+# Pin Placements																			  
+######################################################################################################
+# Clocks and Resets
+NET  "RESET_IN_N"       LOC = "G17" | IOSTANDARD = "LVCMOS33" | PULLUP;   #Bank 1
+NET  "CLK100_IN_P"      LOC = "H19" | IOSTANDARD = "LVDS_25_DCI";         #Bank 3
+NET  "CLK100_IN_N"      LOC = "H18" | IOSTANDARD = "LVDS_25_DCI";         #Bank 3
+
+# LEDs
+NET "LED[0]"            LOC = "C28" | IOSTANDARD = "LVCMOS33";
+NET "LED[1]"            LOC = "J20" | IOSTANDARD = "LVCMOS33";
+NET "LED[2]"            LOC = "H20" | IOSTANDARD = "LVCMOS33";
+NET "LED[3]"            LOC = "G20" | IOSTANDARD = "LVCMOS33";
+
+# Jumpers
+#NET "JP[0]"             LOC = "D5"  | PULLUP | IOSTANDARD = "LVCMOS25" ;
+#NET "JP[1]"             LOC = "M13" | PULLUP | IOSTANDARD = "LVCMOS25" ;
+#NET "JP[2]"             LOC = "L13" | PULLUP | IOSTANDARD = "LVCMOS25" ;
+#NET "JP[3]"             LOC = "K13" | PULLUP | IOSTANDARD = "LVCMOS25" ;  
+
+# DDR DIMM
+NET  "DDR_CLK_P"        LOC = "AJ5";   #Bank 12
+NET  "DDR_CLK_N"        LOC = "AH5";   #Bank 12
+NET  "DDR_CKE[0]" 		LOC = "E9";    #Bank 6
+NET  "DDR_CKE[1]" 		LOC = "G8";	   #Bank 6
+NET  "DDR_RESET_N"      LOC = "F8";    #Bank 6
+NET  "DDR_CS_N[0]"		LOC = "J10";   #Bank 6  S0
+NET  "DDR_CS_N[1]"		LOC = "K9";    #Bank 6  S1
+#NET  "DDR_CS_N[2]"		LOC = "E8";    #Bank 6  S2
+#NET  "DDR_CS_N[3]"		LOC = "J11";   #Bank 6  S3
+NET  "DDR_RAS_N"        LOC = "AG6";   #Bank 12
+NET  "DDR_CAS_N"        LOC = "AC9";   #Bank 12
+NET  "DDR_WE_N"         LOC = "AC10";  #Bank 12
+NET  "DDR_BA[0]"        LOC = "Y7";    #Bank 12
+NET  "DDR_BA[1]"        LOC = "W7";    #Bank 12
+#NET  "DDR_BA[2]"        LOC = "Y8";    #Bank 12
+NET  "DDR_ADD[0]"       LOC = "AE4";   #Bank 12
+NET  "DDR_ADD[1]"       LOC = "AE3";   #Bank 12
+NET  "DDR_ADD[2]"       LOC = "AD5";   #Bank 12
+NET  "DDR_ADD[3]"       LOC = "AC4";   #Bank 12
+NET  "DDR_ADD[4]"       LOC = "AC7";   #Bank 12
+NET  "DDR_ADD[5]"       LOC = "AE6";   #Bank 12
+NET  "DDR_ADD[6]"       LOC = "AK3";   #Bank 12
+NET  "DDR_ADD[7]"       LOC = "AD4";   #Bank 12
+NET  "DDR_ADD[8]"       LOC = "AF6";   #Bank 12
+NET  "DDR_ADD[9]"       LOC = "AA8";   #Bank 12
+NET  "DDR_ADD[10]"      LOC = "AL5";   #Bank 12
+NET  "DDR_ADD[11]"      LOC = "AA9";   #Bank 12
+NET  "DDR_ADD[12]"      LOC = "W9";    #Bank 12
+#NET  "DDR_ADD[13]"      LOC = "AJ4";   #Bank 12
+#NET  "DDR_ADD[14]"      LOC = "AM5";   #Bank 12
+#NET  "DDR_ADD[15]"      LOC = "AC3";   #Bank 12
+
+NET  "DDR_DQS[0]"       LOC = "C9";    #Bank 6  DQS0
+NET  "DDR_DQ[0]"        LOC = "C10";   #Bank 6
+NET  "DDR_DQ[1]"        LOC = "F9";    #Bank 6
+NET  "DDR_DQ[2]"        LOC = "H10";   #Bank 6
+NET  "DDR_DQ[3]"        LOC = "H9";    #Bank 6
+NET  "DDR_DQS[1]"       LOC = "C13";   #Bank 6  DQS9
+NET  "DDR_DQ[4]"        LOC = "E11";   #Bank 6
+NET  "DDR_DQ[5]"        LOC = "D10";   #Bank 6
+NET  "DDR_DQ[6]"        LOC = "F10";   #Bank 6
+NET  "DDR_DQ[7]"        LOC = "G10";   #Bank 6
+NET  "DDR_DQS[2]"       LOC = "D16";   #Bank 6  DQS1
+NET  "DDR_DQ[8]"        LOC = "E7";    #Bank 6
+NET  "DDR_DQ[9]"        LOC = "E12";   #Bank 6
+NET  "DDR_DQ[10]"       LOC = "E14";   #Bank 6
+NET  "DDR_DQ[11]"       LOC = "E13";   #Bank 6
+NET  "DDR_DQS[3]"       LOC = "F6";    #Bank 6  DQS10
+NET  "DDR_DQ[12]"       LOC = "D14";   #Bank 6
+NET  "DDR_DQ[13]"       LOC = "F11";   #Bank 6
+NET  "DDR_DQ[14]"       LOC = "C7";    #Bank 6
+NET  "DDR_DQ[15]"       LOC = "D7";    #Bank 6
+
+NET  "DDR_DQS[4]"       LOC = "J5";    #Bank 10 DQS2
+NET  "DDR_DQ[16]"       LOC = "H4";    #Bank 10
+NET  "DDR_DQ[17]"       LOC = "L9";    #Bank 10
+NET  "DDR_DQ[18]"       LOC = "F5";    #Bank 10
+NET  "DDR_DQ[19]"       LOC = "H5";    #Bank 10
+NET  "DDR_DQS[5]"       LOC = "J6";    #Bank 10 DQS11
+NET  "DDR_DQ[20]"       LOC = "M8";    #Bank 10
+NET  "DDR_DQ[21]"       LOC = "L8";    #Bank 10
+NET  "DDR_DQ[22]"       LOC = "G5";    #Bank 10
+NET  "DDR_DQ[23]"       LOC = "H3";    #Bank 10
+NET  "DDR_DQS[6]"       LOC = "T6";    #Bank 10 DQS3
+NET  "DDR_DQ[24]"       LOC = "P7";    #Bank 10
+NET  "DDR_DQ[25]"       LOC = "P6";    #Bank 10
+NET  "DDR_DQ[26]"       LOC = "T5";    #Bank 10
+NET  "DDR_DQ[27]"       LOC = "T4";    #Bank 10
+NET  "DDR_DQS[7]"       LOC = "V5";    #Bank 10 DQS12
+NET  "DDR_DQ[28]"       LOC = "T3";    #Bank 10
+NET  "DDR_DQ[29]"       LOC = "U3";    #Bank 10
+NET  "DDR_DQ[30]"       LOC = "T8";    #Bank 10
+NET  "DDR_DQ[31]"       LOC = "U8";    #Bank 10
+
+# verified UCF up to here...
+
+NET  "DDR_DQS[8]"       LOC = "AH4";   #Bank 12 DQS4
+NET  "DDR_DQ[32]"       LOC = "V8";    #Bank 12
+NET  "DDR_DQ[33]"       LOC = "AF4";   #Bank 12
+NET  "DDR_DQ[34]"       LOC = "AG8";   #Bank 12
+NET  "DDR_DQ[35]"       LOC = "AF3";   #Bank 12
+NET  "DDR_DQS[9]"       LOC = "AK6";   #Bank 12 DQS13
+NET  "DDR_DQ[36]"       LOC = "V7";    #Bank 12
+NET  "DDR_DQ[37]"       LOC = "AF5";   #Bank 12
+NET  "DDR_DQ[38]"       LOC = "AG7";   #Bank 12
+NET  "DDR_DQ[39]"       LOC = "AG3";   #Bank 12
+NET  "DDR_DQS[10]"      LOC = "AB3";   #Bank 12 DQS5
+NET  "DDR_DQ[40]"       LOC = "W4";    #Bank 12
+NET  "DDR_DQ[41]"       LOC = "AA6";   #Bank 12
+NET  "DDR_DQ[42]"       LOC = "AK4";   #Bank 12
+NET  "DDR_DQ[43]"       LOC = "AL3";   #Bank 12
+NET  "DDR_DQS[11]"      LOC = "AB7";   #Bank 12 DQS14
+NET  "DDR_DQ[44]"       LOC = "W5";    #Bank 12
+NET  "DDR_DQ[45]"       LOC = "Y6";    #Bank 12
+NET  "DDR_DQ[46]"       LOC = "AL4";   #Bank 12
+NET  "DDR_DQ[47]"       LOC = "AM3";   #Bank 12
+
+NET  "DDR_DQS[12]"      LOC = "AG13";  #Bank 8  DQS6
+NET  "DDR_DQ[48]"       LOC = "AF11";  #Bank 8
+NET  "DDR_DQ[49]"       LOC = "AL11";  #Bank 8
+NET  "DDR_DQ[50]"       LOC = "AK12";  #Bank 8
+NET  "DDR_DQ[51]"       LOC = "AH15";  #Bank 8
+NET  "DDR_DQS[13]"      LOC = "AJ11";  #Bank 8  DQS15
+NET  "DDR_DQ[52]"       LOC = "AM11";  #Bank 8
+NET  "DDR_DQ[53]"       LOC = "AJ12";  #Bank 8
+NET  "DDR_DQ[54]"       LOC = "AG11";  #Bank 8
+NET  "DDR_DQ[55]"       LOC = "AJ15";  #Bank 8
+NET  "DDR_DQS[14]"      LOC = "AL8";   #Bank 8  DQS7
+NET  "DDR_DQ[56]"       LOC = "AE11";  #Bank 8
+NET  "DDR_DQ[57]"       LOC = "AB11";  #Bank 8
+NET  "DDR_DQ[58]"       LOC = "AL9";   #Bank 8
+NET  "DDR_DQ[59]"       LOC = "AK9";   #Bank 8
+NET  "DDR_DQS[15]"      LOC = "AD12";  #Bank 8  DQS16
+NET  "DDR_DQ[60]"       LOC = "AA11";  #Bank 8
+NET  "DDR_DQ[61]"       LOC = "AD11";  #Bank 8
+NET  "DDR_DQ[62]"       LOC = "AJ7";   #Bank 8
+NET  "DDR_DQ[63]"       LOC = "AK7";   #Bank 8
+
+NET  "DDR_DQS[16]"      LOC = "AJ24";  #Bank 7  DQS8
+NET  "DDR_DQ[64]"       LOC = "AL18";  #Bank 7  CB0
+NET  "DDR_DQ[65]"       LOC = "AL19";  #Bank 7  CB1
+NET  "DDR_DQ[66]"       LOC = "AL20";  #Bank 7  CB2
+NET  "DDR_DQ[67]"       LOC = "AM20";  #Bank 7  CB3
+NET  "DDR_DQS[17]"      LOC = "AH27";  #Bank 7  DQS17
+NET  "DDR_DQ[68]"       LOC = "AH23";  #Bank 7  CB4
+NET  "DDR_DQ[69]"       LOC = "AM21";  #Bank 7  CB5
+NET  "DDR_DQ[70]"       LOC = "AM22";  #Bank 7  CB6
+NET  "DDR_DQ[71]"       LOC = "AM23";  #Bank 7  CB7
+
+NET  "DDR_SA[0]"        LOC = "AD7";   #Bank 12
+NET  "DDR_SA[1]"        LOC = "AL6";   #Bank 12
+NET  "DDR_SA[2]"        LOC = "AM6";   #Bank 12
+NET  "DDR_SCL"          LOC = "AA4";   #Bank 12
+NET  "DDR_SDA"          LOC = "AA5";   #Bank 12

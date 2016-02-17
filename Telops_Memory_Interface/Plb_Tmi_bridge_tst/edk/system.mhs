@@ -1,0 +1,208 @@
+
+# ##############################################################################
+# Created by Base System Builder Wizard for Xilinx EDK 10.1.03 Build EDK_K_SP3.6
+# Wed Apr 21 10:05:33 2010
+# Target Board:  Memec Virtex-4 FX12 MM Development Board Rev 1
+# Family:    virtex4
+# Device:    XC4VFX12
+# Package:   SF363
+# Speed Grade:  -10
+# Processor: ppc405_0
+# Processor clock frequency: 200.00 MHz
+# Bus clock frequency: 100.00 MHz
+# On Chip Memory :  32 KB
+# ##############################################################################
+ PARAMETER VERSION = 2.1.0
+
+
+ PORT fpga_0_RS232_RX_pin = fpga_0_RS232_RX, DIR = I
+ PORT fpga_0_RS232_TX_pin = fpga_0_RS232_TX, DIR = O
+ PORT fpga_0_LEDs_3Bit_pin = fpga_0_BaseBoard_LEDs_3Bit_GPIO_d_out, DIR = O, VEC = [0:2]
+ PORT fpga_0_UserLED_1Bit_pin = fpga_0_MM_User_LEDs_1Bit_GPIO_d_out, DIR = O, VEC = [0:0]
+ PORT fpga_0_PushButtons_2Bit_pin = fpga_0_Push_Buttons_2Bit_GPIO_in, DIR = I, VEC = [0:1]
+ PORT fpga_0_DIPSw_4Bit_pin = fpga_0_DIP_Switches_4Bit_GPIO_in, DIR = I, VEC = [0:3]
+ PORT sys_clk_pin = dcm_clk_s, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
+ PORT sys_rst_pin = sys_rst_s, DIR = I, RST_POLARITY = 0, SIGIS = RST
+ PORT TMI1_CLK = plbv46_tmi_bridge_0_TMI_CLK, DIR = O, SIGIS = CLK
+ PORT TMI1_WR_DATA = plbv46_tmi_bridge_0_TMI_WR_DATA, DIR = O, VEC = [31:0]
+ PORT TMI1_RD_DVAL = plbv46_tmi_bridge_0_TMI_RD_DVAL, DIR = I
+ PORT TMI1_RD_DATA = plbv46_tmi_bridge_0_TMI_RD_DATA, DIR = I, VEC = [31:0]
+ PORT TMI1_BUSY = plbv46_tmi_bridge_0_TMI_BUSY, DIR = I
+ PORT TMI1_DVAL = plbv46_tmi_bridge_0_TMI_DVAL, DIR = O
+ PORT TMI1_ADD = plbv46_tmi_bridge_0_TMI_ADD, DIR = O, VEC = [7:0]
+ PORT TMI1_RNW = plbv46_tmi_bridge_0_TMI_RNW, DIR = O
+ PORT TMI1_ERROR = plbv46_tmi_bridge_0_TMI_ERROR, DIR = I
+ PORT TMI1_IDLE = plbv46_tmi_bridge_0_TMI_IDLE, DIR = I
+ PORT sys_periph_reset_pin = sys_periph_reset, DIR = O, VEC = [0:0], SIGIS = RST, RST_POLARITY = 1
+ PORT sys_clk_100MHz_pin = sys_clk_s, DIR = O
+ PORT mem160Mhz_clk_s_pin = mem160Mhz_clk_s, DIR = O, SIGIS = CLK, CLK_FREQ = 160000000
+
+
+BEGIN ppc405_virtex4
+ PARAMETER INSTANCE = ppc405_0
+ PARAMETER HW_VER = 2.01.a
+ PARAMETER C_FASTEST_PLB_CLOCK = DPLB0
+ PARAMETER C_IDCR_BASEADDR = 0b0100000000
+ PARAMETER C_IDCR_HIGHADDR = 0b0111111111
+ BUS_INTERFACE JTAGPPC = jtagppc_0_0
+ BUS_INTERFACE IPLB0 = plb
+ BUS_INTERFACE DPLB0 = plb
+ BUS_INTERFACE RESETPPC = ppc_reset_bus
+ PORT CPMC405CLOCK = proc_clk_s
+END
+
+BEGIN jtagppc_cntlr
+ PARAMETER INSTANCE = jtagppc_0
+ PARAMETER HW_VER = 2.01.c
+ BUS_INTERFACE JTAGPPC0 = jtagppc_0_0
+END
+
+BEGIN plb_v46
+ PARAMETER INSTANCE = plb
+ PARAMETER C_DCR_INTFCE = 0
+ PARAMETER C_NUM_CLK_PLB2OPB_REARB = 100
+ PARAMETER HW_VER = 1.03.a
+ PORT PLB_Clk = sys_clk_s
+ PORT SYS_Rst = sys_bus_reset
+END
+
+BEGIN xps_bram_if_cntlr
+ PARAMETER INSTANCE = xps_bram_if_cntlr_1
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_SPLB_NATIVE_DWIDTH = 64
+ PARAMETER C_BASEADDR = 0xffff8000
+ PARAMETER C_HIGHADDR = 0xffffffff
+ BUS_INTERFACE SPLB = plb
+ BUS_INTERFACE PORTA = xps_bram_if_cntlr_1_port
+END
+
+BEGIN bram_block
+ PARAMETER INSTANCE = plb_bram_if_cntlr_1_bram
+ PARAMETER HW_VER = 1.00.a
+ BUS_INTERFACE PORTA = xps_bram_if_cntlr_1_port
+END
+
+BEGIN xps_uartlite
+ PARAMETER INSTANCE = RS232
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BAUDRATE = 9600
+ PARAMETER C_DATA_BITS = 8
+ PARAMETER C_ODD_PARITY = 0
+ PARAMETER C_USE_PARITY = 0
+ PARAMETER C_SPLB_CLK_FREQ_HZ = 100000000
+ PARAMETER C_BASEADDR = 0x84000000
+ PARAMETER C_HIGHADDR = 0x8400ffff
+ BUS_INTERFACE SPLB = plb
+ PORT RX = fpga_0_RS232_RX
+ PORT TX = fpga_0_RS232_TX
+END
+
+BEGIN xps_gpio
+ PARAMETER INSTANCE = BaseBoard_LEDs_3Bit
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_GPIO_WIDTH = 3
+ PARAMETER C_IS_DUAL = 0
+ PARAMETER C_ALL_INPUTS = 0
+ PARAMETER C_IS_BIDIR = 0
+ PARAMETER C_BASEADDR = 0x81460000
+ PARAMETER C_HIGHADDR = 0x8146ffff
+ BUS_INTERFACE SPLB = plb
+ PORT GPIO_d_out = fpga_0_BaseBoard_LEDs_3Bit_GPIO_d_out
+END
+
+BEGIN xps_gpio
+ PARAMETER INSTANCE = MM_User_LEDs_1Bit
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_GPIO_WIDTH = 1
+ PARAMETER C_IS_DUAL = 0
+ PARAMETER C_ALL_INPUTS = 0
+ PARAMETER C_IS_BIDIR = 0
+ PARAMETER C_BASEADDR = 0x81440000
+ PARAMETER C_HIGHADDR = 0x8144ffff
+ BUS_INTERFACE SPLB = plb
+ PORT GPIO_d_out = fpga_0_MM_User_LEDs_1Bit_GPIO_d_out
+END
+
+BEGIN xps_gpio
+ PARAMETER INSTANCE = Push_Buttons_2Bit
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_GPIO_WIDTH = 2
+ PARAMETER C_IS_DUAL = 0
+ PARAMETER C_IS_BIDIR = 0
+ PARAMETER C_ALL_INPUTS = 1
+ PARAMETER C_BASEADDR = 0x81400000
+ PARAMETER C_HIGHADDR = 0x8140ffff
+ BUS_INTERFACE SPLB = plb
+ PORT GPIO_in = fpga_0_Push_Buttons_2Bit_GPIO_in
+END
+
+BEGIN xps_gpio
+ PARAMETER INSTANCE = DIP_Switches_4Bit
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_GPIO_WIDTH = 4
+ PARAMETER C_IS_DUAL = 0
+ PARAMETER C_IS_BIDIR = 0
+ PARAMETER C_ALL_INPUTS = 1
+ PARAMETER C_BASEADDR = 0x81420000
+ PARAMETER C_HIGHADDR = 0x8142ffff
+ BUS_INTERFACE SPLB = plb
+ PORT GPIO_in = fpga_0_DIP_Switches_4Bit_GPIO_in
+END
+
+BEGIN clock_generator
+ PARAMETER INSTANCE = clock_generator_0
+ PARAMETER HW_VER = 2.01.a
+ PARAMETER C_EXT_RESET_HIGH = 1
+ PARAMETER C_CLKIN_FREQ = 100000000
+ PARAMETER C_CLKOUT0_FREQ = 100000000
+ PARAMETER C_CLKOUT0_BUF = TRUE
+ PARAMETER C_CLKOUT0_PHASE = 0
+ PARAMETER C_CLKOUT0_GROUP = DCM0
+ PARAMETER C_CLKOUT1_FREQ = 200000000
+ PARAMETER C_CLKOUT1_BUF = TRUE
+ PARAMETER C_CLKOUT1_PHASE = 0
+ PARAMETER C_CLKOUT1_GROUP = DCM0
+ PARAMETER C_CLKIN_BUF = FALSE
+ PARAMETER C_CLKOUT2_FREQ = 160000000
+ PARAMETER C_CLKOUT2_PHASE = 0
+ PARAMETER C_CLKOUT2_GROUP = DCM0
+ PARAMETER C_CLKOUT2_BUF = TRUE
+ PORT CLKOUT0 = sys_clk_s
+ PORT CLKOUT1 = proc_clk_s
+ PORT CLKIN = dcm_clk_s
+ PORT LOCKED = Dcm_all_locked
+ PORT RST = net_gnd
+ PORT CLKOUT2 = mem160Mhz_clk_s
+END
+
+BEGIN proc_sys_reset
+ PARAMETER INSTANCE = proc_sys_reset_0
+ PARAMETER HW_VER = 2.00.a
+ PARAMETER C_EXT_RESET_HIGH = 0
+ BUS_INTERFACE RESETPPC0 = ppc_reset_bus
+ PORT Slowest_sync_clk = sys_clk_s
+ PORT Dcm_locked = Dcm_all_locked
+ PORT Ext_Reset_In = sys_rst_s
+ PORT Bus_Struct_Reset = sys_bus_reset
+ PORT Peripheral_Reset = sys_periph_reset
+END
+
+BEGIN plbv46_tmi_bridge
+ PARAMETER INSTANCE = plbv46_tmi_bridge_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_TMI_ALEN = 8
+ PARAMETER C_MEM0_BASEADDR = 0xce800000
+ PARAMETER C_MEM0_HIGHADDR = 0xce80ffff
+ BUS_INTERFACE SPLB = plb
+ PORT TMI_CLK = plbv46_tmi_bridge_0_TMI_CLK
+ PORT TMI_WR_DATA = plbv46_tmi_bridge_0_TMI_WR_DATA
+ PORT TMI_RD_DVAL = plbv46_tmi_bridge_0_TMI_RD_DVAL
+ PORT TMI_RD_DATA = plbv46_tmi_bridge_0_TMI_RD_DATA
+ PORT TMI_BUSY = plbv46_tmi_bridge_0_TMI_BUSY
+ PORT TMI_DVAL = plbv46_tmi_bridge_0_TMI_DVAL
+ PORT TMI_ADD = plbv46_tmi_bridge_0_TMI_ADD
+ PORT TMI_RNW = plbv46_tmi_bridge_0_TMI_RNW
+ PORT TMI_ERROR = plbv46_tmi_bridge_0_TMI_ERROR
+ PORT TMI_IDLE = plbv46_tmi_bridge_0_TMI_IDLE
+END
+

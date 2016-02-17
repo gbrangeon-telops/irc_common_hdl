@@ -1,0 +1,132 @@
+#################################################################################
+##
+##      Project:  Aurora Module Generator version 2.4
+##
+##         Date:  $Date: 2005/12/19 20:20:54 $
+##          Tag:  $Name: i+IP+98818 $
+##         File:  $RCSfile: aurora_sample_v4_ucf.ejava,v $
+##          Rev:  $Revision: 1.1.2.8 $
+##
+##      Company:  Xilinx
+## Contributors:  R. K. Awalt, B. L. Woodard, N. Gulstone, N. Jayarajan
+##
+##   Disclaimer:  XILINX IS PROVIDING THIS DESIGN, CODE, OR
+##                INFORMATION "AS IS" SOLELY FOR USE IN DEVELOPING
+##                PROGRAMS AND SOLUTIONS FOR XILINX DEVICES.  BY
+##                PROVIDING THIS DESIGN, CODE, OR INFORMATION AS
+##                ONE POSSIBLE IMPLEMENTATION OF THIS FEATURE,
+##                APPLICATION OR STANDARD, XILINX IS MAKING NO
+##                REPRESENTATION THAT THIS IMPLEMENTATION IS FREE
+##                FROM ANY CLAIMS OF INFRINGEMENT, AND YOU ARE
+##                RESPONSIBLE FOR OBTAINING ANY RIGHTS YOU MAY
+##                REQUIRE FOR YOUR IMPLEMENTATION.  XILINX
+##                EXPRESSLY DISCLAIMS ANY WARRANTY WHATSOEVER WITH
+##                RESPECT TO THE ADEQUACY OF THE IMPLEMENTATION,
+##                INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OR
+##                REPRESENTATIONS THAT THIS IMPLEMENTATION IS FREE
+##                FROM CLAIMS OF INFRINGEMENT, IMPLIED WARRANTIES
+##                OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+##                PURPOSE.
+##
+##                (c) Copyright 2004 Xilinx, Inc.
+##                All rights reserved.
+##
+#################################################################################
+##
+##  AURORA_SAMPLE_UCF
+##
+##  Author: Nigel Gulstone, Nanditha Jayarajan
+##          Xilinx - Embedded Networking System Engineering Group
+##
+##  Description: This is the user constraints file for a 2 lane Aurora
+##               core. This module supports the following features:
+##
+##              *   Supports Virtex 4 on an evaluation board
+##
+##
+##              This ucf file is for an xc4vfx60 on an ML425 board. Since you are using an xc4vfx100 device, you
+##              must change all the LOC constraints that are currently commented out to match your current board
+
+
+################################## Clock Constraints ##########################
+
+# User Clock Contraint: the value is selected based on the line rate and lane width of the module
+NET user_clk_i PERIOD = 20.0  ns;
+
+
+# Reference clock contraint for MGTs on the left edge of the V4 device
+NET ref_clk1_left_i PERIOD = 5.0 ns;
+
+
+# Drp Clock Constraint  
+NET init_clk_i PERIOD = 20 ns;
+
+# Constraints for Calibration Block RX frequency detectors
+NET aurora_module_i/mgt_wrapper_i/mgt0_rxrecclk2_buf_i PERIOD = 20 ns;
+NET aurora_module_i/mgt_wrapper_i/mgt1_rxrecclk2_buf_i PERIOD = 20 ns;
+
+#Constraints for Calibration Block TX frequency detectors
+NET aurora_module_i/mgt_wrapper_i/mgt1_txoutclk1_buf_i PERIOD = 20 ns;
+
+
+################Set the locations of the pins for an ML421 board##############
+
+
+  # 250.00 MHz Diff Crystal Connection from bottom MGTCLK
+#NET REF_CLK1_LEFT_N  LOC=AF20;
+#NET REF_CLK1_LEFT_P  LOC=AF21;
+
+INST GT11CLK_MGT_LEFT LOC = GT11CLK_X0Y1;
+INST GT11CLK_MGT_LEFT SYNCLK1OUTEN = ENABLE;
+INST GT11CLK_MGT_LEFT SYNCLK2OUTEN = DISABLE;
+
+
+
+
+#NET INIT_CLK        LOC=AB14;  #OSCILLATOR
+
+#NET RESET           LOC=AA3;   #BUTTON
+#NET PMA_INIT        LOC=AA4;   #BUTTON SW2
+#NET RESET_CALBLOCKS LOC=W4;    #BUTTON SW3
+
+#NET CHANNEL_UP      LOC=V4;     #LED
+#NET HARD_ERROR      LOC=U4;     #LED
+#NET SOFT_ERROR      LOC=T3;     #LED
+#NET FRAME_ERROR     LOC=T4;     #LED
+
+#NET ERROR_COUNT(0)  LOC=AC9;     #LED
+#NET ERROR_COUNT(1)  LOC=AD8;     #LED
+#NET ERROR_COUNT(2)  LOC=AD9;     #LED
+#NET ERROR_COUNT(3)  LOC=V6;      #LED
+#NET ERROR_COUNT(4)  LOC=U7;      #LED
+#NET ERROR_COUNT(5)  LOC=U9;      #LED
+#NET ERROR_COUNT(6)  LOC=N4;      #LED
+#NET ERROR_COUNT(7)  LOC=M4;      #LED
+
+
+#NET RX_SIGNAL_DETECT(0) LOC=L3;       #DIP Switch. Must be high for operation
+#NET RX_SIGNAL_DETECT(1) LOC=AB6;      #DIP Switch. Must be high for operation
+
+
+
+#This board supports a maximum of 8 lanes
+#NET LANE_UP(0)       LOC=E20;     #Header Pin
+#NET LANE_UP(1)       LOC=D20;     #Header Pin
+
+
+
+##########################    MGT Location Constraints ####################
+
+   
+
+# Place aurora_module_i/mgt_wrapper_i/MGT0 at location X0Y0 
+INST aurora_module_i/mgt_wrapper_i/MGT0 LOC=GT11_X0Y0;
+
+
+   
+
+# Place aurora_module_i/mgt_wrapper_i/MGT1 at location X0Y1 
+INST aurora_module_i/mgt_wrapper_i/MGT1 LOC=GT11_X0Y1;
+
+
+

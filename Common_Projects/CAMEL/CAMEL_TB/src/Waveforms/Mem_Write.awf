@@ -1,0 +1,237 @@
+$WAVE4
+$RESOLUTION 1000
+I 1 "r#9#t_ll_mosi5 SOF c#9#std_logicc9 UX01ZWLH-EOF c#9#std_logicc9 UX01ZWLH-DATA a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-DVAL c#9#std_logicc9 UX01ZWLH-SUPPORT_BUSY c#9#std_logicc9 UX01ZWLH-"
+I 2 "c#9#std_logicc9 UX01ZWLH-"
+I 3 "a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS IN 1 1 5 "DPB/FPGA1/S1/NGC/BIP/RX_MOSI"
+$CHILD 4 2 1
+$SC 2 3 5-22
+$S +1 2 24 0 DVAL
+I 4 "r#14#t_output_debug4 FPGA_ID c#9#std_logicc9 UX01ZWLH-Z a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-Y a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-X a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-"
+I 5 "a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 4 4 21 0 rx_data_decode
+$CHILD +2 1 24
+$CHILD +8 2 24
+$CHILD 38 3 24
+$SC +1 +2-+4 +2-+4 +2-+4
+I 6 "r#9#t_ll_miso2 AFULL c#9#std_logicc9 UX01ZWLH-BUSY c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 6 2 21 0 RX_MISO
+$SC +1 +1
+$IN +1 2 21 0 MEM_WRITE_STALLED
+$S +1 2 21 0 EMERGENCY_ABORT
+$OUT +1 2 17 0 "CTRL/FINISH_NOW"
+I 7 "a#20#UNSIGNED(2 downto 0)1 ricd2 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 7 3 17 0 "BIP/valid_page_images_m1"
+$SC +1-+2
+I 8 "c#17#t_fsm_cache_states7 idle w0 w1r0 w0r1 r0 r1 pause "
+$S +1 8 21 0 cache_state
+$BUS S +1 7 3 21 0 max_frames
+$SC +1-+2
+I 9 "a#21#UNSIGNED(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 9 16 21 0 wr_pixel
+$SC +1-75
+$BUS S +1 7 3 24 0 frame
+$SC +1-+2
+I 10 "a#25#UNSIGNED(ZLEN-1 downto 0)1 ricd23 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 10 24 24 0 z_cnt
+$SC +1-+23
+$BUS S +1 10 24 29 0 _m1
+$SC +1-+23
+$BUS S +1 7 3 32 0 _mod6
+$SC +1-+2
+$BUS S +1 7 3 36 0 "8"
+$SC +1-+2
+I 11 "a#25#UNSIGNED(ZLEN-3 downto 0)1 ricd21 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 11 22 33 0 d6
+$SC +1-+21
+I 12 "a#25#UNSIGNED(ZLEN-4 downto 0)1 ricd20 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 12 21 34 0 "8"
+$SC +1-+20
+I 13 "a#28#std_logic_vector(3 downto 0)1 ricd3 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 13 4 21 0 divisor
+$SC +1-+3
+$BUS S +1 9 16 21 0 rd_pixel
+$SC +1-+15
+$BUS S +1 7 3 24 0 frame
+$SC +1-+2
+I 14 "a#29#std_logic_vector(19 downto 0)1 ricd19 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 14 20 21 0 ZBT_RD_ADD
+$SC +1-+19
+$OUT +1 2 31 0 _EN
+$IN +1 2 32 0 AFULL
+$BUS IN +1 3 16 28 0 DATA
+$SC +1-+15
+$BUS S +1 4 4 32 0 _decode
+$CHILD +2 1 249
+$CHILD +8 2 249
+$CHILD +14 3 249
+$SC +1 +2-+4 +2-+4 +2-+4
+$IN +1 2 29 0 VAL
+$OUT +1 2 29 0 ATA_EN
+$OUT +1 2 33 0 BUSY
+$IN +1 2 28 0 IDLE
+$IN +1 2 21 0 RUN
+$OUT +1 2 21 0 DONE
+I 15 "r#14#MemWriteConfig12 IMGSIZE a#27#UNSIGNED(IMGLEN-1 downto 0)1 ricd19 0 c#9#std_logicc9 UX01ZWLH-IMGSIZE_M1 a#27#UNSIGNED(IMGLEN-1 downto 0)1 ricd19 0 c#9#std_logicc9 UX01ZWLH-ZSIZE a#25#UNSIGNED(ZLEN-1 downto 0)1 ricd23 0 c#9#std_logicc9 UX01ZWLH-ZSIZE_M1 a#25#UNSIGNED(ZLEN-1 downto 0)1 ricd23 0 c#9#std_logicc9 UX01ZWLH-ZSIZE_M1_D6_P1 a#25#UNSIGNED(ZLEN-3 downto 0)1 ricd21 0 c#9#std_logicc9 UX01ZWLH-ZSIZE_M1_D8_P1 a#25#UNSIGNED(ZLEN-4 downto 0)1 ricd20 0 c#9#std_logicc9 UX01ZWLH-LAST_PAGE_CNT_M1 a#20#UNSIGNED(2 downto 0)1 ricd2 0 c#9#std_logicc9 UX01ZWLH-TAGSIZE a#27#UNSIGNED(TAGLEN-1 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-AVGSIZE a#27#UNSIGNED(AVGLEN-1 downto 0)1 ricd5 0 c#9#std_logicc9 UX01ZWLH-INIT_ADD a#23#UNSIGNED(AMAX downto 0)1 ricd26 0 c#9#std_logicc9 UX01ZWLH-CONTROL a#28#std_logic_vector(0 downto 0)1 ricd0 0 c#9#std_logicc9 UX01ZWLH-CONFIG a#28#std_logic_vector(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-"
+I 16 "a#27#UNSIGNED(IMGLEN-1 downto 0)1 ricd19 0 c#9#std_logicc9 UX01ZWLH-"
+I 17 "a#27#UNSIGNED(TAGLEN-1 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-"
+I 18 "a#27#UNSIGNED(AVGLEN-1 downto 0)1 ricd5 0 c#9#std_logicc9 UX01ZWLH-"
+I 19 "a#23#UNSIGNED(AMAX downto 0)1 ricd26 0 c#9#std_logicc9 UX01ZWLH-"
+I 20 "a#28#std_logic_vector(0 downto 0)1 ricd0 0 c#9#std_logicc9 UX01ZWLH-"
+I 21 "a#28#std_logic_vector(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS IN +1 15 12 21 0 CFG
+$CHILD +1 0 275
+$CHILD +1 0 275
+$CHILD +22 1 275
+$CHILD +22 1 275
+$CHILD +43 2 275
+$CHILD +43 2 275
+$CHILD +68 3 275
+$CHILD +68 3 275
+$CHILD +93 4 275
+$CHILD +93 4 275
+$CHILD 391 5 275
+$CHILD 391 5 275
+$CHILD 413 6 275
+$CHILD 413 6 275
+$CHILD 417 7 275
+$CHILD 417 7 275
+$CHILD 426 8 275
+$CHILD 426 8 275
+$CHILD 433 9 275
+$CHILD 461 10 275
+$CHILD 463 11 275
+$SC +2-+19 +2-+19 +2-+23 +2-+23 +2-+21 +2-+20 +2-+2 +2-+7 +2-+5 +2-+26 +2 +2-+7
+$BUS OUT +1 7 3 21 0 VALID_PAGE_IMG_M1
+$SC +1-+2
+$NOMODE +1 0 "" -1 0 1448032600
+$BUS IN +1 1 5 "DPB/FPGA1/S1/NGC/AVG/RX_MOSI"
+$CHILD +3 2 477
+$SC +1 +1 +2-+17
+$BUS OUT +1 6 2 25 0 ISO
+$SC +1 +1
+I 22 "r#11#t_ll_mosi215 SOF c#9#std_logicc9 UX01ZWLH-EOF c#9#std_logicc9 UX01ZWLH-DATA a#29#std_logic_vector(20 downto 0)1 ricd20 0 c#9#std_logicc9 UX01ZWLH-DVAL c#9#std_logicc9 UX01ZWLH-SUPPORT_BUSY c#9#std_logicc9 UX01ZWLH-"
+I 23 "a#29#std_logic_vector(20 downto 0)1 ricd20 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 22 5 21 0 TX_MOSI
+$CHILD +3 2 502
+$SC +1 +1 +2-+22
+$BUS IN +1 6 2 25 0 ISO
+$SC +1 +1
+$NOMODE +1 0 "" -1 0 1448032600
+$BUS IN +1 22 5 "DPB/FPGA1/S1/NGC/CORE/RX_MOSI"
+$CHILD +3 2 533
+$SC +1 +1 +2-+22
+$BUS OUT +1 6 2 26 0 ISO
+$SC +1 +1
+I 24 "a#29#std_logic_vector(26 downto 0)1 ricd26 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 24 27 22 0 DDR_WR_ADD
+$SC +1-+26
+I 25 "a#30#std_logic_vector(127 downto 0)1 ricd127 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 25 128 29 0 DATA
+$SC +1-719
+$OUT +1 2 29 0 WE
+$IN +1 2 29 0 AFULL
+$S +1 2 23 0 ONEi
+$S +1 2 22 0 master_busy
+$BUS S +1 7 3 24 0 x_frames
+$SC +1-+2
+I 26 "c#15#t_fsm_ddr_states3 ddridle ddrrun ddrpause "
+$S +1 26 22 0 ddr_state
+$BUS S +1 16 20 22 0 Pixel_cnt
+$SC +1-+19
+$BUS S +1 10 24 22 4 Z
+$SC +1-+23
+I 27 "i#20#INTEGER range 0 to 7rict0 7 "
+$S +1 27 22 0 SubIndex16
+I 28 "i#20#INTEGER range 0 to 5rict0 5 "
+$S +1 28 30 0 "20"
+$BUS S +1 7 3 22 0 frame_cnt
+$SC +1-+2
+$S +1 2 22 0 inc_add
+$BUS S +1 10 24 22 0 Z_cnt_minus_one
+$SC +1-+23
+$S +1 2 22 1 Force128bitWrit
+$NOMODE +1 0 "" -1 0 1448032600
+I 29 "r#9#t_wb_mosi5 DAT a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-WE c#9#std_logicc9 UX01ZWLH-ADR a#29#std_logic_vector(11 downto 0)1 ricd11 0 c#9#std_logicc9 UX01ZWLH-CYC c#9#std_logicc9 UX01ZWLH-STB c#9#std_logicc9 UX01ZWLH-"
+I 30 "a#29#std_logic_vector(11 downto 0)1 ricd11 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS IN +1 29 5 "DPB/FPGA1/S1/NGC/CTRL/WB_MOSI"
+$CHILD +1 0 809
+$CHILD +19 2 809
+$SC +2-+16 +2-+13
+I 31 "r#9#t_wb_miso2 DAT a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-ACK c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 31 2 26 0 ISO
+$CHILD +1 0 843
+$SC +2-+16
+$IN +1 2 22 0 NEW_DCUBE
+$S +1 2 31 0 _pending
+$IN +1 2 22 0 EOF_DCUBE
+$S +1 2 31 0 _reg
+$OUT +1 2 22 0 PERMIT_FLOW
+I 32 "a#28#std_logic_vector(8 downto 0)1 ricd8 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 32 9 22 0 ERRORS
+$SC +1-+8
+$BUS OUT +1 15 12 22 0 CFG
+$CHILD +1 0 877
+$CHILD +22 1 877
+$CHILD +43 2 877
+$CHILD +68 3 877
+$CHILD +93 4 877
+$CHILD 993 5 877
+$CHILD +138 6 877
+$CHILD +142 7 877
+$CHILD +151 8 877
+$CHILD +158 9 877
+$CHILD +186 10 877
+$CHILD +188 11 877
+$SC +2-+19 +2-+19 +2-+23 +2-+23 +2-+21 +2-+20 +2-+2 +2-+7 +2-+5 +2-+26 +2 +2-+7
+$BUS OUT +1 18 6 22 0 DCUBE_CNT
+$SC +1-+5
+$OUT +1 2 22 0 MEM_WRITE_STALLED
+$OUT +1 2 23 0 ASTER_BUSY
+$OUT +1 2 22 0 FINISH_NOW
+$OUT +1 2 22 0 BIP_RUN
+$IN +1 2 26 0 DONE
+$IN +1 2 26 0 ONE_PIXEL_RECVD
+$IN +1 2 26 0 IMG_SIZE_ERR
+$IN +1 2 26 0 DVAL
+$IN +1 2 22 0 ZBT_WR_EN
+$IN +1 2 26 0 RD_DVAL
+$IN +1 2 29 0 IDLE
+$IN +1 2 26 0 CACHE_BUSY
+I 33 "a#28#std_logic_vector(5 downto 0)1 ricd5 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS IN +1 33 6 26 0 VALID_WINDOW
+$SC +1-+5
+$IN +1 2 26 0 CACHE_PRESENT
+$IN +1 2 26 0 TEST_PASS
+$IN +1 2 26 0 FIFO_ERR
+$OUT +1 2 22 0 AVG_RUN
+$IN +1 2 26 0 DVAL
+$IN +1 2 26 0 FIFO_ERR
+$IN +1 2 26 0 ONE_PIXEL_RECVD
+$IN +1 2 22 1 DDR_RD_DVALI
+$OUT +1 2 22 0 CORE_RUN
+$IN +1 2 27 0 DONE
+$IN +1 2 22 1 DDR_WR_W
+$IN +1 2 22 0 MR_FIFO_ERR
+I 34 "c#16#t_main_fsm_states7 idle resetstatus waitingfornewcube init cubeinprogress waitforeofcube pause "
+$S +1 34 22 0 main_state
+$BUS S +1 15 12 22 0 c
+$CHILD +1 0 1113
+$CHILD +22 1 1113
+$CHILD +43 2 1113
+$CHILD +68 3 1113
+$CHILD +93 4 1113
+$CHILD +116 5 1113
+$CHILD +138 6 1113
+$CHILD +142 7 1113
+$CHILD +151 8 1113
+$CHILD +158 9 1113
+$CHILD +186 10 1113
+$CHILD +188 11 1113
+$SC +2-+19 +2-+19 +2-+23 +2-+23 +2-+21 +2-+20 +2-+2 +2-+7 +2-+5 +2-+26 +2 +2-+7
+P 0 1-1309 CS "0"
+P 0 476 +56 808 EmptyRow "1"
+P 0 50 +5 +4 76 +4 +25 +83 +17 +71-+42/21 +25 +25 +23 +22 +4 +9 +46 724 +5 +21 +27 Radix "10"
+P 0 49 Radix "2"
+P 0 +0 Shape "3"
+$ENDWAVE

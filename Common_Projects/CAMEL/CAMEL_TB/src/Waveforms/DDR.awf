@@ -1,0 +1,175 @@
+$WAVE4
+$RESOLUTION 1000
+I 1 "e#9#std_logicc9 UX01ZWLH-"
+$OUT 1 1 "DPB/FPGA1/DDR/ddr/ddr/ddr_core/init_done"
+$OUT 2 1 14 0 WR1_AFULL
+I 2 "a#30#std_logic_vector(127 downto 0)1 ricd127 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS IN 3 2 128 18 0 DATA
+$SC 4-131
+I 3 "a#29#std_logic_vector(26 downto 0)1 ricd26 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS IN +1 3 27 18 0 ADD
+$SC +1-+26
+$IN +1 1 18 0 EN
+$NOMODE +1 0 "" -1 0 1500000000
+$IN +1 1 "DPB/FPGA1/DDR/RD1_DATA_EN"
+$OUT +1 1 18 0 AFULL
+$OUT +1 1 18 1 DVA
+$BUS OUT +1 2 128 19 0 ATA
+$SC +1-293
+$IN +1 1 18 0 ADD_EN
+$BUS IN +1 3 27 21 0 ""
+$SC +1-+26
+$NOMODE +1 0 "" -1 0 1500000000
+$OUT +1 1 "DPB/FPGA1/DDR/RD2_AFULL"
+$IN +1 1 18 0 DATA_EN
+$OUT +1 1 19 0 VAL
+$BUS OUT +1 2 128 19 0 ATA
+$SC +1-455
+$IN +1 1 18 0 ADD_EN
+$BUS IN +1 3 27 21 0 ""
+$SC +1-+26
+$NOMODE +1 0 "" -1 0 1500000000
+I 4 "a#40#std_logic_vector((DATAWIDTH-1) downto 0)1 ricd143 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 4 144 "DPB/FPGA1/DDR/ddr/DDR_test/data_path/dat_local"
+$SC +1-630
+$BUS S +1 4 144 38 6 in
+$SC +1-775
+$BUS S +1 4 144 37 0 test_vect
+$SC +1-920
+I 5 "a#42#std_logic_vector((DATAWIDTH/2-1) downto 0)1 ricd71 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 5 72 37 0 datn
+$SC +1-+71
+$BUS S +1 5 72 40 0 p
+$SC +1-+71
+I 6 "a#28#std_logic_vector(9 downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 6 10 37 0 pend_cnt
+$SC +1-+9
+I 7 "a#28#std_logic_vector(7 downto 0)1 ricd7 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 7 8 37 4 dead_bit
+$SC +1-+7
+$IN +1 1 37 0 CLK
+$IN +1 1 37 0 RST_DPTH
+$IN +1 1 37 0 DAT_INV
+$IN +1 1 37 0 NXT_ADR
+$IN +1 1 41 0 DAT
+$OUT +1 1 37 0 DAT_PEND
+$BUS IN +1 7 8 40 0 ""
+$SC +1-+7
+$BUS OUT +1 4 144 38 1 OU
+$SC +1-+143
+$BUS IN +1 4 144 38 0 IN
+$SC +1-+143
+$OUT +1 1 38 0 AT_EQ
+I 8 "a#28#std_logic_vector(6 downto 0)1 ricd6 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 8 7 38 0 EAD_BIT
+$SC +1-+6
+$OUT +1 1 42 0 FND
+$NOMODE +1 0 "" -1 0 1500000000
+$S +1 1 "DPB/FPGA1/DDR/ddr/DDR_test/mem_test_controller/dat_inv_loc"
+I 9 "i#20#INTEGER range 0 to 1rict0 1 "
+$S +1 9 48 0 elay_counter_ddr_test_sm
+I 10 "e#16#ddr_test_sm_types10 d1_ds1 d2_ds2 write reset read ok err wr_end rd_end notest "
+$S +1 10 48 0 dr_test_sm
+$IN +1 1 47 0 CLK
+$IN +1 1 47 0 DAT_EQ
+$IN +1 1 51 0 PEND
+$IN +1 1 50 1 A_VL
+$IN +1 1 48 0 DRT_TRIG
+$IN +1 1 47 0 LST_ADR
+$IN +1 1 47 0 SINIT
+$IN +1 1 47 0 U_BUSY
+$OUT +1 1 47 0 DAT_INV
+I 11 "a#28#std_logic_vector(1 downto 0)1 ricd1 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 11 2 48 0 DRT_STAT
+$SC +1 +1
+$OUT +1 1 47 1 EN_TES
+$OUT +1 1 47 0 NXT_ADR
+$OUT +1 1 51 0 DAT
+$OUT +1 1 47 0 RST_GEN
+I 12 "a#28#std_logic_vector(2 downto 0)1 ricd2 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 12 3 47 0 U_CMD
+$SC +1-+2
+$OUT +1 1 52 1 _VALI
+$NOMODE +1 0 "" -1 0 1500000000
+$IN +1 1 "DPB/FPGA1/DDR/ddr/ddr/ddr_core/cntrl0_APP_WDF_WREN"
+$OUT +1 1 38 0 WDF_ALMOST_FULL
+$IN +1 1 38 0 APP_AF_WREN
+$OUT +1 1 39 0 F_ALMOST_FULL
+$OUT +1 1 38 0 READ_DATA_VALID
+$NOMODE +1 0 "" -1 0 1500000000
+I 13 "e#10#State_types6 init write1 write2 read1 read2 read3 "
+$S +1 13 "DPB/FPGA1/DDR/ddr/ddr/ddr_arbitrator/U6/FSM/State"
+I 14 "a#29#std_logic_vector(27 downto 0)1 ricd27 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 14 28 35 0 _ADDR
+$SC +1-+27
+$BUS OUT +1 12 3 36 0 CMD
+$SC +1-+2
+$OUT +1 1 39 1 _VALI
+$IN +1 1 34 0 CORE_AFULL
+$NOMODE +1 0 "" -1 0 1500000000
+I 15 "a#28#std_logic_vector(8 downto 0)1 ricd8 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 15 9 "DPB/FPGA1/DDR/ddr/DDR_arbitrator/RDF1_cnt"
+$SC +1-+8
+I 16 "a#20#UNSIGNED(9 downto 0)1 ricd9 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 16 10 41 0 _xtd
+$SC +1-+9
+$S +1 1 38 0 full
+$S +1 1 38 4 a
+$BUS S +1 15 9 33 0 SRDF_d_cnt
+$SC +1-+8
+$S +1 1 38 0 full
+$S +1 1 38 4 a
+$NOMODE +1 0 "" -1 0 1500000000
+I 17 "a#46#std_logic_vector((USER_ADDR_WIDTH-1) downto 0)1 ricd26 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS IN +1 17 27 "DPB/FPGA1/DDR/ddr/ddr/ddr_arbitrator/WR1_ADD"
+$SC +1-+26
+$IN +1 1 38 0 EN
+I 18 "a#46#std_logic_vector((USER_DATA_WIDTH-1) downto 0)1 ricd127 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS IN +1 18 128 38 0 DATA
+$SC +1-+127
+$OUT +1 1 38 0 AFULL
+$NOMODE +1 0 "" -1 0 1500000000
+$BUS IN +1 17 27 "DPB/FPGA1/DDR/ddr/ddr/ddr_arbitrator/RD2_ADD"
+$SC +1-+26
+$IN +1 1 41 0 _EN
+$OUT +1 1 39 0 FULL
+$BUS OUT +1 18 128 39 0 ATA
+$SC +1-+127
+$OUT +1 1 39 0 VAL
+$IN +1 1 39 0 ATA_EN
+$NOMODE +1 0 "" -1 0 1500000000
+$BUS OUT +1 18 128 "DPB/FPGA1/DDR/ddr/ddr/ddr_arbitrator/RD1_DATA"
+$SC +1-+127
+$OUT +1 1 38 0 AFULL
+$OUT +1 1 38 1 DVA
+$BUS IN +1 17 27 38 0 ADD
+$SC +1-+26
+$IN +1 1 41 0 _EN
+$IN +1 1 38 3 DATA
+$NOMODE +1 0 "" -1 0 1500000000
+$OUT +1 1 "DPB/FPGA1/DDR/ddr/DDR_arbitrator/IDLE"
+$S +1 1 33 0 WF1_empty
+$S +1 1 42 1 _dl
+$S +1 1 35 1 "2_empt"
+$S +1 1 42 1 _dl
+$S +1 1 33 1 RAF1_empt
+$S +1 1 43 1 _dl
+$S +1 1 36 1 "2_empt"
+$S +1 1 43 1 _dl
+$S +1 1 36 1 "3_empt"
+$S +1 1 43 1 _dl
+$S +1 1 33 1 SRDF_empt
+$S +1 1 33 6 USER_req_fifos
+$S +1 1 38 6 SRDF
+$S +1 1 33 0 IDLE_buf
+$S +1 1 33 0 new_request
+$S +1 1 33 0 req_fifos_empty
+I 19 "a#20#UNSIGNED(4 downto 0)1 ricd4 0 e#9#std_logicc9 UX01ZWLH-"
+$BUS VARIABLE +1 19 5 33 0 "Idle_process/cnt"
+$SC +1-+4
+$NOMODE +1 0 "" -1 0 1500000000
+P 0 161-485/162 +917 +25 +6 +37 +36 +160-+324/162 +24 CS "0"
+P 0 1-160 +2-322 +2-484 +2-+915 +2-+23 +2-+4 +2-+35 +2-+34 +2-+158 +2-+160 +2-+160 +2-+22 CS "1"
+P 0 161-485/162 +917 +25 +6 +37 +36 +160-+324/162 +24 EmptyRow "1"
+P 0 1427 +43 +544 Height "37"
+$ENDWAVE

@@ -1,0 +1,5058 @@
+--------------------------------------------------------------------------------
+-- Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+--------------------------------------------------------------------------------
+--   ____  ____
+--  /   /\/   /
+-- /___/  \  /    Vendor: Xilinx
+-- \   \   \/     Version: K.39
+--  \   \         Application: netgen
+--  /   /         Filename: fixtofp32_16s_sim.vhd
+-- /___/   /\     Timestamp: Tue Sep 25 15:28:45 2012
+-- \   \  /  \ 
+--  \___\/\___\
+--             
+-- Command	: -ofmt vhdl -intstyle xflow -w ..\netlist\fixtofp32_16s.ngc ..\vhm\fixtofp32_16s_sim.vhd 
+-- Device	: xc4vfx100-10-ff1152
+-- Input file	: ../netlist/fixtofp32_16s.ngc
+-- Output file	: ../vhm/fixtofp32_16s_sim.vhd
+-- # of Entities	: 1
+-- Design Name	: fixtofp32_16s
+-- Xilinx	: C:\Xilinx\10.1\ISE
+--             
+-- Purpose:    
+--     This VHDL netlist is a verification model and uses simulation 
+--     primitives which may not represent the true implementation of the 
+--     device, however the netlist is functionally correct and should not 
+--     be modified. This file cannot be synthesized and should only be used 
+--     with supported simulation tools.
+--             
+-- Reference:  
+--     Development System Reference Guide, Chapter 23
+--     Synthesis and Simulation Design Guide, Chapter 6
+--             
+--------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+library UNISIM;
+use UNISIM.VCOMPONENTS.ALL;
+use UNISIM.VPKG.ALL;
+
+entity fixtofp32_16s is
+  port (
+    CLK : in STD_LOGIC := 'X'; 
+    TX_MOSI_DVAL : out STD_LOGIC; 
+    RX_MOSI_SUPPORT_BUSY : in STD_LOGIC := 'X'; 
+    RX_MISO_AFULL : out STD_LOGIC; 
+    RX_MOSI_DVAL : in STD_LOGIC := 'X'; 
+    RX_MOSI_SOF : in STD_LOGIC := 'X'; 
+    TX_MISO_AFULL : in STD_LOGIC := 'X'; 
+    TX_MOSI_SUPPORT_BUSY : out STD_LOGIC; 
+    RX_MOSI_EOF : in STD_LOGIC := 'X'; 
+    TX_MOSI_SOF : out STD_LOGIC; 
+    TX_MOSI_EOF : out STD_LOGIC; 
+    ARESET : in STD_LOGIC := 'X'; 
+    TX_MISO_BUSY : in STD_LOGIC := 'X'; 
+    RX_MISO_BUSY : out STD_LOGIC; 
+    TX_MOSI_DREM : out STD_LOGIC_VECTOR ( 1 downto 0 ); 
+    TX_MOSI_DATA : out STD_LOGIC_VECTOR ( 31 downto 0 ); 
+    RX_EXP : in STD_LOGIC_VECTOR ( 7 downto 0 ); 
+    RX_MOSI_DREM : in STD_LOGIC_VECTOR ( 1 downto 0 ); 
+    RX_MOSI_DATA : in STD_LOGIC_VECTOR ( 31 downto 0 ) 
+  );
+end fixtofp32_16s;
+
+architecture STRUCTURE of fixtofp32_16s is
+  signal NlwRenamedSignal_RX_MISO_AFULL : STD_LOGIC; 
+  signal NlwRenamedSig_OI_RX_MISO_BUSY : STD_LOGIC; 
+  signal Fix16s_to_FP32_temp_567 : STD_LOGIC; 
+  signal Fix16s_to_FP32_stage4_dval_566 : STD_LOGIC; 
+  signal Fix16s_to_FP32_stage3_dval_BRB1_565 : STD_LOGIC; 
+  signal Fix16s_to_FP32_stage3_dval_BRB0_564 : STD_LOGIC; 
+  signal Fix16s_to_FP32_stage3_dval : STD_LOGIC; 
+  signal Fix16s_to_FP32_stage2_dval_BRB0_562 : STD_LOGIC; 
+  signal Fix16s_to_FP32_stage1_dval_BRB0_561 : STD_LOGIC; 
+  signal Fix16s_to_FP32_sreset_560 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_7_mux0000 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_4_mux0000 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux0000 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_2_mux0000 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_1_mux0000 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_0_mux0000 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_0_cmp_eq000062_FRB_553 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_0_cmp_eq000049_FRB_552 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_0_cmp_eq000025_FRB_551 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_0_cmp_eq000012_FRB_550 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_0_cmp_eq0000 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_9_mux000047_FRB_548 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_9_mux00001_FRB_547 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_9_mux000012_FRB_546 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_8_mux000032_FRB_545 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_8_mux000021_FRB_544 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_8_mux000013_FRB_543 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_8_mux00000_FRB_542 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_7_mux00005_FRB_541 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_7_mux000038_FRB_540 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_7_mux00001_FRB_539 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_7_mux000018_FRB_538 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_7_mux00000_FRB_537 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_6_mux000061_FRB_536 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_6_mux000060_FRB_535 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_6_mux000055_FRB_534 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_6_mux000032_FRB_533 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_6_mux000021_FRB_532 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_6_mux000013_FRB_531 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_6_mux00000_FRB_530 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_5_mux000063_FRB_529 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_5_mux00001_FRB_528 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_5_mux0000124_FRB_527 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_5_mux00000_FRB_526 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_4_mux000094_FRB_525 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_4_mux0000941_524 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_4_mux000094 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_4_mux000058_FRB_522 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_4_mux000021_FRB_521 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_4_mux000013_FRB_520 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_4_mux0000105_FRB_519 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_4_mux00000_FRB_518 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux000094_FRB_517 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux000093_FRB_516 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux00005_FRB_515 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux000058_FRB_514 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux000050_FRB_513 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux000037_FRB_512 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux00001_FRB_511 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux000018_FRB_510 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux0000104_FRB_509 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_3_mux00000_FRB_508 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_2_mux000066_FRB_507 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_2_mux00005_FRB_506 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_2_mux000054_FRB_505 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_2_mux000037_FRB_504 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_2_mux00001_FRB_503 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_2_mux000018_FRB_502 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_2_mux0000106_FRB_501 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_2_mux0000105_FRB_500 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_2_mux00000_FRB_499 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_1_mux000082_FRB_498 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_1_mux000054_FRB_497 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_1_mux000049_FRB_496 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_1_mux000032_FRB_495 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_1_mux000018_FRB_494 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_1_mux000014_FRB_493 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_1_mux0000122_FRB_492 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_1_mux00001221_491 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_1_mux0000122 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_13_mux00000_FRB_489 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_11_mux00001_FRB_488 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_11_mux000018_FRB_487 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_11_mux000012_FRB_486 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_10_mux000032_FRB_485 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_10_mux000021_FRB_484 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_10_mux000013_FRB_483 : STD_LOGIC; 
+  signal Fix16s_to_FP32_result_10_mux00000_FRB_482 : STD_LOGIC; 
+  signal Fix16s_to_FP32_hold_dval_and0000 : STD_LOGIC; 
+  signal Fix16s_to_FP32_hold_dval_470 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_9_BRB3_469 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_9_BRB0_468 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_8_BRB2_466 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_8_BRB1_465 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_8_BRB0_464 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_22_BRB3_462 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_22_BRB2_461 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_22_BRB0_460 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_21_BRB3_458 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_21_BRB2_457 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_21_BRB0_456 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_20_BRB3_454 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_20_BRB2_453 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_20_BRB0_452 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_19_BRB3_450 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_19_BRB2_449 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_19_BRB0_448 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_18_BRB3_446 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_18_BRB2_445 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_18_BRB0_444 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_17_BRB3_442 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_17_BRB2_441 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_17_BRB0_440 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_16_BRB3_438 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_16_BRB2_437 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_16_BRB0_436 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_15_BRB3_434 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_15_BRB2_433 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_15_BRB0_432 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_14_BRB3_430 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_14_BRB2_429 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_14_BRB0_428 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_13_BRB2_426 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_13_BRB1_425 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_12_BRB2_423 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_12_BRB1_422 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_11_BRB3_420 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_11_BRB2_419 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_11_BRB0_418 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_10_BRB3_416 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fract3_10_BRB1_415 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data4_slv_30_BRB0_413 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data4_slv_29_BRB0_412 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data4_slv_28_BRB0_411 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data4_slv_27_BRB0_410 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data4_slv_26_BRB0_409 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data4_slv_25_BRB0_408 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data4_slv_24_BRB0_407 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data4_slv_23_BRB3_406 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data4_slv_23_BRB2_405 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data4_slv_23_BRB0_404 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_7_Q : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_4_Q : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_Q : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_2_Q : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_1_Q : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_0_Q : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_9_BRB8_397 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_9_BRB6_396 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_9_BRB5_395 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_9_BRB11_394 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_9_BRB1_393 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_8_BRB8_392 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_8_BRB5_391 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_8_BRB4_390 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_8_BRB1_389 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_7_BRB6_388 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_7_BRB2_387 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_7_BRB12_386 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_7_BRB11_385 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_7_BRB10_384 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_6_BRB7_383 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_6_BRB6_382 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_6_BRB5_381 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_6_BRB4_380 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_6_BRB3_379 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_6_BRB2_378 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_6_BRB10_377 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_6_BRB1_376 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_5_BRB9_375 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_5_BRB7_374 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_5_BRB4_373 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_5_BRB2_372 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_5_BRB10_371 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_5_BRB0_370 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_4_BRB9_369 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_4_BRB5_368 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_4_BRB4_367 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_4_BRB11_366 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_4_BRB10_365 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_4_BRB1_364 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_BRB9_363 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_BRB7_362 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_BRB6_361 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_BRB5_360 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_BRB4_359 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_BRB2_358 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_BRB12_357 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_BRB11_356 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_BRB10_355 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_3_BRB0_354 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_2_BRB9_353 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_2_BRB6_352 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_2_BRB5_351 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_2_BRB4_350 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_2_BRB2_349 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_2_BRB12_348 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_2_BRB11_347 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_2_BRB10_346 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_2_BRB0_345 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_1_BRB9_344 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_1_BRB8_343 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_1_BRB7_342 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_1_BRB5_341 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_1_BRB4_340 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_1_BRB2_339 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_1_BRB1_338 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_1_BRB0_337 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_15_BRB2_336 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_15_BRB1_335 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_15_BRB0_334 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_14_BRB0_333 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_13_BRB5_332 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_13_BRB1_331 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_13_BRB0_330 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_12_BRB5_329 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_12_BRB4_328 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_11_BRB7_327 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_11_BRB6_326 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_11_BRB5_325 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_11_BRB2_324 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_11_BRB0_323 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_10_BRB7_322 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_10_BRB5_321 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_10_BRB4_320 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_10_BRB3_319 : STD_LOGIC; 
+  signal Fix16s_to_FP32_fp_data2_10_BRB0_318 : STD_LOGIC; 
+  signal Fix16s_to_FP32_exp3_full_7_BRB0_316 : STD_LOGIC; 
+  signal Fix16s_to_FP32_exp3_full_6_BRB0_315 : STD_LOGIC; 
+  signal Fix16s_to_FP32_exp3_full_5_BRB0_314 : STD_LOGIC; 
+  signal Fix16s_to_FP32_exp3_full_4_BRB0_313 : STD_LOGIC; 
+  signal Fix16s_to_FP32_exp3_full_3_BRB0_312 : STD_LOGIC; 
+  signal Fix16s_to_FP32_exp3_full_2_BRB0_311 : STD_LOGIC; 
+  signal Fix16s_to_FP32_exp3_full_1_BRB0_310 : STD_LOGIC; 
+  signal Fix16s_to_FP32_exp3_full_0_BRB1_309 : STD_LOGIC; 
+  signal Fix16s_to_FP32_exp3_full_0_BRB0_308 : STD_LOGIC; 
+  signal Fix16s_to_FP32_convert_ce : STD_LOGIC; 
+  signal Fix16s_to_FP32_ce_reg_306 : STD_LOGIC; 
+  signal Fix16s_to_FP32_argb2_mux0000_3_1_FRB_305 : STD_LOGIC; 
+  signal Fix16s_to_FP32_argb2_mux0000_2_44_FRB_304 : STD_LOGIC; 
+  signal Fix16s_to_FP32_argb2_mux0000_1_62_FRB_303 : STD_LOGIC; 
+  signal Fix16s_to_FP32_argb2_mux0000_0_145_FRB_302 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N99 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N98 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N97 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N96 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N95 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N94 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N93 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N92 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N91 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N90 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N9 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N88 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N87 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N86 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N85 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N84 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N83 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N81 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N8 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N79 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N78 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N77 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N76 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N74 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N73 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N72 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N7 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N69 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N68 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N67 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N66 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N65 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N64 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N63 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N60 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N6 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N59 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N58 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N57 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N56 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N55 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N54 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N53 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N52 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N51 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N50 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N5 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N49 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N48 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N47 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N466 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N465 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N464 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N463 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N462 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N460 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N46 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N458 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N44 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N41 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N40 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N39 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N38 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N37 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N36 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N35 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N34 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N33 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N32 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N31 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N30 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N29 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N28 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N27 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N26 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N25 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N246 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N245 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N243 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N242 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N241 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N24 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N239 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N238 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N237 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N235 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N234 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N233 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N231 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N230 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N23 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N229 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N227 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N226 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N225 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N223 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N222 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N221 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N22 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N219 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N218 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N217 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N215 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N214 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N213 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N2111 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N210 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N21 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N209 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N207 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N206 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N202 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N20 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N191 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N18 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N174 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N173 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N1711 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N171 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N170 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N161 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N15 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N147 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N146 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N145 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N143 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N142 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N141 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N140 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N14 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N139 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N137 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N136 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N135 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N134 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N133 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N132 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N131 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N130 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N13 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N129 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N128 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N127 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N126 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N125 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N124 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N123 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N122 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N121 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N120 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N12 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N119 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N118 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N117 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N116 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N115 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N114 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N113 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N112 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N111 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N110 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N11 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N109 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N108 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N107 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N106 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N105 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N104 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N103 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N102 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N101 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N100 : STD_LOGIC; 
+  signal Fix16s_to_FP32_N10 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_stage3_dval_BRB1_68 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_9_BRB8_67 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_9_BRB5_66 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_6_BRB3_65 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_5_BRB4_64 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_5_BRB0_63 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_15_BRB1_62 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_15_BRB0_61 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_14_BRB0_60 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_13_BRB1_59 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_12_BRB5_58 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_12_BRB4_57 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_11_BRB6_56 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_11_BRB2_55 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_fp_data2_10_BRB5_54 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_TX_MOSI_SOF_53 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_TX_MOSI_EOF_52 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Mshreg_TX_MOSI_DATA_31_51 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_9_rt_50 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_8_rt_41 : STD_LOGIC; 
+  signal Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_0_rt_3 : STD_LOGIC; 
+  signal NlwRenamedSig_OI_TX_MOSI_DATA : STD_LOGIC_VECTOR ( 0 downto 0 ); 
+  signal NlwRenamedSig_OI_TX_MOSI_DREM : STD_LOGIC_VECTOR ( 0 downto 0 ); 
+  signal Fix16s_to_FP32_lcl_sum_add0000 : STD_LOGIC_VECTOR ( 9 downto 0 ); 
+  signal Fix16s_to_FP32_fract3 : STD_LOGIC_VECTOR ( 22 downto 8 ); 
+  signal Fix16s_to_FP32_exp3_full : STD_LOGIC_VECTOR ( 8 downto 8 ); 
+  signal Fix16s_to_FP32_Msub_expon_sub0000_cy : STD_LOGIC_VECTOR ( 2 downto 2 ); 
+  signal Fix16s_to_FP32_Madd_lcl_sum_add0000_lut : STD_LOGIC_VECTOR ( 7 downto 0 ); 
+  signal Fix16s_to_FP32_Madd_lcl_sum_add0000_cy : STD_LOGIC_VECTOR ( 8 downto 0 ); 
+  signal Fix16s_to_FP32_Madd_arg_int_not0000 : STD_LOGIC_VECTOR ( 15 downto 1 ); 
+  signal Fix16s_to_FP32_Madd_arg_int_addsub0000_cy : STD_LOGIC_VECTOR ( 13 downto 0 ); 
+begin
+  RX_MISO_AFULL <= NlwRenamedSignal_RX_MISO_AFULL;
+  NlwRenamedSignal_RX_MISO_AFULL <= TX_MISO_AFULL;
+  TX_MOSI_SUPPORT_BUSY <= NlwRenamedSig_OI_TX_MOSI_DREM(0);
+  RX_MISO_BUSY <= NlwRenamedSig_OI_RX_MISO_BUSY;
+  TX_MOSI_DREM(1) <= NlwRenamedSig_OI_TX_MOSI_DREM(0);
+  TX_MOSI_DREM(0) <= NlwRenamedSig_OI_TX_MOSI_DREM(0);
+  TX_MOSI_DATA(7) <= NlwRenamedSig_OI_TX_MOSI_DATA(0);
+  TX_MOSI_DATA(6) <= NlwRenamedSig_OI_TX_MOSI_DATA(0);
+  TX_MOSI_DATA(5) <= NlwRenamedSig_OI_TX_MOSI_DATA(0);
+  TX_MOSI_DATA(4) <= NlwRenamedSig_OI_TX_MOSI_DATA(0);
+  TX_MOSI_DATA(3) <= NlwRenamedSig_OI_TX_MOSI_DATA(0);
+  TX_MOSI_DATA(2) <= NlwRenamedSig_OI_TX_MOSI_DATA(0);
+  TX_MOSI_DATA(1) <= NlwRenamedSig_OI_TX_MOSI_DATA(0);
+  TX_MOSI_DATA(0) <= NlwRenamedSig_OI_TX_MOSI_DATA(0);
+  Fix16s_to_FP32_fp_data2_5_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_5_BRB0_63,
+      Q => Fix16s_to_FP32_fp_data2_5_BRB0_370
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_5_BRB0 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N68,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_5_BRB0_63
+    );
+  Fix16s_to_FP32_fp_data2_6_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_6_BRB3_65,
+      Q => Fix16s_to_FP32_fp_data2_6_BRB3_379
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_6_BRB3 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N30,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_6_BRB3_65
+    );
+  Fix16s_to_FP32_fp_data2_9_BRB8 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_9_BRB8_67,
+      Q => Fix16s_to_FP32_fp_data2_9_BRB8_397
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_9_BRB8 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N63,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_9_BRB8_67
+    );
+  Fix16s_to_FP32_fp_data2_10_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_10_BRB5_54,
+      Q => Fix16s_to_FP32_fp_data2_10_BRB5_321
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_10_BRB5 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N72,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_10_BRB5_54
+    );
+  Fix16s_to_FP32_fp_data2_11_BRB6 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_11_BRB6_56,
+      Q => Fix16s_to_FP32_fp_data2_11_BRB6_326
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_11_BRB6 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N73,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_11_BRB6_56
+    );
+  Fix16s_to_FP32_fp_data2_11_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_11_BRB2_55,
+      Q => Fix16s_to_FP32_fp_data2_11_BRB2_324
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_11_BRB2 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N64,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_11_BRB2_55
+    );
+  Fix16s_to_FP32_fp_data2_5_BRB4 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_5_BRB4_64,
+      Q => Fix16s_to_FP32_fp_data2_5_BRB4_373
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_5_BRB4 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N28,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_5_BRB4_64
+    );
+  Fix16s_to_FP32_fp_data2_12_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_12_BRB5_58,
+      Q => Fix16s_to_FP32_fp_data2_12_BRB5_329
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_12_BRB5 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N31,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_12_BRB5_58
+    );
+  Fix16s_to_FP32_fp_data2_9_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_9_BRB5_66,
+      Q => Fix16s_to_FP32_fp_data2_9_BRB5_395
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_9_BRB5 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N35,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_9_BRB5_66
+    );
+  Fix16s_to_FP32_fp_data2_12_BRB4 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_12_BRB4_57,
+      Q => Fix16s_to_FP32_fp_data2_12_BRB4_328
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_12_BRB4 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N33,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_12_BRB4_57
+    );
+  Fix16s_to_FP32_stage3_dval_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_stage3_dval_BRB1_68,
+      Q => Fix16s_to_FP32_stage3_dval_BRB1_565
+    );
+  Fix16s_to_FP32_Mshreg_stage3_dval_BRB1 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DREM(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => RX_MOSI_DVAL,
+      Q => Fix16s_to_FP32_Mshreg_stage3_dval_BRB1_68
+    );
+  Fix16s_to_FP32_fp_data2_13_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_13_BRB1_59,
+      Q => Fix16s_to_FP32_fp_data2_13_BRB1_331
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_13_BRB1 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N32,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_13_BRB1_59
+    );
+  Fix16s_to_FP32_fp_data2_14_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_14_BRB0_60,
+      Q => Fix16s_to_FP32_fp_data2_14_BRB0_333
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_14_BRB0 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N65,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_14_BRB0_60
+    );
+  Fix16s_to_FP32_fp_data2_15_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_15_BRB1_62,
+      Q => Fix16s_to_FP32_fp_data2_15_BRB1_335
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_15_BRB1 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N55,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_15_BRB1_62
+    );
+  Fix16s_to_FP32_fp_data2_15_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_fp_data2_15_BRB0_61,
+      Q => Fix16s_to_FP32_fp_data2_15_BRB0_334
+    );
+  Fix16s_to_FP32_Mshreg_fp_data2_15_BRB0 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => Fix16s_to_FP32_N34,
+      Q => Fix16s_to_FP32_Mshreg_fp_data2_15_BRB0_61
+    );
+  Fix16s_to_FP32_TX_MOSI_EOF : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_TX_MOSI_EOF_52,
+      Q => TX_MOSI_EOF
+    );
+  Fix16s_to_FP32_Mshreg_TX_MOSI_EOF : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DREM(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => RX_MOSI_EOF,
+      Q => Fix16s_to_FP32_Mshreg_TX_MOSI_EOF_52
+    );
+  Fix16s_to_FP32_TX_MOSI_DATA_31 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_TX_MOSI_DATA_31_51,
+      Q => TX_MOSI_DATA(31)
+    );
+  Fix16s_to_FP32_Mshreg_TX_MOSI_DATA_31 : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DREM(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => RX_MOSI_DATA(15),
+      Q => Fix16s_to_FP32_Mshreg_TX_MOSI_DATA_31_51
+    );
+  Fix16s_to_FP32_TX_MOSI_SOF : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_Mshreg_TX_MOSI_SOF_53,
+      Q => TX_MOSI_SOF
+    );
+  Fix16s_to_FP32_Mshreg_TX_MOSI_SOF : SRL16E
+    generic map(
+      INIT => X"0000"
+    )
+    port map (
+      A0 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A1 => NlwRenamedSig_OI_TX_MOSI_DREM(0),
+      A2 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      A3 => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      CE => Fix16s_to_FP32_convert_ce,
+      CLK => CLK,
+      D => RX_MOSI_SOF,
+      Q => Fix16s_to_FP32_Mshreg_TX_MOSI_SOF_53
+    );
+  Fix16s_to_FP32_Msub_expon_sub0000_cy_2_11 : LUT3_D
+    generic map(
+      INIT => X"FE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_argb2_mux0000_2_44_FRB_304,
+      I1 => Fix16s_to_FP32_argb2_mux0000_0_145_FRB_302,
+      I2 => Fix16s_to_FP32_argb2_mux0000_1_62_FRB_303,
+      LO => Fix16s_to_FP32_N466,
+      O => Fix16s_to_FP32_Msub_expon_sub0000_cy(2)
+    );
+  Fix16s_to_FP32_result_1_mux0000122_f5 : MUXF5
+    port map (
+      I0 => Fix16s_to_FP32_result_1_mux00001221_491,
+      I1 => Fix16s_to_FP32_result_1_mux0000122,
+      S => Fix16s_to_FP32_N60,
+      O => Fix16s_to_FP32_N145
+    );
+  Fix16s_to_FP32_result_1_mux00001222 : LUT3
+    generic map(
+      INIT => X"80"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N58,
+      I1 => Fix16s_to_FP32_N32,
+      I2 => Fix16s_to_FP32_N74,
+      O => Fix16s_to_FP32_result_1_mux00001221_491
+    );
+  Fix16s_to_FP32_result_1_mux00001221 : LUT4
+    generic map(
+      INIT => X"F080"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N58,
+      I1 => Fix16s_to_FP32_N33,
+      I2 => Fix16s_to_FP32_N74,
+      I3 => Fix16s_to_FP32_N63,
+      O => Fix16s_to_FP32_result_1_mux0000122
+    );
+  Fix16s_to_FP32_result_4_mux000094_f5 : MUXF5
+    port map (
+      I0 => Fix16s_to_FP32_result_4_mux0000941_524,
+      I1 => Fix16s_to_FP32_result_4_mux000094,
+      S => Fix16s_to_FP32_N60,
+      O => Fix16s_to_FP32_N81
+    );
+  Fix16s_to_FP32_result_4_mux0000942 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N58,
+      I1 => Fix16s_to_FP32_N33,
+      I2 => Fix16s_to_FP32_N34,
+      O => Fix16s_to_FP32_result_4_mux0000941_524
+    );
+  Fix16s_to_FP32_result_4_mux0000941 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N58,
+      I1 => Fix16s_to_FP32_N31,
+      I2 => Fix16s_to_FP32_N32,
+      O => Fix16s_to_FP32_result_4_mux000094
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_1_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(1),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(1)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_2_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(2),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(2)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_3_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(3),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(3)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_4_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(4),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(4)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_5_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(5),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(5)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_6_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(6),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(6)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_7_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(7),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(7)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_8_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(8),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(8)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_9_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(9),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(9)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_10_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(10),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(10)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_11_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(11),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(11)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_12_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(12),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(12)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_13_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(13),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(13)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_14_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(14),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(14)
+    );
+  Fix16s_to_FP32_Madd_arg_int_not0000_15_1_INV_0 : INV
+    port map (
+      I => RX_MOSI_DATA(15),
+      O => Fix16s_to_FP32_Madd_arg_int_not0000(15)
+    );
+  Fix16s_to_FP32_result_1_mux000014_G : LUT3
+    generic map(
+      INIT => X"EA"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N26,
+      I1 => Fix16s_to_FP32_N22,
+      I2 => Fix16s_to_FP32_N64,
+      O => Fix16s_to_FP32_N465
+    );
+  Fix16s_to_FP32_result_1_mux000014_F : LUT4
+    generic map(
+      INIT => X"0080"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N23,
+      I1 => Fix16s_to_FP32_N57,
+      I2 => Fix16s_to_FP32_N59,
+      I3 => Fix16s_to_FP32_N58,
+      O => Fix16s_to_FP32_N464
+    );
+  Fix16s_to_FP32_result_1_mux000014 : MUXF5
+    port map (
+      I0 => Fix16s_to_FP32_N464,
+      I1 => Fix16s_to_FP32_N465,
+      S => Fix16s_to_FP32_N60,
+      O => Fix16s_to_FP32_N147
+    );
+  Fix16s_to_FP32_result_5_mux000063_SW0_G : LUT4
+    generic map(
+      INIT => X"0E04"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N58,
+      I1 => Fix16s_to_FP32_N34,
+      I2 => Fix16s_to_FP32_N59,
+      I3 => Fix16s_to_FP32_N33,
+      O => Fix16s_to_FP32_N463
+    );
+  Fix16s_to_FP32_result_5_mux000063_SW0_F : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N59,
+      I1 => Fix16s_to_FP32_N58,
+      I2 => Fix16s_to_FP32_N30,
+      I3 => Fix16s_to_FP32_N36,
+      O => Fix16s_to_FP32_N462
+    );
+  Fix16s_to_FP32_result_5_mux000063_SW0 : MUXF5
+    port map (
+      I0 => Fix16s_to_FP32_N462,
+      I1 => Fix16s_to_FP32_N463,
+      S => Fix16s_to_FP32_N57,
+      O => Fix16s_to_FP32_N460
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_0_rt : LUT1
+    generic map(
+      INIT => X"2"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(0),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_0_rt_3
+    );
+  Fix16s_to_FP32_result_1_mux000018 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N65,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(13),
+      I3 => Fix16s_to_FP32_N18,
+      O => Fix16s_to_FP32_N139
+    );
+  Fix16s_to_FP32_result_2_mux0000106 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N65,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(12),
+      I3 => Fix16s_to_FP32_N171,
+      O => Fix16s_to_FP32_N137
+    );
+  Fix16s_to_FP32_result_2_mux000066 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N72,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(8),
+      I3 => Fix16s_to_FP32_N13,
+      O => Fix16s_to_FP32_N135
+    );
+  Fix16s_to_FP32_result_2_mux000049 : LUT4
+    generic map(
+      INIT => X"0001"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N57,
+      I1 => Fix16s_to_FP32_N55,
+      I2 => Fix16s_to_FP32_N26,
+      I3 => Fix16s_to_FP32_N39,
+      O => Fix16s_to_FP32_N74
+    );
+  Fix16s_to_FP32_result_2_mux000037 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N73,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(9),
+      I3 => Fix16s_to_FP32_N14,
+      O => Fix16s_to_FP32_N133
+    );
+  Fix16s_to_FP32_result_2_mux00005 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N69,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(5),
+      I3 => Fix16s_to_FP32_N10,
+      O => Fix16s_to_FP32_N131
+    );
+  Fix16s_to_FP32_result_2_mux00001 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N67,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(3),
+      I3 => Fix16s_to_FP32_N8,
+      O => Fix16s_to_FP32_N130
+    );
+  Fix16s_to_FP32_result_2_mux00000 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N68,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(4),
+      I3 => Fix16s_to_FP32_N9,
+      O => Fix16s_to_FP32_N129
+    );
+  Fix16s_to_FP32_result_3_mux000094 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N65,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(11),
+      I3 => Fix16s_to_FP32_N161,
+      O => Fix16s_to_FP32_N127
+    );
+  Fix16s_to_FP32_result_3_mux000058 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N72,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(7),
+      I3 => Fix16s_to_FP32_N12,
+      O => Fix16s_to_FP32_N125
+    );
+  Fix16s_to_FP32_result_3_mux000037 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N73,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(8),
+      I3 => Fix16s_to_FP32_N13,
+      O => Fix16s_to_FP32_N123
+    );
+  Fix16s_to_FP32_result_3_mux00005 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N69,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(4),
+      I3 => Fix16s_to_FP32_N9,
+      O => Fix16s_to_FP32_N121
+    );
+  Fix16s_to_FP32_result_3_mux00001 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N67,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(2),
+      I3 => Fix16s_to_FP32_N7,
+      O => Fix16s_to_FP32_N120
+    );
+  Fix16s_to_FP32_result_3_mux00000 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N68,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(3),
+      I3 => Fix16s_to_FP32_N8,
+      O => Fix16s_to_FP32_N119
+    );
+  Fix16s_to_FP32_result_4_mux0000105 : LUT4
+    generic map(
+      INIT => X"0010"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => Fix16s_to_FP32_N26,
+      I2 => Fix16s_to_FP32_N57,
+      I3 => Fix16s_to_FP32_N39,
+      O => Fix16s_to_FP32_N118
+    );
+  Fix16s_to_FP32_result_4_mux000021 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N65,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(10),
+      I3 => Fix16s_to_FP32_N15,
+      O => Fix16s_to_FP32_N116
+    );
+  Fix16s_to_FP32_result_4_mux00000 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(11),
+      I3 => Fix16s_to_FP32_N161,
+      O => Fix16s_to_FP32_N114
+    );
+  Fix16s_to_FP32_result_6_mux000061 : LUT4
+    generic map(
+      INIT => X"0105"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => Fix16s_to_FP32_N54,
+      I2 => Fix16s_to_FP32_N26,
+      I3 => Fix16s_to_FP32_N48,
+      O => Fix16s_to_FP32_N113
+    );
+  Fix16s_to_FP32_result_6_mux000032 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N73,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(5),
+      I3 => Fix16s_to_FP32_N10,
+      O => Fix16s_to_FP32_N110
+    );
+  Fix16s_to_FP32_result_6_mux000021 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N69,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(1),
+      I3 => Fix16s_to_FP32_N6,
+      O => Fix16s_to_FP32_N109
+    );
+  Fix16s_to_FP32_result_6_mux00000 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(9),
+      I3 => Fix16s_to_FP32_N14,
+      O => Fix16s_to_FP32_N107
+    );
+  Fix16s_to_FP32_result_7_mux000038 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N73,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(4),
+      I3 => Fix16s_to_FP32_N9,
+      O => Fix16s_to_FP32_N106
+    );
+  Fix16s_to_FP32_result_7_mux00005 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N69,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(0),
+      I3 => Fix16s_to_FP32_N5,
+      O => Fix16s_to_FP32_N104
+    );
+  Fix16s_to_FP32_result_7_mux00001 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(8),
+      I3 => Fix16s_to_FP32_N13,
+      O => Fix16s_to_FP32_N103
+    );
+  Fix16s_to_FP32_result_7_mux00000 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N65,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(7),
+      I3 => Fix16s_to_FP32_N12,
+      O => Fix16s_to_FP32_N102
+    );
+  Fix16s_to_FP32_result_8_mux000032 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N73,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(3),
+      I3 => Fix16s_to_FP32_N8,
+      O => Fix16s_to_FP32_N101
+    );
+  Fix16s_to_FP32_result_8_mux000021 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N65,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(6),
+      I3 => Fix16s_to_FP32_N11,
+      O => Fix16s_to_FP32_N100
+    );
+  Fix16s_to_FP32_result_8_mux00000 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(7),
+      I3 => Fix16s_to_FP32_N12,
+      O => Fix16s_to_FP32_N98
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq00168 : LUT4
+    generic map(
+      INIT => X"0207"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N6,
+      I2 => Fix16s_to_FP32_N34,
+      I3 => RX_MOSI_DATA(1),
+      O => Fix16s_to_FP32_N46
+    );
+  Fix16s_to_FP32_result_9_mux000047 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N73,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(2),
+      I3 => Fix16s_to_FP32_N7,
+      O => Fix16s_to_FP32_N97
+    );
+  Fix16s_to_FP32_result_9_mux000020 : LUT4
+    generic map(
+      INIT => X"0E04"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => RX_MOSI_DATA(0),
+      I2 => Fix16s_to_FP32_N58,
+      I3 => Fix16s_to_FP32_N5,
+      O => Fix16s_to_FP32_N63
+    );
+  Fix16s_to_FP32_result_9_mux00001 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(6),
+      I3 => Fix16s_to_FP32_N11,
+      O => Fix16s_to_FP32_N95
+    );
+  Fix16s_to_FP32_result_10_mux000032 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N73,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(1),
+      I3 => Fix16s_to_FP32_N6,
+      O => Fix16s_to_FP32_N94
+    );
+  Fix16s_to_FP32_result_10_mux000021 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N65,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(4),
+      I3 => Fix16s_to_FP32_N9,
+      O => Fix16s_to_FP32_N93
+    );
+  Fix16s_to_FP32_result_10_mux00000 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(5),
+      I3 => Fix16s_to_FP32_N10,
+      O => Fix16s_to_FP32_N91
+    );
+  Fix16s_to_FP32_result_5_mux00001 : LUT4
+    generic map(
+      INIT => X"0080"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N25,
+      I1 => Fix16s_to_FP32_N57,
+      I2 => Fix16s_to_FP32_N59,
+      I3 => Fix16s_to_FP32_N58,
+      O => Fix16s_to_FP32_N88
+    );
+  Fix16s_to_FP32_result_5_mux00000 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(10),
+      I3 => Fix16s_to_FP32_N15,
+      O => Fix16s_to_FP32_N87
+    );
+  Fix16s_to_FP32_result_11_mux000018 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N58,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(0),
+      I3 => Fix16s_to_FP32_N5,
+      O => Fix16s_to_FP32_N86
+    );
+  Fix16s_to_FP32_result_11_mux00001 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(4),
+      I3 => Fix16s_to_FP32_N9,
+      O => Fix16s_to_FP32_N84
+    );
+  Fix16s_to_FP32_argb2_mux0000_1_45 : LUT4
+    generic map(
+      INIT => X"0207"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N18,
+      I2 => Fix16s_to_FP32_N22,
+      I3 => RX_MOSI_DATA(13),
+      O => Fix16s_to_FP32_N54
+    );
+  Fix16s_to_FP32_result_13_mux00000 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => RX_MOSI_DATA(15),
+      I2 => RX_MOSI_DATA(2),
+      I3 => Fix16s_to_FP32_N7,
+      O => Fix16s_to_FP32_N83
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq00171 : LUT4
+    generic map(
+      INIT => X"0E04"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => RX_MOSI_DATA(14),
+      I2 => Fix16s_to_FP32_N55,
+      I3 => Fix16s_to_FP32_N191,
+      O => Fix16s_to_FP32_N65
+    );
+  Fix16s_to_FP32_RX_BUSYi1 : LUT3
+    generic map(
+      INIT => X"FE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_sreset_560,
+      I1 => NlwRenamedSignal_RX_MISO_AFULL,
+      I2 => TX_MISO_BUSY,
+      O => NlwRenamedSig_OI_RX_MISO_BUSY
+    );
+  Fix16s_to_FP32_hold_dval_and00001 : LUT4
+    generic map(
+      INIT => X"F080"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_stage4_dval_566,
+      I1 => Fix16s_to_FP32_ce_reg_306,
+      I2 => TX_MISO_BUSY,
+      I3 => Fix16s_to_FP32_hold_dval_470,
+      O => Fix16s_to_FP32_hold_dval_and0000
+    );
+  Fix16s_to_FP32_result_5_mux000063 : LUT3
+    generic map(
+      INIT => X"EA"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N460,
+      I1 => Fix16s_to_FP32_N64,
+      I2 => Fix16s_to_FP32_N27,
+      O => Fix16s_to_FP32_N146
+    );
+  Fix16s_to_FP32_exp4_mux0000_0_1 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data4_slv_23_BRB0_404,
+      I1 => Fix16s_to_FP32_fp_data4_slv_23_BRB2_405,
+      I2 => Fix16s_to_FP32_fp_data4_slv_23_BRB3_406,
+      O => TX_MOSI_DATA(23)
+    );
+  Fix16s_to_FP32_exp4_mux0000_1_1 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data4_slv_23_BRB0_404,
+      I1 => Fix16s_to_FP32_fp_data4_slv_24_BRB0_407,
+      I2 => Fix16s_to_FP32_fp_data4_slv_23_BRB3_406,
+      O => TX_MOSI_DATA(24)
+    );
+  Fix16s_to_FP32_exp4_mux0000_2_1 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data4_slv_23_BRB0_404,
+      I1 => Fix16s_to_FP32_fp_data4_slv_25_BRB0_408,
+      I2 => Fix16s_to_FP32_fp_data4_slv_23_BRB3_406,
+      O => TX_MOSI_DATA(25)
+    );
+  Fix16s_to_FP32_exp4_mux0000_3_1 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data4_slv_23_BRB0_404,
+      I1 => Fix16s_to_FP32_fp_data4_slv_26_BRB0_409,
+      I2 => Fix16s_to_FP32_fp_data4_slv_23_BRB3_406,
+      O => TX_MOSI_DATA(26)
+    );
+  Fix16s_to_FP32_exp4_mux0000_4_1 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data4_slv_23_BRB0_404,
+      I1 => Fix16s_to_FP32_fp_data4_slv_27_BRB0_410,
+      I2 => Fix16s_to_FP32_fp_data4_slv_23_BRB3_406,
+      O => TX_MOSI_DATA(27)
+    );
+  Fix16s_to_FP32_exp4_mux0000_5_1 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data4_slv_23_BRB0_404,
+      I1 => Fix16s_to_FP32_fp_data4_slv_28_BRB0_411,
+      I2 => Fix16s_to_FP32_fp_data4_slv_23_BRB3_406,
+      O => TX_MOSI_DATA(28)
+    );
+  Fix16s_to_FP32_exp4_mux0000_6_1 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data4_slv_23_BRB0_404,
+      I1 => Fix16s_to_FP32_fp_data4_slv_29_BRB0_412,
+      I2 => Fix16s_to_FP32_fp_data4_slv_23_BRB3_406,
+      O => TX_MOSI_DATA(29)
+    );
+  Fix16s_to_FP32_exp4_mux0000_7_1 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data4_slv_23_BRB0_404,
+      I1 => Fix16s_to_FP32_fp_data4_slv_30_BRB0_413,
+      I2 => Fix16s_to_FP32_fp_data4_slv_23_BRB3_406,
+      O => TX_MOSI_DATA(30)
+    );
+  Fix16s_to_FP32_argb2_mux0000_1_33 : LUT4
+    generic map(
+      INIT => X"FFAE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N23,
+      I1 => Fix16s_to_FP32_N458,
+      I2 => Fix16s_to_FP32_N28,
+      I3 => Fix16s_to_FP32_N29,
+      O => Fix16s_to_FP32_N48
+    );
+  Fix16s_to_FP32_argb2_mux0000_1_33_SW0 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N44,
+      I1 => Fix16s_to_FP32_N27,
+      I2 => Fix16s_to_FP32_N36,
+      I3 => Fix16s_to_FP32_N25,
+      O => Fix16s_to_FP32_N458
+    );
+  Fix16s_to_FP32_fp_data2_2_BRB12 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_2_mux000018_FRB_502,
+      Q => Fix16s_to_FP32_fp_data2_2_BRB12_348
+    );
+  Fix16s_to_FP32_fp_data2_2_BRB11 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_2_mux00005_FRB_506,
+      Q => Fix16s_to_FP32_fp_data2_2_BRB11_347
+    );
+  Fix16s_to_FP32_fp_data2_2_BRB10 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_2_mux00001_FRB_503,
+      Q => Fix16s_to_FP32_fp_data2_2_BRB10_346
+    );
+  Fix16s_to_FP32_fp_data2_2_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_2_mux00000_FRB_499,
+      Q => Fix16s_to_FP32_fp_data2_2_BRB2_349
+    );
+  Fix16s_to_FP32_fp_data2_2_BRB9 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_2_mux0000106_FRB_501,
+      Q => Fix16s_to_FP32_fp_data2_2_BRB9_353
+    );
+  Fix16s_to_FP32_fp_data2_2_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_2_mux0000105_FRB_500,
+      Q => Fix16s_to_FP32_fp_data2_2_BRB0_345
+    );
+  Fix16s_to_FP32_fp_data2_2_BRB6 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_2_mux000066_FRB_507,
+      Q => Fix16s_to_FP32_fp_data2_2_BRB6_352
+    );
+  Fix16s_to_FP32_fp_data2_2_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_2_mux000054_FRB_505,
+      Q => Fix16s_to_FP32_fp_data2_2_BRB5_351
+    );
+  Fix16s_to_FP32_fp_data2_2_BRB4 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_2_mux000037_FRB_504,
+      Q => Fix16s_to_FP32_fp_data2_2_BRB4_350
+    );
+  Fix16s_to_FP32_fp_data2_3_BRB12 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux000018_FRB_510,
+      Q => Fix16s_to_FP32_fp_data2_3_BRB12_357
+    );
+  Fix16s_to_FP32_fp_data2_3_BRB11 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux00005_FRB_515,
+      Q => Fix16s_to_FP32_fp_data2_3_BRB11_356
+    );
+  Fix16s_to_FP32_fp_data2_3_BRB10 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux00001_FRB_511,
+      Q => Fix16s_to_FP32_fp_data2_3_BRB10_355
+    );
+  Fix16s_to_FP32_fp_data2_3_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux00000_FRB_508,
+      Q => Fix16s_to_FP32_fp_data2_3_BRB2_358
+    );
+  Fix16s_to_FP32_fp_data2_3_BRB9 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux000094_FRB_517,
+      Q => Fix16s_to_FP32_fp_data2_3_BRB9_363
+    );
+  Fix16s_to_FP32_fp_data2_3_BRB7 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux0000104_FRB_509,
+      Q => Fix16s_to_FP32_fp_data2_3_BRB7_362
+    );
+  Fix16s_to_FP32_fp_data2_3_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux000093_FRB_516,
+      Q => Fix16s_to_FP32_fp_data2_3_BRB0_354
+    );
+  Fix16s_to_FP32_fp_data2_3_BRB6 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux000058_FRB_514,
+      Q => Fix16s_to_FP32_fp_data2_3_BRB6_361
+    );
+  Fix16s_to_FP32_fp_data2_3_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux000050_FRB_513,
+      Q => Fix16s_to_FP32_fp_data2_3_BRB5_360
+    );
+  Fix16s_to_FP32_fp_data2_3_BRB4 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux000037_FRB_512,
+      Q => Fix16s_to_FP32_fp_data2_3_BRB4_359
+    );
+  Fix16s_to_FP32_fp_data2_4_BRB11 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_4_mux0000105_FRB_519,
+      Q => Fix16s_to_FP32_fp_data2_4_BRB11_366
+    );
+  Fix16s_to_FP32_fp_data2_4_BRB10 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_4_mux000094_FRB_525,
+      Q => Fix16s_to_FP32_fp_data2_4_BRB10_365
+    );
+  Fix16s_to_FP32_fp_data2_4_BRB9 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_4_mux000058_FRB_522,
+      Q => Fix16s_to_FP32_fp_data2_4_BRB9_369
+    );
+  Fix16s_to_FP32_fp_data2_5_BRB10 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_5_mux00000_FRB_526,
+      Q => Fix16s_to_FP32_fp_data2_5_BRB10_371
+    );
+  Fix16s_to_FP32_fp_data2_5_BRB9 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_5_mux000063_FRB_529,
+      Q => Fix16s_to_FP32_fp_data2_5_BRB9_375
+    );
+  Fix16s_to_FP32_fp_data2_5_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_5_mux00001_FRB_528,
+      Q => Fix16s_to_FP32_fp_data2_5_BRB2_372
+    );
+  Fix16s_to_FP32_fp_data2_5_BRB7 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_5_mux0000124_FRB_527,
+      Q => Fix16s_to_FP32_fp_data2_5_BRB7_374
+    );
+  Fix16s_to_FP32_fp_data2_6_BRB10 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_6_mux000032_FRB_533,
+      Q => Fix16s_to_FP32_fp_data2_6_BRB10_377
+    );
+  Fix16s_to_FP32_fp_data2_7_BRB12 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_7_mux000018_FRB_538,
+      Q => Fix16s_to_FP32_fp_data2_7_BRB12_386
+    );
+  Fix16s_to_FP32_fp_data2_7_BRB11 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_7_mux00005_FRB_541,
+      Q => Fix16s_to_FP32_fp_data2_7_BRB11_385
+    );
+  Fix16s_to_FP32_fp_data2_7_BRB10 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_7_mux00001_FRB_539,
+      Q => Fix16s_to_FP32_fp_data2_7_BRB10_384
+    );
+  Fix16s_to_FP32_fp_data2_7_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_7_mux00000_FRB_537,
+      Q => Fix16s_to_FP32_fp_data2_7_BRB2_387
+    );
+  Fix16s_to_FP32_fp_data2_7_BRB6 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_7_mux000038_FRB_540,
+      Q => Fix16s_to_FP32_fp_data2_7_BRB6_388
+    );
+  Fix16s_to_FP32_fp_data2_8_BRB8 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_8_mux000032_FRB_545,
+      Q => Fix16s_to_FP32_fp_data2_8_BRB8_392
+    );
+  Fix16s_to_FP32_fp_data2_9_BRB11 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_9_mux000047_FRB_548,
+      Q => Fix16s_to_FP32_fp_data2_9_BRB11_394
+    );
+  Fix16s_to_FP32_fp_data2_9_BRB6 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_9_mux000012_FRB_546,
+      Q => Fix16s_to_FP32_fp_data2_9_BRB6_396
+    );
+  Fix16s_to_FP32_fp_data2_13_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_13_mux00000_FRB_489,
+      Q => Fix16s_to_FP32_fp_data2_13_BRB5_332
+    );
+  Fix16s_to_FP32_fp_data2_13_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_argb2_mux0000_0_145_FRB_302,
+      Q => Fix16s_to_FP32_fp_data2_13_BRB0_330
+    );
+  Fix16s_to_FP32_fp_data2_10_BRB7 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_10_mux000032_FRB_485,
+      Q => Fix16s_to_FP32_fp_data2_10_BRB7_322
+    );
+  Fix16s_to_FP32_fp_data2_11_BRB7 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_11_mux000018_FRB_487,
+      Q => Fix16s_to_FP32_fp_data2_11_BRB7_327
+    );
+  Fix16s_to_FP32_fp_data2_11_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_11_mux000012_FRB_486,
+      Q => Fix16s_to_FP32_fp_data2_11_BRB5_325
+    );
+  Fix16s_to_FP32_fp_data2_1_BRB9 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_1_mux000032_FRB_495,
+      Q => Fix16s_to_FP32_fp_data2_1_BRB9_344
+    );
+  Fix16s_to_FP32_fp_data2_1_BRB8 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_1_mux000018_FRB_494,
+      Q => Fix16s_to_FP32_fp_data2_1_BRB8_343
+    );
+  Fix16s_to_FP32_fp_data2_1_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_1_mux000014_FRB_493,
+      Q => Fix16s_to_FP32_fp_data2_1_BRB2_339
+    );
+  Fix16s_to_FP32_fp_data2_1_BRB7 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_1_mux0000122_FRB_492,
+      Q => Fix16s_to_FP32_fp_data2_1_BRB7_342
+    );
+  Fix16s_to_FP32_fp_data2_1_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_1_mux000082_FRB_498,
+      Q => Fix16s_to_FP32_fp_data2_1_BRB0_337
+    );
+  Fix16s_to_FP32_fp_data2_1_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_1_mux000054_FRB_497,
+      Q => Fix16s_to_FP32_fp_data2_1_BRB5_341
+    );
+  Fix16s_to_FP32_fp_data2_1_BRB4 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_argb2_mux0000_1_62_FRB_303,
+      Q => Fix16s_to_FP32_fp_data2_1_BRB4_340
+    );
+  Fix16s_to_FP32_fp_data2_1_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_1_mux000049_FRB_496,
+      Q => Fix16s_to_FP32_fp_data2_1_BRB1_338
+    );
+  Fix16s_to_FP32_fp_data2_4_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_4_mux000021_FRB_521,
+      Q => Fix16s_to_FP32_fp_data2_4_BRB5_368
+    );
+  Fix16s_to_FP32_fp_data2_4_BRB4 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_4_mux000013_FRB_520,
+      Q => Fix16s_to_FP32_fp_data2_4_BRB4_367
+    );
+  Fix16s_to_FP32_fp_data2_4_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_4_mux00000_FRB_518,
+      Q => Fix16s_to_FP32_fp_data2_4_BRB1_364
+    );
+  Fix16s_to_FP32_fp_data2_6_BRB7 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_6_mux000021_FRB_532,
+      Q => Fix16s_to_FP32_fp_data2_6_BRB7_383
+    );
+  Fix16s_to_FP32_fp_data2_6_BRB6 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_6_mux000013_FRB_531,
+      Q => Fix16s_to_FP32_fp_data2_6_BRB6_382
+    );
+  Fix16s_to_FP32_fp_data2_6_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_6_mux00000_FRB_530,
+      Q => Fix16s_to_FP32_fp_data2_6_BRB2_378
+    );
+  Fix16s_to_FP32_fp_data2_6_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_6_mux000061_FRB_536,
+      Q => Fix16s_to_FP32_fp_data2_6_BRB5_381
+    );
+  Fix16s_to_FP32_fp_data2_6_BRB4 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_6_mux000060_FRB_535,
+      Q => Fix16s_to_FP32_fp_data2_6_BRB4_380
+    );
+  Fix16s_to_FP32_fp_data2_6_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_6_mux000055_FRB_534,
+      Q => Fix16s_to_FP32_fp_data2_6_BRB1_376
+    );
+  Fix16s_to_FP32_fp_data2_8_BRB5 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_8_mux000021_FRB_544,
+      Q => Fix16s_to_FP32_fp_data2_8_BRB5_391
+    );
+  Fix16s_to_FP32_fp_data2_8_BRB4 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_8_mux000013_FRB_543,
+      Q => Fix16s_to_FP32_fp_data2_8_BRB4_390
+    );
+  Fix16s_to_FP32_fp_data2_8_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_8_mux00000_FRB_542,
+      Q => Fix16s_to_FP32_fp_data2_8_BRB1_389
+    );
+  Fix16s_to_FP32_fp_data2_9_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_9_mux00001_FRB_547,
+      Q => Fix16s_to_FP32_fp_data2_9_BRB1_393
+    );
+  Fix16s_to_FP32_fp_data2_10_BRB4 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_10_mux000021_FRB_484,
+      Q => Fix16s_to_FP32_fp_data2_10_BRB4_320
+    );
+  Fix16s_to_FP32_fp_data2_10_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_10_mux000013_FRB_483,
+      Q => Fix16s_to_FP32_fp_data2_10_BRB3_319
+    );
+  Fix16s_to_FP32_fp_data2_10_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_10_mux00000_FRB_482,
+      Q => Fix16s_to_FP32_fp_data2_10_BRB0_318
+    );
+  Fix16s_to_FP32_fp_data2_11_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_11_mux00001_FRB_488,
+      Q => Fix16s_to_FP32_fp_data2_11_BRB0_323
+    );
+  Fix16s_to_FP32_stage3_dval_BRB0 : FDPE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_stage2_dval_BRB0_562,
+      PRE => ARESET,
+      Q => Fix16s_to_FP32_stage3_dval_BRB0_564
+    );
+  Fix16s_to_FP32_fract3_22_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N246,
+      Q => Fix16s_to_FP32_fract3_22_BRB3_462
+    );
+  Fix16s_to_FP32_fract3_22_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N245,
+      Q => Fix16s_to_FP32_fract3_22_BRB2_461
+    );
+  Fix16s_to_FP32_fract3_22_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N243,
+      Q => Fix16s_to_FP32_fract3_22_BRB0_460
+    );
+  Fix16s_to_FP32_fract3_21_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N242,
+      Q => Fix16s_to_FP32_fract3_21_BRB3_458
+    );
+  Fix16s_to_FP32_fract3_21_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N241,
+      Q => Fix16s_to_FP32_fract3_21_BRB2_457
+    );
+  Fix16s_to_FP32_fract3_21_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N239,
+      Q => Fix16s_to_FP32_fract3_21_BRB0_456
+    );
+  Fix16s_to_FP32_fract3_20_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N238,
+      Q => Fix16s_to_FP32_fract3_20_BRB3_454
+    );
+  Fix16s_to_FP32_fract3_20_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N237,
+      Q => Fix16s_to_FP32_fract3_20_BRB2_453
+    );
+  Fix16s_to_FP32_fract3_20_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N235,
+      Q => Fix16s_to_FP32_fract3_20_BRB0_452
+    );
+  Fix16s_to_FP32_fract3_19_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N234,
+      Q => Fix16s_to_FP32_fract3_19_BRB3_450
+    );
+  Fix16s_to_FP32_fract3_19_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N233,
+      Q => Fix16s_to_FP32_fract3_19_BRB2_449
+    );
+  Fix16s_to_FP32_fract3_19_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N231,
+      Q => Fix16s_to_FP32_fract3_19_BRB0_448
+    );
+  Fix16s_to_FP32_fract3_18_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N230,
+      Q => Fix16s_to_FP32_fract3_18_BRB3_446
+    );
+  Fix16s_to_FP32_fract3_18_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N229,
+      Q => Fix16s_to_FP32_fract3_18_BRB2_445
+    );
+  Fix16s_to_FP32_fract3_18_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N227,
+      Q => Fix16s_to_FP32_fract3_18_BRB0_444
+    );
+  Fix16s_to_FP32_fract3_17_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N226,
+      Q => Fix16s_to_FP32_fract3_17_BRB3_442
+    );
+  Fix16s_to_FP32_fract3_17_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N225,
+      Q => Fix16s_to_FP32_fract3_17_BRB2_441
+    );
+  Fix16s_to_FP32_fract3_17_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N223,
+      Q => Fix16s_to_FP32_fract3_17_BRB0_440
+    );
+  Fix16s_to_FP32_fract3_16_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N222,
+      Q => Fix16s_to_FP32_fract3_16_BRB3_438
+    );
+  Fix16s_to_FP32_fract3_16_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N221,
+      Q => Fix16s_to_FP32_fract3_16_BRB2_437
+    );
+  Fix16s_to_FP32_fract3_16_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N219,
+      Q => Fix16s_to_FP32_fract3_16_BRB0_436
+    );
+  Fix16s_to_FP32_fract3_15_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N218,
+      Q => Fix16s_to_FP32_fract3_15_BRB3_434
+    );
+  Fix16s_to_FP32_fract3_15_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N217,
+      Q => Fix16s_to_FP32_fract3_15_BRB2_433
+    );
+  Fix16s_to_FP32_fract3_15_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N215,
+      Q => Fix16s_to_FP32_fract3_15_BRB0_432
+    );
+  Fix16s_to_FP32_fract3_14_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N214,
+      Q => Fix16s_to_FP32_fract3_14_BRB3_430
+    );
+  Fix16s_to_FP32_fract3_14_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N213,
+      Q => Fix16s_to_FP32_fract3_14_BRB2_429
+    );
+  Fix16s_to_FP32_fract3_14_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N2111,
+      Q => Fix16s_to_FP32_fract3_14_BRB0_428
+    );
+  Fix16s_to_FP32_fract3_11_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N210,
+      Q => Fix16s_to_FP32_fract3_11_BRB3_420
+    );
+  Fix16s_to_FP32_fract3_11_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N209,
+      Q => Fix16s_to_FP32_fract3_11_BRB2_419
+    );
+  Fix16s_to_FP32_fract3_11_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N207,
+      Q => Fix16s_to_FP32_fract3_11_BRB0_418
+    );
+  Fix16s_to_FP32_fract3_10_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N206,
+      Q => Fix16s_to_FP32_fract3_10_BRB3_416
+    );
+  Fix16s_to_FP32_fract3_10_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fp_data2_13_BRB1_331,
+      Q => Fix16s_to_FP32_fract3_10_BRB1_415
+    );
+  Fix16s_to_FP32_fract3_9_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N202,
+      Q => Fix16s_to_FP32_fract3_9_BRB3_469
+    );
+  Fix16s_to_FP32_fract3_9_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fp_data2_14_BRB0_333,
+      Q => Fix16s_to_FP32_fract3_9_BRB0_468
+    );
+  Fix16s_to_FP32_fract3_13_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N174,
+      Q => Fix16s_to_FP32_fract3_13_BRB2_426
+    );
+  Fix16s_to_FP32_fract3_13_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N173,
+      Q => Fix16s_to_FP32_fract3_13_BRB1_425
+    );
+  Fix16s_to_FP32_fract3_12_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N1711,
+      Q => Fix16s_to_FP32_fract3_12_BRB2_423
+    );
+  Fix16s_to_FP32_fract3_12_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N170,
+      Q => Fix16s_to_FP32_fract3_12_BRB1_422
+    );
+  Fix16s_to_FP32_fract3_8_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fp_data2_15_BRB2_336,
+      Q => Fix16s_to_FP32_fract3_8_BRB2_466
+    );
+  Fix16s_to_FP32_fract3_8_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fp_data2_15_BRB1_335,
+      Q => Fix16s_to_FP32_fract3_8_BRB1_465
+    );
+  Fix16s_to_FP32_fract3_8_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fp_data2_15_BRB0_334,
+      Q => Fix16s_to_FP32_fract3_8_BRB0_464
+    );
+  Fix16s_to_FP32_stage2_dval_BRB0 : FDPE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_stage1_dval_BRB0_561,
+      PRE => ARESET,
+      Q => Fix16s_to_FP32_stage2_dval_BRB0_562
+    );
+  Fix16s_to_FP32_fp_data4_slv_30_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_exp3_full_7_BRB0_316,
+      Q => Fix16s_to_FP32_fp_data4_slv_30_BRB0_413
+    );
+  Fix16s_to_FP32_fp_data4_slv_29_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_exp3_full_6_BRB0_315,
+      Q => Fix16s_to_FP32_fp_data4_slv_29_BRB0_412
+    );
+  Fix16s_to_FP32_fp_data4_slv_28_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_exp3_full_5_BRB0_314,
+      Q => Fix16s_to_FP32_fp_data4_slv_28_BRB0_411
+    );
+  Fix16s_to_FP32_fp_data4_slv_27_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_exp3_full_4_BRB0_313,
+      Q => Fix16s_to_FP32_fp_data4_slv_27_BRB0_410
+    );
+  Fix16s_to_FP32_fp_data4_slv_26_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_exp3_full_3_BRB0_312,
+      Q => Fix16s_to_FP32_fp_data4_slv_26_BRB0_409
+    );
+  Fix16s_to_FP32_fp_data4_slv_25_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_exp3_full_2_BRB0_311,
+      Q => Fix16s_to_FP32_fp_data4_slv_25_BRB0_408
+    );
+  Fix16s_to_FP32_fp_data4_slv_24_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_exp3_full_1_BRB0_310,
+      Q => Fix16s_to_FP32_fp_data4_slv_24_BRB0_407
+    );
+  Fix16s_to_FP32_fp_data4_slv_23_BRB3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_exp3_full_0_BRB1_309,
+      Q => Fix16s_to_FP32_fp_data4_slv_23_BRB3_406
+    );
+  Fix16s_to_FP32_fp_data4_slv_23_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_exp3_full_0_BRB0_308,
+      Q => Fix16s_to_FP32_fp_data4_slv_23_BRB2_405
+    );
+  Fix16s_to_FP32_exp3_full_7_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_lcl_sum_add0000(7),
+      Q => Fix16s_to_FP32_exp3_full_7_BRB0_316
+    );
+  Fix16s_to_FP32_exp3_full_6_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_lcl_sum_add0000(6),
+      Q => Fix16s_to_FP32_exp3_full_6_BRB0_315
+    );
+  Fix16s_to_FP32_exp3_full_5_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_lcl_sum_add0000(5),
+      Q => Fix16s_to_FP32_exp3_full_5_BRB0_314
+    );
+  Fix16s_to_FP32_exp3_full_4_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_lcl_sum_add0000(4),
+      Q => Fix16s_to_FP32_exp3_full_4_BRB0_313
+    );
+  Fix16s_to_FP32_exp3_full_3_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_lcl_sum_add0000(3),
+      Q => Fix16s_to_FP32_exp3_full_3_BRB0_312
+    );
+  Fix16s_to_FP32_exp3_full_2_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_lcl_sum_add0000(2),
+      Q => Fix16s_to_FP32_exp3_full_2_BRB0_311
+    );
+  Fix16s_to_FP32_exp3_full_1_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_lcl_sum_add0000(1),
+      Q => Fix16s_to_FP32_exp3_full_1_BRB0_310
+    );
+  Fix16s_to_FP32_exp3_full_0_BRB1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_lcl_sum_add0000(8),
+      Q => Fix16s_to_FP32_exp3_full_0_BRB1_309
+    );
+  Fix16s_to_FP32_exp3_full_0_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_lcl_sum_add0000(0),
+      Q => Fix16s_to_FP32_exp3_full_0_BRB0_308
+    );
+  Fix16s_to_FP32_fp_data2_15_BRB2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_0_cmp_eq0000,
+      Q => Fix16s_to_FP32_fp_data2_15_BRB2_336
+    );
+  Fix16s_to_FP32_fp_data4_slv_23_BRB0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_exp3_full(8),
+      Q => Fix16s_to_FP32_fp_data4_slv_23_BRB0_404
+    );
+  Fix16s_to_FP32_stage1_dval_BRB0 : FDPE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => NlwRenamedSig_OI_RX_MISO_BUSY,
+      PRE => ARESET,
+      Q => Fix16s_to_FP32_stage1_dval_BRB0_561
+    );
+  Fix16s_to_FP32_result_1_mux000014_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N147,
+      Q => Fix16s_to_FP32_result_1_mux000014_FRB_493
+    );
+  Fix16s_to_FP32_result_5_mux000063_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N146,
+      Q => Fix16s_to_FP32_result_5_mux000063_FRB_529
+    );
+  Fix16s_to_FP32_result_1_mux0000122_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N145,
+      Q => Fix16s_to_FP32_result_1_mux0000122_FRB_492
+    );
+  Fix16s_to_FP32_result_1_mux000082_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N143,
+      Q => Fix16s_to_FP32_result_1_mux000082_FRB_498
+    );
+  Fix16s_to_FP32_result_1_mux000054_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N142,
+      Q => Fix16s_to_FP32_result_1_mux000054_FRB_497
+    );
+  Fix16s_to_FP32_result_1_mux000049_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N141,
+      Q => Fix16s_to_FP32_result_1_mux000049_FRB_496
+    );
+  Fix16s_to_FP32_result_1_mux000032_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N140,
+      Q => Fix16s_to_FP32_result_1_mux000032_FRB_495
+    );
+  Fix16s_to_FP32_result_1_mux000018_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N139,
+      Q => Fix16s_to_FP32_result_1_mux000018_FRB_494
+    );
+  Fix16s_to_FP32_result_2_mux0000106_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N137,
+      Q => Fix16s_to_FP32_result_2_mux0000106_FRB_501
+    );
+  Fix16s_to_FP32_result_2_mux0000105_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N136,
+      Q => Fix16s_to_FP32_result_2_mux0000105_FRB_500
+    );
+  Fix16s_to_FP32_result_2_mux000066_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N135,
+      Q => Fix16s_to_FP32_result_2_mux000066_FRB_507
+    );
+  Fix16s_to_FP32_result_2_mux000054_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N134,
+      Q => Fix16s_to_FP32_result_2_mux000054_FRB_505
+    );
+  Fix16s_to_FP32_result_2_mux000037_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N133,
+      Q => Fix16s_to_FP32_result_2_mux000037_FRB_504
+    );
+  Fix16s_to_FP32_result_2_mux000018_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N132,
+      Q => Fix16s_to_FP32_result_2_mux000018_FRB_502
+    );
+  Fix16s_to_FP32_result_2_mux00005_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N131,
+      Q => Fix16s_to_FP32_result_2_mux00005_FRB_506
+    );
+  Fix16s_to_FP32_result_2_mux00001_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N130,
+      Q => Fix16s_to_FP32_result_2_mux00001_FRB_503
+    );
+  Fix16s_to_FP32_result_2_mux00000_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N129,
+      Q => Fix16s_to_FP32_result_2_mux00000_FRB_499
+    );
+  Fix16s_to_FP32_result_3_mux0000104_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N128,
+      Q => Fix16s_to_FP32_result_3_mux0000104_FRB_509
+    );
+  Fix16s_to_FP32_result_3_mux000094_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N127,
+      Q => Fix16s_to_FP32_result_3_mux000094_FRB_517
+    );
+  Fix16s_to_FP32_result_3_mux000093_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N126,
+      Q => Fix16s_to_FP32_result_3_mux000093_FRB_516
+    );
+  Fix16s_to_FP32_result_3_mux000058_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N125,
+      Q => Fix16s_to_FP32_result_3_mux000058_FRB_514
+    );
+  Fix16s_to_FP32_result_3_mux000050_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N124,
+      Q => Fix16s_to_FP32_result_3_mux000050_FRB_513
+    );
+  Fix16s_to_FP32_result_3_mux000037_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N123,
+      Q => Fix16s_to_FP32_result_3_mux000037_FRB_512
+    );
+  Fix16s_to_FP32_result_3_mux000018_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N122,
+      Q => Fix16s_to_FP32_result_3_mux000018_FRB_510
+    );
+  Fix16s_to_FP32_result_3_mux00005_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N121,
+      Q => Fix16s_to_FP32_result_3_mux00005_FRB_515
+    );
+  Fix16s_to_FP32_result_3_mux00001_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N120,
+      Q => Fix16s_to_FP32_result_3_mux00001_FRB_511
+    );
+  Fix16s_to_FP32_result_3_mux00000_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N119,
+      Q => Fix16s_to_FP32_result_3_mux00000_FRB_508
+    );
+  Fix16s_to_FP32_result_4_mux0000105_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N118,
+      Q => Fix16s_to_FP32_result_4_mux0000105_FRB_519
+    );
+  Fix16s_to_FP32_result_4_mux000058_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N117,
+      Q => Fix16s_to_FP32_result_4_mux000058_FRB_522
+    );
+  Fix16s_to_FP32_result_4_mux000021_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N116,
+      Q => Fix16s_to_FP32_result_4_mux000021_FRB_521
+    );
+  Fix16s_to_FP32_result_4_mux000013_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N115,
+      Q => Fix16s_to_FP32_result_4_mux000013_FRB_520
+    );
+  Fix16s_to_FP32_result_4_mux00000_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N114,
+      Q => Fix16s_to_FP32_result_4_mux00000_FRB_518
+    );
+  Fix16s_to_FP32_result_6_mux000061_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N113,
+      Q => Fix16s_to_FP32_result_6_mux000061_FRB_536
+    );
+  Fix16s_to_FP32_result_6_mux000060_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N112,
+      Q => Fix16s_to_FP32_result_6_mux000060_FRB_535
+    );
+  Fix16s_to_FP32_result_6_mux000055_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N111,
+      Q => Fix16s_to_FP32_result_6_mux000055_FRB_534
+    );
+  Fix16s_to_FP32_result_6_mux000032_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N110,
+      Q => Fix16s_to_FP32_result_6_mux000032_FRB_533
+    );
+  Fix16s_to_FP32_result_6_mux000021_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N109,
+      Q => Fix16s_to_FP32_result_6_mux000021_FRB_532
+    );
+  Fix16s_to_FP32_result_6_mux000013_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N108,
+      Q => Fix16s_to_FP32_result_6_mux000013_FRB_531
+    );
+  Fix16s_to_FP32_result_6_mux00000_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N107,
+      Q => Fix16s_to_FP32_result_6_mux00000_FRB_530
+    );
+  Fix16s_to_FP32_result_7_mux000038_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N106,
+      Q => Fix16s_to_FP32_result_7_mux000038_FRB_540
+    );
+  Fix16s_to_FP32_result_7_mux000018_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N105,
+      Q => Fix16s_to_FP32_result_7_mux000018_FRB_538
+    );
+  Fix16s_to_FP32_result_7_mux00005_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N104,
+      Q => Fix16s_to_FP32_result_7_mux00005_FRB_541
+    );
+  Fix16s_to_FP32_result_7_mux00001_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N103,
+      Q => Fix16s_to_FP32_result_7_mux00001_FRB_539
+    );
+  Fix16s_to_FP32_result_7_mux00000_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N102,
+      Q => Fix16s_to_FP32_result_7_mux00000_FRB_537
+    );
+  Fix16s_to_FP32_result_8_mux000032_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N101,
+      Q => Fix16s_to_FP32_result_8_mux000032_FRB_545
+    );
+  Fix16s_to_FP32_result_8_mux000021_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N100,
+      Q => Fix16s_to_FP32_result_8_mux000021_FRB_544
+    );
+  Fix16s_to_FP32_result_8_mux000013_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N99,
+      Q => Fix16s_to_FP32_result_8_mux000013_FRB_543
+    );
+  Fix16s_to_FP32_result_8_mux00000_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N98,
+      Q => Fix16s_to_FP32_result_8_mux00000_FRB_542
+    );
+  Fix16s_to_FP32_result_9_mux000047_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N97,
+      Q => Fix16s_to_FP32_result_9_mux000047_FRB_548
+    );
+  Fix16s_to_FP32_result_9_mux000012_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N96,
+      Q => Fix16s_to_FP32_result_9_mux000012_FRB_546
+    );
+  Fix16s_to_FP32_result_9_mux00001_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N95,
+      Q => Fix16s_to_FP32_result_9_mux00001_FRB_547
+    );
+  Fix16s_to_FP32_result_10_mux000032_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N94,
+      Q => Fix16s_to_FP32_result_10_mux000032_FRB_485
+    );
+  Fix16s_to_FP32_result_10_mux000021_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N93,
+      Q => Fix16s_to_FP32_result_10_mux000021_FRB_484
+    );
+  Fix16s_to_FP32_result_10_mux000013_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N92,
+      Q => Fix16s_to_FP32_result_10_mux000013_FRB_483
+    );
+  Fix16s_to_FP32_result_10_mux00000_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N91,
+      Q => Fix16s_to_FP32_result_10_mux00000_FRB_482
+    );
+  Fix16s_to_FP32_result_5_mux0000124_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N90,
+      Q => Fix16s_to_FP32_result_5_mux0000124_FRB_527
+    );
+  Fix16s_to_FP32_result_5_mux00001_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N88,
+      Q => Fix16s_to_FP32_result_5_mux00001_FRB_528
+    );
+  Fix16s_to_FP32_result_5_mux00000_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N87,
+      Q => Fix16s_to_FP32_result_5_mux00000_FRB_526
+    );
+  Fix16s_to_FP32_result_11_mux000018_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N86,
+      Q => Fix16s_to_FP32_result_11_mux000018_FRB_487
+    );
+  Fix16s_to_FP32_result_11_mux000012_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N85,
+      Q => Fix16s_to_FP32_result_11_mux000012_FRB_486
+    );
+  Fix16s_to_FP32_result_11_mux00001_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N84,
+      Q => Fix16s_to_FP32_result_11_mux00001_FRB_488
+    );
+  Fix16s_to_FP32_result_13_mux00000_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N83,
+      Q => Fix16s_to_FP32_result_13_mux00000_FRB_489
+    );
+  Fix16s_to_FP32_result_4_mux000094_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N81,
+      Q => Fix16s_to_FP32_result_4_mux000094_FRB_525
+    );
+  Fix16s_to_FP32_result_0_cmp_eq000049_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N79,
+      Q => Fix16s_to_FP32_result_0_cmp_eq000049_FRB_552
+    );
+  Fix16s_to_FP32_result_0_cmp_eq000062_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N78,
+      Q => Fix16s_to_FP32_result_0_cmp_eq000062_FRB_553
+    );
+  Fix16s_to_FP32_result_0_cmp_eq000025_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N77,
+      Q => Fix16s_to_FP32_result_0_cmp_eq000025_FRB_551
+    );
+  Fix16s_to_FP32_result_0_cmp_eq000012_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N76,
+      Q => Fix16s_to_FP32_result_0_cmp_eq000012_FRB_550
+    );
+  Fix16s_to_FP32_argb2_mux0000_0_145_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N60,
+      Q => Fix16s_to_FP32_argb2_mux0000_0_145_FRB_302
+    );
+  Fix16s_to_FP32_argb2_mux0000_3_1_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N59,
+      Q => Fix16s_to_FP32_argb2_mux0000_3_1_FRB_305
+    );
+  Fix16s_to_FP32_argb2_mux0000_1_62_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N58,
+      Q => Fix16s_to_FP32_argb2_mux0000_1_62_FRB_303
+    );
+  Fix16s_to_FP32_argb2_mux0000_2_44_FRB : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_N57,
+      Q => Fix16s_to_FP32_argb2_mux0000_2_44_FRB_304
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_9_rt : LUT1
+    generic map(
+      INIT => X"2"
+    )
+    port map (
+      I0 => RX_EXP(7),
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_9_rt_50
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_8_rt : LUT1
+    generic map(
+      INIT => X"2"
+    )
+    port map (
+      I0 => RX_EXP(7),
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_8_rt_41
+    );
+  Fix16s_to_FP32_result_1_mux0000162 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_22_BRB0_460,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_22_BRB2_461,
+      I3 => Fix16s_to_FP32_fract3_22_BRB3_462,
+      O => Fix16s_to_FP32_fract3(22)
+    );
+  Fix16s_to_FP32_result_1_mux0000135 : LUT3
+    generic map(
+      INIT => X"F2"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_1_BRB0_337,
+      I1 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB7_342,
+      O => Fix16s_to_FP32_N245
+    );
+  Fix16s_to_FP32_result_1_mux000082 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N25,
+      I1 => Fix16s_to_FP32_N72,
+      I2 => Fix16s_to_FP32_N27,
+      I3 => Fix16s_to_FP32_N73,
+      O => Fix16s_to_FP32_N143
+    );
+  Fix16s_to_FP32_result_1_mux000060 : LUT3
+    generic map(
+      INIT => X"EA"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_1_BRB1_338,
+      I1 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB5_341,
+      O => Fix16s_to_FP32_N243
+    );
+  Fix16s_to_FP32_result_1_mux000054 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N29,
+      I1 => Fix16s_to_FP32_N73,
+      I2 => Fix16s_to_FP32_N28,
+      I3 => Fix16s_to_FP32_N72,
+      O => Fix16s_to_FP32_N142
+    );
+  Fix16s_to_FP32_result_1_mux000049 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N67,
+      I1 => Fix16s_to_FP32_N30,
+      I2 => Fix16s_to_FP32_N66,
+      I3 => Fix16s_to_FP32_N31,
+      O => Fix16s_to_FP32_N141
+    );
+  Fix16s_to_FP32_result_1_mux000034 : LUT3
+    generic map(
+      INIT => X"FE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_1_BRB2_339,
+      I1 => Fix16s_to_FP32_fp_data2_1_BRB8_343,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB9_344,
+      O => Fix16s_to_FP32_N246
+    );
+  Fix16s_to_FP32_result_1_mux000032 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N69,
+      I1 => Fix16s_to_FP32_N36,
+      I2 => Fix16s_to_FP32_N68,
+      I3 => Fix16s_to_FP32_N35,
+      O => Fix16s_to_FP32_N140
+    );
+  Fix16s_to_FP32_result_2_mux0000150 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_21_BRB0_456,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_21_BRB2_457,
+      I3 => Fix16s_to_FP32_fract3_21_BRB3_458,
+      O => Fix16s_to_FP32_fract3(21)
+    );
+  Fix16s_to_FP32_result_2_mux0000126 : LUT4
+    generic map(
+      INIT => X"FFAE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_2_BRB0_345,
+      I1 => Fix16s_to_FP32_fp_data2_4_BRB9_369,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I3 => Fix16s_to_FP32_fp_data2_2_BRB9_353,
+      O => Fix16s_to_FP32_N241
+    );
+  Fix16s_to_FP32_result_2_mux0000105 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N66,
+      I1 => Fix16s_to_FP32_N33,
+      I2 => Fix16s_to_FP32_N55,
+      I3 => Fix16s_to_FP32_N24,
+      O => Fix16s_to_FP32_N136
+    );
+  Fix16s_to_FP32_result_2_mux000080 : LUT4
+    generic map(
+      INIT => X"FE00"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_2_BRB6_352,
+      I1 => Fix16s_to_FP32_fp_data2_2_BRB5_351,
+      I2 => Fix16s_to_FP32_fp_data2_2_BRB4_350,
+      I3 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      O => Fix16s_to_FP32_N239
+    );
+  Fix16s_to_FP32_result_2_mux000054 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N74,
+      I1 => Fix16s_to_FP32_N60,
+      I2 => Fix16s_to_FP32_N34,
+      I3 => Fix16s_to_FP32_N32,
+      O => Fix16s_to_FP32_N134
+    );
+  Fix16s_to_FP32_result_2_mux000028 : LUT4
+    generic map(
+      INIT => X"FFFE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_2_BRB2_349,
+      I1 => Fix16s_to_FP32_fp_data2_2_BRB10_346,
+      I2 => Fix16s_to_FP32_fp_data2_2_BRB11_347,
+      I3 => Fix16s_to_FP32_fp_data2_2_BRB12_348,
+      O => Fix16s_to_FP32_N242
+    );
+  Fix16s_to_FP32_result_2_mux000018 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N64,
+      I1 => Fix16s_to_FP32_N60,
+      I2 => Fix16s_to_FP32_N29,
+      I3 => Fix16s_to_FP32_N23,
+      O => Fix16s_to_FP32_N132
+    );
+  Fix16s_to_FP32_result_3_mux0000138 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_20_BRB0_452,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_20_BRB2_453,
+      I3 => Fix16s_to_FP32_fract3_20_BRB3_454,
+      O => Fix16s_to_FP32_fract3(20)
+    );
+  Fix16s_to_FP32_result_3_mux0000114 : LUT4
+    generic map(
+      INIT => X"FFAE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_3_BRB0_354,
+      I1 => Fix16s_to_FP32_fp_data2_3_BRB7_362,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I3 => Fix16s_to_FP32_fp_data2_3_BRB9_363,
+      O => Fix16s_to_FP32_N237
+    );
+  Fix16s_to_FP32_result_3_mux0000104 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N35,
+      I1 => Fix16s_to_FP32_N72,
+      I2 => Fix16s_to_FP32_N36,
+      I3 => Fix16s_to_FP32_N73,
+      O => Fix16s_to_FP32_N128
+    );
+  Fix16s_to_FP32_result_3_mux000093 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N66,
+      I1 => Fix16s_to_FP32_N32,
+      I2 => Fix16s_to_FP32_N55,
+      I3 => Fix16s_to_FP32_N22,
+      O => Fix16s_to_FP32_N126
+    );
+  Fix16s_to_FP32_result_3_mux000070 : LUT4
+    generic map(
+      INIT => X"FE00"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_3_BRB6_361,
+      I1 => Fix16s_to_FP32_fp_data2_3_BRB5_360,
+      I2 => Fix16s_to_FP32_fp_data2_3_BRB4_359,
+      I3 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      O => Fix16s_to_FP32_N235
+    );
+  Fix16s_to_FP32_result_3_mux000050 : LUT4
+    generic map(
+      INIT => X"1000"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N59,
+      I1 => Fix16s_to_FP32_N57,
+      I2 => Fix16s_to_FP32_N60,
+      I3 => Fix16s_to_FP32_N34,
+      O => Fix16s_to_FP32_N124
+    );
+  Fix16s_to_FP32_result_3_mux000028 : LUT4
+    generic map(
+      INIT => X"FFFE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_3_BRB2_358,
+      I1 => Fix16s_to_FP32_fp_data2_3_BRB10_355,
+      I2 => Fix16s_to_FP32_fp_data2_3_BRB11_356,
+      I3 => Fix16s_to_FP32_fp_data2_3_BRB12_357,
+      O => Fix16s_to_FP32_N238
+    );
+  Fix16s_to_FP32_result_3_mux000018 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N64,
+      I1 => Fix16s_to_FP32_N60,
+      I2 => Fix16s_to_FP32_N28,
+      I3 => Fix16s_to_FP32_N29,
+      O => Fix16s_to_FP32_N122
+    );
+  Fix16s_to_FP32_argb2_mux0000_0_145 : LUT4
+    generic map(
+      INIT => X"FF32"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N56,
+      I1 => Fix16s_to_FP32_N26,
+      I2 => Fix16s_to_FP32_N24,
+      I3 => Fix16s_to_FP32_N55,
+      O => Fix16s_to_FP32_N60
+    );
+  Fix16s_to_FP32_argb2_mux0000_0_95 : LUT4
+    generic map(
+      INIT => X"0F02"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N50,
+      I1 => Fix16s_to_FP32_N29,
+      I2 => Fix16s_to_FP32_N22,
+      I3 => Fix16s_to_FP32_N23,
+      O => Fix16s_to_FP32_N56
+    );
+  Fix16s_to_FP32_argb2_mux0000_0_51 : LUT4
+    generic map(
+      INIT => X"FF32"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N41,
+      I1 => Fix16s_to_FP32_N27,
+      I2 => Fix16s_to_FP32_N25,
+      I3 => Fix16s_to_FP32_N28,
+      O => Fix16s_to_FP32_N50
+    );
+  Fix16s_to_FP32_argb2_mux0000_0_21 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N36,
+      I1 => Fix16s_to_FP32_N38,
+      I2 => Fix16s_to_FP32_N35,
+      O => Fix16s_to_FP32_N41
+    );
+  Fix16s_to_FP32_argb2_mux0000_0_11 : LUT4
+    generic map(
+      INIT => X"0F02"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N32,
+      I1 => Fix16s_to_FP32_N33,
+      I2 => Fix16s_to_FP32_N30,
+      I3 => Fix16s_to_FP32_N31,
+      O => Fix16s_to_FP32_N38
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq002011 : LUT3
+    generic map(
+      INIT => X"08"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N60,
+      I1 => Fix16s_to_FP32_N59,
+      I2 => Fix16s_to_FP32_N57,
+      O => Fix16s_to_FP32_N73
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq002111 : LUT3
+    generic map(
+      INIT => X"10"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N60,
+      I1 => Fix16s_to_FP32_N57,
+      I2 => Fix16s_to_FP32_N59,
+      O => Fix16s_to_FP32_N72
+    );
+  Fix16s_to_FP32_arg_int_mux0000_2_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N7,
+      I2 => RX_MOSI_DATA(2),
+      O => Fix16s_to_FP32_N33
+    );
+  Fix16s_to_FP32_arg_int_mux0000_1_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N6,
+      I2 => RX_MOSI_DATA(1),
+      O => Fix16s_to_FP32_N32
+    );
+  Fix16s_to_FP32_arg_int_mux0000_3_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N8,
+      I2 => RX_MOSI_DATA(3),
+      O => Fix16s_to_FP32_N31
+    );
+  Fix16s_to_FP32_result_4_mux0000149 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_19_BRB0_448,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_19_BRB2_449,
+      I3 => Fix16s_to_FP32_fract3_19_BRB3_450,
+      O => Fix16s_to_FP32_fract3(19)
+    );
+  Fix16s_to_FP32_result_4_mux0000123 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_4_BRB11_366,
+      I1 => Fix16s_to_FP32_fp_data2_4_BRB10_365,
+      I2 => Fix16s_to_FP32_fp_data2_4_BRB9_369,
+      I3 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      O => Fix16s_to_FP32_N233
+    );
+  Fix16s_to_FP32_result_4_mux000058 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N36,
+      I1 => Fix16s_to_FP32_N72,
+      I2 => Fix16s_to_FP32_N25,
+      I3 => Fix16s_to_FP32_N73,
+      O => Fix16s_to_FP32_N117
+    );
+  Fix16s_to_FP32_result_4_mux000040 : LUT4
+    generic map(
+      INIT => X"0F08"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_6_BRB3_379,
+      I1 => Fix16s_to_FP32_fp_data2_10_BRB5_321,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I3 => Fix16s_to_FP32_fp_data2_6_BRB10_377,
+      O => Fix16s_to_FP32_N231
+    );
+  Fix16s_to_FP32_result_4_mux000023 : LUT3
+    generic map(
+      INIT => X"FE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_4_BRB1_364,
+      I1 => Fix16s_to_FP32_fp_data2_4_BRB4_367,
+      I2 => Fix16s_to_FP32_fp_data2_4_BRB5_368,
+      O => Fix16s_to_FP32_N234
+    );
+  Fix16s_to_FP32_result_4_mux000013 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N64,
+      I1 => Fix16s_to_FP32_N60,
+      I2 => Fix16s_to_FP32_N27,
+      I3 => Fix16s_to_FP32_N28,
+      O => Fix16s_to_FP32_N115
+    );
+  Fix16s_to_FP32_result_6_mux000092 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_17_BRB0_440,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_17_BRB2_441,
+      I3 => Fix16s_to_FP32_fract3_17_BRB3_442,
+      O => Fix16s_to_FP32_fract3(17)
+    );
+  Fix16s_to_FP32_result_6_mux000068 : LUT3
+    generic map(
+      INIT => X"EA"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_6_BRB1_376,
+      I1 => Fix16s_to_FP32_fp_data2_6_BRB4_380,
+      I2 => Fix16s_to_FP32_fp_data2_6_BRB5_381,
+      O => Fix16s_to_FP32_N225
+    );
+  Fix16s_to_FP32_result_6_mux000060 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N33,
+      I1 => Fix16s_to_FP32_N72,
+      I2 => Fix16s_to_FP32_N31,
+      I3 => Fix16s_to_FP32_N73,
+      O => Fix16s_to_FP32_N112
+    );
+  Fix16s_to_FP32_result_6_mux000055 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N68,
+      I1 => Fix16s_to_FP32_N34,
+      I2 => Fix16s_to_FP32_N65,
+      I3 => Fix16s_to_FP32_N27,
+      O => Fix16s_to_FP32_N111
+    );
+  Fix16s_to_FP32_result_6_mux000038 : LUT4
+    generic map(
+      INIT => X"F080"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_6_BRB3_379,
+      I1 => Fix16s_to_FP32_fp_data2_10_BRB5_321,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I3 => Fix16s_to_FP32_fp_data2_6_BRB10_377,
+      O => Fix16s_to_FP32_N223
+    );
+  Fix16s_to_FP32_result_6_mux000023 : LUT3
+    generic map(
+      INIT => X"FE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_6_BRB2_378,
+      I1 => Fix16s_to_FP32_fp_data2_6_BRB6_382,
+      I2 => Fix16s_to_FP32_fp_data2_6_BRB7_383,
+      O => Fix16s_to_FP32_N226
+    );
+  Fix16s_to_FP32_result_6_mux000013 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N64,
+      I1 => Fix16s_to_FP32_N60,
+      I2 => Fix16s_to_FP32_N36,
+      I3 => Fix16s_to_FP32_N25,
+      O => Fix16s_to_FP32_N108
+    );
+  Fix16s_to_FP32_result_7_mux000083 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_16_BRB0_436,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_16_BRB2_437,
+      I3 => Fix16s_to_FP32_fract3_16_BRB3_438,
+      O => Fix16s_to_FP32_fract3(16)
+    );
+  Fix16s_to_FP32_result_7_mux000055 : LUT4
+    generic map(
+      INIT => X"0F08"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_13_BRB1_331,
+      I1 => Fix16s_to_FP32_fp_data2_10_BRB5_321,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I3 => Fix16s_to_FP32_fp_data2_9_BRB11_394,
+      O => Fix16s_to_FP32_N221
+    );
+  Fix16s_to_FP32_result_7_mux000044 : LUT4
+    generic map(
+      INIT => X"F080"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_12_BRB5_329,
+      I1 => Fix16s_to_FP32_fp_data2_10_BRB5_321,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I3 => Fix16s_to_FP32_fp_data2_7_BRB6_388,
+      O => Fix16s_to_FP32_N219
+    );
+  Fix16s_to_FP32_result_7_mux000028 : LUT4
+    generic map(
+      INIT => X"FFFE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_7_BRB2_387,
+      I1 => Fix16s_to_FP32_fp_data2_7_BRB10_384,
+      I2 => Fix16s_to_FP32_fp_data2_7_BRB11_385,
+      I3 => Fix16s_to_FP32_fp_data2_7_BRB12_386,
+      O => Fix16s_to_FP32_N222
+    );
+  Fix16s_to_FP32_result_7_mux000018 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N64,
+      I1 => Fix16s_to_FP32_N60,
+      I2 => Fix16s_to_FP32_N35,
+      I3 => Fix16s_to_FP32_N36,
+      O => Fix16s_to_FP32_N105
+    );
+  Fix16s_to_FP32_result_8_mux000077 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_15_BRB0_432,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_15_BRB2_433,
+      I3 => Fix16s_to_FP32_fract3_15_BRB3_434,
+      O => Fix16s_to_FP32_fract3(15)
+    );
+  Fix16s_to_FP32_result_8_mux000049 : LUT4
+    generic map(
+      INIT => X"0F08"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_15_BRB0_334,
+      I1 => Fix16s_to_FP32_fp_data2_10_BRB5_321,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I3 => Fix16s_to_FP32_fp_data2_10_BRB7_322,
+      O => Fix16s_to_FP32_N217
+    );
+  Fix16s_to_FP32_result_8_mux000038 : LUT4
+    generic map(
+      INIT => X"F080"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_12_BRB4_328,
+      I1 => Fix16s_to_FP32_fp_data2_10_BRB5_321,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I3 => Fix16s_to_FP32_fp_data2_8_BRB8_392,
+      O => Fix16s_to_FP32_N215
+    );
+  Fix16s_to_FP32_result_8_mux000023 : LUT3
+    generic map(
+      INIT => X"FE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_8_BRB1_389,
+      I1 => Fix16s_to_FP32_fp_data2_8_BRB4_390,
+      I2 => Fix16s_to_FP32_fp_data2_8_BRB5_391,
+      O => Fix16s_to_FP32_N218
+    );
+  Fix16s_to_FP32_result_8_mux000013 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N64,
+      I1 => Fix16s_to_FP32_N60,
+      I2 => Fix16s_to_FP32_N30,
+      I3 => Fix16s_to_FP32_N35,
+      O => Fix16s_to_FP32_N99
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq00241 : LUT4
+    generic map(
+      INIT => X"0080"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N57,
+      I1 => Fix16s_to_FP32_N60,
+      I2 => Fix16s_to_FP32_N58,
+      I3 => Fix16s_to_FP32_N59,
+      O => Fix16s_to_FP32_N69
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq00251 : LUT4
+    generic map(
+      INIT => X"1000"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N60,
+      I1 => Fix16s_to_FP32_N59,
+      I2 => Fix16s_to_FP32_N58,
+      I3 => Fix16s_to_FP32_N57,
+      O => Fix16s_to_FP32_N68
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq00261 : LUT4
+    generic map(
+      INIT => X"1000"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N58,
+      I1 => Fix16s_to_FP32_N59,
+      I2 => Fix16s_to_FP32_N60,
+      I3 => Fix16s_to_FP32_N57,
+      O => Fix16s_to_FP32_N67
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq00271 : LUT4
+    generic map(
+      INIT => X"0010"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N58,
+      I1 => Fix16s_to_FP32_N60,
+      I2 => Fix16s_to_FP32_N57,
+      I3 => Fix16s_to_FP32_N59,
+      O => Fix16s_to_FP32_N66
+    );
+  Fix16s_to_FP32_arg_int_mux0000_4_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N9,
+      I2 => RX_MOSI_DATA(4),
+      O => Fix16s_to_FP32_N30
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq001667 : LUT4
+    generic map(
+      INIT => X"FF08"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N49,
+      I1 => Fix16s_to_FP32_N47,
+      I2 => Fix16s_to_FP32_N39,
+      I3 => Fix16s_to_FP32_N40,
+      O => Fix16s_to_FP32_N55
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq001634 : LUT4
+    generic map(
+      INIT => X"0001"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N25,
+      I1 => Fix16s_to_FP32_N36,
+      I2 => Fix16s_to_FP32_N35,
+      I3 => Fix16s_to_FP32_N30,
+      O => Fix16s_to_FP32_N47
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq001619 : LUT4
+    generic map(
+      INIT => X"0010"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N31,
+      I1 => Fix16s_to_FP32_N33,
+      I2 => Fix16s_to_FP32_N46,
+      I3 => Fix16s_to_FP32_N26,
+      O => Fix16s_to_FP32_N49
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq00160 : LUT2
+    generic map(
+      INIT => X"8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N21,
+      O => Fix16s_to_FP32_N40
+    );
+  Fix16s_to_FP32_argb2_or00002 : LUT4
+    generic map(
+      INIT => X"FFFE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N22,
+      I1 => Fix16s_to_FP32_N28,
+      I2 => Fix16s_to_FP32_N27,
+      I3 => Fix16s_to_FP32_N37,
+      O => Fix16s_to_FP32_N39
+    );
+  Fix16s_to_FP32_argb2_or00002_SW0 : LUT3
+    generic map(
+      INIT => X"FE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N24,
+      I1 => Fix16s_to_FP32_N23,
+      I2 => Fix16s_to_FP32_N29,
+      O => Fix16s_to_FP32_N37
+    );
+  Fix16s_to_FP32_arg_int_mux0000_10_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N15,
+      I2 => RX_MOSI_DATA(10),
+      O => Fix16s_to_FP32_N29
+    );
+  Fix16s_to_FP32_arg_int_cmp_eq001811 : LUT3
+    generic map(
+      INIT => X"08"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N59,
+      I1 => Fix16s_to_FP32_N57,
+      I2 => Fix16s_to_FP32_N58,
+      O => Fix16s_to_FP32_N64
+    );
+  Fix16s_to_FP32_result_9_mux000070 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_14_BRB0_428,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_14_BRB2_429,
+      I3 => Fix16s_to_FP32_fract3_14_BRB3_430,
+      O => Fix16s_to_FP32_fract3(14)
+    );
+  Fix16s_to_FP32_result_9_mux000053 : LUT4
+    generic map(
+      INIT => X"F080"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_13_BRB1_331,
+      I1 => Fix16s_to_FP32_fp_data2_10_BRB5_321,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I3 => Fix16s_to_FP32_fp_data2_9_BRB11_394,
+      O => Fix16s_to_FP32_N213
+    );
+  Fix16s_to_FP32_result_9_mux000026 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_11_BRB2_324,
+      I1 => Fix16s_to_FP32_fp_data2_9_BRB6_396,
+      I2 => Fix16s_to_FP32_fp_data2_11_BRB6_326,
+      I3 => Fix16s_to_FP32_fp_data2_9_BRB8_397,
+      O => Fix16s_to_FP32_N2111
+    );
+  Fix16s_to_FP32_result_9_mux000012 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N60,
+      I1 => Fix16s_to_FP32_N30,
+      I2 => Fix16s_to_FP32_N31,
+      O => Fix16s_to_FP32_N96
+    );
+  Fix16s_to_FP32_result_9_mux00003 : LUT3
+    generic map(
+      INIT => X"EA"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_9_BRB1_393,
+      I1 => Fix16s_to_FP32_fp_data2_14_BRB0_333,
+      I2 => Fix16s_to_FP32_fp_data2_9_BRB5_395,
+      O => Fix16s_to_FP32_N214
+    );
+  Fix16s_to_FP32_result_10_mux000054 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I1 => Fix16s_to_FP32_fract3_13_BRB1_425,
+      I2 => Fix16s_to_FP32_fract3_13_BRB2_426,
+      O => Fix16s_to_FP32_fract3(13)
+    );
+  Fix16s_to_FP32_result_10_mux000038 : LUT4
+    generic map(
+      INIT => X"F080"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_15_BRB0_334,
+      I1 => Fix16s_to_FP32_fp_data2_10_BRB5_321,
+      I2 => Fix16s_to_FP32_fp_data2_1_BRB4_340,
+      I3 => Fix16s_to_FP32_fp_data2_10_BRB7_322,
+      O => Fix16s_to_FP32_N173
+    );
+  Fix16s_to_FP32_result_10_mux000023 : LUT3
+    generic map(
+      INIT => X"FE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_10_BRB0_318,
+      I1 => Fix16s_to_FP32_fp_data2_10_BRB3_319,
+      I2 => Fix16s_to_FP32_fp_data2_10_BRB4_320,
+      O => Fix16s_to_FP32_N174
+    );
+  Fix16s_to_FP32_result_10_mux000013 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N64,
+      I1 => Fix16s_to_FP32_N60,
+      I2 => Fix16s_to_FP32_N33,
+      I3 => Fix16s_to_FP32_N31,
+      O => Fix16s_to_FP32_N92
+    );
+  Fix16s_to_FP32_arg_int_mux0000_9_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N14,
+      I2 => RX_MOSI_DATA(9),
+      O => Fix16s_to_FP32_N28
+    );
+  Fix16s_to_FP32_arg_int_mux0000_8_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N13,
+      I2 => RX_MOSI_DATA(8),
+      O => Fix16s_to_FP32_N27
+    );
+  Fix16s_to_FP32_arg_int_mux0000_14_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N191,
+      I2 => RX_MOSI_DATA(14),
+      O => Fix16s_to_FP32_N26
+    );
+  Fix16s_to_FP32_arg_int_mux0000_7_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N12,
+      I2 => RX_MOSI_DATA(7),
+      O => Fix16s_to_FP32_N25
+    );
+  Fix16s_to_FP32_arg_int_mux0000_13_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N18,
+      I2 => RX_MOSI_DATA(13),
+      O => Fix16s_to_FP32_N24
+    );
+  Fix16s_to_FP32_arg_int_mux0000_6_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N11,
+      I2 => RX_MOSI_DATA(6),
+      O => Fix16s_to_FP32_N36
+    );
+  Fix16s_to_FP32_arg_int_mux0000_5_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N10,
+      I2 => RX_MOSI_DATA(5),
+      O => Fix16s_to_FP32_N35
+    );
+  Fix16s_to_FP32_arg_int_mux0000_11_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N161,
+      I2 => RX_MOSI_DATA(11),
+      O => Fix16s_to_FP32_N23
+    );
+  Fix16s_to_FP32_result_5_mux0000153 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_18_BRB0_444,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_18_BRB2_445,
+      I3 => Fix16s_to_FP32_fract3_18_BRB3_446,
+      O => Fix16s_to_FP32_fract3(18)
+    );
+  Fix16s_to_FP32_result_5_mux0000132 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_5_BRB0_370,
+      I1 => Fix16s_to_FP32_fp_data2_13_BRB1_331,
+      I2 => Fix16s_to_FP32_fp_data2_10_BRB5_321,
+      I3 => Fix16s_to_FP32_fp_data2_5_BRB7_374,
+      O => Fix16s_to_FP32_N229
+    );
+  Fix16s_to_FP32_result_5_mux0000124 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N58,
+      I1 => Fix16s_to_FP32_N35,
+      I2 => Fix16s_to_FP32_N31,
+      O => Fix16s_to_FP32_N90
+    );
+  Fix16s_to_FP32_result_5_mux0000103 : LUT2
+    generic map(
+      INIT => X"8"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_14_BRB0_333,
+      I1 => Fix16s_to_FP32_fp_data2_5_BRB4_373,
+      O => Fix16s_to_FP32_N227
+    );
+  Fix16s_to_FP32_result_5_mux000094 : LUT4
+    generic map(
+      INIT => X"FFE2"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_5_BRB2_372,
+      I1 => Fix16s_to_FP32_fp_data2_13_BRB0_330,
+      I2 => Fix16s_to_FP32_fp_data2_5_BRB9_375,
+      I3 => Fix16s_to_FP32_fp_data2_5_BRB10_371,
+      O => Fix16s_to_FP32_N230
+    );
+  Fix16s_to_FP32_result_11_mux000044 : LUT3
+    generic map(
+      INIT => X"54"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I1 => Fix16s_to_FP32_fract3_12_BRB1_422,
+      I2 => Fix16s_to_FP32_fract3_12_BRB2_423,
+      O => Fix16s_to_FP32_fract3(12)
+    );
+  Fix16s_to_FP32_result_11_mux000023 : LUT4
+    generic map(
+      INIT => X"F888"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_11_BRB2_324,
+      I1 => Fix16s_to_FP32_fp_data2_11_BRB5_325,
+      I2 => Fix16s_to_FP32_fp_data2_11_BRB6_326,
+      I3 => Fix16s_to_FP32_fp_data2_11_BRB7_327,
+      O => Fix16s_to_FP32_N170
+    );
+  Fix16s_to_FP32_result_11_mux000012 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N60,
+      I1 => Fix16s_to_FP32_N33,
+      I2 => Fix16s_to_FP32_N32,
+      O => Fix16s_to_FP32_N85
+    );
+  Fix16s_to_FP32_result_11_mux00003 : LUT3
+    generic map(
+      INIT => X"EA"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_11_BRB0_323,
+      I1 => Fix16s_to_FP32_fp_data2_14_BRB0_333,
+      I2 => Fix16s_to_FP32_fp_data2_12_BRB5_329,
+      O => Fix16s_to_FP32_N1711
+    );
+  Fix16s_to_FP32_result_12_mux000035 : LUT4
+    generic map(
+      INIT => X"3332"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_11_BRB0_418,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_11_BRB2_419,
+      I3 => Fix16s_to_FP32_fract3_11_BRB3_420,
+      O => Fix16s_to_FP32_fract3(11)
+    );
+  Fix16s_to_FP32_result_12_mux000021 : LUT2
+    generic map(
+      INIT => X"8"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_14_BRB0_333,
+      I1 => Fix16s_to_FP32_fp_data2_12_BRB4_328,
+      O => Fix16s_to_FP32_N209
+    );
+  Fix16s_to_FP32_result_12_mux000013 : LUT4
+    generic map(
+      INIT => X"A820"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_11_BRB2_324,
+      I1 => Fix16s_to_FP32_fp_data2_13_BRB0_330,
+      I2 => Fix16s_to_FP32_fp_data2_15_BRB0_334,
+      I3 => Fix16s_to_FP32_fp_data2_13_BRB1_331,
+      O => Fix16s_to_FP32_N207
+    );
+  Fix16s_to_FP32_result_12_mux00000 : LUT2
+    generic map(
+      INIT => X"8"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_15_BRB1_335,
+      I1 => Fix16s_to_FP32_fp_data2_12_BRB5_329,
+      O => Fix16s_to_FP32_N210
+    );
+  Fix16s_to_FP32_argb2_mux0000_1_62 : LUT4
+    generic map(
+      INIT => X"FFEA"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => Fix16s_to_FP32_N48,
+      I2 => Fix16s_to_FP32_N54,
+      I3 => Fix16s_to_FP32_N26,
+      O => Fix16s_to_FP32_N58
+    );
+  Fix16s_to_FP32_argb2_mux0000_1_11 : LUT4
+    generic map(
+      INIT => X"0302"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N33,
+      I1 => Fix16s_to_FP32_N35,
+      I2 => Fix16s_to_FP32_N30,
+      I3 => Fix16s_to_FP32_N31,
+      O => Fix16s_to_FP32_N44
+    );
+  Fix16s_to_FP32_argb2_mux0000_3_1 : LUT3
+    generic map(
+      INIT => X"FE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => Fix16s_to_FP32_N26,
+      I2 => Fix16s_to_FP32_N39,
+      O => Fix16s_to_FP32_N59
+    );
+  Fix16s_to_FP32_result_13_mux000019 : LUT4
+    generic map(
+      INIT => X"0F08"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_9_BRB0_468,
+      I1 => Fix16s_to_FP32_fract3_10_BRB1_415,
+      I2 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I3 => Fix16s_to_FP32_fract3_10_BRB3_416,
+      O => Fix16s_to_FP32_fract3(10)
+    );
+  Fix16s_to_FP32_result_13_mux00006 : LUT4
+    generic map(
+      INIT => X"FF80"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_13_BRB0_330,
+      I1 => Fix16s_to_FP32_fp_data2_11_BRB2_324,
+      I2 => Fix16s_to_FP32_fp_data2_15_BRB0_334,
+      I3 => Fix16s_to_FP32_fp_data2_13_BRB5_332,
+      O => Fix16s_to_FP32_N206
+    );
+  Fix16s_to_FP32_result_14_mux0000 : LUT4
+    generic map(
+      INIT => X"2033"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_9_BRB0_468,
+      I1 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      I2 => Fix16s_to_FP32_fract3_8_BRB0_464,
+      I3 => Fix16s_to_FP32_fract3_9_BRB3_469,
+      O => Fix16s_to_FP32_fract3(9)
+    );
+  Fix16s_to_FP32_result_14_mux0000_SW0 : LUT2
+    generic map(
+      INIT => X"7"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fp_data2_15_BRB1_335,
+      I1 => Fix16s_to_FP32_fp_data2_13_BRB1_331,
+      O => Fix16s_to_FP32_N202
+    );
+  Fix16s_to_FP32_arg_int_mux0000_12_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N171,
+      I2 => RX_MOSI_DATA(12),
+      O => Fix16s_to_FP32_N22
+    );
+  Fix16s_to_FP32_argb2_mux0000_2_44 : LUT4
+    generic map(
+      INIT => X"FFEA"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N55,
+      I1 => Fix16s_to_FP32_N52,
+      I2 => Fix16s_to_FP32_N53,
+      I3 => Fix16s_to_FP32_N51,
+      O => Fix16s_to_FP32_N57
+    );
+  Fix16s_to_FP32_argb2_mux0000_2_20 : LUT4
+    generic map(
+      INIT => X"0001"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N23,
+      I1 => Fix16s_to_FP32_N29,
+      I2 => Fix16s_to_FP32_N28,
+      I3 => Fix16s_to_FP32_N27,
+      O => Fix16s_to_FP32_N53
+    );
+  Fix16s_to_FP32_argb2_mux0000_2_7 : LUT4
+    generic map(
+      INIT => X"FFFE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N35,
+      I1 => Fix16s_to_FP32_N30,
+      I2 => Fix16s_to_FP32_N25,
+      I3 => Fix16s_to_FP32_N36,
+      O => Fix16s_to_FP32_N52
+    );
+  Fix16s_to_FP32_argb2_mux0000_2_2 : LUT3
+    generic map(
+      INIT => X"FE"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_N26,
+      I1 => Fix16s_to_FP32_N24,
+      I2 => Fix16s_to_FP32_N22,
+      O => Fix16s_to_FP32_N51
+    );
+  Fix16s_to_FP32_result_3_mux00001_104 : LUT3
+    generic map(
+      INIT => X"09"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_argb2_mux0000_3_1_FRB_305,
+      I1 => Fix16s_to_FP32_Msub_expon_sub0000_cy(2),
+      I2 => Fix16s_to_FP32_result_0_cmp_eq0000,
+      O => Fix16s_to_FP32_result_3_mux0000
+    );
+  Fix16s_to_FP32_result_4_mux00001 : LUT3
+    generic map(
+      INIT => X"01"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_argb2_mux0000_3_1_FRB_305,
+      I1 => Fix16s_to_FP32_Msub_expon_sub0000_cy(2),
+      I2 => Fix16s_to_FP32_result_0_cmp_eq0000,
+      O => Fix16s_to_FP32_result_4_mux0000
+    );
+  Fix16s_to_FP32_result_7_mux00001_102 : LUT3
+    generic map(
+      INIT => X"0E"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_argb2_mux0000_3_1_FRB_305,
+      I1 => Fix16s_to_FP32_N466,
+      I2 => Fix16s_to_FP32_result_0_cmp_eq0000,
+      O => Fix16s_to_FP32_result_7_mux0000
+    );
+  Fix16s_to_FP32_arg_int_mux0000_0_1 : LUT3
+    generic map(
+      INIT => X"D8"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => Fix16s_to_FP32_N5,
+      I2 => RX_MOSI_DATA(0),
+      O => Fix16s_to_FP32_N34
+    );
+  Fix16s_to_FP32_result_2_mux00001_100 : LUT4
+    generic map(
+      INIT => X"00C9"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_argb2_mux0000_1_62_FRB_303,
+      I1 => Fix16s_to_FP32_argb2_mux0000_2_44_FRB_304,
+      I2 => Fix16s_to_FP32_argb2_mux0000_0_145_FRB_302,
+      I3 => Fix16s_to_FP32_result_0_cmp_eq0000,
+      O => Fix16s_to_FP32_result_2_mux0000
+    );
+  Fix16s_to_FP32_result_1_mux00001 : LUT3
+    generic map(
+      INIT => X"09"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_argb2_mux0000_1_62_FRB_303,
+      I1 => Fix16s_to_FP32_argb2_mux0000_0_145_FRB_302,
+      I2 => Fix16s_to_FP32_result_0_cmp_eq0000,
+      O => Fix16s_to_FP32_result_1_mux0000
+    );
+  Fix16s_to_FP32_result_0_mux00001 : LUT2
+    generic map(
+      INIT => X"1"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_argb2_mux0000_0_145_FRB_302,
+      I1 => Fix16s_to_FP32_result_0_cmp_eq0000,
+      O => Fix16s_to_FP32_result_0_mux0000
+    );
+  Fix16s_to_FP32_result_15_mux00001 : LUT3
+    generic map(
+      INIT => X"08"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_fract3_8_BRB0_464,
+      I1 => Fix16s_to_FP32_fract3_8_BRB1_465,
+      I2 => Fix16s_to_FP32_fract3_8_BRB2_466,
+      O => Fix16s_to_FP32_fract3(8)
+    );
+  Fix16s_to_FP32_result_0_cmp_eq000076 : LUT4
+    generic map(
+      INIT => X"8000"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_result_0_cmp_eq000012_FRB_550,
+      I1 => Fix16s_to_FP32_result_0_cmp_eq000025_FRB_551,
+      I2 => Fix16s_to_FP32_result_0_cmp_eq000049_FRB_552,
+      I3 => Fix16s_to_FP32_result_0_cmp_eq000062_FRB_553,
+      O => Fix16s_to_FP32_result_0_cmp_eq0000
+    );
+  Fix16s_to_FP32_result_0_cmp_eq000062 : LUT4
+    generic map(
+      INIT => X"0001"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(11),
+      I1 => RX_MOSI_DATA(10),
+      I2 => RX_MOSI_DATA(9),
+      I3 => RX_MOSI_DATA(8),
+      O => Fix16s_to_FP32_N78
+    );
+  Fix16s_to_FP32_result_0_cmp_eq000049 : LUT4
+    generic map(
+      INIT => X"0001"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(15),
+      I1 => RX_MOSI_DATA(14),
+      I2 => RX_MOSI_DATA(13),
+      I3 => RX_MOSI_DATA(12),
+      O => Fix16s_to_FP32_N79
+    );
+  Fix16s_to_FP32_result_0_cmp_eq000025 : LUT4
+    generic map(
+      INIT => X"0001"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(3),
+      I1 => RX_MOSI_DATA(2),
+      I2 => RX_MOSI_DATA(1),
+      I3 => RX_MOSI_DATA(0),
+      O => Fix16s_to_FP32_N77
+    );
+  Fix16s_to_FP32_result_0_cmp_eq000012 : LUT4
+    generic map(
+      INIT => X"0001"
+    )
+    port map (
+      I0 => RX_MOSI_DATA(7),
+      I1 => RX_MOSI_DATA(6),
+      I2 => RX_MOSI_DATA(5),
+      I3 => RX_MOSI_DATA(4),
+      O => Fix16s_to_FP32_N76
+    );
+  Fix16s_to_FP32_convert_ce1 : LUT2
+    generic map(
+      INIT => X"1"
+    )
+    port map (
+      I0 => NlwRenamedSignal_RX_MISO_AFULL,
+      I1 => TX_MISO_BUSY,
+      O => Fix16s_to_FP32_convert_ce
+    );
+  Fix16s_to_FP32_RX_DVALi1 : LUT2
+    generic map(
+      INIT => X"4"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_stage3_dval_BRB0_564,
+      I1 => Fix16s_to_FP32_stage3_dval_BRB1_565,
+      O => Fix16s_to_FP32_stage3_dval
+    );
+  Fix16s_to_FP32_TX_DVALi1 : LUT3
+    generic map(
+      INIT => X"EA"
+    )
+    port map (
+      I0 => Fix16s_to_FP32_hold_dval_470,
+      I1 => Fix16s_to_FP32_stage4_dval_566,
+      I2 => Fix16s_to_FP32_ce_reg_306,
+      O => TX_MOSI_DVAL
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_15_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_N20,
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(15),
+      O => Fix16s_to_FP32_N21
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_14_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(13),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(14),
+      O => Fix16s_to_FP32_N191
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_14_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(13),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(14),
+      O => Fix16s_to_FP32_N20
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_13_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(12),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(13),
+      O => Fix16s_to_FP32_N18
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_13_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(12),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(13),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(13)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_12_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(11),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(12),
+      O => Fix16s_to_FP32_N171
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_12_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(11),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(12),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(12)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_11_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(10),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(11),
+      O => Fix16s_to_FP32_N161
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_11_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(10),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(11),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(11)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_10_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(9),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(10),
+      O => Fix16s_to_FP32_N15
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_10_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(9),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(10),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(10)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_9_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(8),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(9),
+      O => Fix16s_to_FP32_N14
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_9_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(8),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(9),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(9)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_8_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(7),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(8),
+      O => Fix16s_to_FP32_N13
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_8_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(7),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(8),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(8)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_7_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(6),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(7),
+      O => Fix16s_to_FP32_N12
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_7_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(6),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(7),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(7)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_6_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(5),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(6),
+      O => Fix16s_to_FP32_N11
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_6_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(5),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(6),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(6)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_5_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(4),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(5),
+      O => Fix16s_to_FP32_N10
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_5_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(4),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(5),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(5)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_4_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(3),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(4),
+      O => Fix16s_to_FP32_N9
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_4_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(3),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(4),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(4)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_3_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(2),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(3),
+      O => Fix16s_to_FP32_N8
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_3_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(2),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(3),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(3)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_2_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(1),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(2),
+      O => Fix16s_to_FP32_N7
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_2_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(1),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(2),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(2)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_1_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(0),
+      LI => Fix16s_to_FP32_Madd_arg_int_not0000(1),
+      O => Fix16s_to_FP32_N6
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_1_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(0),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_arg_int_not0000(1),
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(1)
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_xor_0_Q : XORCY
+    port map (
+      CI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      LI => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_0_rt_3,
+      O => Fix16s_to_FP32_N5
+    );
+  Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_0_Q : MUXCY
+    port map (
+      CI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      DI => NlwRenamedSig_OI_TX_MOSI_DREM(0),
+      S => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy_0_rt_3,
+      O => Fix16s_to_FP32_Madd_arg_int_addsub0000_cy(0)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_9_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(8),
+      LI => Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_9_rt_50,
+      O => Fix16s_to_FP32_lcl_sum_add0000(9)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_8_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(7),
+      LI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_8_rt_41,
+      O => Fix16s_to_FP32_lcl_sum_add0000(8)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_8_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(7),
+      DI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      S => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_8_rt_41,
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(8)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_7_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(6),
+      LI => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(7),
+      O => Fix16s_to_FP32_lcl_sum_add0000(7)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_7_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(6),
+      DI => Fix16s_to_FP32_fp_data2_7_Q,
+      S => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(7),
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(7)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_lut_7_Q : LUT2
+    generic map(
+      INIT => X"6"
+    )
+    port map (
+      I0 => RX_EXP(7),
+      I1 => Fix16s_to_FP32_fp_data2_7_Q,
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(7)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_6_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(5),
+      LI => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(6),
+      O => Fix16s_to_FP32_lcl_sum_add0000(6)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_6_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(5),
+      DI => Fix16s_to_FP32_fp_data2_4_Q,
+      S => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(6),
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(6)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_lut_6_Q : LUT2
+    generic map(
+      INIT => X"6"
+    )
+    port map (
+      I0 => RX_EXP(6),
+      I1 => Fix16s_to_FP32_fp_data2_4_Q,
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(6)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_5_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(4),
+      LI => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(5),
+      O => Fix16s_to_FP32_lcl_sum_add0000(5)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_5_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(4),
+      DI => Fix16s_to_FP32_fp_data2_4_Q,
+      S => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(5),
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(5)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_lut_5_Q : LUT2
+    generic map(
+      INIT => X"6"
+    )
+    port map (
+      I0 => RX_EXP(5),
+      I1 => Fix16s_to_FP32_fp_data2_4_Q,
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(5)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_4_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(3),
+      LI => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(4),
+      O => Fix16s_to_FP32_lcl_sum_add0000(4)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_4_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(3),
+      DI => Fix16s_to_FP32_fp_data2_4_Q,
+      S => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(4),
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(4)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_lut_4_Q : LUT2
+    generic map(
+      INIT => X"6"
+    )
+    port map (
+      I0 => RX_EXP(4),
+      I1 => Fix16s_to_FP32_fp_data2_4_Q,
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(4)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_3_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(2),
+      LI => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(3),
+      O => Fix16s_to_FP32_lcl_sum_add0000(3)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_3_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(2),
+      DI => Fix16s_to_FP32_fp_data2_3_Q,
+      S => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(3),
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(3)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_lut_3_Q : LUT2
+    generic map(
+      INIT => X"6"
+    )
+    port map (
+      I0 => RX_EXP(3),
+      I1 => Fix16s_to_FP32_fp_data2_3_Q,
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(3)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_2_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(1),
+      LI => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(2),
+      O => Fix16s_to_FP32_lcl_sum_add0000(2)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_2_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(1),
+      DI => Fix16s_to_FP32_fp_data2_2_Q,
+      S => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(2),
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(2)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_lut_2_Q : LUT2
+    generic map(
+      INIT => X"6"
+    )
+    port map (
+      I0 => RX_EXP(2),
+      I1 => Fix16s_to_FP32_fp_data2_2_Q,
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(2)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_1_Q : XORCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(0),
+      LI => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(1),
+      O => Fix16s_to_FP32_lcl_sum_add0000(1)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_1_Q : MUXCY
+    port map (
+      CI => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(0),
+      DI => Fix16s_to_FP32_fp_data2_1_Q,
+      S => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(1),
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(1)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_lut_1_Q : LUT2
+    generic map(
+      INIT => X"6"
+    )
+    port map (
+      I0 => RX_EXP(1),
+      I1 => Fix16s_to_FP32_fp_data2_1_Q,
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(1)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_xor_0_Q : XORCY
+    port map (
+      CI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      LI => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(0),
+      O => Fix16s_to_FP32_lcl_sum_add0000(0)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_cy_0_Q : MUXCY
+    port map (
+      CI => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      DI => Fix16s_to_FP32_fp_data2_0_Q,
+      S => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(0),
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_cy(0)
+    );
+  Fix16s_to_FP32_Madd_lcl_sum_add0000_lut_0_Q : LUT2
+    generic map(
+      INIT => X"6"
+    )
+    port map (
+      I0 => RX_EXP(0),
+      I1 => Fix16s_to_FP32_fp_data2_0_Q,
+      O => Fix16s_to_FP32_Madd_lcl_sum_add0000_lut(0)
+    );
+  Fix16s_to_FP32_stage4_dval : FDCE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      CLR => ARESET,
+      D => Fix16s_to_FP32_stage3_dval,
+      Q => Fix16s_to_FP32_stage4_dval_566
+    );
+  Fix16s_to_FP32_fp_data4_slv_22 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(22),
+      Q => TX_MOSI_DATA(22)
+    );
+  Fix16s_to_FP32_fp_data4_slv_21 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(21),
+      Q => TX_MOSI_DATA(21)
+    );
+  Fix16s_to_FP32_fp_data4_slv_20 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(20),
+      Q => TX_MOSI_DATA(20)
+    );
+  Fix16s_to_FP32_fp_data4_slv_19 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(19),
+      Q => TX_MOSI_DATA(19)
+    );
+  Fix16s_to_FP32_fp_data4_slv_18 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(18),
+      Q => TX_MOSI_DATA(18)
+    );
+  Fix16s_to_FP32_fp_data4_slv_17 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(17),
+      Q => TX_MOSI_DATA(17)
+    );
+  Fix16s_to_FP32_fp_data4_slv_16 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(16),
+      Q => TX_MOSI_DATA(16)
+    );
+  Fix16s_to_FP32_fp_data4_slv_15 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(15),
+      Q => TX_MOSI_DATA(15)
+    );
+  Fix16s_to_FP32_fp_data4_slv_14 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(14),
+      Q => TX_MOSI_DATA(14)
+    );
+  Fix16s_to_FP32_fp_data4_slv_13 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(13),
+      Q => TX_MOSI_DATA(13)
+    );
+  Fix16s_to_FP32_fp_data4_slv_12 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(12),
+      Q => TX_MOSI_DATA(12)
+    );
+  Fix16s_to_FP32_fp_data4_slv_11 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(11),
+      Q => TX_MOSI_DATA(11)
+    );
+  Fix16s_to_FP32_fp_data4_slv_10 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(10),
+      Q => TX_MOSI_DATA(10)
+    );
+  Fix16s_to_FP32_fp_data4_slv_9 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(9),
+      Q => TX_MOSI_DATA(9)
+    );
+  Fix16s_to_FP32_fp_data4_slv_8 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_fract3(8),
+      Q => TX_MOSI_DATA(8)
+    );
+  Fix16s_to_FP32_sreset : FDP
+    port map (
+      C => CLK,
+      D => Fix16s_to_FP32_temp_567,
+      PRE => ARESET,
+      Q => Fix16s_to_FP32_sreset_560
+    );
+  Fix16s_to_FP32_exp3_full_8 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_lcl_sum_add0000(9),
+      Q => Fix16s_to_FP32_exp3_full(8)
+    );
+  Fix16s_to_FP32_fp_data2_7 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_7_mux0000,
+      Q => Fix16s_to_FP32_fp_data2_7_Q
+    );
+  Fix16s_to_FP32_fp_data2_4 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_4_mux0000,
+      Q => Fix16s_to_FP32_fp_data2_4_Q
+    );
+  Fix16s_to_FP32_fp_data2_3 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_3_mux0000,
+      Q => Fix16s_to_FP32_fp_data2_3_Q
+    );
+  Fix16s_to_FP32_fp_data2_2 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_2_mux0000,
+      Q => Fix16s_to_FP32_fp_data2_2_Q
+    );
+  Fix16s_to_FP32_fp_data2_1 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_1_mux0000,
+      Q => Fix16s_to_FP32_fp_data2_1_Q
+    );
+  Fix16s_to_FP32_fp_data2_0 : FDE
+    port map (
+      C => CLK,
+      CE => Fix16s_to_FP32_convert_ce,
+      D => Fix16s_to_FP32_result_0_mux0000,
+      Q => Fix16s_to_FP32_fp_data2_0_Q
+    );
+  Fix16s_to_FP32_hold_dval : FDC
+    port map (
+      C => CLK,
+      CLR => ARESET,
+      D => Fix16s_to_FP32_hold_dval_and0000,
+      Q => Fix16s_to_FP32_hold_dval_470
+    );
+  Fix16s_to_FP32_temp : FDP
+    port map (
+      C => CLK,
+      D => NlwRenamedSig_OI_TX_MOSI_DATA(0),
+      PRE => ARESET,
+      Q => Fix16s_to_FP32_temp_567
+    );
+  Fix16s_to_FP32_ce_reg : FD
+    port map (
+      C => CLK,
+      D => Fix16s_to_FP32_convert_ce,
+      Q => Fix16s_to_FP32_ce_reg_306
+    );
+  Fix16s_to_FP32_XST_VCC : VCC
+    port map (
+      P => NlwRenamedSig_OI_TX_MOSI_DREM(0)
+    );
+  Fix16s_to_FP32_XST_GND : GND
+    port map (
+      G => NlwRenamedSig_OI_TX_MOSI_DATA(0)
+    );
+
+end STRUCTURE;
+

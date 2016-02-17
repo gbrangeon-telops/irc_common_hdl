@@ -1,0 +1,1652 @@
+--
+-- Written by Synplicity
+-- Mon Aug 18 20:25:53 2008
+--
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+library UNISIM;
+use UNISIM.VCOMPONENTS.all;
+
+entity sync_reset_1 is
+port(
+  ARESET :  in std_logic;
+  CLK :  in std_logic;
+  reset :  out std_logic);
+end sync_reset_1;
+
+architecture beh of sync_reset_1 is
+  signal TEMP : std_logic ;
+  signal NN_1 : std_logic ;
+  signal NN_2 : std_logic ;
+begin
+  II_SRESET: FDP port map (
+      Q => reset,
+      D => TEMP,
+      C => CLK,
+      PRE => ARESET);
+  II_temp: FDP port map (
+      Q => TEMP,
+      D => NN_1,
+      C => CLK,
+      PRE => ARESET);
+  II_GND: GND port map (
+      G => NN_1);
+  II_VCC: VCC port map (
+      P => NN_2);
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+library UNISIM;
+use UNISIM.VCOMPONENTS.all;
+
+entity ll_fp32_max_1 is
+port(
+  RX_MOSI_slv_30 :  in std_logic;
+  RX_MOSI_slv_31 :  in std_logic;
+  RX_MOSI_slv_28 :  in std_logic;
+  RX_MOSI_slv_29 :  in std_logic;
+  RX_MOSI_slv_26 :  in std_logic;
+  RX_MOSI_slv_27 :  in std_logic;
+  RX_MOSI_slv_24 :  in std_logic;
+  RX_MOSI_slv_25 :  in std_logic;
+  RX_MOSI_slv_33 :  in std_logic;
+  RX_MOSI_slv_0 :  in std_logic;
+  RX_MOSI_slv_11 :  in std_logic;
+  RX_MOSI_slv_10 :  in std_logic;
+  RX_MOSI_slv_9 :  in std_logic;
+  RX_MOSI_slv_8 :  in std_logic;
+  RX_MOSI_slv_7 :  in std_logic;
+  RX_MOSI_slv_6 :  in std_logic;
+  RX_MOSI_slv_5 :  in std_logic;
+  RX_MOSI_slv_4 :  in std_logic;
+  RX_MOSI_slv_3 :  in std_logic;
+  RX_MOSI_slv_2 :  in std_logic;
+  RX_MOSI_slv_1 :  in std_logic;
+  RX_MOSI_slv_23 :  in std_logic;
+  RX_MOSI_slv_22 :  in std_logic;
+  RX_MOSI_slv_21 :  in std_logic;
+  RX_MOSI_slv_20 :  in std_logic;
+  RX_MOSI_slv_19 :  in std_logic;
+  RX_MOSI_slv_18 :  in std_logic;
+  RX_MOSI_slv_17 :  in std_logic;
+  RX_MOSI_slv_16 :  in std_logic;
+  RX_MOSI_slv_15 :  in std_logic;
+  RX_MOSI_slv_14 :  in std_logic;
+  RX_MOSI_slv_13 :  in std_logic;
+  RX_MOSI_slv_12 :  in std_logic;
+  MAX_30 :  out std_logic;
+  MAX_29 :  out std_logic;
+  MAX_28 :  out std_logic;
+  MAX_27 :  out std_logic;
+  MAX_26 :  out std_logic;
+  MAX_25 :  out std_logic;
+  MAX_24 :  out std_logic;
+  MAX_23 :  out std_logic;
+  MAX_22 :  out std_logic;
+  MAX_21 :  out std_logic;
+  MAX_20 :  out std_logic;
+  MAX_19 :  out std_logic;
+  MAX_18 :  out std_logic;
+  MAX_17 :  out std_logic;
+  MAX_16 :  out std_logic;
+  MAX_15 :  out std_logic;
+  MAX_14 :  out std_logic;
+  MAX_13 :  out std_logic;
+  MAX_12 :  out std_logic;
+  MAX_11 :  out std_logic;
+  MAX_10 :  out std_logic;
+  MAX_9 :  out std_logic;
+  MAX_8 :  out std_logic;
+  MAX_7 :  out std_logic;
+  MAX_6 :  out std_logic;
+  MAX_5 :  out std_logic;
+  MAX_4 :  out std_logic;
+  MAX_3 :  out std_logic;
+  MAX_2 :  out std_logic;
+  MAX_1 :  out std_logic;
+  MAX_0 :  out std_logic;
+  ARESET :  in std_logic;
+  NEW_MAX :  out std_logic;
+  CLK :  in std_logic);
+end ll_fp32_max_1;
+
+architecture beh of ll_fp32_max_1 is
+  signal FLOAT_IN_ABS : std_logic_vector (30 downto 0);
+  signal MAX_REG : std_logic_vector (30 downto 0);
+  signal MAX_REG_4 : std_logic_vector (30 downto 0);
+  signal IS_GREATER_THAN_1_AXB_0_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_1_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_2_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_3_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_4_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_5_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_6_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_7_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_8_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_9_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_10_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_11_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_12_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_13_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_14_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_15_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_16_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_17_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_18_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_19_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_20_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_21_I : std_logic ;
+  signal IS_GREATER_THAN_1_AXB_22_I : std_logic ;
+  signal IS_GREATER_THAN_4_AXB_0_I : std_logic ;
+  signal IS_GREATER_THAN_4_AXB_1_I : std_logic ;
+  signal IS_GREATER_THAN_4_AXB_2_I : std_logic ;
+  signal IS_GREATER_THAN_4_AXB_3_I : std_logic ;
+  signal IS_GREATER_THAN_4_AXB_4_I : std_logic ;
+  signal IS_GREATER_THAN_4_AXB_5_I : std_logic ;
+  signal IS_GREATER_THAN_4_AXB_6_I : std_logic ;
+  signal IS_GREATER_THAN_4_AXB_7_I : std_logic ;
+  signal MAX_0_SQMUXA : std_logic ;
+  signal DVAL_REG : std_logic ;
+  signal EOF_REG : std_logic ;
+  signal UN15_DVAL_REG_NE_1 : std_logic ;
+  signal RESET : std_logic ;
+  signal UN1_DVAL_REG_4 : std_logic ;
+  signal UN15_DVAL_REG_NE_0 : std_logic ;
+  signal UN15_DVAL_REG_NE_3 : std_logic ;
+  signal UN15_DVAL_REG_NE_2 : std_logic ;
+  signal IS_GREATER_THAN_1 : std_logic ;
+  signal IS_GREATER_THAN_4 : std_logic ;
+  signal UN15_DVAL_REG : std_logic ;
+  signal MAX_REG_1_SQMUXA_0 : std_logic ;
+  signal N_1 : std_logic ;
+  signal N_164 : std_logic ;
+  signal IS_GREATER_THAN_4_CRY_6 : std_logic ;
+  signal IS_GREATER_THAN_4_CRY_5 : std_logic ;
+  signal IS_GREATER_THAN_4_CRY_4 : std_logic ;
+  signal IS_GREATER_THAN_4_CRY_3 : std_logic ;
+  signal IS_GREATER_THAN_4_CRY_2 : std_logic ;
+  signal IS_GREATER_THAN_4_CRY_1 : std_logic ;
+  signal IS_GREATER_THAN_4_CRY_0 : std_logic ;
+  signal NN_1 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_21 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_20 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_19 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_18 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_17 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_16 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_15 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_14 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_13 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_12 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_11 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_10 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_9 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_8 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_7 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_6 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_5 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_4 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_3 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_2 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_1 : std_logic ;
+  signal IS_GREATER_THAN_1_CRY_0 : std_logic ;
+  signal NN_2 : std_logic ;
+  component sync_reset_1
+    port(
+      ARESET : in std_logic;
+      CLK : in std_logic;
+      reset : out std_logic  );
+  end component;
+begin
+  \II_op_gt.gt.is_greater_than_1_axb_0_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(0),
+    I1 => MAX_REG(0),
+    O => IS_GREATER_THAN_1_AXB_0_I);
+  \II_op_gt.gt.is_greater_than_1_axb_1_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(1),
+    I1 => MAX_REG(1),
+    O => IS_GREATER_THAN_1_AXB_1_I);
+  \II_op_gt.gt.is_greater_than_1_axb_2_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(2),
+    I1 => MAX_REG(2),
+    O => IS_GREATER_THAN_1_AXB_2_I);
+  \II_op_gt.gt.is_greater_than_1_axb_3_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(3),
+    I1 => MAX_REG(3),
+    O => IS_GREATER_THAN_1_AXB_3_I);
+  \II_op_gt.gt.is_greater_than_1_axb_4_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(4),
+    I1 => MAX_REG(4),
+    O => IS_GREATER_THAN_1_AXB_4_I);
+  \II_op_gt.gt.is_greater_than_1_axb_5_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(5),
+    I1 => MAX_REG(5),
+    O => IS_GREATER_THAN_1_AXB_5_I);
+  \II_op_gt.gt.is_greater_than_1_axb_6_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(6),
+    I1 => MAX_REG(6),
+    O => IS_GREATER_THAN_1_AXB_6_I);
+  \II_op_gt.gt.is_greater_than_1_axb_7_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(7),
+    I1 => MAX_REG(7),
+    O => IS_GREATER_THAN_1_AXB_7_I);
+  \II_op_gt.gt.is_greater_than_1_axb_8_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(8),
+    I1 => MAX_REG(8),
+    O => IS_GREATER_THAN_1_AXB_8_I);
+  \II_op_gt.gt.is_greater_than_1_axb_9_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(9),
+    I1 => MAX_REG(9),
+    O => IS_GREATER_THAN_1_AXB_9_I);
+  \II_op_gt.gt.is_greater_than_1_axb_10_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(10),
+    I1 => MAX_REG(10),
+    O => IS_GREATER_THAN_1_AXB_10_I);
+  \II_op_gt.gt.is_greater_than_1_axb_11_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(11),
+    I1 => MAX_REG(11),
+    O => IS_GREATER_THAN_1_AXB_11_I);
+  \II_op_gt.gt.is_greater_than_1_axb_12_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(12),
+    I1 => MAX_REG(12),
+    O => IS_GREATER_THAN_1_AXB_12_I);
+  \II_op_gt.gt.is_greater_than_1_axb_13_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(13),
+    I1 => MAX_REG(13),
+    O => IS_GREATER_THAN_1_AXB_13_I);
+  \II_op_gt.gt.is_greater_than_1_axb_14_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(14),
+    I1 => MAX_REG(14),
+    O => IS_GREATER_THAN_1_AXB_14_I);
+  \II_op_gt.gt.is_greater_than_1_axb_15_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(15),
+    I1 => MAX_REG(15),
+    O => IS_GREATER_THAN_1_AXB_15_I);
+  \II_op_gt.gt.is_greater_than_1_axb_16_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(16),
+    I1 => MAX_REG(16),
+    O => IS_GREATER_THAN_1_AXB_16_I);
+  \II_op_gt.gt.is_greater_than_1_axb_17_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(17),
+    I1 => MAX_REG(17),
+    O => IS_GREATER_THAN_1_AXB_17_I);
+  \II_op_gt.gt.is_greater_than_1_axb_18_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(18),
+    I1 => MAX_REG(18),
+    O => IS_GREATER_THAN_1_AXB_18_I);
+  \II_op_gt.gt.is_greater_than_1_axb_19_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(19),
+    I1 => MAX_REG(19),
+    O => IS_GREATER_THAN_1_AXB_19_I);
+  \II_op_gt.gt.is_greater_than_1_axb_20_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(20),
+    I1 => MAX_REG(20),
+    O => IS_GREATER_THAN_1_AXB_20_I);
+  \II_op_gt.gt.is_greater_than_1_axb_21_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(21),
+    I1 => MAX_REG(21),
+    O => IS_GREATER_THAN_1_AXB_21_I);
+  \II_op_gt.gt.is_greater_than_1_axb_22_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(22),
+    I1 => MAX_REG(22),
+    O => IS_GREATER_THAN_1_AXB_22_I);
+  \II_op_gt.gt.is_greater_than_4_axb_0_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(23),
+    I1 => MAX_REG(23),
+    O => IS_GREATER_THAN_4_AXB_0_I);
+  \II_op_gt.gt.is_greater_than_4_axb_1_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(24),
+    I1 => MAX_REG(24),
+    O => IS_GREATER_THAN_4_AXB_1_I);
+  \II_op_gt.gt.is_greater_than_4_axb_2_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(25),
+    I1 => MAX_REG(25),
+    O => IS_GREATER_THAN_4_AXB_2_I);
+  \II_op_gt.gt.is_greater_than_4_axb_3_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(26),
+    I1 => MAX_REG(26),
+    O => IS_GREATER_THAN_4_AXB_3_I);
+  \II_op_gt.gt.is_greater_than_4_axb_4_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(27),
+    I1 => MAX_REG(27),
+    O => IS_GREATER_THAN_4_AXB_4_I);
+  \II_op_gt.gt.is_greater_than_4_axb_5_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(28),
+    I1 => MAX_REG(28),
+    O => IS_GREATER_THAN_4_AXB_5_I);
+  \II_op_gt.gt.is_greater_than_4_axb_6_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(29),
+    I1 => MAX_REG(29),
+    O => IS_GREATER_THAN_4_AXB_6_I);
+  \II_op_gt.gt.is_greater_than_4_axb_7_i\: LUT2 
+  generic map(
+    INIT => X"9"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(30),
+    I1 => MAX_REG(30),
+    O => IS_GREATER_THAN_4_AXB_7_I);
+  \II_MAX[0]\: FDE port map (
+      Q => MAX_0,
+      D => MAX_REG(0),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[1]\: FDE port map (
+      Q => MAX_1,
+      D => MAX_REG(1),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[2]\: FDE port map (
+      Q => MAX_2,
+      D => MAX_REG(2),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[3]\: FDE port map (
+      Q => MAX_3,
+      D => MAX_REG(3),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[4]\: FDE port map (
+      Q => MAX_4,
+      D => MAX_REG(4),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[5]\: FDE port map (
+      Q => MAX_5,
+      D => MAX_REG(5),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[6]\: FDE port map (
+      Q => MAX_6,
+      D => MAX_REG(6),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[7]\: FDE port map (
+      Q => MAX_7,
+      D => MAX_REG(7),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[8]\: FDE port map (
+      Q => MAX_8,
+      D => MAX_REG(8),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[9]\: FDE port map (
+      Q => MAX_9,
+      D => MAX_REG(9),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[10]\: FDE port map (
+      Q => MAX_10,
+      D => MAX_REG(10),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[11]\: FDE port map (
+      Q => MAX_11,
+      D => MAX_REG(11),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[12]\: FDE port map (
+      Q => MAX_12,
+      D => MAX_REG(12),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[13]\: FDE port map (
+      Q => MAX_13,
+      D => MAX_REG(13),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[14]\: FDE port map (
+      Q => MAX_14,
+      D => MAX_REG(14),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[15]\: FDE port map (
+      Q => MAX_15,
+      D => MAX_REG(15),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[16]\: FDE port map (
+      Q => MAX_16,
+      D => MAX_REG(16),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[17]\: FDE port map (
+      Q => MAX_17,
+      D => MAX_REG(17),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[18]\: FDE port map (
+      Q => MAX_18,
+      D => MAX_REG(18),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[19]\: FDE port map (
+      Q => MAX_19,
+      D => MAX_REG(19),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[20]\: FDE port map (
+      Q => MAX_20,
+      D => MAX_REG(20),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[21]\: FDE port map (
+      Q => MAX_21,
+      D => MAX_REG(21),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[22]\: FDE port map (
+      Q => MAX_22,
+      D => MAX_REG(22),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[23]\: FDE port map (
+      Q => MAX_23,
+      D => MAX_REG(23),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[24]\: FDE port map (
+      Q => MAX_24,
+      D => MAX_REG(24),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[25]\: FDE port map (
+      Q => MAX_25,
+      D => MAX_REG(25),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[26]\: FDE port map (
+      Q => MAX_26,
+      D => MAX_REG(26),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[27]\: FDE port map (
+      Q => MAX_27,
+      D => MAX_REG(27),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[28]\: FDE port map (
+      Q => MAX_28,
+      D => MAX_REG(28),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[29]\: FDE port map (
+      Q => MAX_29,
+      D => MAX_REG(29),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_MAX[30]\: FDE port map (
+      Q => MAX_30,
+      D => MAX_REG(30),
+      C => CLK,
+      CE => MAX_0_SQMUXA);
+  \II_float_in_abs[11]\: FD port map (
+      Q => FLOAT_IN_ABS(11),
+      D => RX_MOSI_slv_12,
+      C => CLK);
+  \II_float_in_abs[12]\: FD port map (
+      Q => FLOAT_IN_ABS(12),
+      D => RX_MOSI_slv_13,
+      C => CLK);
+  \II_float_in_abs[13]\: FD port map (
+      Q => FLOAT_IN_ABS(13),
+      D => RX_MOSI_slv_14,
+      C => CLK);
+  \II_float_in_abs[14]\: FD port map (
+      Q => FLOAT_IN_ABS(14),
+      D => RX_MOSI_slv_15,
+      C => CLK);
+  \II_float_in_abs[15]\: FD port map (
+      Q => FLOAT_IN_ABS(15),
+      D => RX_MOSI_slv_16,
+      C => CLK);
+  \II_float_in_abs[16]\: FD port map (
+      Q => FLOAT_IN_ABS(16),
+      D => RX_MOSI_slv_17,
+      C => CLK);
+  \II_float_in_abs[17]\: FD port map (
+      Q => FLOAT_IN_ABS(17),
+      D => RX_MOSI_slv_18,
+      C => CLK);
+  \II_float_in_abs[18]\: FD port map (
+      Q => FLOAT_IN_ABS(18),
+      D => RX_MOSI_slv_19,
+      C => CLK);
+  \II_float_in_abs[19]\: FD port map (
+      Q => FLOAT_IN_ABS(19),
+      D => RX_MOSI_slv_20,
+      C => CLK);
+  \II_float_in_abs[20]\: FD port map (
+      Q => FLOAT_IN_ABS(20),
+      D => RX_MOSI_slv_21,
+      C => CLK);
+  \II_float_in_abs[21]\: FD port map (
+      Q => FLOAT_IN_ABS(21),
+      D => RX_MOSI_slv_22,
+      C => CLK);
+  \II_float_in_abs[22]\: FD port map (
+      Q => FLOAT_IN_ABS(22),
+      D => RX_MOSI_slv_23,
+      C => CLK);
+  \II_float_in_abs[0]\: FD port map (
+      Q => FLOAT_IN_ABS(0),
+      D => RX_MOSI_slv_1,
+      C => CLK);
+  \II_float_in_abs[1]\: FD port map (
+      Q => FLOAT_IN_ABS(1),
+      D => RX_MOSI_slv_2,
+      C => CLK);
+  \II_float_in_abs[2]\: FD port map (
+      Q => FLOAT_IN_ABS(2),
+      D => RX_MOSI_slv_3,
+      C => CLK);
+  \II_float_in_abs[3]\: FD port map (
+      Q => FLOAT_IN_ABS(3),
+      D => RX_MOSI_slv_4,
+      C => CLK);
+  \II_float_in_abs[4]\: FD port map (
+      Q => FLOAT_IN_ABS(4),
+      D => RX_MOSI_slv_5,
+      C => CLK);
+  \II_float_in_abs[5]\: FD port map (
+      Q => FLOAT_IN_ABS(5),
+      D => RX_MOSI_slv_6,
+      C => CLK);
+  \II_float_in_abs[6]\: FD port map (
+      Q => FLOAT_IN_ABS(6),
+      D => RX_MOSI_slv_7,
+      C => CLK);
+  \II_float_in_abs[7]\: FD port map (
+      Q => FLOAT_IN_ABS(7),
+      D => RX_MOSI_slv_8,
+      C => CLK);
+  \II_float_in_abs[8]\: FD port map (
+      Q => FLOAT_IN_ABS(8),
+      D => RX_MOSI_slv_9,
+      C => CLK);
+  \II_float_in_abs[9]\: FD port map (
+      Q => FLOAT_IN_ABS(9),
+      D => RX_MOSI_slv_10,
+      C => CLK);
+  \II_float_in_abs[10]\: FD port map (
+      Q => FLOAT_IN_ABS(10),
+      D => RX_MOSI_slv_11,
+      C => CLK);
+  II_NEW_MAX: FD port map (
+      Q => NEW_MAX,
+      D => MAX_0_SQMUXA,
+      C => CLK);
+  II_dval_reg: FD port map (
+      Q => DVAL_REG,
+      D => RX_MOSI_slv_0,
+      C => CLK);
+  II_eof_reg: FD port map (
+      Q => EOF_REG,
+      D => RX_MOSI_slv_33,
+      C => CLK);
+  \II_float_in_abs[24]\: FD port map (
+      Q => FLOAT_IN_ABS(24),
+      D => RX_MOSI_slv_25,
+      C => CLK);
+  \II_float_in_abs[23]\: FD port map (
+      Q => FLOAT_IN_ABS(23),
+      D => RX_MOSI_slv_24,
+      C => CLK);
+  \II_float_in_abs[26]\: FD port map (
+      Q => FLOAT_IN_ABS(26),
+      D => RX_MOSI_slv_27,
+      C => CLK);
+  \II_float_in_abs[25]\: FD port map (
+      Q => FLOAT_IN_ABS(25),
+      D => RX_MOSI_slv_26,
+      C => CLK);
+  \II_float_in_abs[28]\: FD port map (
+      Q => FLOAT_IN_ABS(28),
+      D => RX_MOSI_slv_29,
+      C => CLK);
+  \II_float_in_abs[27]\: FD port map (
+      Q => FLOAT_IN_ABS(27),
+      D => RX_MOSI_slv_28,
+      C => CLK);
+  \II_float_in_abs[30]\: FD port map (
+      Q => FLOAT_IN_ABS(30),
+      D => RX_MOSI_slv_31,
+      C => CLK);
+  \II_float_in_abs[29]\: FD port map (
+      Q => FLOAT_IN_ABS(29),
+      D => RX_MOSI_slv_30,
+      C => CLK);
+  \II_op_gt.gt.un15_dval_reg_NE_1\: LUT4 
+  generic map(
+    INIT => X"8421"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(29),
+    I1 => FLOAT_IN_ABS(30),
+    I2 => MAX_REG(29),
+    I3 => MAX_REG(30),
+    O => UN15_DVAL_REG_NE_1);
+  \II_max_reg[29]\: FDRE port map (
+      Q => MAX_REG(29),
+      D => MAX_REG_4(29),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[30]\: FDRE port map (
+      Q => MAX_REG(30),
+      D => MAX_REG_4(30),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_op_gt.gt.un15_dval_reg_NE_0\: LUT4 
+  generic map(
+    INIT => X"8421"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(27),
+    I1 => FLOAT_IN_ABS(28),
+    I2 => MAX_REG(27),
+    I3 => MAX_REG(28),
+    O => UN15_DVAL_REG_NE_0);
+  \II_max_reg[27]\: FDRE port map (
+      Q => MAX_REG(27),
+      D => MAX_REG_4(27),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[28]\: FDRE port map (
+      Q => MAX_REG(28),
+      D => MAX_REG_4(28),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_op_gt.gt.un15_dval_reg_NE_3\: LUT4 
+  generic map(
+    INIT => X"8421"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(25),
+    I1 => FLOAT_IN_ABS(26),
+    I2 => MAX_REG(25),
+    I3 => MAX_REG(26),
+    O => UN15_DVAL_REG_NE_3);
+  \II_max_reg[25]\: FDRE port map (
+      Q => MAX_REG(25),
+      D => MAX_REG_4(25),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[26]\: FDRE port map (
+      Q => MAX_REG(26),
+      D => MAX_REG_4(26),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_op_gt.gt.un15_dval_reg_NE_2\: LUT4 
+  generic map(
+    INIT => X"8421"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(23),
+    I1 => FLOAT_IN_ABS(24),
+    I2 => MAX_REG(23),
+    I3 => MAX_REG(24),
+    O => UN15_DVAL_REG_NE_2);
+  \II_max_reg[23]\: FDRE port map (
+      Q => MAX_REG(23),
+      D => MAX_REG_4(23),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[24]\: FDRE port map (
+      Q => MAX_REG(24),
+      D => MAX_REG_4(24),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg_4[0]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(0),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(0));
+  \II_max_reg_4[1]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(1),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(1));
+  \II_max_reg_4[2]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(2),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(2));
+  \II_max_reg_4[3]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(3),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(3));
+  \II_max_reg_4[4]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(4),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(4));
+  \II_max_reg_4[5]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(5),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(5));
+  \II_max_reg_4[6]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(6),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(6));
+  \II_max_reg_4[7]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(7),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(7));
+  \II_max_reg_4[8]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(8),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(8));
+  \II_max_reg_4[9]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(9),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(9));
+  \II_max_reg_4[10]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(10),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(10));
+  \II_max_reg_4[11]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(11),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(11));
+  \II_max_reg_4[12]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(12),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(12));
+  \II_max_reg_4[13]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(13),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(13));
+  \II_max_reg_4[14]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(14),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(14));
+  \II_max_reg_4[15]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(15),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(15));
+  \II_max_reg_4[16]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(16),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(16));
+  \II_max_reg_4[17]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(17),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(17));
+  \II_max_reg_4[18]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(18),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(18));
+  \II_max_reg_4[19]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(19),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(19));
+  \II_max_reg_4[20]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(20),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(20));
+  \II_max_reg_4[21]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(21),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(21));
+  \II_max_reg_4[22]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(22),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(22));
+  \II_max_reg_4[23]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(23),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(23));
+  \II_max_reg_4[24]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(24),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(24));
+  \II_max_reg_4[25]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(25),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(25));
+  \II_max_reg_4[26]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(26),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(26));
+  \II_max_reg_4[27]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(27),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(27));
+  \II_max_reg_4[28]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(28),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(28));
+  \II_max_reg_4[29]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(29),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(29));
+  \II_max_reg_4[30]\: LUT4_L 
+  generic map(
+    INIT => X"88A0"
+  )
+  port map (
+    I0 => FLOAT_IN_ABS(30),
+    I1 => IS_GREATER_THAN_1,
+    I2 => IS_GREATER_THAN_4,
+    I3 => UN15_DVAL_REG,
+    LO => MAX_REG_4(30));
+  II_un1_dval_reg_3: LUT4 
+  generic map(
+    INIT => X"A222"
+  )
+  port map (
+    I0 => DVAL_REG,
+    I1 => MAX_REG_1_SQMUXA_0,
+    I2 => IS_GREATER_THAN_1,
+    I3 => UN15_DVAL_REG,
+    O => UN1_DVAL_REG_4);
+  II_max_reg_1_sqmuxa_0: LUT3 
+  generic map(
+    INIT => X"51"
+  )
+  port map (
+    I0 => EOF_REG,
+    I1 => IS_GREATER_THAN_4,
+    I2 => UN15_DVAL_REG,
+    O => MAX_REG_1_SQMUXA_0);
+  \II_op_gt.gt.un15_dval_reg_NE\: LUT4 
+  generic map(
+    INIT => X"8000"
+  )
+  port map (
+    I0 => UN15_DVAL_REG_NE_0,
+    I1 => UN15_DVAL_REG_NE_1,
+    I2 => UN15_DVAL_REG_NE_2,
+    I3 => UN15_DVAL_REG_NE_3,
+    O => UN15_DVAL_REG);
+  II_MAX_0_sqmuxa: LUT2 
+  generic map(
+    INIT => X"8"
+  )
+  port map (
+    I0 => DVAL_REG,
+    I1 => EOF_REG,
+    O => MAX_0_SQMUXA);
+  \II_op_gt.gt.is_greater_than_4_cry_7\: MUXCY port map (
+      DI => FLOAT_IN_ABS(30),
+      CI => IS_GREATER_THAN_4_CRY_6,
+      S => IS_GREATER_THAN_4_AXB_7_I,
+      O => IS_GREATER_THAN_4);
+  \II_op_gt.gt.is_greater_than_4_cry_6\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(29),
+      CI => IS_GREATER_THAN_4_CRY_5,
+      S => IS_GREATER_THAN_4_AXB_6_I,
+      LO => IS_GREATER_THAN_4_CRY_6);
+  \II_op_gt.gt.is_greater_than_4_cry_5\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(28),
+      CI => IS_GREATER_THAN_4_CRY_4,
+      S => IS_GREATER_THAN_4_AXB_5_I,
+      LO => IS_GREATER_THAN_4_CRY_5);
+  \II_op_gt.gt.is_greater_than_4_cry_4\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(27),
+      CI => IS_GREATER_THAN_4_CRY_3,
+      S => IS_GREATER_THAN_4_AXB_4_I,
+      LO => IS_GREATER_THAN_4_CRY_4);
+  \II_op_gt.gt.is_greater_than_4_cry_3\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(26),
+      CI => IS_GREATER_THAN_4_CRY_2,
+      S => IS_GREATER_THAN_4_AXB_3_I,
+      LO => IS_GREATER_THAN_4_CRY_3);
+  \II_op_gt.gt.is_greater_than_4_cry_2\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(25),
+      CI => IS_GREATER_THAN_4_CRY_1,
+      S => IS_GREATER_THAN_4_AXB_2_I,
+      LO => IS_GREATER_THAN_4_CRY_2);
+  \II_op_gt.gt.is_greater_than_4_cry_1\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(24),
+      CI => IS_GREATER_THAN_4_CRY_0,
+      S => IS_GREATER_THAN_4_AXB_1_I,
+      LO => IS_GREATER_THAN_4_CRY_1);
+  \II_op_gt.gt.is_greater_than_4_cry_0\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(23),
+      CI => NN_1,
+      S => IS_GREATER_THAN_4_AXB_0_I,
+      LO => IS_GREATER_THAN_4_CRY_0);
+  \II_op_gt.gt.is_greater_than_1_cry_22\: MUXCY port map (
+      DI => FLOAT_IN_ABS(22),
+      CI => IS_GREATER_THAN_1_CRY_21,
+      S => IS_GREATER_THAN_1_AXB_22_I,
+      O => IS_GREATER_THAN_1);
+  \II_op_gt.gt.is_greater_than_1_cry_21\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(21),
+      CI => IS_GREATER_THAN_1_CRY_20,
+      S => IS_GREATER_THAN_1_AXB_21_I,
+      LO => IS_GREATER_THAN_1_CRY_21);
+  \II_op_gt.gt.is_greater_than_1_cry_20\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(20),
+      CI => IS_GREATER_THAN_1_CRY_19,
+      S => IS_GREATER_THAN_1_AXB_20_I,
+      LO => IS_GREATER_THAN_1_CRY_20);
+  \II_op_gt.gt.is_greater_than_1_cry_19\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(19),
+      CI => IS_GREATER_THAN_1_CRY_18,
+      S => IS_GREATER_THAN_1_AXB_19_I,
+      LO => IS_GREATER_THAN_1_CRY_19);
+  \II_op_gt.gt.is_greater_than_1_cry_18\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(18),
+      CI => IS_GREATER_THAN_1_CRY_17,
+      S => IS_GREATER_THAN_1_AXB_18_I,
+      LO => IS_GREATER_THAN_1_CRY_18);
+  \II_op_gt.gt.is_greater_than_1_cry_17\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(17),
+      CI => IS_GREATER_THAN_1_CRY_16,
+      S => IS_GREATER_THAN_1_AXB_17_I,
+      LO => IS_GREATER_THAN_1_CRY_17);
+  \II_op_gt.gt.is_greater_than_1_cry_16\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(16),
+      CI => IS_GREATER_THAN_1_CRY_15,
+      S => IS_GREATER_THAN_1_AXB_16_I,
+      LO => IS_GREATER_THAN_1_CRY_16);
+  \II_op_gt.gt.is_greater_than_1_cry_15\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(15),
+      CI => IS_GREATER_THAN_1_CRY_14,
+      S => IS_GREATER_THAN_1_AXB_15_I,
+      LO => IS_GREATER_THAN_1_CRY_15);
+  \II_op_gt.gt.is_greater_than_1_cry_14\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(14),
+      CI => IS_GREATER_THAN_1_CRY_13,
+      S => IS_GREATER_THAN_1_AXB_14_I,
+      LO => IS_GREATER_THAN_1_CRY_14);
+  \II_op_gt.gt.is_greater_than_1_cry_13\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(13),
+      CI => IS_GREATER_THAN_1_CRY_12,
+      S => IS_GREATER_THAN_1_AXB_13_I,
+      LO => IS_GREATER_THAN_1_CRY_13);
+  \II_op_gt.gt.is_greater_than_1_cry_12\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(12),
+      CI => IS_GREATER_THAN_1_CRY_11,
+      S => IS_GREATER_THAN_1_AXB_12_I,
+      LO => IS_GREATER_THAN_1_CRY_12);
+  \II_op_gt.gt.is_greater_than_1_cry_11\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(11),
+      CI => IS_GREATER_THAN_1_CRY_10,
+      S => IS_GREATER_THAN_1_AXB_11_I,
+      LO => IS_GREATER_THAN_1_CRY_11);
+  \II_op_gt.gt.is_greater_than_1_cry_10\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(10),
+      CI => IS_GREATER_THAN_1_CRY_9,
+      S => IS_GREATER_THAN_1_AXB_10_I,
+      LO => IS_GREATER_THAN_1_CRY_10);
+  \II_op_gt.gt.is_greater_than_1_cry_9\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(9),
+      CI => IS_GREATER_THAN_1_CRY_8,
+      S => IS_GREATER_THAN_1_AXB_9_I,
+      LO => IS_GREATER_THAN_1_CRY_9);
+  \II_op_gt.gt.is_greater_than_1_cry_8\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(8),
+      CI => IS_GREATER_THAN_1_CRY_7,
+      S => IS_GREATER_THAN_1_AXB_8_I,
+      LO => IS_GREATER_THAN_1_CRY_8);
+  \II_op_gt.gt.is_greater_than_1_cry_7\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(7),
+      CI => IS_GREATER_THAN_1_CRY_6,
+      S => IS_GREATER_THAN_1_AXB_7_I,
+      LO => IS_GREATER_THAN_1_CRY_7);
+  \II_op_gt.gt.is_greater_than_1_cry_6\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(6),
+      CI => IS_GREATER_THAN_1_CRY_5,
+      S => IS_GREATER_THAN_1_AXB_6_I,
+      LO => IS_GREATER_THAN_1_CRY_6);
+  \II_op_gt.gt.is_greater_than_1_cry_5\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(5),
+      CI => IS_GREATER_THAN_1_CRY_4,
+      S => IS_GREATER_THAN_1_AXB_5_I,
+      LO => IS_GREATER_THAN_1_CRY_5);
+  \II_op_gt.gt.is_greater_than_1_cry_4\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(4),
+      CI => IS_GREATER_THAN_1_CRY_3,
+      S => IS_GREATER_THAN_1_AXB_4_I,
+      LO => IS_GREATER_THAN_1_CRY_4);
+  \II_op_gt.gt.is_greater_than_1_cry_3\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(3),
+      CI => IS_GREATER_THAN_1_CRY_2,
+      S => IS_GREATER_THAN_1_AXB_3_I,
+      LO => IS_GREATER_THAN_1_CRY_3);
+  \II_op_gt.gt.is_greater_than_1_cry_2\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(2),
+      CI => IS_GREATER_THAN_1_CRY_1,
+      S => IS_GREATER_THAN_1_AXB_2_I,
+      LO => IS_GREATER_THAN_1_CRY_2);
+  \II_op_gt.gt.is_greater_than_1_cry_1\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(1),
+      CI => IS_GREATER_THAN_1_CRY_0,
+      S => IS_GREATER_THAN_1_AXB_1_I,
+      LO => IS_GREATER_THAN_1_CRY_1);
+  \II_op_gt.gt.is_greater_than_1_cry_0\: MUXCY_L port map (
+      DI => FLOAT_IN_ABS(0),
+      CI => NN_1,
+      S => IS_GREATER_THAN_1_AXB_0_I,
+      LO => IS_GREATER_THAN_1_CRY_0);
+  \II_max_reg[22]\: FDRE port map (
+      Q => MAX_REG(22),
+      D => MAX_REG_4(22),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[21]\: FDRE port map (
+      Q => MAX_REG(21),
+      D => MAX_REG_4(21),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[20]\: FDRE port map (
+      Q => MAX_REG(20),
+      D => MAX_REG_4(20),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[19]\: FDRE port map (
+      Q => MAX_REG(19),
+      D => MAX_REG_4(19),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[18]\: FDRE port map (
+      Q => MAX_REG(18),
+      D => MAX_REG_4(18),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[17]\: FDRE port map (
+      Q => MAX_REG(17),
+      D => MAX_REG_4(17),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[16]\: FDRE port map (
+      Q => MAX_REG(16),
+      D => MAX_REG_4(16),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[15]\: FDRE port map (
+      Q => MAX_REG(15),
+      D => MAX_REG_4(15),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[14]\: FDRE port map (
+      Q => MAX_REG(14),
+      D => MAX_REG_4(14),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[13]\: FDRE port map (
+      Q => MAX_REG(13),
+      D => MAX_REG_4(13),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[12]\: FDRE port map (
+      Q => MAX_REG(12),
+      D => MAX_REG_4(12),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[11]\: FDRE port map (
+      Q => MAX_REG(11),
+      D => MAX_REG_4(11),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[10]\: FDRE port map (
+      Q => MAX_REG(10),
+      D => MAX_REG_4(10),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[9]\: FDRE port map (
+      Q => MAX_REG(9),
+      D => MAX_REG_4(9),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[8]\: FDRE port map (
+      Q => MAX_REG(8),
+      D => MAX_REG_4(8),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[7]\: FDRE port map (
+      Q => MAX_REG(7),
+      D => MAX_REG_4(7),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[6]\: FDRE port map (
+      Q => MAX_REG(6),
+      D => MAX_REG_4(6),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[5]\: FDRE port map (
+      Q => MAX_REG(5),
+      D => MAX_REG_4(5),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[4]\: FDRE port map (
+      Q => MAX_REG(4),
+      D => MAX_REG_4(4),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[3]\: FDRE port map (
+      Q => MAX_REG(3),
+      D => MAX_REG_4(3),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[2]\: FDRE port map (
+      Q => MAX_REG(2),
+      D => MAX_REG_4(2),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[1]\: FDRE port map (
+      Q => MAX_REG(1),
+      D => MAX_REG_4(1),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  \II_max_reg[0]\: FDRE port map (
+      Q => MAX_REG(0),
+      D => MAX_REG_4(0),
+      C => CLK,
+      R => RESET,
+      CE => UN1_DVAL_REG_4);
+  II_sync_RST: sync_reset_1 port map (
+      ARESET => ARESET,
+      CLK => CLK,
+      reset => RESET);
+  II_GND: GND port map (
+      G => NN_1);
+  II_VCC: VCC port map (
+      P => NN_2);
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+library UNISIM;
+use UNISIM.VCOMPONENTS.all;
+
+entity ll_fp32_max_syn is
+port(
+  RX_MOSI_slv : in std_logic_vector (35 downto 0);
+  MAX : out std_logic_vector (31 downto 0);
+  NEW_MAX :  out std_logic;
+  ARESET :  in std_logic;
+  CLK :  in std_logic);
+end ll_fp32_max_syn;
+
+architecture beh of ll_fp32_max_syn is
+  signal NN_1 : std_logic ;
+  component ll_fp32_max_1
+    port(
+      RX_MOSI_slv_30 : in std_logic;
+      RX_MOSI_slv_31 : in std_logic;
+      RX_MOSI_slv_28 : in std_logic;
+      RX_MOSI_slv_29 : in std_logic;
+      RX_MOSI_slv_26 : in std_logic;
+      RX_MOSI_slv_27 : in std_logic;
+      RX_MOSI_slv_24 : in std_logic;
+      RX_MOSI_slv_25 : in std_logic;
+      RX_MOSI_slv_33 : in std_logic;
+      RX_MOSI_slv_0 : in std_logic;
+      RX_MOSI_slv_11 : in std_logic;
+      RX_MOSI_slv_10 : in std_logic;
+      RX_MOSI_slv_9 : in std_logic;
+      RX_MOSI_slv_8 : in std_logic;
+      RX_MOSI_slv_7 : in std_logic;
+      RX_MOSI_slv_6 : in std_logic;
+      RX_MOSI_slv_5 : in std_logic;
+      RX_MOSI_slv_4 : in std_logic;
+      RX_MOSI_slv_3 : in std_logic;
+      RX_MOSI_slv_2 : in std_logic;
+      RX_MOSI_slv_1 : in std_logic;
+      RX_MOSI_slv_23 : in std_logic;
+      RX_MOSI_slv_22 : in std_logic;
+      RX_MOSI_slv_21 : in std_logic;
+      RX_MOSI_slv_20 : in std_logic;
+      RX_MOSI_slv_19 : in std_logic;
+      RX_MOSI_slv_18 : in std_logic;
+      RX_MOSI_slv_17 : in std_logic;
+      RX_MOSI_slv_16 : in std_logic;
+      RX_MOSI_slv_15 : in std_logic;
+      RX_MOSI_slv_14 : in std_logic;
+      RX_MOSI_slv_13 : in std_logic;
+      RX_MOSI_slv_12 : in std_logic;
+      MAX_30 : out std_logic;
+      MAX_29 : out std_logic;
+      MAX_28 : out std_logic;
+      MAX_27 : out std_logic;
+      MAX_26 : out std_logic;
+      MAX_25 : out std_logic;
+      MAX_24 : out std_logic;
+      MAX_23 : out std_logic;
+      MAX_22 : out std_logic;
+      MAX_21 : out std_logic;
+      MAX_20 : out std_logic;
+      MAX_19 : out std_logic;
+      MAX_18 : out std_logic;
+      MAX_17 : out std_logic;
+      MAX_16 : out std_logic;
+      MAX_15 : out std_logic;
+      MAX_14 : out std_logic;
+      MAX_13 : out std_logic;
+      MAX_12 : out std_logic;
+      MAX_11 : out std_logic;
+      MAX_10 : out std_logic;
+      MAX_9 : out std_logic;
+      MAX_8 : out std_logic;
+      MAX_7 : out std_logic;
+      MAX_6 : out std_logic;
+      MAX_5 : out std_logic;
+      MAX_4 : out std_logic;
+      MAX_3 : out std_logic;
+      MAX_2 : out std_logic;
+      MAX_1 : out std_logic;
+      MAX_0 : out std_logic;
+      ARESET : in std_logic;
+      NEW_MAX : out std_logic;
+      CLK : in std_logic  );
+  end component;
+begin
+  II_U1: ll_fp32_max_1 port map (
+      RX_MOSI_slv_30 => RX_MOSI_slv(31),
+      RX_MOSI_slv_31 => RX_MOSI_slv(32),
+      RX_MOSI_slv_28 => RX_MOSI_slv(29),
+      RX_MOSI_slv_29 => RX_MOSI_slv(30),
+      RX_MOSI_slv_26 => RX_MOSI_slv(27),
+      RX_MOSI_slv_27 => RX_MOSI_slv(28),
+      RX_MOSI_slv_24 => RX_MOSI_slv(25),
+      RX_MOSI_slv_25 => RX_MOSI_slv(26),
+      RX_MOSI_slv_33 => RX_MOSI_slv(34),
+      RX_MOSI_slv_0 => RX_MOSI_slv(1),
+      RX_MOSI_slv_11 => RX_MOSI_slv(12),
+      RX_MOSI_slv_10 => RX_MOSI_slv(11),
+      RX_MOSI_slv_9 => RX_MOSI_slv(10),
+      RX_MOSI_slv_8 => RX_MOSI_slv(9),
+      RX_MOSI_slv_7 => RX_MOSI_slv(8),
+      RX_MOSI_slv_6 => RX_MOSI_slv(7),
+      RX_MOSI_slv_5 => RX_MOSI_slv(6),
+      RX_MOSI_slv_4 => RX_MOSI_slv(5),
+      RX_MOSI_slv_3 => RX_MOSI_slv(4),
+      RX_MOSI_slv_2 => RX_MOSI_slv(3),
+      RX_MOSI_slv_1 => RX_MOSI_slv(2),
+      RX_MOSI_slv_23 => RX_MOSI_slv(24),
+      RX_MOSI_slv_22 => RX_MOSI_slv(23),
+      RX_MOSI_slv_21 => RX_MOSI_slv(22),
+      RX_MOSI_slv_20 => RX_MOSI_slv(21),
+      RX_MOSI_slv_19 => RX_MOSI_slv(20),
+      RX_MOSI_slv_18 => RX_MOSI_slv(19),
+      RX_MOSI_slv_17 => RX_MOSI_slv(18),
+      RX_MOSI_slv_16 => RX_MOSI_slv(17),
+      RX_MOSI_slv_15 => RX_MOSI_slv(16),
+      RX_MOSI_slv_14 => RX_MOSI_slv(15),
+      RX_MOSI_slv_13 => RX_MOSI_slv(14),
+      RX_MOSI_slv_12 => RX_MOSI_slv(13),
+      MAX_30 => MAX(30),
+      MAX_29 => MAX(29),
+      MAX_28 => MAX(28),
+      MAX_27 => MAX(27),
+      MAX_26 => MAX(26),
+      MAX_25 => MAX(25),
+      MAX_24 => MAX(24),
+      MAX_23 => MAX(23),
+      MAX_22 => MAX(22),
+      MAX_21 => MAX(21),
+      MAX_20 => MAX(20),
+      MAX_19 => MAX(19),
+      MAX_18 => MAX(18),
+      MAX_17 => MAX(17),
+      MAX_16 => MAX(16),
+      MAX_15 => MAX(15),
+      MAX_14 => MAX(14),
+      MAX_13 => MAX(13),
+      MAX_12 => MAX(12),
+      MAX_11 => MAX(11),
+      MAX_10 => MAX(10),
+      MAX_9 => MAX(9),
+      MAX_8 => MAX(8),
+      MAX_7 => MAX(7),
+      MAX_6 => MAX(6),
+      MAX_5 => MAX(5),
+      MAX_4 => MAX(4),
+      MAX_3 => MAX(3),
+      MAX_2 => MAX(2),
+      MAX_1 => MAX(1),
+      MAX_0 => MAX(0),
+      ARESET => ARESET,
+      NEW_MAX => NEW_MAX,
+      CLK => CLK);
+  II_GND: GND port map (
+      G => MAX(31));
+  II_VCC: VCC port map (
+      P => NN_1);
+end beh;
+

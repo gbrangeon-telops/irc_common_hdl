@@ -1,0 +1,781 @@
+Release 10.1.03 - xst K.39 (nt)
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+--> 
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+     9.1) Device utilization summary
+     9.2) Partition Resource Summary
+     9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "make.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : no
+
+---- Target Parameters
+Output File Name                   : "rs232_syscon.ngc"
+Output Format                      : NGC
+Target Device                      : xc4vfx100-10
+
+---- Source Options
+Top Module Name                    : rs232_syscon
+Automatic FSM Extraction           : yes
+FSM Encoding Algorithm             : Auto
+Resource Sharing                   : yes
+FSM Style                          : lut
+RAM Extraction                     : yes
+RAM Style                          : auto
+ROM Extraction                     : yes
+ROM Style                          : auto
+Mux Extraction                     : yes
+Mux Style                          : auto
+Decoder Extraction                 : yes
+Priority Encoder Extraction        : yes
+Shift Register Extraction          : yes
+Logical Shifter Extraction         : yes
+XOR Collapsing                     : yes
+Multiplier Style                   : auto
+Automatic Register Balancing       : no
+Safe Implementation                : no
+
+---- Target Options
+Add IO Buffers                     : no
+Pack IO Registers into IOBs        : auto
+Global Maximum Fanout              : 500
+Add Generic Clock Buffer(BUFG)     : 0
+Register Duplication               : yes
+Equivalent register Removal        : yes
+Slice Packing                      : yes
+Convert Tristates To Logic         : yes
+Optimize Instantiated Primitives   : no
+Use Clock Enable                   : yes
+Use Synchronous Set                : yes
+Use Synchronous Reset              : yes
+
+---- General Options
+Optimization Effort                : 2
+Optimization Goal                  : speed
+Global Optimization                : allclocknets
+RTL Output                         : no
+Write Timing Constraints           : no
+Verilog 2001                       : yes
+Keep Hierarchy                     : no
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : maintain
+Cross Clock Analysis               : no
+Slice Utilization Ratio            : 100
+Read Cores                         : yes
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling verilog file "./../serial.v" in library work
+Module <rs232rx> compiled
+Compiling verilog file "./../auto_baud_with_tracking.v" in library work
+Module <rs232tx> compiled
+Compiling verilog file "rs232_syscon_d32.v" in library work
+Module <auto_baud_with_tracking> compiled
+Module <rs232_syscon> compiled
+No errors in compilation
+Analysis of file <"make.prj"> succeeded.
+ 
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for module <rs232_syscon> in library <work> with parameters.
+	ADR_DIGITS_PP = "00000000000000000000000000000100"
+	CMD_BUFFER_SIZE_PP = "00000000000000000000000000100000"
+	CMD_PTR_BITS_PP = "00000000000000000000000000000100"
+	DAT_DIGITS_PP = "00000000000000000000000000001000"
+	QTY_DIGITS_PP = "00000000000000000000000000000010"
+	RD_DIGIT_COUNT_BITS_PP = "00000000000000000000000000000011"
+	RD_FIELDS_PP = "00000000000000000000000000001000"
+	RD_FIELD_COUNT_BITS_PP = "00000000000000000000000000000011"
+	WATCHDOG_TIMER_BITS_PP = "00000000000000000000000000001000"
+	WATCHDOG_TIMER_VALUE_PP = "00000000000000000000000011001000"
+	m1_ack_error_indicator = "00111"
+	m1_adr_error_indicator = "01010"
+	m1_bg_error_indicator = "01000"
+	m1_bus_granted = "11001"
+	m1_check_received_char = "00011"
+	m1_cmd_error_indicator = "01001"
+	m1_dat_error_indicator = "01011"
+	m1_execute = "11010"
+	m1_get_adr_field = "10010"
+	m1_get_dat_field = "10100"
+	m1_get_qty_field = "10110"
+	m1_initial_state = "00000"
+	m1_parse_error_indicator = "00110"
+	m1_parse_error_indicator_crlf = "00101"
+	m1_qty_error_indicator = "01100"
+	m1_rd_send_adr_sr = "11011"
+	m1_rd_send_crlf = "11111"
+	m1_rd_send_dat_sr = "11101"
+	m1_rd_send_separator = "11100"
+	m1_rd_send_space = "11110"
+	m1_request_bus = "11000"
+	m1_scan_adr_whitespace = "10001"
+	m1_scan_command = "10000"
+	m1_scan_dat_whitespace = "10011"
+	m1_scan_qty_whitespace = "10101"
+	m1_send_crlf = "00100"
+	m1_send_ok = "00001"
+	m1_send_prompt = "00010"
+	m1_start_execution = "10111"
+
+Analyzing hierarchy for module <auto_baud_with_tracking> in library <work> with parameters.
+	CLOCK_FACTOR_PP = "00000000000000000000000000001000"
+	LOG2_MAX_COUNT_PP = "00000000000000000000000000010000"
+	m1_idle = "0000"
+	m1_measure_0 = "0001"
+	m1_measure_1 = "0010"
+	m1_measure_2 = "0011"
+	m1_measure_3 = "0100"
+	m1_measure_4 = "0101"
+	m1_run = "0110"
+	m1_verify_0 = "1000"
+	m1_verify_1 = "1001"
+	m1_verify_failed = "0111"
+
+Analyzing hierarchy for module <rs232tx> in library <work> with parameters.
+	CLOCK_FACTOR_PP = "00000000000000000000000000001000"
+	DATA_BITS_PP = "00000000000000000000000000001000"
+	START_BITS_PP = "00000000000000000000000000000001"
+	STOP_BITS_PP = "00000000000000000000000000000001"
+	TX_BIT_COUNT_BITS_PP = "00000000000000000000000000000100"
+	m1_idle = "00000000000000000000000000000000"
+	m1_sending = "00000000000000000000000000000011"
+	m1_sending_last_bit = "00000000000000000000000000000010"
+	m1_waiting = "00000000000000000000000000000001"
+
+Analyzing hierarchy for module <rs232rx> in library <work> with parameters.
+	CLOCK_FACTOR_PP = "00000000000000000000000000001000"
+	DATA_BITS_PP = "00000000000000000000000000001000"
+	START_BITS_PP = "00000000000000000000000000000001"
+	STOP_BITS_PP = "00000000000000000000000000000001"
+	m1_all_low = "00000000000000000000000000000101"
+	m1_extra_1 = "00000000000000000000000000000110"
+	m1_extra_2 = "00000000000000000000000000000111"
+	m1_idle = "00000000000000000000000000000000"
+	m1_over_run = "00000000000000000000000000000010"
+	m1_shift = "00000000000000000000000000000011"
+	m1_start = "00000000000000000000000000000001"
+	m1_under_run = "00000000000000000000000000000100"
+	m2_data_ready_ack = "00000000000000000000000000000000"
+	m2_data_ready_flag = "00000000000000000000000000000001"
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing top module <rs232_syscon>.
+	ADR_DIGITS_PP = 32'sb00000000000000000000000000000100
+	CMD_BUFFER_SIZE_PP = 32'sb00000000000000000000000000100000
+	CMD_PTR_BITS_PP = 32'sb00000000000000000000000000000100
+	DAT_DIGITS_PP = 32'sb00000000000000000000000000001000
+	QTY_DIGITS_PP = 32'sb00000000000000000000000000000010
+	RD_DIGIT_COUNT_BITS_PP = 32'sb00000000000000000000000000000011
+	RD_FIELDS_PP = 32'sb00000000000000000000000000001000
+	RD_FIELD_COUNT_BITS_PP = 32'sb00000000000000000000000000000011
+	WATCHDOG_TIMER_BITS_PP = 32'sb00000000000000000000000000001000
+	WATCHDOG_TIMER_VALUE_PP = 32'sb00000000000000000000000011001000
+	m1_ack_error_indicator = 5'b00111
+	m1_adr_error_indicator = 5'b01010
+	m1_bg_error_indicator = 5'b01000
+	m1_bus_granted = 5'b11001
+	m1_check_received_char = 5'b00011
+	m1_cmd_error_indicator = 5'b01001
+	m1_dat_error_indicator = 5'b01011
+	m1_execute = 5'b11010
+	m1_get_adr_field = 5'b10010
+	m1_get_dat_field = 5'b10100
+	m1_get_qty_field = 5'b10110
+	m1_initial_state = 5'b00000
+	m1_parse_error_indicator = 5'b00110
+	m1_parse_error_indicator_crlf = 5'b00101
+	m1_qty_error_indicator = 5'b01100
+	m1_rd_send_adr_sr = 5'b11011
+	m1_rd_send_crlf = 5'b11111
+	m1_rd_send_dat_sr = 5'b11101
+	m1_rd_send_separator = 5'b11100
+	m1_rd_send_space = 5'b11110
+	m1_request_bus = 5'b11000
+	m1_scan_adr_whitespace = 5'b10001
+	m1_scan_command = 5'b10000
+	m1_scan_dat_whitespace = 5'b10011
+	m1_scan_qty_whitespace = 5'b10101
+	m1_send_crlf = 5'b00100
+	m1_send_ok = 5'b00001
+	m1_send_prompt = 5'b00010
+	m1_start_execution = 5'b10111
+"rs232_syscon_d32.v" line 482: Found Parallel Case directive in module <rs232_syscon>.
+"rs232_syscon_d32.v" line 615: Found Parallel Case directive in module <rs232_syscon>.
+INFO:Xst:1607 - Contents of array <cmd_buffer> may be accessed with an index that does not cover the full array size.
+INFO:Xst:1607 - Contents of array <cmd_buffer> may be accessed with an index that does not cover the full array size.
+INFO:Xst:1607 - Contents of array <cmd_buffer> may be accessed with an index that does not cover the full array size.
+Module <rs232_syscon> is correct for synthesis.
+ 
+Analyzing module <auto_baud_with_tracking> in library <work>.
+	CLOCK_FACTOR_PP = 32'sb00000000000000000000000000001000
+	LOG2_MAX_COUNT_PP = 32'sb00000000000000000000000000010000
+	m1_idle = 4'b0000
+	m1_measure_0 = 4'b0001
+	m1_measure_1 = 4'b0010
+	m1_measure_2 = 4'b0011
+	m1_measure_3 = 4'b0100
+	m1_measure_4 = 4'b0101
+	m1_run = 4'b0110
+	m1_verify_0 = 4'b1000
+	m1_verify_1 = 4'b1001
+	m1_verify_failed = 4'b0111
+"./../auto_baud_with_tracking.v" line 514: Found Parallel Case directive in module <auto_baud_with_tracking>.
+Module <auto_baud_with_tracking> is correct for synthesis.
+ 
+Analyzing module <rs232tx> in library <work>.
+	CLOCK_FACTOR_PP = 32'sb00000000000000000000000000001000
+	DATA_BITS_PP = 32'sb00000000000000000000000000001000
+	START_BITS_PP = 32'sb00000000000000000000000000000001
+	STOP_BITS_PP = 32'sb00000000000000000000000000000001
+	TX_BIT_COUNT_BITS_PP = 32'sb00000000000000000000000000000100
+	m1_idle = 32'sb00000000000000000000000000000000
+	m1_sending = 32'sb00000000000000000000000000000011
+	m1_sending_last_bit = 32'sb00000000000000000000000000000010
+	m1_waiting = 32'sb00000000000000000000000000000001
+Module <rs232tx> is correct for synthesis.
+ 
+Analyzing module <rs232rx> in library <work>.
+	CLOCK_FACTOR_PP = 32'sb00000000000000000000000000001000
+	DATA_BITS_PP = 32'sb00000000000000000000000000001000
+	START_BITS_PP = 32'sb00000000000000000000000000000001
+	STOP_BITS_PP = 32'sb00000000000000000000000000000001
+	m1_all_low = 32'sb00000000000000000000000000000101
+	m1_extra_1 = 32'sb00000000000000000000000000000110
+	m1_extra_2 = 32'sb00000000000000000000000000000111
+	m1_idle = 32'sb00000000000000000000000000000000
+	m1_over_run = 32'sb00000000000000000000000000000010
+	m1_shift = 32'sb00000000000000000000000000000011
+	m1_start = 32'sb00000000000000000000000000000001
+	m1_under_run = 32'sb00000000000000000000000000000100
+	m2_data_ready_ack = 32'sb00000000000000000000000000000000
+	m2_data_ready_flag = 32'sb00000000000000000000000000000001
+Module <rs232rx> is correct for synthesis.
+ 
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <auto_baud_with_tracking>.
+    Related source file is "./../auto_baud_with_tracking.v".
+    Found finite state machine <FSM_0> for signal <m1_state>.
+    -----------------------------------------------------------------------
+    | States             | 10                                             |
+    | Transitions        | 19                                             |
+    | Inputs             | 4                                              |
+    | Outputs            | 5                                              |
+    | Clock              | clk_i (rising_edge)                            |
+    | Reset              | reset_i (positive)                             |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | 0000                                           |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <baud_clk_o>.
+    Found 16-bit register for signal <baud>.
+    Found 16-bit up counter for signal <baud_count>.
+    Found 16-bit comparator equal for signal <baud_count_rollover>.
+    Found 1-bit register for signal <character_miscompare>.
+    Found 1-bit xor2 for signal <character_miscompare$xor0000> created at line 415.
+    Found 4-bit register for signal <clock_count>.
+    Found 4-bit adder for signal <clock_count$addsub0000> created at line 318.
+    Found 16-bit register for signal <main_count>.
+    Found 16-bit adder for signal <main_count$addsub0000>.
+    Found 16-bit comparator equal for signal <main_count_rollover>.
+    Found 16-bit register for signal <measurement>.
+    Found 1-bit register for signal <run>.
+    Found 9-bit register for signal <target_bits>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 Counter(s).
+	inferred  55 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+Unit <auto_baud_with_tracking> synthesized.
+
+
+Synthesizing Unit <rs232tx>.
+    Related source file is "./../serial.v".
+    Found 2-bit register for signal <m1_state>.
+    Found 4-bit up counter for signal <prescaler_count_l>.
+    Found 10-bit register for signal <q>.
+    Found 4-bit up counter for signal <tx_bit_count_l>.
+    Summary:
+	inferred   2 Counter(s).
+	inferred  12 D-type flip-flop(s).
+Unit <rs232tx> synthesized.
+
+
+Synthesizing Unit <rs232rx>.
+    Related source file is "./../serial.v".
+    Found 8-bit register for signal <data>.
+    Found 4-bit up counter for signal <intrabit_count_l>.
+    Found 3-bit register for signal <m1_state>.
+    Found 1-bit register for signal <m2_state>.
+    Found 10-bit register for signal <q>.
+    Summary:
+	inferred   1 Counter(s).
+	inferred  22 D-type flip-flop(s).
+Unit <rs232rx> synthesized.
+
+
+Synthesizing Unit <rs232_syscon>.
+    Related source file is "rs232_syscon_d32.v".
+WARNING:Xst:1780 - Signal <rd_line_done> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <rd_data_field_done> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <rd_addr_field_done> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+    Found 16x8-bit single-port RAM <Mram_cmd_buffer> for signal <cmd_buffer>.
+    Register <stb_o> equivalent to <cyc_o> has been removed
+INFO:Xst:1799 - State 01000 is never reached in FSM <m1_state>.
+INFO:Xst:1799 - State 00101 is never reached in FSM <m1_state>.
+    Found finite state machine <FSM_1> for signal <m1_state>.
+    -----------------------------------------------------------------------
+    | States             | 26                                             |
+    | Transitions        | 86                                             |
+    | Inputs             | 23                                             |
+    | Outputs            | 27                                             |
+    | Clock              | clk_i (rising_edge)                            |
+    | Reset              | reset_i (positive)                             |
+    | Reset type         | synchronous                                    |
+    | Reset State        | 00000                                          |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Using one-hot encoding for signal <command>.
+    Found 32x8-bit ROM for signal <msg_char>.
+    Found 16-bit register for signal <adr_o>.
+    Found 1-bit register for signal <cyc_o>.
+    Found 32-bit register for signal <dat_o>.
+    Found 1-bit register for signal <we_o>.
+    Found 1-bit register for signal <ack_i_reg>.
+    Found 8-bit up counter for signal <adr_offset>.
+    Found 16-bit adder for signal <adr_ptr>.
+    Found 16-bit register for signal <adr_sr>.
+    Found 8-bit comparator greatequal for signal <char_is_a_f$cmp_ge0000> created at line 1092.
+    Found 8-bit comparator lessequal for signal <char_is_a_f$cmp_le0000> created at line 1092.
+    Found 8-bit comparator greatequal for signal <char_is_num$cmp_ge0000> created at line 1091.
+    Found 8-bit comparator lessequal for signal <char_is_num$cmp_le0000> created at line 1091.
+    Found 4-bit updown counter for signal <cmd_ptr>.
+    Found 4-bit register for signal <command>.
+    Found 32-bit register for signal <dat_i_reg>.
+    Found 32-bit register for signal <dat_sr>.
+    Found 4-bit adder for signal <hex_digit$addsub0000> created at line 1098.
+    Found 8-bit comparator not equal for signal <m1_state$cmp_ne0000> created at line 941.
+    Found 5-bit up counter for signal <msg_offset>.
+    Found 5-bit adder for signal <msg_pointer>.
+    Found 8-bit register for signal <qty_sr>.
+    Found 16-bit register for signal <rd_adr_sr>.
+    Found 3-bit up counter for signal <rd_digit_count>.
+    Found 3-bit up counter for signal <rd_field_count>.
+    Found 8-bit up counter for signal <watchdog_timer_count>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 RAM(s).
+	inferred   1 ROM(s).
+	inferred   6 Counter(s).
+	inferred 159 D-type flip-flop(s).
+	inferred   3 Adder/Subtractor(s).
+	inferred   5 Comparator(s).
+Unit <rs232_syscon> synthesized.
+
+INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmetic operations in this design can share the same physical resources for reduced device utilization. For improved clock frequency you may try to disable resource sharing.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 1
+ 16x8-bit single-port RAM                              : 1
+# ROMs                                                 : 1
+ 32x8-bit ROM                                          : 1
+# Adders/Subtractors                                   : 5
+ 16-bit adder                                          : 2
+ 4-bit adder                                           : 2
+ 5-bit adder                                           : 1
+# Counters                                             : 10
+ 16-bit up counter                                     : 1
+ 3-bit up counter                                      : 2
+ 4-bit up counter                                      : 3
+ 4-bit updown counter                                  : 1
+ 5-bit up counter                                      : 1
+ 8-bit up counter                                      : 2
+# Registers                                            : 93
+ 1-bit register                                        : 79
+ 10-bit register                                       : 2
+ 16-bit register                                       : 4
+ 2-bit register                                        : 1
+ 3-bit register                                        : 1
+ 32-bit register                                       : 2
+ 4-bit register                                        : 2
+ 8-bit register                                        : 1
+ 9-bit register                                        : 1
+# Comparators                                          : 7
+ 16-bit comparator equal                               : 2
+ 8-bit comparator greatequal                           : 2
+ 8-bit comparator lessequal                            : 2
+ 8-bit comparator not equal                            : 1
+# Xors                                                 : 1
+ 1-bit xor2                                            : 1
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_1> for best encoding.
+Optimizing FSM <m1_state/FSM> on signal <m1_state[1:26]> with one-hot encoding.
+-------------------------------------
+ State | Encoding
+-------------------------------------
+ 00000 | 00000000000000000000000001
+ 00001 | 00000000000000000000000100
+ 00010 | 00000000000000000000000010
+ 00011 | 00000000000000000000001000
+ 00100 | 00000000000000000000100000
+ 00101 | unreached
+ 00110 | 00000000000000000010000000
+ 00111 | 00000000000000000001000000
+ 01000 | unreached
+ 01001 | 00000000000000000100000000
+ 01010 | 00000000000000001000000000
+ 01011 | 00000000000000010000000000
+ 01100 | 00000000000000100000000000
+ 10000 | 00000000000000000000010000
+ 10001 | 00000000000001000000000000
+ 10010 | 00000000000100000000000000
+ 10011 | 00000000001000000000000000
+ 10100 | 00000000100000000000000000
+ 10101 | 00000000010000000000000000
+ 10110 | 00000001000000000000000000
+ 10111 | 00000000000010000000000000
+ 11001 | 00000010000000000000000000
+ 11010 | 00000100000000000000000000
+ 11011 | 00001000000000000000000000
+ 11100 | 00100000000000000000000000
+ 11101 | 00010000000000000000000000
+ 11110 | 10000000000000000000000000
+ 11111 | 01000000000000000000000000
+-------------------------------------
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <clock_unit_2/m1_state/FSM> on signal <m1_state[1:4]> with sequential encoding.
+-------------------
+ State | Encoding
+-------------------
+ 0000  | 0000
+ 0001  | 0001
+ 0010  | 0010
+ 0011  | 0011
+ 0100  | 0100
+ 0101  | 0101
+ 0110  | 1001
+ 0111  | 1000
+ 1000  | 0110
+ 1001  | 0111
+-------------------
+Loading device for application Rf_Device from file '4vfx100.nph' in environment D:\Xilinx_v10\ISE.
+WARNING:Xst:2404 -  FFs/Latches <q<9:9>> (without init value) have a constant value of 0 in block <rs232tx>.
+
+Synthesizing (advanced) Unit <rs232_syscon>.
+INFO:Xst - HDL ADVISOR - The RAM <Mram_cmd_buffer> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 16-word x 8-bit                     |          |
+    |     clkA           | connected to signal <clk_i>         | rise     |
+    |     weA            | connected to signal <_and0000>      | high     |
+    |     addrA          | connected to signal <cmd_ptr>       |          |
+    |     diA            | connected to signal <rs232_rx_char> |          |
+    |     doA            | connected to signal <cmd_char>      |          |
+    -----------------------------------------------------------------------
+Unit <rs232_syscon> synthesized (advanced).
+WARNING:Xst:2677 - Node <command_0> of sequential type is unconnected in block <rs232_syscon>.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# FSMs                                                 : 2
+# RAMs                                                 : 1
+ 16x8-bit single-port distributed RAM                  : 1
+# ROMs                                                 : 1
+ 32x8-bit ROM                                          : 1
+# Adders/Subtractors                                   : 5
+ 16-bit adder                                          : 2
+ 4-bit adder                                           : 2
+ 5-bit adder                                           : 1
+# Counters                                             : 10
+ 16-bit up counter                                     : 1
+ 3-bit up counter                                      : 2
+ 4-bit up counter                                      : 3
+ 4-bit updown counter                                  : 1
+ 5-bit up counter                                      : 1
+ 8-bit up counter                                      : 2
+# Registers                                            : 255
+ Flip-Flops                                            : 255
+# Comparators                                          : 7
+ 16-bit comparator equal                               : 2
+ 8-bit comparator greatequal                           : 2
+ 8-bit comparator lessequal                            : 2
+ 8-bit comparator not equal                            : 1
+# Xors                                                 : 1
+ 1-bit xor2                                            : 1
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1710 - FF/Latch <target_bits_8> (without init value) has a constant value of 0 in block <auto_baud_with_tracking>. This FF/Latch will be trimmed during the optimization process.
+
+Optimizing unit <rs232_syscon> ...
+
+Optimizing unit <rs232tx> ...
+
+Optimizing unit <rs232rx> ...
+
+Optimizing unit <auto_baud_with_tracking> ...
+WARNING:Xst:1710 - FF/Latch <clock_count_3> (without init value) has a constant value of 0 in block <auto_baud_with_tracking>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <clock_count_3> (without init value) has a constant value of 0 in block <auto_baud_with_tracking>. This FF/Latch will be trimmed during the optimization process.
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block rs232_syscon, actual ratio is 0.
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 342
+ Flip-Flops                                            : 342
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                             *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+Top Level Output File Name         : rs232_syscon.ngc
+Output Format                      : NGC
+Optimization Goal                  : speed
+Keep Hierarchy                     : no
+
+Design Statistics
+# IOs                              : 90
+
+Cell Usage :
+# BELS                             : 630
+#      GND                         : 1
+#      INV                         : 13
+#      LUT1                        : 36
+#      LUT2                        : 71
+#      LUT2_D                      : 9
+#      LUT2_L                      : 5
+#      LUT3                        : 116
+#      LUT3_D                      : 12
+#      LUT3_L                      : 3
+#      LUT4                        : 163
+#      LUT4_D                      : 15
+#      LUT4_L                      : 23
+#      MUXCY                       : 79
+#      MUXF5                       : 14
+#      VCC                         : 1
+#      XORCY                       : 69
+# FlipFlops/Latches                : 342
+#      FD                          : 83
+#      FDC                         : 4
+#      FDCE                        : 42
+#      FDPE                        : 35
+#      FDR                         : 24
+#      FDRE                        : 134
+#      FDRS                        : 8
+#      FDRSE                       : 1
+#      FDS                         : 1
+#      FDSE                        : 10
+# RAMS                             : 8
+#      RAM16X1S                    : 8
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 4vfx100ff1152-10 
+
+ Number of Slices:                      291  out of  42176     0%  
+ Number of Slice Flip Flops:            342  out of  84352     0%  
+ Number of 4 input LUTs:                474  out of  84352     0%  
+    Number used as logic:               466
+    Number used as RAMs:                  8
+ Number of IOs:                          90
+ Number of bonded IOBs:                   0  out of    576     0%  
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+clk_i                              | NONE(ack_i_reg)        | 350   |
+-----------------------------------+------------------------+-------+
+INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
+
+Asynchronous Control Signals Information:
+----------------------------------------
+----------------------------------------------------------------+---------------------------------+-------+
+Control Signal                                                  | Buffer(FF name)                 | Load  |
+----------------------------------------------------------------+---------------------------------+-------+
+reset_i                                                         | NONE                            | 65    |
+clock_unit_2/idle(clock_unit_2/character_miscompare_not000121:O)| NONE(clock_unit_2/measurement_9)| 16    |
+----------------------------------------------------------------+---------------------------------+-------+
+
+Timing Summary:
+---------------
+Speed Grade: -10
+
+   Minimum period: 6.303ns (Maximum Frequency: 158.665MHz)
+   Minimum input arrival time before clock: 3.569ns
+   Maximum output required time after clock: 1.225ns
+   Maximum combinational path delay: No path found
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'clk_i'
+  Clock period: 6.303ns (frequency: 158.665MHz)
+  Total number of paths / destination ports: 29441 / 722
+-------------------------------------------------------------------------
+Delay:               6.303ns (Levels of Logic = 3)
+  Source:            Mram_cmd_buffer8 (RAM)
+  Destination:       rd_adr_sr_14 (FF)
+  Source Clock:      clk_i rising
+  Destination Clock: clk_i rising
+
+  Data Path: Mram_cmd_buffer8 to rd_adr_sr_14
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     RAM16X1S:WCLK->O      6   1.711   0.725  Mram_cmd_buffer8 (cmd_char<7>)
+     LUT3:I0->O            3   0.195   0.538  char_is_whitespace21 (N72)
+     LUT4:I3->O           15   0.195   0.754  char_is_whitespace (char_is_whitespace)
+     LUT4:I3->O           32   0.195   0.928  rd_adr_sr_15_or00001 (rd_adr_sr_15_or0000)
+     FDRE:R                    1.062          rd_adr_sr_14
+    ----------------------------------------
+    Total                      6.303ns (3.358ns logic, 2.945ns route)
+                                       (53.3% logic, 46.7% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'clk_i'
+  Total number of paths / destination ports: 257 / 246
+-------------------------------------------------------------------------
+Offset:              3.569ns (Levels of Logic = 3)
+  Source:            reset_i (PAD)
+  Destination:       msg_offset_0 (FF)
+  Destination Clock: clk_i rising
+
+  Data Path: reset_i to msg_offset_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     LUT2_D:I1->O          1   0.195   0.688  msg_offset_or00000 (msg_offset_or00000)
+     LUT4:I1->O            1   0.195   0.688  msg_offset_or000013 (msg_offset_or000013)
+     LUT4:I1->O            5   0.195   0.383  msg_offset_or0000122 (msg_offset_or0000)
+     FDRE:R                    1.062          msg_offset_0
+    ----------------------------------------
+    Total                      3.569ns (1.810ns logic, 1.759ns route)
+                                       (50.7% logic, 49.3% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'clk_i'
+  Total number of paths / destination ports: 54 / 53
+-------------------------------------------------------------------------
+Offset:              1.225ns (Levels of Logic = 1)
+  Source:            m1_state_FSM_FFd6 (FF)
+  Destination:       rst_o (PAD)
+  Source Clock:      clk_i rising
+
+  Data Path: m1_state_FSM_FFd6 to rst_o
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q              8   0.360   0.670  m1_state_FSM_FFd6 (m1_state_FSM_FFd6)
+     LUT2:I0->O            0   0.195   0.000  rst_o1 (rst_o)
+    ----------------------------------------
+    Total                      1.225ns (0.555ns logic, 0.670ns route)
+                                       (45.3% logic, 54.7% route)
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 14.00 secs
+Total CPU time to Xst completion: 13.69 secs
+ 
+--> 
+
+Total memory usage is 327556 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    8 (   0 filtered)
+Number of infos    :    8 (   0 filtered)
+

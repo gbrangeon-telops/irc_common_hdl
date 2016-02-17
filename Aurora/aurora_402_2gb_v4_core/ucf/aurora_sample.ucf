@@ -1,0 +1,126 @@
+#################################################################################
+##
+##      Project:  Aurora Module Generator version 2.5
+##
+##         Date:  $Date: 2006/11/01 09:15:03 $
+##          Tag:  $Name: i+IP3Im+117652 $
+##         File:  $RCSfile: aurora_sample_v4_ucf.ejava,v $
+##          Rev:  $Revision: 1.2.12.1 $
+##
+##      Company:  Xilinx
+## Contributors:  R. K. Awalt, B. L. Woodard, N. Gulstone, N. Jayarajan
+##
+##   Disclaimer:  XILINX IS PROVIDING THIS DESIGN, CODE, OR
+##                INFORMATION "AS IS" SOLELY FOR USE IN DEVELOPING
+##                PROGRAMS AND SOLUTIONS FOR XILINX DEVICES.  BY
+##                PROVIDING THIS DESIGN, CODE, OR INFORMATION AS
+##                ONE POSSIBLE IMPLEMENTATION OF THIS FEATURE,
+##                APPLICATION OR STANDARD, XILINX IS MAKING NO
+##                REPRESENTATION THAT THIS IMPLEMENTATION IS FREE
+##                FROM ANY CLAIMS OF INFRINGEMENT, AND YOU ARE
+##                RESPONSIBLE FOR OBTAINING ANY RIGHTS YOU MAY
+##                REQUIRE FOR YOUR IMPLEMENTATION.  XILINX
+##                EXPRESSLY DISCLAIMS ANY WARRANTY WHATSOEVER WITH
+##                RESPECT TO THE ADEQUACY OF THE IMPLEMENTATION,
+##                INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OR
+##                REPRESENTATIONS THAT THIS IMPLEMENTATION IS FREE
+##                FROM CLAIMS OF INFRINGEMENT, IMPLIED WARRANTIES
+##                OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+##                PURPOSE.
+##
+##                (c) Copyright 2004 Xilinx, Inc.
+##                All rights reserved.
+##
+#################################################################################
+##
+##  AURORA_SAMPLE_UCF
+##
+##  Author: Nigel Gulstone, Nanditha Jayarajan
+##          Xilinx - Embedded Networking System Engineering Group
+##
+##  Description: This is the user constraints file for a 2 lane Aurora
+##               core. This module supports the following features:
+##
+##              *   Supports Virtex 4 FX devices, 1152 Package on ML423 Board
+##
+##
+##              This ucf file is for an xc4vfx60 on an ML423 board. Since you are using an xc4vfx100 device, you
+##              must change all the LOC constraints that are currently commented out to match your current board
+
+#Set stepping configuration for CES4
+CONFIG STEPPING = "SCD1";
+################################## Clock Constraints ##########################
+
+# User Clock Contraint: the value is selected based on the line rate and lane width of the module
+NET user_clk_i PERIOD = 10.0  ns;
+
+
+# Reference clock contraint for MGTs on the left edge of the V4 device
+NET ref_clk1_left_i PERIOD = 5.0 ns;
+
+
+# Drp Clock Constraint  
+NET init_clk_i PERIOD = 20 ns;
+
+# Constraints for Calibration Block RX frequency detectors
+
+################Set the locations of the pins for an ML423 board##############
+
+
+#NET REF_CLK1_LEFT_N  LOC=AP28;
+#NET REF_CLK1_LEFT_P  LOC=AP29;
+
+INST GT11CLK_MGT_LEFT LOC = GT11CLK_X0Y1;
+INST GT11CLK_MGT_LEFT SYNCLK1OUTEN = ENABLE;
+INST GT11CLK_MGT_LEFT SYNCLK2OUTEN = DISABLE;
+
+
+
+
+#NET INIT_CLK        LOC=AF20;  #OSCILLATOR
+
+#NET RESET           LOC=AG10;   #BUTTON
+#NET PMA_INIT        LOC=AF10;   #BUTTON SW2
+#NET RESET_CALBLOCKS LOC=AJ10;    #BUTTON SW3
+
+#NET CHANNEL_UP      LOC=AH9;     #LED
+#NET HARD_ERROR      LOC=AJ9;     #LED
+#NET SOFT_ERROR      LOC=AD9;     #LED
+#NET FRAME_ERROR     LOC=AD10;     #LED
+
+#NET ERROR_COUNT(0)  LOC=AJ16;     #LED
+#NET ERROR_COUNT(1)  LOC=AG15;     #LED
+#NET ERROR_COUNT(2)  LOC=AF15;     #LED
+#NET ERROR_COUNT(3)  LOC=AF14;      #LED
+#NET ERROR_COUNT(4)  LOC=AE14;      #LED
+#NET ERROR_COUNT(5)  LOC=AE13;      #LED
+#NET ERROR_COUNT(6)  LOC=AH7;      #LED
+#NET ERROR_COUNT(7)  LOC=AH8;      #LED
+
+
+#NET RX_SIGNAL_DETECT(0) LOC=AJ7;       #DIP Switch. Must be high for operation
+#NET RX_SIGNAL_DETECT(1) LOC=AH15;      #DIP Switch. Must be high for operation
+
+
+
+#This board supports a maximum of 8 lanes
+#NET LANE_UP(0)       LOC=G22;     #Header Pin
+#NET LANE_UP(1)       LOC=H22;     #Header Pin
+
+
+
+##########################    MGT Location Constraints ####################
+
+   
+
+# Place aurora_module_i/mgt_wrapper_i/MGT0 at location X0Y0 
+INST aurora_module_i/mgt_wrapper_i/MGT0 LOC=GT11_X0Y0;
+
+
+   
+
+# Place aurora_module_i/mgt_wrapper_i/MGT1 at location X0Y1 
+INST aurora_module_i/mgt_wrapper_i/MGT1 LOC=GT11_X0Y1;
+
+
+

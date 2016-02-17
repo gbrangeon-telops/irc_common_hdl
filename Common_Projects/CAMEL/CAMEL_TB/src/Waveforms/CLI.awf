@@ -1,0 +1,113 @@
+$WAVE4
+$RESOLUTION 1000
+I 1 "r#11#t_ll_mosi215 SOF c#9#std_logicc9 UX01ZWLH-EOF c#9#std_logicc9 UX01ZWLH-DATA a#29#std_logic_vector(20 downto 0)1 ricd20 0 c#9#std_logicc9 UX01ZWLH-DVAL c#9#std_logicc9 UX01ZWLH-SUPPORT_BUSY c#9#std_logicc9 UX01ZWLH-"
+I 2 "c#9#std_logicc9 UX01ZWLH-"
+I 3 "a#29#std_logic_vector(20 downto 0)1 ricd20 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS IN 1 1 5 "DPB/FPGA1/DS/RX_MOSI"
+$CHILD 4 2 1
+$SC 2 3 5-27
+$BUS IN +1 3 21 20 0 ".DATA"
+$SC +1-49
+I 4 "r#9#t_ll_miso2 AFULL c#9#std_logicc9 UX01ZWLH-BUSY c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 4 2 17 0 ISO
+$SC +1 +1
+I 5 "r#9#t_ll_mosi5 SOF c#9#std_logicc9 UX01ZWLH-EOF c#9#std_logicc9 UX01ZWLH-DATA a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-DVAL c#9#std_logicc9 UX01ZWLH-SUPPORT_BUSY c#9#std_logicc9 UX01ZWLH-"
+I 6 "a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 5 5 13 0 TX_MOSI
+$CHILD +3 2 53
+$SC +1 +1 +2-74
+$BUS IN +1 4 2 17 0 ISO
+$SC +1 +1
+$NOMODE +1 0 "" -1 0 1000000000
+I 7 "r#9#t_wb_mosi5 DAT a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-WE c#9#std_logicc9 UX01ZWLH-ADR a#29#std_logic_vector(11 downto 0)1 ricd11 0 c#9#std_logicc9 UX01ZWLH-CYC c#9#std_logicc9 UX01ZWLH-STB c#9#std_logicc9 UX01ZWLH-"
+I 8 "a#29#std_logic_vector(11 downto 0)1 ricd11 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS IN +1 7 5 "DPB/FPGA1/S4/WB_MOSI"
+$CHILD +1 0 79
+$CHILD 98 2 79
+$SC +2-97 +2-+13
+I 9 "r#9#t_wb_miso2 DAT a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-ACK c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 9 2 17 0 ISO
+$CHILD +1 0 113
+$SC +2-+16
+$BUS IN +1 5 5 13 0 RX_MOSI
+$CHILD +3 2 132
+$SC +1 +1 +2-+17
+$BUS OUT +1 4 2 17 0 ISO
+$SC +1 +1
+$BUS OUT +1 5 5 13 0 TX_MOSI
+$CHILD +3 2 157
+$SC +1 +1 +2-+17
+$BUS IN +1 4 2 17 0 ISO
+$SC +1 +1
+I 10 "a#27#UNSIGNED(DUILEN-1 downto 0)1 ricd28 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 10 29 13 0 rx_cnt
+$SC +1-+28
+$BUS S +1 5 5 13 0 fifo_mosi
+$CHILD +3 2 212
+$SC +1 +1 +2-+17
+$BUS S +1 4 2 19 0 iso
+$SC +1 +1
+$BUS S +1 4 2 13 0 TX_MISO_buf
+$SC +1 +1
+$BUS S +1 10 29 13 0 tx_cnt
+$SC +1-+28
+$S +1 2 13 0 reset_counts
+I 11 "a#28#std_logic_vector(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 11 8 13 0 CONFIG
+$SC +1-+7
+I 12 "c#7#t_states6 idle sendheader sendpayloadheader sendpayload sendfooter pause "
+$S +1 12 13 0 State
+I 13 "a#27#UNSIGNED(IMGLEN-1 downto 0)1 ricd19 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 13 20 13 0 FRAMECNT
+$SC +1-+19
+I 14 "a#36#UNSIGNED(FRAMECNT'LENGTH-1 downto 0)1 ricd19 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS VARIABLE +1 14 20 13 0 "state_proc/Frame_cnt"
+$SC +1-+19
+I 15 "a#25#UNSIGNED(ALEN-1 downto 0)1 ricd6 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 15 7 13 4 Head
+$SC +1-+6
+$S +1 2 13 0 Done
+$S +1 2 13 0 Run
+$NOMODE +1 0 "" -1 0 1000000000
+$S +1 2 "DPB/FPGA1/S4/ram_we"
+I 16 "a#36#std_logic_vector(D_WIDTH-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS IN +1 16 16 13 0 "Dcube_info_ram/DI"
+$SC +1-+15
+I 17 "a#33#std_logic_vector(ALEN-1 downto 0)1 ricd6 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 17 7 13 0 ram_add
+$SC +1-+6
+$BUS S +1 6 16 17 0 dout
+$SC +1-+15
+$NOMODE +1 0 "" -1 0 1000000000
+$BUS IN +1 5 5 "DPB/FPGA1/U22/RX_MOSI"
+$CHILD +3 2 378
+$SC +1 +1 +2-+17
+$BUS OUT +1 4 2 18 0 ISO
+$SC +1 +1
+$S +1 2 14 0 rx_sof_buf_i
+$VARIABLE +1 2 14 0 "Data_16_to_32_Map/path"
+$VARIABLE +1 2 36 0 _valid
+I 18 "r#11#t_ll_mosi326 SOF c#9#std_logicc9 UX01ZWLH-EOF c#9#std_logicc9 UX01ZWLH-DATA a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-DREM a#28#std_logic_vector(1 downto 0)1 ricd1 0 c#9#std_logicc9 UX01ZWLH-DVAL c#9#std_logicc9 UX01ZWLH-SUPPORT_BUSY c#9#std_logicc9 UX01ZWLH-"
+I 19 "a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+I 20 "a#28#std_logic_vector(1 downto 0)1 ricd1 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 18 6 14 0 TX_MOSI
+$CHILD +3 2 406
+$CHILD +36 3 406
+$SC +1 +1 +2-+31 +2-+3
+$BUS IN +1 4 2 18 0 ISO
+$SC +1 +1
+$NOMODE +1 0 "" -1 0 1000000000
+$BUS S +1 18 6 "DPB/FPGA1/CLINK_MOSI"
+$CHILD +3 2 451
+$CHILD +36 3 451
+$SC +1 +1 +2-+31 +2-+3
+$BUS S +1 4 2 17 0 ISO
+$SC +1 +1
+P 0 331 +1 Bold "1"
+P 0 1-494 CS "0"
+P 0 331 +1 Color "33555711"
+P 0 78 333 +44 +73 EmptyRow "1"
+P 0 28 Notation "2comp"
+P 0 +0 281-+42/21 Radix "10"
+P 0 28 Shape "2"
+$ENDWAVE

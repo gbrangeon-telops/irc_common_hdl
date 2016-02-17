@@ -1,0 +1,7 @@
+acom  "D:\telops\Common_HDL\DDR_Ctrl\src\DDR_tester\dat_gen.vhd"
+acom  "D:\telops\Common_HDL\DDR_Ctrl\src\DDR_tester\dat_path.vhd"
+acom  "D:\telops\Common_HDL\DDR_Ctrl\src\DDR_tester\ddr_test_sm.asf"
+acom  "D:\telops\Common_HDL\DDR_Ctrl\src\DDR_tester\adr_gen.vhd"
+acom  "D:\telops\Common_HDL\DDR_Ctrl\src\DDR_tester\mctrl_iface.vhd"
+acom  "D:\telops\Common_HDL\DDR_Ctrl\src\DDR_tester\mem_test.vhd"
+acom  "D:\telops\Common_HDL\DDR_Ctrl\src\DDR_tester\ddr_tester.bde"

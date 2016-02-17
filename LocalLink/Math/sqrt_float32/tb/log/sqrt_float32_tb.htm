@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+
+<!----------------------------------------------------------------------------->
+<!--                          BEGIN HTML HEAD                                -->
+<!--                                                                         -->
+
+<HEAD>
+<TITLE>DRC Report File - sqrt_float32_tb.bde</TITLE>
+<STYLE>
+.Err	{color:'#FF0000';cursor:hand;text-decoration:underline;}
+.Warn	{color:'#0000FF';cursor:hand;text-decoration:underline;}
+.Info	{color:'#000000';cursor:hand;text-decoration:underline;}
+.Sccss  {color:'#009600';cursor:hand;text-decoration:underline;}
+.ErrH	{color:'#FF0000';cursor:hand;text-decoration:underline;}
+.WarnH	{color:'#0000FF';cursor:hand;text-decoration:underline;}
+.InfoH	{color:'#000000';cursor:hand;text-decoration:underline;}
+.Err1	{color:'#FF0000';}
+.Warn1	{color:'#0000FF';}
+.Info1	{color:'#000000';}
+.Sccss1 {color:'#009600';}
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="white" TEXT="black" LINK="blue" VLINK="purple" BACKGROUND="C:\Program Files\Aldec\Active-HDL 8.2\\Flows\Res\default.bmp">
+<FONT FACE="Serif">
+<tt>
+<!--                                                                         -->
+<!--                             END HEADER                                  -->
+<!----------------------------------------------------------------------------->
+
+<!----------------------------------------------------------------------------->
+<!--                            BEGIN VBSCRIPT                               -->
+<!--                                                                         -->
+<SCRIPT LANGUAGE=JSCRIPT>
+	function RollOn() {
+		switch(window.event.srcElement.className) {
+			case 'Err':
+				window.event.srcElement.className = 'ErrH'; break;
+			case 'Warn':
+				window.event.srcElement.className = 'WarnH'; break;
+			case 'Info':
+				window.event.srcElement.className = 'InfoH'; break;
+		}
+	}
+	function RollOff() {
+		switch(window.event.srcElement.className) {
+			case 'ErrH':
+				window.event.srcElement.className = 'Err'; break;
+			case 'WarnH':
+				window.event.srcElement.className = 'Warn'; break;
+			case 'InfoH':
+				window.event.srcElement.className = 'Info'; break;
+		}
+	}
+	function OnError(sMsg,sUrl,sLine) {
+		return true;
+	}
+	
+	document.onmouseover = RollOn;
+	document.onmouseout = RollOff;
+	window.onerror = OnError;
+</SCRIPT>
+
+<SCRIPT LANGUAGE=VBSCRIPT>
+
+Function IID_IDispatch
+	IID_IDispatch = "{00020400-0000-0000-C000-000000000046}"
+End Function
+
+Function CLSID_Executor
+	CLSID_Executor = "Aldec.ExePlugIn.Generic.7"
+End Function
+
+
+Sub OpenPlugIn (progid, template, document, element, string)
+
+	Dim executor, command
+
+	Set executor = window.external.aldec.connector.OpenPlugIn(CLSID_Executor, IID_IDispatch)
+
+	command = "?Activate[<"+progid+">][<"+template+">][<"+document+">][<"+element+">][<"+string+">]"
+
+	executor.ExecuteCommand command, ""
+
+End Sub
+
+
+</SCRIPT>
+<!--                                                                         -->
+<!--                             END VBSCRIPT                                -->
+<!----------------------------------------------------------------------------->
+
+<H2>DRC Report File - sqrt_float32_tb.bde</H2>
+
+Created on Tue 2010-06-01 at 14:28:17
+<HR NOSHADE COLOR="#008080">
+<SPAN class=Info1>Checking file 'd:\Telops\Common_HDL\LocalLink\Math\sqrt_float32\tb\src\sqrt_float32_tb.bde'.</SPAN><BR>
+<SPAN class=Warn onclick="OpenPlugIn('Aldec.BDE.7','0','d:\\Telops\\Common_HDL\\LocalLink\\Math\\sqrt_float32\\tb\\src\\sqrt_float32_tb.bde','','-errorid=1');">Unconnected output port 'ERR'. Instance 'U2'.</SPAN><BR>
+<SPAN class=Warn onclick="OpenPlugIn('Aldec.BDE.7','0','d:\\Telops\\Common_HDL\\LocalLink\\Math\\sqrt_float32\\tb\\src\\sqrt_float32_tb.bde','','-errorid=293');">Net 'FILE_IN1(1:255)' is without source.</SPAN><BR>
+<SPAN class=Warn onclick="OpenPlugIn('Aldec.BDE.7','0','d:\\Telops\\Common_HDL\\LocalLink\\Math\\sqrt_float32\\tb\\src\\sqrt_float32_tb.bde','','-errorid=294');">Net 'FILE_OUT1(1:255)' is without source.</SPAN><BR>
+<SPAN class=Warn onclick="OpenPlugIn('Aldec.BDE.7','0','d:\\Telops\\Common_HDL\\LocalLink\\Math\\sqrt_float32\\tb\\src\\sqrt_float32_tb.bde','','-errorid=1');">Settings of synthesis pragma for generic: LATENCY of symbol: LL_sqrt_float32, instance: U2 differ from library settings.</SPAN><BR>
+<SPAN class=Warn onclick="OpenPlugIn('Aldec.BDE.7','0','d:\\Telops\\Common_HDL\\LocalLink\\Math\\sqrt_float32\\tb\\src\\sqrt_float32_tb.bde','','-errorid=79');">Settings of synthesis pragma for generic: C_SIGNED_DATA of symbol: LL_file_input, instance: U1 differ from library settings.</SPAN><BR>
+<SPAN class=Warn onclick="OpenPlugIn('Aldec.BDE.7','0','d:\\Telops\\Common_HDL\\LocalLink\\Math\\sqrt_float32\\tb\\src\\sqrt_float32_tb.bde','','-errorid=79');">Settings of synthesis pragma for generic: C_STALL_RND_SEED of symbol: LL_file_input, instance: U1 differ from library settings.</SPAN><BR>
+<SPAN class=Warn onclick="OpenPlugIn('Aldec.BDE.7','0','d:\\Telops\\Common_HDL\\LocalLink\\Math\\sqrt_float32\\tb\\src\\sqrt_float32_tb.bde','','-errorid=88');">Settings of synthesis pragma for generic: C_DLEN of symbol: LL_file_output, instance: U4 differ from library settings.</SPAN><BR>
+<SPAN class=Warn onclick="OpenPlugIn('Aldec.BDE.7','0','d:\\Telops\\Common_HDL\\LocalLink\\Math\\sqrt_float32\\tb\\src\\sqrt_float32_tb.bde','','-errorid=88');">Settings of synthesis pragma for generic: C_FORMAT of symbol: LL_file_output, instance: U4 differ from library settings.</SPAN><BR>
+<SPAN class=Warn1>sqrt_float32_tb.bde - 0 error(s), 8 warning(s)</SPAN><BR>
+<SPAN class=Info1>DRC process completed in 1 second(s).</SPAN><BR>
+</tt>
+</FONT>
+       
+        >
+</BODY>
+</HTML>

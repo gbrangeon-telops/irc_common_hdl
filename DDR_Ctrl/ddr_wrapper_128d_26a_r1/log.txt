@@ -1,0 +1,202 @@
+Release 9.1.03i - xst J.33
+Copyright (c) 1995-2007 Xilinx, Inc.  All rights reserved.
+--> 
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+     9.1) Device utilization summary
+     9.2) Partition Resource Summary
+     9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "make.prj"
+Input Format                       : mixed
+Synthesis Constraint File          : make.xcf
+Ignore Synthesis Constraint File   : no
+
+---- Target Parameters
+Output File Name                   : "ddr_wrapper_128d_26a_r1.ngc"
+Output Format                      : NGC
+Target Device                      : xc4vfx100ff1152-10
+
+---- Source Options
+Top Module Name                    : ddr_wrapper_128d_26a_r1
+Automatic FSM Extraction           : yes
+FSM Encoding Algorithm             : Auto
+Resource Sharing                   : yes
+FSM Style                          : lut
+RAM Extraction                     : yes
+RAM Style                          : auto
+ROM Extraction                     : yes
+ROM Style                          : auto
+Mux Extraction                     : yes
+Mux Style                          : auto
+Decoder Extraction                 : yes
+Priority Encoder Extraction        : yes
+Shift Register Extraction          : yes
+Logical Shifter Extraction         : yes
+XOR Collapsing                     : yes
+Multiplier Style                   : auto
+Automatic Register Balancing       : no
+Safe Implementation                : no
+
+---- Target Options
+Add IO Buffers                     : no
+Pack IO Registers into IOBs        : auto
+Global Maximum Fanout              : 25
+Add Generic Clock Buffer(BUFG)     : 0
+Register Duplication               : yes
+Equivalent register Removal        : yes
+Slice Packing                      : yes
+Convert Tristates To Logic         : yes
+Optimize Instantiated Primitives   : no
+Use Clock Enable                   : auto
+Use Synchronous Set                : yes
+Use Synchronous Reset              : yes
+
+---- General Options
+Optimization Effort                : 2
+Optimization Goal                  : speed
+Global Optimization                : allclocknets
+RTL Output                         : no
+Write Timing Constraints           : no
+Verilog 2001                       : yes
+Keep Hierarchy                     : no
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : maintain
+Cross Clock Analysis               : no
+Slice Utilization Ratio            : 100
+Read Cores                         : optimize
+Slice Utilization Ratio Delta      : 5
+
+---- Other Options
+Cores Search Directories           : D:\Telops\Common_HDL\CoreGen_V4
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "D:/Telops/Common_HDL/Utilities/double_sync.vhd" in Library common_hdl.
+Entity <double_sync> compiled.
+Entity <double_sync> (Architecture <RTL>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_parameters_0.vhd" in Library work.
+Package <mem_interface_top_parameters_0> compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top.vhd" in Library work.
+Entity <mem_interface_top> compiled.
+Entity <mem_interface_top> (Architecture <arc_mem_interface_top>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_backend_fifos_0.vhd" in Library work.
+Entity <mem_interface_top_backend_fifos_0> compiled.
+Entity <mem_interface_top_backend_fifos_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_controller_iobs_0.vhd" in Library work.
+Entity <mem_interface_top_controller_iobs_0> compiled.
+Entity <mem_interface_top_controller_iobs_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_data_path_0.vhd" in Library work.
+Entity <mem_interface_top_data_path_0> compiled.
+Entity <mem_interface_top_data_path_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_data_path_iobs_0.vhd" in Library work.
+Entity <mem_interface_top_data_path_iobs_0> compiled.
+Entity <mem_interface_top_data_path_iobs_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_data_tap_inc.vhd" in Library work.
+Entity <mem_interface_top_data_tap_inc> compiled.
+Entity <mem_interface_top_data_tap_inc> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_data_write_0.vhd" in Library work.
+Entity <mem_interface_top_data_write_0> compiled.
+Entity <mem_interface_top_data_write_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_ddr_controller_0.vhd" in Library work.
+Entity <mem_interface_top_ddr_controller_0> compiled.
+Entity <mem_interface_top_ddr_controller_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_idelay_ctrl.vhd" in Library work.
+Entity <mem_interface_top_idelay_ctrl> compiled.
+Entity <mem_interface_top_idelay_ctrl> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_infrastructure.vhd" in Library work.
+Entity <mem_interface_top_infrastructure> compiled.
+Entity <mem_interface_top_infrastructure> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_infrastructure_iobs_0.vhd" in Library work.
+Entity <mem_interface_top_infrastructure_iobs_0> compiled.
+Entity <mem_interface_top_infrastructure_iobs_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_iobs_0.vhd" in Library work.
+Entity <mem_interface_top_iobs_0> compiled.
+Entity <mem_interface_top_iobs_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_pattern_compare4.vhd" in Library work.
+Entity <mem_interface_top_pattern_compare4> compiled.
+Entity <mem_interface_top_pattern_compare4> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_RAM_D_0.vhd" in Library work.
+Entity <mem_interface_top_RAM_D_0> compiled.
+Entity <mem_interface_top_RAM_D_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_rd_data_0.vhd" in Library work.
+Entity <mem_interface_top_rd_data_0> compiled.
+Entity <mem_interface_top_rd_data_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_rd_data_fifo_0.vhd" in Library work.
+Entity <mem_interface_top_rd_data_fifo_0> compiled.
+Entity <mem_interface_top_rd_data_fifo_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_rd_wr_addr_fifo_0.vhd" in Library work.
+Entity <mem_interface_top_rd_wr_addr_fifo_0> compiled.
+Entity <mem_interface_top_rd_wr_addr_fifo_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_tap_ctrl_0.vhd" in Library work.
+Entity <mem_interface_top_tap_ctrl> compiled.
+Entity <mem_interface_top_tap_ctrl> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_tap_logic_0.vhd" in Library work.
+Entity <mem_interface_top_tap_logic_0> compiled.
+Entity <mem_interface_top_tap_logic_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_top_0.vhd" in Library work.
+Entity <mem_interface_top_top_0> compiled.
+Entity <mem_interface_top_top_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_user_interface_0.vhd" in Library work.
+Entity <mem_interface_top_user_interface_0> compiled.
+Entity <mem_interface_top_user_interface_0> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_v4_dq_iob.vhd" in Library work.
+Entity <mem_interface_top_v4_dq_iob> compiled.
+Entity <mem_interface_top_v4_dq_iob> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_v4_dqs_iob.vhd" in Library work.
+Entity <mem_interface_top_v4_dqs_iob> compiled.
+Entity <mem_interface_top_v4_dqs_iob> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_wr_data_fifo_16.vhd" in Library work.
+Entity <mem_interface_top_wr_data_fifo_16> compiled.
+Entity <mem_interface_top_wr_data_fifo_16> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/MIG/mem_interface_top_wr_data_fifo_8.vhd" in Library work.
+Entity <mem_interface_top_wr_data_fifo_8> compiled.
+Entity <mem_interface_top_wr_data_fifo_8> (Architecture <arch>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/Tester/adr_gen.vhd" in Library work.
+Entity <adr_gen> compiled.
+Entity <adr_gen> (Architecture <rtl>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/Tester/dat_gen.vhd" in Library work.
+Entity <dat_gen> compiled.
+Entity <dat_gen> (Architecture <rtl>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/Tester/dat_path.vhd" in Library work.
+Entity <dat_path> compiled.
+Entity <dat_path> (Architecture <rtl>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/Tester/mctrl_iface.vhd" in Library work.
+Entity <mctrl_iface> compiled.
+Entity <mctrl_iface> (Architecture <rtl>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/User-Interface/DDR_Interface_FSM.vhd" in Library work.
+Entity <DDR_Interface_FSM> compiled.
+Entity <DDR_Interface_FSM> (Architecture <FSM>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/User-Interface/DDR_Interface.vhd" in Library work.
+Entity <DDR_Interface> compiled.
+Entity <DDR_Interface> (Architecture <RTL>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/DDR_Ctrl/src/User-Interface/ddr_top.vhd" in Library work.
+ERROR:HDLParsers:3014 - "D:/Telops/Common_HDL/DDR_Ctrl/src/User-Interface/ddr_top.vhd" Line 21. Library unit simple_mem is not available in library common_hdl.
+--> 
+
+Total memory usage is 125492 kilobytes
+
+Number of errors   :    1 (   0 filtered)
+Number of warnings :    0 (   0 filtered)
+Number of infos    :    0 (   0 filtered)
+

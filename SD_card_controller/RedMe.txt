@@ -1,0 +1,30 @@
+Introduction:
+=============
+This project is about SD card R/W.
+It have been compiled and tested on the FX12 Mini-module dev board.
+You can find the files from this board here:
+F:\Bibliotheque\Electronique\PCB\EFP-00162-001 (FIRST MC Heater Autofocus)\Documentation\Datasheets\Mini module Virtex4FX12
+
+
+Software projects:
+=================
+For all software projects use Windows Terminal at 9600, 8-bit, 1-bit stop, no parity and no HW control.
+
+sd_raw: This is a project that allow you to write a ramp to a given sd card block, read it back and compare.
+        You can also uncoment the section of code that allows erasing of the entire block. Open Windows terminal
+        to see the printouts.
+        
+sd_uart : This project allow you to read-out an entire block to windows terminal by entring the block number in format
+	 of 0000 (4 digits).
+	 
+sd_dosfs: This is a light implementation of DosFS to be able to read a file that was writing by the PC on FAT16/32 sd card.
+	 You need to format sd card to FAT16/32 using DosFs utility tool and put some files into it. This program will read-out on Windows terminal 
+	 the data that is on this file.
+
+SD card formating:
+=================
+
+Format the SD card using the mkdosfs.exe tool utiliy:
+
+For FAT16:	mkdosfs - v -n VolumeName
+For FAT32:	mkdosfs - v -F 32 -n VolumeName

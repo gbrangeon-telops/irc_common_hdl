@@ -1,0 +1,77 @@
+#################################################################################
+##
+##      Project:  Aurora Module Generator version 2.5
+##
+##         Date:  $Date: 2006/11/01 09:15:09 $
+##          Tag:  $Name: i+IP3Im+117652 $
+##         File:  $RCSfile: aurora_v4_ucf.ejava,v $
+##          Rev:  $Revision: 1.2.12.1 $
+##
+##      Company:  Xilinx
+## Contributors:  R. K. Awalt, B. L. Woodard, N. Gulstone
+##
+##   Disclaimer:  XILINX IS PROVIDING THIS DESIGN, CODE, OR
+##                INFORMATION "AS IS" SOLELY FOR USE IN DEVELOPING
+##                PROGRAMS AND SOLUTIONS FOR XILINX DEVICES.  BY
+##                PROVIDING THIS DESIGN, CODE, OR INFORMATION AS
+##                ONE POSSIBLE IMPLEMENTATION OF THIS FEATURE,
+##                APPLICATION OR STANDARD, XILINX IS MAKING NO
+##                REPRESENTATION THAT THIS IMPLEMENTATION IS FREE
+##                FROM ANY CLAIMS OF INFRINGEMENT, AND YOU ARE
+##                RESPONSIBLE FOR OBTAINING ANY RIGHTS YOU MAY
+##                REQUIRE FOR YOUR IMPLEMENTATION.  XILINX
+##                EXPRESSLY DISCLAIMS ANY WARRANTY WHATSOEVER WITH
+##                RESPECT TO THE ADEQUACY OF THE IMPLEMENTATION,
+##                INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OR
+##                REPRESENTATIONS THAT THIS IMPLEMENTATION IS FREE
+##                FROM CLAIMS OF INFRINGEMENT, IMPLIED WARRANTIES
+##                OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+##                PURPOSE.
+##
+##                (c) Copyright 2004 Xilinx, Inc.
+##                All rights reserved.
+##
+#################################################################################
+##
+##  aurora_402_ucf
+##
+##  Author: Nigel Gulstone
+##          Xilinx - Embedded Networking System Engineering Group
+##
+##  Description: This is the user constraints file for a 2 lane Aurora
+##               core.
+##
+##              *   Supports Virtex 4 FX devices, 1152 Package on ML423 Board
+##
+##
+ 
+#Set stepping configuration for CES4
+CONFIG STEPPING = "SCD1";
+
+
+###############################  Clock Constraints ###############################
+#User Clock contraint
+NET USER_CLK PERIOD = 10.0 ns;
+
+
+# Constraints for Calibration Block RX frequency detectors
+NET mgt_wrapper_i/mgt0_rxrecclk2_buf_i PERIOD = 20 ns;
+NET mgt_wrapper_i/mgt1_rxrecclk2_buf_i PERIOD = 20 ns;
+
+#Constraints for Calibration Block TX frequency detectors
+NET mgt_wrapper_i/mgt1_txoutclk1_buf_i PERIOD = 20 ns;
+
+
+
+##########################    MGT Wrapper Constraints ####################
+
+   
+
+# Place mgt_wrapper_i/MGT0 at location X0Y0 
+INST mgt_wrapper_i/MGT0 LOC=GT11_X0Y0;
+
+   
+
+# Place mgt_wrapper_i/MGT1 at location X0Y1 
+INST mgt_wrapper_i/MGT1 LOC=GT11_X0Y1;
+

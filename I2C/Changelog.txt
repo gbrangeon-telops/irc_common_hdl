@@ -1,0 +1,17 @@
+July 03, 2006
+
+- A clean start / stop I2C sequence has been added on reset of i2c_master.vhd
+- ucf modified for 50 ohm DCI stub to minimize potentially damaging ringing on digital lines
+
+
+- Faulty temperature sensors were replaced on FPGA1 and FPGA2 of GBHSI, cause of failure unknown.
+
+  Symptoms :
+     - temperature readings allways zero
+     - SDA pin only pulls up to ~2.5V rather than 3.3V
+
+  Hypothesis:
+     1) Ringing due to fast rise times on digital lines exceeds chip input ranges and eventually causes failure.
+        Scope ground lead too long to prove or disprove.  Added DCI 50 ohm stub in VP30, VP40 and VP7 ucf files
+     2) Bad batch of ADM1023 chips
+     3) Overheating during soldering

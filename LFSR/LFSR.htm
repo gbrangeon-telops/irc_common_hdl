@@ -1,0 +1,107 @@
+<html><head><title>jnicolle.com - LFSR</title>
+
+
+<style type="text/css">
+ .pos_top {background-color:#d0a080; position:absolute; left:5px; right:5px; top:5px; padding:2px; }
+ .pos_menu {background-color:#eeeeee; position:absolute; left:5px; top:80px; width:150px; padding:2px; }
+ .pos_content {position:absolute; left:175px; top:80px; margin:0px; }
+
+ div, table {font-family: Verdana,Tahoma,Arial; font-size:12;}
+ p.info, a.info, li.info {font-size: xx-small}
+ p.red {font-size: xx-small; color: red}
+ h1 {font-size: 240%}
+ h2 {font-size: 210%}
+ h3 {font-size: 190%}
+ h4 {font-size: 160%}
+ h5 {font-size: 130%}
+ h6 {font-size: 110%}
+ a {text-decoration:none; color:black; font-weight:bold;}
+ a:hover {text-decoration:underline;}
+ .link {color:#000000; font-size:10;}
+ .link:hover {text-decoration:underline; color:blue;}
+ pre {background: #d0d0f0; padding: 5px; margin: 5px;}
+</style></head><body rightmargin="0" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
+<div class="pos_top"><table width="100%"><tbody><tr><td><font size="7">jnicolle.com</font></td></tr></tbody></table></div>
+
+<div class="pos_menu">
+<font color="#9090c0">
+
+<br><b>Home</b><br>
+<a class="link" href="http://www.jnicolle.com/">Site home</a><br>
+<a class="link" href="http://www.jnicolle.com/?page=WhoAmI">Who am I?</a><br>
+
+<br><b>Computer stuff</b><br>
+<a class="link" href="http://www.jnicolle.com/?page=software">Software</a><br>
+<a class="link" href="http://www.jnicolle.com/?page=Win32comp">EXE compressors</a><br>
+<a class="link" href="http://www.jnicolle.com/?page=music">Music</a><br>
+
+<br><b>Electronic stuff</b><br>
+<a class="link" href="http://www.jnicolle.com/?page=8051">8051</a><br>
+<a class="link" href="http://www.jnicolle.com/?page=HDL-UP1">HDL-UP1</a><br>
+<a class="link" href="http://www.jnicolle.com/?page=LFSR">LFSR</a><br>
+<a class="link" href="http://www.jnicolle.com/?page=LVDS">LVDS</a><br>
+<a class="link" href="http://www.jnicolle.com/?page=RCA">RCA</a><br>
+
+<br><b>Joke</b><br>
+<a class="link" href="http://www.jnicolle.com/?page=madcow">Mad cow test</a><br>
+
+<br><b>Opinions</b><br>
+<a class="link" href="http://www.jnicolle.com/?page=food">How eating healthy?</a><br>
+<a class="link" href="http://www.jnicolle.com/?page=god">Does god exist?</a><br>
+<a class="link" href="http://www.jnicolle.com/?page=politician">Why politicians lie?</a><br>
+
+<br><br>
+<br><br>
+</font>
+</div>
+
+<div class="pos_content">
+<h3>LFSR testbench</h3>
+
+<p class="info">
+<font color="#ff0000">11/05/2001</font> - LFSR testbench 1.20 (beta) adds more sequence lengths.<br>
+<font color="#ff0000">07/05/2000</font> - LFSR testbench 1.10 fixes the
+schematic feedback paths when the 'extended-sequence logic' is used.
+HDL generation was correct and has not changed. Thanks for Rick Collins
+for bringing that to my attention.<br>
+</p><hr>
+
+<p>LFSRs are pretty well known and understood. You can find numerous descriptions in the literature and on the net.<br>
+My contribution is <a href="http://www.jnicolle.com/LFSR/LFSRTestbench.zip">LFSR testbench 1.20 beta</a> (156KB) software. It will help you understand LFSR basics:
+</p>
+
+<ul>
+  <li>Change <strong>interactively</strong> the LFSR settings (length, taps...).</li>
+  <li>Visualize the <strong>schematic</strong>.</li>
+  <li>Get the binary <strong>sequence</strong> list and length.</li>
+  <li>Get the corresponding <strong>HDL</strong> designs (in VHDL, AHDL and Verilog).</li>
+</ul>
+
+<p><img src="LFSR.gif" height="80" hspace="5" width="408"></p>
+<p>Note that the software always produces non-parameterized LFSR designs, so <a href="http://www.jnicolle.com/LFSR/LFSR.txt">here's</a> an example of a parameterized one (AHDL).</p><hr>
+
+<h4>LFSR related links:</h4>
+
+<p>
+<a href="http://www-s.ti.com/sc/psheets/scta036a/scta036a.pdf">What's an LFSR?</a> is a TI article in PDF format.<br>
+<a href="http://www.newwaveinstruments.com/resources/articles/m_sequence_linear_feedback_shift_register_lfsr.htm">LFSR Reference</a> from New Wave Instruments.<br>
+<a href="http://www.e-insite.net/ednmag/archives/1998/052198/11df_06.htm">LFSR counters</a> from EDN mag.<br>
+<a href="http://www.e-insite.net/ednmag/archives/1996/010496/01df4.htm">LFSR</a> from EDN mag.<br>
+</p>
+
+<h4>Nice books:</h4>
+<a href="http://www.maxmon.com/booginfo.htm">Bebop to the Boolean Boogie</a> (excellent description about LFSRs and their applications - page 351).<br>
+<a href="http://www.doone.com/hdl_chip_des.html">HDL Chip Design</a> (good LFSR description, excellent HDL book).<br>
+<hr>
+
+<p class="info">Here comes the usual disclaimer: These software and all
+the accompanying files are provided "as is" and without any warranties
+expressed or implied including but not limited to implied warranties of
+merchantability and fitness for a particular purpose. In no event
+should the author be liable for any damages whatsoever (including
+without limitation, damages for loss of business profits, business
+interruption, loss of business information, or any other pecuniary
+loss) arising out of the use or inability to use this product.</p>
+</div>
+
+</body></html>

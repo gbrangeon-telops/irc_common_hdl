@@ -1,0 +1,2380 @@
+--
+-- Written by Synplicity
+-- Mon Aug 18 20:26:33 2008
+--
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+library UNISIM;
+use UNISIM.VCOMPONENTS.all;
+
+entity fi21tofp32_1 is
+port(
+  RX_LL_MISO_slv : out std_logic_vector (0 downto 0);
+  TX_LL_MISO_slv : in std_logic_vector (1 downto 0);
+  RX_LL_MOSI_slv : in std_logic_vector (24 downto 1);
+  TX_LL_MOSI_slv_1 :  out std_logic;
+  TX_LL_MOSI_slv_34 :  out std_logic;
+  TX_LL_MOSI_slv_35 :  out std_logic;
+  TX_LL_MOSI_slv_32 :  out std_logic;
+  TX_LL_MOSI_slv_31 :  out std_logic;
+  TX_LL_MOSI_slv_30 :  out std_logic;
+  TX_LL_MOSI_slv_29 :  out std_logic;
+  TX_LL_MOSI_slv_28 :  out std_logic;
+  TX_LL_MOSI_slv_27 :  out std_logic;
+  TX_LL_MOSI_slv_26 :  out std_logic;
+  TX_LL_MOSI_slv_25 :  out std_logic;
+  TX_LL_MOSI_slv_24 :  out std_logic;
+  TX_LL_MOSI_slv_23 :  out std_logic;
+  TX_LL_MOSI_slv_22 :  out std_logic;
+  TX_LL_MOSI_slv_21 :  out std_logic;
+  TX_LL_MOSI_slv_20 :  out std_logic;
+  TX_LL_MOSI_slv_19 :  out std_logic;
+  TX_LL_MOSI_slv_18 :  out std_logic;
+  TX_LL_MOSI_slv_17 :  out std_logic;
+  TX_LL_MOSI_slv_16 :  out std_logic;
+  TX_LL_MOSI_slv_15 :  out std_logic;
+  TX_LL_MOSI_slv_14 :  out std_logic;
+  TX_LL_MOSI_slv_13 :  out std_logic;
+  TX_LL_MOSI_slv_12 :  out std_logic;
+  TX_LL_MOSI_slv_11 :  out std_logic;
+  TX_LL_MOSI_slv_10 :  out std_logic;
+  TX_LL_MOSI_slv_9 :  out std_logic;
+  TX_LL_MOSI_slv_8 :  out std_logic;
+  TX_LL_MOSI_slv_7 :  out std_logic;
+  TX_LL_MOSI_slv_6 :  out std_logic;
+  TX_LL_MOSI_slv_5 :  out std_logic;
+  ARESET :  in std_logic;
+  CLK :  in std_logic);
+end fi21tofp32_1;
+
+architecture beh of fi21tofp32_1 is
+  signal EXPON_1 : std_logic_vector (2 to 2);
+  signal UN11_ARG_INT : std_logic_vector (19 downto 0);
+  signal FP_DATA2_2 : std_logic_vector (25 downto 0);
+  signal FP_DATA2_1 : std_logic_vector (0 to 0);
+  signal EXP3 : std_logic_vector (7 downto 0);
+  signal FI1_EXPON : std_logic_vector (7 downto 0);
+  signal FI_DATA1 : std_logic_vector (20 downto 0);
+  signal SOF_SR_TMP_D_ARRAY_0 : std_logic_vector (0 to 0);
+  signal UN182_ARGB2_M20 : std_logic_vector (3 downto 1);
+  signal UN182_ARGB2_M18 : std_logic_vector (4 to 4);
+  signal UN182_ARGB2_0_0_AM : std_logic_vector (1 to 1);
+  signal UN182_ARGB2_0_0_BM : std_logic_vector (1 to 1);
+  signal UN182_ARGB2_M18_0_0_D : std_logic_vector (0 to 0);
+  signal UN182_ARGB2_0_0_D : std_logic_vector (2 downto 0);
+  signal UN182_ARGB2_M14 : std_logic_vector (3 downto 1);
+  signal UN182_ARGB2_M17 : std_logic_vector (4 downto 2);
+  signal UN182_ARGB2_M15 : std_logic_vector (2 downto 0);
+  signal UN182_ARGB2_M16 : std_logic_vector (2 downto 0);
+  signal UN182_ARGB2_M16_0_0_AM : std_logic_vector (2 downto 0);
+  signal UN182_ARGB2_M16_0_0_BM : std_logic_vector (2 downto 0);
+  signal UN182_ARGB2_M15_0_0_AM : std_logic_vector (2 downto 0);
+  signal UN182_ARGB2_M15_0_0_BM : std_logic_vector (2 downto 0);
+  signal UN138_ARGB2 : std_logic ;
+  signal M47_0_0 : std_logic ;
+  signal M50_1 : std_logic ;
+  signal G_15_1 : std_logic ;
+  signal N_171_I_I_M2_0_1 : std_logic ;
+  signal CONVERT_CE : std_logic ;
+  signal N_185_I : std_logic ;
+  signal UN7_ARG_INT_AXB0_I : std_logic ;
+  signal N_143_I : std_logic ;
+  signal N_145_I : std_logic ;
+  signal N_147_I : std_logic ;
+  signal N_149_I : std_logic ;
+  signal UN177_ARGB2 : std_logic ;
+  signal N_255_I : std_logic ;
+  signal FI1_EXPON_0_SQMUXA : std_logic ;
+  signal SOF : std_logic ;
+  signal SOF_0_SQMUXA : std_logic ;
+  signal RX_DVALI : std_logic ;
+  signal CE_REG : std_logic ;
+  signal HOLD_DVAL : std_logic ;
+  signal HOLD_DVAL_1 : std_logic ;
+  signal EOF_SR_N_6 : std_logic ;
+  signal STAGE1_DVAL : std_logic ;
+  signal UN1_RX_LL_MOSI_1 : std_logic ;
+  signal STAGE2_DVAL : std_logic ;
+  signal STAGE3 : std_logic ;
+  signal UN182_ARGB2_0_0_S_1_M3_I_A3 : std_logic ;
+  signal UN182_ARGB2_0_0_S_1_M3_I : std_logic ;
+  signal NN_1 : std_logic ;
+  signal NN_2 : std_logic ;
+  signal M12_0_0 : std_logic ;
+  signal N_345 : std_logic ;
+  signal UN7_ARG_INT_AXBXC3 : std_logic ;
+  signal M4 : std_logic ;
+  signal N_234 : std_logic ;
+  signal M2 : std_logic ;
+  signal N_9 : std_logic ;
+  signal N_15 : std_logic ;
+  signal M18_0_0 : std_logic ;
+  signal N_306 : std_logic ;
+  signal M38_0_0 : std_logic ;
+  signal M55_0_0 : std_logic ;
+  signal N_36 : std_logic ;
+  signal N_343 : std_logic ;
+  signal N_53 : std_logic ;
+  signal N_353 : std_logic ;
+  signal N_358 : std_logic ;
+  signal M13_2_03_0 : std_logic ;
+  signal M13_2_03_1 : std_logic ;
+  signal N_364 : std_logic ;
+  signal N_366 : std_logic ;
+  signal N_256 : std_logic ;
+  signal N_247 : std_logic ;
+  signal N_101 : std_logic ;
+  signal UN7_ARG_INT_AXB0 : std_logic ;
+  signal EXPON_1_AC0_3 : std_logic ;
+  signal UN7_ARG_INT_AXB2 : std_logic ;
+  signal EXPON_1_P4 : std_logic ;
+  signal UN182_ARGB2_SM18_I : std_logic ;
+  signal N_273 : std_logic ;
+  signal UN177_ARGB2_1 : std_logic ;
+  signal EXP3_AXB_1 : std_logic ;
+  signal EXP3_AXB_2 : std_logic ;
+  signal EXP3_AXB_3 : std_logic ;
+  signal EXP3_AXB_4 : std_logic ;
+  signal EXP3_AXB_5 : std_logic ;
+  signal EXP3_AXB_6 : std_logic ;
+  signal EXP3_AXB_7 : std_logic ;
+  signal N_232 : std_logic ;
+  signal N_231 : std_logic ;
+  signal UN7_ARG_INT_AXBXC1 : std_logic ;
+  signal N_17 : std_logic ;
+  signal N_18 : std_logic ;
+  signal N_94 : std_logic ;
+  signal N_95 : std_logic ;
+  signal N_96 : std_logic ;
+  signal N_31 : std_logic ;
+  signal N_34 : std_logic ;
+  signal N_35 : std_logic ;
+  signal G_22_0_0_AM : std_logic ;
+  signal G_22_0_0_BM : std_logic ;
+  signal N_92 : std_logic ;
+  signal G_25_0_0_AM : std_logic ;
+  signal G_25_0_0_BM : std_logic ;
+  signal N_97 : std_logic ;
+  signal N_236 : std_logic ;
+  signal M71_0_0_AM : std_logic ;
+  signal M71_0_0_BM : std_logic ;
+  signal N_362 : std_logic ;
+  signal M100_0_0_AM : std_logic ;
+  signal M100_0_0_BM : std_logic ;
+  signal N_99 : std_logic ;
+  signal M17_2_03_0_M2_0_1_AM : std_logic ;
+  signal M17_2_03_0_M2_0_1_BM : std_logic ;
+  signal N_240 : std_logic ;
+  signal N_244 : std_logic ;
+  signal N_357 : std_logic ;
+  signal N_91 : std_logic ;
+  signal N_77 : std_logic ;
+  signal M17_2_03_0_M2_2_0_0_AM : std_logic ;
+  signal M17_2_03_0_M2_2_0_0_BM : std_logic ;
+  signal M90_0_0_AM : std_logic ;
+  signal M90_0_0_BM : std_logic ;
+  signal M69_0_0_AM : std_logic ;
+  signal M69_0_0_BM : std_logic ;
+  signal N_75 : std_logic ;
+  signal N_76 : std_logic ;
+  signal M98_0_0_AM : std_logic ;
+  signal M98_0_0_BM : std_logic ;
+  signal M62_0_0_AM : std_logic ;
+  signal M62_0_0_BM : std_logic ;
+  signal M55_0_0_AM : std_logic ;
+  signal M55_0_0_BM : std_logic ;
+  signal M47_0_0_AM : std_logic ;
+  signal M47_0_0_BM : std_logic ;
+  signal M45_0_0_AM : std_logic ;
+  signal M45_0_0_BM : std_logic ;
+  signal N_12 : std_logic ;
+  signal N_341 : std_logic ;
+  signal N_228 : std_logic ;
+  signal N_229 : std_logic ;
+  signal N_233 : std_logic ;
+  signal UN182_ARGB2_SM15_I : std_logic ;
+  signal N_272 : std_logic ;
+  signal N_198 : std_logic ;
+  signal N_233_0 : std_logic ;
+  signal N_234_0 : std_logic ;
+  signal UN182_ARGB2_SS12 : std_logic ;
+  signal N_229_0 : std_logic ;
+  signal UN182_ARGB2_0_0_S_1_M3_I_A3_1 : std_logic ;
+  signal EXP3_CRY_6 : std_logic ;
+  signal EXP3_CRY_5 : std_logic ;
+  signal EXP3_CRY_4 : std_logic ;
+  signal EXP3_CRY_3 : std_logic ;
+  signal EXP3_CRY_2 : std_logic ;
+  signal EXP3_CRY_1 : std_logic ;
+  signal EXP3_CRY_0 : std_logic ;
+  signal N_281 : std_logic ;
+  signal N_280 : std_logic ;
+begin
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m50\: LUT4_L 
+  generic map(
+    INIT => X"1005"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => M47_0_0,
+    I2 => M50_1,
+    I3 => EXPON_1(2),
+    LO => UN11_ARG_INT(10));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_15\: LUT4_L 
+  generic map(
+    INIT => X"4011"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => G_15_1,
+    I2 => N_171_I_I_M2_0_1,
+    I3 => EXPON_1(2),
+    LO => UN11_ARG_INT(9));
+  \II_fp_data2_2[0]\: FDE port map (
+      Q => FP_DATA2_2(0),
+      D => UN11_ARG_INT(0),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[1]\: FDE port map (
+      Q => FP_DATA2_2(1),
+      D => UN11_ARG_INT(1),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[2]\: FDE port map (
+      Q => FP_DATA2_2(2),
+      D => UN11_ARG_INT(2),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[3]\: FDE port map (
+      Q => FP_DATA2_2(3),
+      D => UN11_ARG_INT(3),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[4]\: FDE port map (
+      Q => FP_DATA2_2(4),
+      D => UN11_ARG_INT(4),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[5]\: FDE port map (
+      Q => FP_DATA2_2(5),
+      D => UN11_ARG_INT(5),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[6]\: FDE port map (
+      Q => FP_DATA2_2(6),
+      D => UN11_ARG_INT(6),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[7]\: FDE port map (
+      Q => FP_DATA2_2(7),
+      D => UN11_ARG_INT(7),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[8]\: FDE port map (
+      Q => FP_DATA2_2(8),
+      D => UN11_ARG_INT(8),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[9]\: FDE port map (
+      Q => FP_DATA2_2(9),
+      D => UN11_ARG_INT(9),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[10]\: FDE port map (
+      Q => FP_DATA2_2(10),
+      D => UN11_ARG_INT(10),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[11]\: FDE port map (
+      Q => FP_DATA2_2(11),
+      D => UN11_ARG_INT(11),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[12]\: FDE port map (
+      Q => FP_DATA2_2(12),
+      D => UN11_ARG_INT(12),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[13]\: FDE port map (
+      Q => FP_DATA2_2(13),
+      D => UN11_ARG_INT(13),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[14]\: FDE port map (
+      Q => FP_DATA2_2(14),
+      D => UN11_ARG_INT(14),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[15]\: FDE port map (
+      Q => FP_DATA2_2(15),
+      D => UN11_ARG_INT(15),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[16]\: FDE port map (
+      Q => FP_DATA2_2(16),
+      D => UN11_ARG_INT(16),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[17]\: FDE port map (
+      Q => FP_DATA2_2(17),
+      D => N_185_I,
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[18]\: FDE port map (
+      Q => FP_DATA2_2(18),
+      D => UN11_ARG_INT(18),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[19]\: FDE port map (
+      Q => FP_DATA2_2(19),
+      D => UN11_ARG_INT(19),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[20]\: FDE port map (
+      Q => FP_DATA2_2(20),
+      D => UN7_ARG_INT_AXB0_I,
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[21]\: FDE port map (
+      Q => FP_DATA2_2(21),
+      D => N_143_I,
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[22]\: FDE port map (
+      Q => FP_DATA2_2(22),
+      D => N_145_I,
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[23]\: FDE port map (
+      Q => FP_DATA2_2(23),
+      D => N_147_I,
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[24]\: FDE port map (
+      Q => FP_DATA2_2(24),
+      D => N_149_I,
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_2[25]\: FDE port map (
+      Q => FP_DATA2_2(25),
+      D => UN177_ARGB2,
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data2_1[0]\: FDE port map (
+      Q => FP_DATA2_1(0),
+      D => N_255_I,
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[3]\: FDE port map (
+      Q => TX_LL_MOSI_slv_5,
+      D => FP_DATA2_2(0),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[4]\: FDE port map (
+      Q => TX_LL_MOSI_slv_6,
+      D => FP_DATA2_2(1),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[5]\: FDE port map (
+      Q => TX_LL_MOSI_slv_7,
+      D => FP_DATA2_2(2),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[6]\: FDE port map (
+      Q => TX_LL_MOSI_slv_8,
+      D => FP_DATA2_2(3),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[7]\: FDE port map (
+      Q => TX_LL_MOSI_slv_9,
+      D => FP_DATA2_2(4),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[8]\: FDE port map (
+      Q => TX_LL_MOSI_slv_10,
+      D => FP_DATA2_2(5),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[9]\: FDE port map (
+      Q => TX_LL_MOSI_slv_11,
+      D => FP_DATA2_2(6),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[10]\: FDE port map (
+      Q => TX_LL_MOSI_slv_12,
+      D => FP_DATA2_2(7),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[11]\: FDE port map (
+      Q => TX_LL_MOSI_slv_13,
+      D => FP_DATA2_2(8),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[12]\: FDE port map (
+      Q => TX_LL_MOSI_slv_14,
+      D => FP_DATA2_2(9),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[13]\: FDE port map (
+      Q => TX_LL_MOSI_slv_15,
+      D => FP_DATA2_2(10),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[14]\: FDE port map (
+      Q => TX_LL_MOSI_slv_16,
+      D => FP_DATA2_2(11),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[15]\: FDE port map (
+      Q => TX_LL_MOSI_slv_17,
+      D => FP_DATA2_2(12),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[16]\: FDE port map (
+      Q => TX_LL_MOSI_slv_18,
+      D => FP_DATA2_2(13),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[17]\: FDE port map (
+      Q => TX_LL_MOSI_slv_19,
+      D => FP_DATA2_2(14),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[18]\: FDE port map (
+      Q => TX_LL_MOSI_slv_20,
+      D => FP_DATA2_2(15),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[19]\: FDE port map (
+      Q => TX_LL_MOSI_slv_21,
+      D => FP_DATA2_2(16),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[20]\: FDE port map (
+      Q => TX_LL_MOSI_slv_22,
+      D => FP_DATA2_2(17),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[21]\: FDE port map (
+      Q => TX_LL_MOSI_slv_23,
+      D => FP_DATA2_2(18),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[22]\: FDE port map (
+      Q => TX_LL_MOSI_slv_24,
+      D => FP_DATA2_2(19),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[23]\: FDE port map (
+      Q => TX_LL_MOSI_slv_25,
+      D => EXP3(0),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[24]\: FDE port map (
+      Q => TX_LL_MOSI_slv_26,
+      D => EXP3(1),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[25]\: FDE port map (
+      Q => TX_LL_MOSI_slv_27,
+      D => EXP3(2),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[26]\: FDE port map (
+      Q => TX_LL_MOSI_slv_28,
+      D => EXP3(3),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[27]\: FDE port map (
+      Q => TX_LL_MOSI_slv_29,
+      D => EXP3(4),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[28]\: FDE port map (
+      Q => TX_LL_MOSI_slv_30,
+      D => EXP3(5),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[29]\: FDE port map (
+      Q => TX_LL_MOSI_slv_31,
+      D => EXP3(6),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fp_data3_slv[30]\: FDE port map (
+      Q => TX_LL_MOSI_slv_32,
+      D => EXP3(7),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi1_expon[0]\: FDE port map (
+      Q => FI1_EXPON(0),
+      D => RX_LL_MOSI_slv(2),
+      C => CLK,
+      CE => FI1_EXPON_0_SQMUXA);
+  \II_fi1_expon[1]\: FDE port map (
+      Q => FI1_EXPON(1),
+      D => RX_LL_MOSI_slv(3),
+      C => CLK,
+      CE => FI1_EXPON_0_SQMUXA);
+  \II_fi1_expon[2]\: FDE port map (
+      Q => FI1_EXPON(2),
+      D => RX_LL_MOSI_slv(4),
+      C => CLK,
+      CE => FI1_EXPON_0_SQMUXA);
+  \II_fi1_expon[3]\: FDE port map (
+      Q => FI1_EXPON(3),
+      D => RX_LL_MOSI_slv(5),
+      C => CLK,
+      CE => FI1_EXPON_0_SQMUXA);
+  \II_fi1_expon[4]\: FDE port map (
+      Q => FI1_EXPON(4),
+      D => RX_LL_MOSI_slv(6),
+      C => CLK,
+      CE => FI1_EXPON_0_SQMUXA);
+  \II_fi1_expon[5]\: FDE port map (
+      Q => FI1_EXPON(5),
+      D => RX_LL_MOSI_slv(7),
+      C => CLK,
+      CE => FI1_EXPON_0_SQMUXA);
+  \II_fi1_expon[6]\: FDE port map (
+      Q => FI1_EXPON(6),
+      D => RX_LL_MOSI_slv(8),
+      C => CLK,
+      CE => FI1_EXPON_0_SQMUXA);
+  \II_fi1_expon[7]\: FDE port map (
+      Q => FI1_EXPON(7),
+      D => RX_LL_MOSI_slv(9),
+      C => CLK,
+      CE => FI1_EXPON_0_SQMUXA);
+  II_sof: FDCE port map (
+      Q => SOF,
+      D => SOF_0_SQMUXA,
+      C => CLK,
+      CLR => ARESET,
+      CE => RX_DVALI);
+  \II_fi_data1[0]\: FDE port map (
+      Q => FI_DATA1(0),
+      D => RX_LL_MOSI_slv(2),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[1]\: FDE port map (
+      Q => FI_DATA1(1),
+      D => RX_LL_MOSI_slv(3),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[2]\: FDE port map (
+      Q => FI_DATA1(2),
+      D => RX_LL_MOSI_slv(4),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[3]\: FDE port map (
+      Q => FI_DATA1(3),
+      D => RX_LL_MOSI_slv(5),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[4]\: FDE port map (
+      Q => FI_DATA1(4),
+      D => RX_LL_MOSI_slv(6),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[5]\: FDE port map (
+      Q => FI_DATA1(5),
+      D => RX_LL_MOSI_slv(7),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[6]\: FDE port map (
+      Q => FI_DATA1(6),
+      D => RX_LL_MOSI_slv(8),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[7]\: FDE port map (
+      Q => FI_DATA1(7),
+      D => RX_LL_MOSI_slv(9),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[8]\: FDE port map (
+      Q => FI_DATA1(8),
+      D => RX_LL_MOSI_slv(10),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[9]\: FDE port map (
+      Q => FI_DATA1(9),
+      D => RX_LL_MOSI_slv(11),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[10]\: FDE port map (
+      Q => FI_DATA1(10),
+      D => RX_LL_MOSI_slv(12),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[11]\: FDE port map (
+      Q => FI_DATA1(11),
+      D => RX_LL_MOSI_slv(13),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[12]\: FDE port map (
+      Q => FI_DATA1(12),
+      D => RX_LL_MOSI_slv(14),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[13]\: FDE port map (
+      Q => FI_DATA1(13),
+      D => RX_LL_MOSI_slv(15),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[14]\: FDE port map (
+      Q => FI_DATA1(14),
+      D => RX_LL_MOSI_slv(16),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[15]\: FDE port map (
+      Q => FI_DATA1(15),
+      D => RX_LL_MOSI_slv(17),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[16]\: FDE port map (
+      Q => FI_DATA1(16),
+      D => RX_LL_MOSI_slv(18),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[17]\: FDE port map (
+      Q => FI_DATA1(17),
+      D => RX_LL_MOSI_slv(19),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[18]\: FDE port map (
+      Q => FI_DATA1(18),
+      D => RX_LL_MOSI_slv(20),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[19]\: FDE port map (
+      Q => FI_DATA1(19),
+      D => RX_LL_MOSI_slv(21),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_fi_data1[20]\: FDE port map (
+      Q => FI_DATA1(20),
+      D => RX_LL_MOSI_slv(22),
+      C => CLK,
+      CE => CONVERT_CE);
+  II_ce_reg: FD port map (
+      Q => CE_REG,
+      D => CONVERT_CE,
+      C => CLK);
+  II_hold_dval: FDC port map (
+      Q => HOLD_DVAL,
+      D => HOLD_DVAL_1,
+      C => CLK,
+      CLR => ARESET);
+  \II_flow_control.SOF_sr_DOUT[0]\: FDE port map (
+      Q => TX_LL_MOSI_slv_35,
+      D => SOF_SR_TMP_D_ARRAY_0(0),
+      C => CLK,
+      CE => CONVERT_CE);
+  \II_flow_control.EOF_sr_DOUT[0]\: FDE port map (
+      Q => TX_LL_MOSI_slv_34,
+      D => EOF_SR_N_6,
+      C => CLK,
+      CE => CONVERT_CE);
+  II_stage1_dval: FDCE port map (
+      Q => STAGE1_DVAL,
+      D => UN1_RX_LL_MOSI_1,
+      C => CLK,
+      CLR => ARESET,
+      CE => CONVERT_CE);
+  II_stage2_dval: FDCE port map (
+      Q => STAGE2_DVAL,
+      D => STAGE1_DVAL,
+      C => CLK,
+      CLR => ARESET,
+      CE => CONVERT_CE);
+  II_stage3_dval_0: FDCE port map (
+      Q => STAGE3,
+      D => STAGE2_DVAL,
+      C => CLK,
+      CLR => ARESET,
+      CE => CONVERT_CE);
+  II_un182_argb2_0_0_s_1_m3_i: LUT3 
+  generic map(
+    INIT => X"FE"
+  )
+  port map (
+    I0 => UN182_ARGB2_0_0_S_1_M3_I_A3,
+    I1 => FI_DATA1(20),
+    I2 => FI_DATA1(19),
+    O => UN182_ARGB2_0_0_S_1_M3_I);
+  II_N_131_i: LUT3 
+  generic map(
+    INIT => X"FE"
+  )
+  port map (
+    I0 => ARESET,
+    I1 => TX_LL_MISO_slv(1),
+    I2 => TX_LL_MISO_slv(0),
+    O => RX_LL_MISO_slv(0));
+  \II_flow_control.EOF_sr_I_1\: SRL16E port map (
+      Q => EOF_SR_N_6,
+      A0 => NN_1,
+      A1 => NN_2,
+      A2 => NN_2,
+      A3 => NN_2,
+      D => RX_LL_MOSI_slv(23),
+      CLK => CLK,
+      CE => CONVERT_CE);
+  \II_flow_control.SOF_sr_I_1\: SRL16E port map (
+      Q => SOF_SR_TMP_D_ARRAY_0(0),
+      A0 => NN_1,
+      A1 => NN_2,
+      A2 => NN_2,
+      A3 => NN_2,
+      D => SOF,
+      CLK => CLK,
+      CE => CONVERT_CE);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m50_1\: LUT4_L 
+  generic map(
+    INIT => X"05FC"
+  )
+  port map (
+    I0 => M12_0_0,
+    I1 => N_345,
+    I2 => EXPON_1(2),
+    I3 => UN7_ARG_INT_AXBXC3,
+    LO => M50_1);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_15_1\: LUT4_L 
+  generic map(
+    INIT => X"05F3"
+  )
+  port map (
+    I0 => M4,
+    I1 => N_234,
+    I2 => EXPON_1(2),
+    I3 => UN7_ARG_INT_AXBXC3,
+    LO => G_15_1);
+  II_un1_rx_ll_mosi_1: LUT2_L 
+  generic map(
+    INIT => X"2"
+  )
+  port map (
+    I0 => RX_LL_MOSI_slv(1),
+    I1 => RX_LL_MOSI_slv(24),
+    LO => UN1_RX_LL_MOSI_1);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m21\: LUT4_L 
+  generic map(
+    INIT => X"0004"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => M2,
+    I2 => EXPON_1(2),
+    I3 => UN7_ARG_INT_AXBXC3,
+    LO => UN11_ARG_INT(0));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m22\: LUT2_L 
+  generic map(
+    INIT => X"4"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => N_9,
+    LO => UN11_ARG_INT(1));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m23\: LUT2_L 
+  generic map(
+    INIT => X"4"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => N_15,
+    LO => UN11_ARG_INT(2));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m24\: LUT4_L 
+  generic map(
+    INIT => X"0001"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => M18_0_0,
+    I2 => EXPON_1(2),
+    I3 => UN7_ARG_INT_AXBXC3,
+    LO => UN11_ARG_INT(3));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m27\: LUT4_L 
+  generic map(
+    INIT => X"880C"
+  )
+  port map (
+    I0 => M2,
+    I1 => N_306,
+    I2 => M38_0_0,
+    I3 => EXPON_1(2),
+    LO => UN11_ARG_INT(4));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_11_0_a2\: LUT4_L 
+  generic map(
+    INIT => X"A0C0"
+  )
+  port map (
+    I0 => M4,
+    I1 => N_171_I_I_M2_0_1,
+    I2 => N_306,
+    I3 => EXPON_1(2),
+    LO => UN11_ARG_INT(5));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_12_0_a2\: LUT4_L 
+  generic map(
+    INIT => X"880C"
+  )
+  port map (
+    I0 => M12_0_0,
+    I1 => N_306,
+    I2 => M47_0_0,
+    I3 => EXPON_1(2),
+    LO => UN11_ARG_INT(6));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_13_0_a2\: LUT4_L 
+  generic map(
+    INIT => X"440C"
+  )
+  port map (
+    I0 => M18_0_0,
+    I1 => N_306,
+    I2 => M55_0_0,
+    I3 => EXPON_1(2),
+    LO => UN11_ARG_INT(7));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m41\: LUT4_L 
+  generic map(
+    INIT => X"5044"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => N_36,
+    I2 => N_343,
+    I3 => EXPON_1(2),
+    LO => UN11_ARG_INT(8));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m58\: LUT4_L 
+  generic map(
+    INIT => X"5011"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => N_53,
+    I2 => N_353,
+    I3 => EXPON_1(2),
+    LO => UN11_ARG_INT(11));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m65\: LUT4_L 
+  generic map(
+    INIT => X"4405"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => N_36,
+    I2 => N_358,
+    I3 => EXPON_1(2),
+    LO => UN11_ARG_INT(12));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_19\: LUT3_L 
+  generic map(
+    INIT => X"15"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => M13_2_03_0,
+    I2 => M13_2_03_1,
+    LO => UN11_ARG_INT(13));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m72\: LUT2_L 
+  generic map(
+    INIT => X"4"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => N_364,
+    LO => UN11_ARG_INT(14));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m79\: LUT4_L 
+  generic map(
+    INIT => X"1105"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => N_53,
+    I2 => N_366,
+    I3 => EXPON_1(2),
+    LO => UN11_ARG_INT(15));
+  II_N_185_i: LUT4_L 
+  generic map(
+    INIT => X"5140"
+  )
+  port map (
+    I0 => N_256,
+    I1 => UN138_ARGB2,
+    I2 => N_9,
+    I3 => N_247,
+    LO => N_185_I);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_24_0_0\: LUT3_L 
+  generic map(
+    INIT => X"8D"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => N_15,
+    I2 => N_101,
+    LO => UN11_ARG_INT(18));
+  II_un7_arg_int_axb0_i: LUT1_L 
+  generic map(
+    INIT => X"1"
+  )
+  port map (
+    I0 => UN7_ARG_INT_AXB0,
+    LO => UN7_ARG_INT_AXB0_I);
+  II_N_143_i: LUT3_L 
+  generic map(
+    INIT => X"41"
+  )
+  port map (
+    I0 => N_256,
+    I1 => UN7_ARG_INT_AXB0,
+    I2 => UN182_ARGB2_M20(1),
+    LO => N_143_I);
+  II_N_145_i: LUT2_L 
+  generic map(
+    INIT => X"4"
+  )
+  port map (
+    I0 => N_256,
+    I1 => EXPON_1(2),
+    LO => N_145_I);
+  II_N_147_i: LUT4_L 
+  generic map(
+    INIT => X"5401"
+  )
+  port map (
+    I0 => N_256,
+    I1 => EXPON_1_AC0_3,
+    I2 => UN7_ARG_INT_AXB2,
+    I3 => UN182_ARGB2_M20(3),
+    LO => N_147_I);
+  II_N_149_i: LUT4_L 
+  generic map(
+    INIT => X"4144"
+  )
+  port map (
+    I0 => N_256,
+    I1 => EXPON_1_P4,
+    I2 => UN182_ARGB2_M18(4),
+    I3 => UN182_ARGB2_SM18_I,
+    LO => N_149_I);
+  \II_convert_block.convert_proc.to_float.find_msb.for_loop.0.un177_argb2_3_a2\: LUT3_L 
+  generic map(
+    INIT => X"80"
+  )
+  port map (
+    I0 => N_273,
+    I1 => UN177_ARGB2_1,
+    I2 => FI_DATA1(0),
+    LO => UN177_ARGB2);
+  II_N_255_i: LUT2_L 
+  generic map(
+    INIT => X"7"
+  )
+  port map (
+    I0 => N_273,
+    I1 => UN177_ARGB2_1,
+    LO => N_255_I);
+  II_exp3_axb_1: LUT2_L 
+  generic map(
+    INIT => X"6"
+  )
+  port map (
+    I0 => FI1_EXPON(1),
+    I1 => FP_DATA2_2(21),
+    LO => EXP3_AXB_1);
+  II_exp3_axb_2: LUT2_L 
+  generic map(
+    INIT => X"6"
+  )
+  port map (
+    I0 => FI1_EXPON(2),
+    I1 => FP_DATA2_2(22),
+    LO => EXP3_AXB_2);
+  II_exp3_axb_3: LUT2_L 
+  generic map(
+    INIT => X"6"
+  )
+  port map (
+    I0 => FI1_EXPON(3),
+    I1 => FP_DATA2_2(23),
+    LO => EXP3_AXB_3);
+  II_exp3_axb_4: LUT2_L 
+  generic map(
+    INIT => X"6"
+  )
+  port map (
+    I0 => FI1_EXPON(4),
+    I1 => FP_DATA2_2(24),
+    LO => EXP3_AXB_4);
+  II_exp3_axb_5: LUT2_L 
+  generic map(
+    INIT => X"6"
+  )
+  port map (
+    I0 => FI1_EXPON(5),
+    I1 => FP_DATA2_2(25),
+    LO => EXP3_AXB_5);
+  II_exp3_axb_6: LUT2_L 
+  generic map(
+    INIT => X"6"
+  )
+  port map (
+    I0 => FI1_EXPON(6),
+    I1 => FP_DATA2_2(25),
+    LO => EXP3_AXB_6);
+  II_exp3_axb_7: LUT2_L 
+  generic map(
+    INIT => X"6"
+  )
+  port map (
+    I0 => FI1_EXPON(7),
+    I1 => FP_DATA2_1(0),
+    LO => EXP3_AXB_7);
+  II_sof_0_sqmuxa: LUT2_L 
+  generic map(
+    INIT => X"2"
+  )
+  port map (
+    I0 => RX_LL_MOSI_slv(24),
+    I1 => SOF,
+    LO => SOF_0_SQMUXA);
+  \II_flow_control.hold_dval_1\: LUT4_L 
+  generic map(
+    INIT => X"A8A0"
+  )
+  port map (
+    I0 => TX_LL_MISO_slv(0),
+    I1 => CE_REG,
+    I2 => HOLD_DVAL,
+    I3 => STAGE3,
+    LO => HOLD_DVAL_1);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.N_171_i_i_m2_0_1\: MUXF5 port map (
+      I0 => N_232,
+      I1 => N_231,
+      S => UN7_ARG_INT_AXBXC1,
+      O => N_171_I_I_M2_0_1);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m18_0_0\: MUXF5 port map (
+      I0 => N_17,
+      I1 => N_18,
+      S => UN7_ARG_INT_AXBXC1,
+      O => M18_0_0);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m95_0_0\: MUXF5 port map (
+      I0 => N_94,
+      I1 => N_95,
+      S => UN7_ARG_INT_AXBXC1,
+      O => N_96);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m34_0_0\: MUXF5 port map (
+      I0 => N_31,
+      I1 => N_34,
+      S => UN7_ARG_INT_AXBXC1,
+      O => N_35);
+  \II_un182_argb2_0_0[1]\: MUXF5 port map (
+      I0 => UN182_ARGB2_0_0_AM(1),
+      I1 => UN182_ARGB2_0_0_BM(1),
+      S => UN182_ARGB2_0_0_S_1_M3_I,
+      O => UN182_ARGB2_M20(1));
+  \II_un182_argb2_0_0[0]\: MUXF5 port map (
+      I0 => UN182_ARGB2_M18_0_0_D(0),
+      I1 => UN182_ARGB2_0_0_D(0),
+      S => UN182_ARGB2_0_0_S_1_M3_I,
+      O => UN7_ARG_INT_AXB0);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_22_0_0\: MUXF5 port map (
+      I0 => G_22_0_0_AM,
+      I1 => G_22_0_0_BM,
+      S => UN138_ARGB2,
+      O => UN11_ARG_INT(16));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_22_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"02"
+  )
+  port map (
+    I0 => M2,
+    I1 => EXPON_1(2),
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => G_22_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_22_0_0_am\: LUT3 
+  generic map(
+    INIT => X"35"
+  )
+  port map (
+    I0 => N_92,
+    I1 => N_358,
+    I2 => EXPON_1(2),
+    O => G_22_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_25_0_0\: MUXF5 port map (
+      I0 => G_25_0_0_AM,
+      I1 => G_25_0_0_BM,
+      S => UN138_ARGB2,
+      O => UN11_ARG_INT(19));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_25_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"01"
+  )
+  port map (
+    I0 => M18_0_0,
+    I1 => EXPON_1(2),
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => G_25_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.G_25_0_0_am\: LUT3 
+  generic map(
+    INIT => X"35"
+  )
+  port map (
+    I0 => N_97,
+    I1 => N_366,
+    I2 => EXPON_1(2),
+    O => G_25_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m13_2_03_1\: LUT4 
+  generic map(
+    INIT => X"FF53"
+  )
+  port map (
+    I0 => N_234,
+    I1 => N_236,
+    I2 => EXPON_1(2),
+    I3 => UN7_ARG_INT_AXBXC3,
+    O => M13_2_03_1);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m13_2_03_0\: LUT4_L 
+  generic map(
+    INIT => X"53FF"
+  )
+  port map (
+    I0 => M4,
+    I1 => N_171_I_I_M2_0_1,
+    I2 => EXPON_1(2),
+    I3 => UN7_ARG_INT_AXBXC3,
+    LO => M13_2_03_0);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m71_0_0\: MUXF5 port map (
+      I0 => M71_0_0_AM,
+      I1 => M71_0_0_BM,
+      S => EXPON_1(2),
+      O => N_364);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m71_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"A3"
+  )
+  port map (
+    I0 => M12_0_0,
+    I1 => N_345,
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => M71_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m71_0_0_am\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => M47_0_0,
+    I1 => N_362,
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => M71_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m100_0_0\: MUXF5 port map (
+      I0 => M100_0_0_AM,
+      I1 => M100_0_0_BM,
+      S => EXPON_1(2),
+      O => N_101);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m100_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => M47_0_0,
+    I1 => N_362,
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => M100_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m100_0_0_am\: LUT3 
+  generic map(
+    INIT => X"CA"
+  )
+  port map (
+    I0 => N_99,
+    I1 => N_345,
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => M100_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m17_2_03_0_m2_0_1\: MUXF5 port map (
+      I0 => M17_2_03_0_M2_0_1_AM,
+      I1 => M17_2_03_0_M2_0_1_BM,
+      S => UN7_ARG_INT_AXBXC3,
+      O => N_247);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m17_2_03_0_m2_0_1_bm\: LUT3 
+  generic map(
+    INIT => X"CA"
+  )
+  port map (
+    I0 => N_234,
+    I1 => N_171_I_I_M2_0_1,
+    I2 => EXPON_1(2),
+    O => M17_2_03_0_M2_0_1_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m17_2_03_0_m2_0_1_am\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => N_236,
+    I1 => N_240,
+    I2 => EXPON_1(2),
+    O => M17_2_03_0_M2_0_1_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m8\: LUT3 
+  generic map(
+    INIT => X"02"
+  )
+  port map (
+    I0 => M4,
+    I1 => EXPON_1(2),
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => N_9);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m14\: LUT3 
+  generic map(
+    INIT => X"02"
+  )
+  port map (
+    I0 => M12_0_0,
+    I1 => EXPON_1(2),
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => N_15);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m52_0_0\: LUT3 
+  generic map(
+    INIT => X"A3"
+  )
+  port map (
+    I0 => M18_0_0,
+    I1 => N_244,
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => N_53);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m63_0_0\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => M38_0_0,
+    I1 => N_357,
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => N_358);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m91_0_0\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => N_35,
+    I1 => N_91,
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => N_92);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m96_0_0\: LUT3 
+  generic map(
+    INIT => X"3A"
+  )
+  port map (
+    I0 => N_96,
+    I1 => N_244,
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => N_97);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m77_0_0\: LUT3 
+  generic map(
+    INIT => X"CA"
+  )
+  port map (
+    I0 => N_77,
+    I1 => M55_0_0,
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => N_366);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m35_0_0\: LUT3 
+  generic map(
+    INIT => X"A3"
+  )
+  port map (
+    I0 => M2,
+    I1 => N_35,
+    I2 => UN7_ARG_INT_AXBXC3,
+    O => N_36);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m27_0\: LUT2 
+  generic map(
+    INIT => X"1"
+  )
+  port map (
+    I0 => UN138_ARGB2,
+    I1 => UN7_ARG_INT_AXBXC3,
+    O => N_306);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m39\: LUT2 
+  generic map(
+    INIT => X"1"
+  )
+  port map (
+    I0 => M38_0_0,
+    I1 => UN7_ARG_INT_AXBXC3,
+    O => N_343);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m56\: LUT2 
+  generic map(
+    INIT => X"1"
+  )
+  port map (
+    I0 => M55_0_0,
+    I1 => UN7_ARG_INT_AXBXC3,
+    O => N_353);
+  II_un7_arg_int_axbxc3: LUT4 
+  generic map(
+    INIT => X"37C8"
+  )
+  port map (
+    I0 => UN7_ARG_INT_AXB0,
+    I1 => UN7_ARG_INT_AXB2,
+    I2 => UN182_ARGB2_M20(1),
+    I3 => UN182_ARGB2_M20(3),
+    O => UN7_ARG_INT_AXBXC3);
+  II_expon_1_ac0_3: LUT3 
+  generic map(
+    INIT => X"32"
+  )
+  port map (
+    I0 => UN7_ARG_INT_AXB0,
+    I1 => UN7_ARG_INT_AXB2,
+    I2 => UN182_ARGB2_M20(1),
+    O => EXPON_1_AC0_3);
+  II_expon_1_axbxc2: LUT3 
+  generic map(
+    INIT => X"C9"
+  )
+  port map (
+    I0 => UN7_ARG_INT_AXB0,
+    I1 => UN7_ARG_INT_AXB2,
+    I2 => UN182_ARGB2_M20(1),
+    O => EXPON_1(2));
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m17_2_03_0_m2_2_0_0\: MUXF5 port map (
+      I0 => M17_2_03_0_M2_2_0_0_AM,
+      I1 => M17_2_03_0_M2_2_0_0_BM,
+      S => UN7_ARG_INT_AXBXC1,
+      O => N_240);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m17_2_03_0_m2_2_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => FI_DATA1(14),
+    I1 => FI_DATA1(15),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M17_2_03_0_M2_2_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m17_2_03_0_m2_2_0_0_am\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => FI_DATA1(16),
+    I1 => FI_DATA1(17),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M17_2_03_0_M2_2_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m90_0_0\: MUXF5 port map (
+      I0 => M90_0_0_AM,
+      I1 => M90_0_0_BM,
+      S => UN7_ARG_INT_AXBXC1,
+      O => N_91);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m90_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(13),
+    I1 => FI_DATA1(14),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M90_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m90_0_0_am\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(15),
+    I1 => FI_DATA1(16),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M90_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m69_0_0\: MUXF5 port map (
+      I0 => M69_0_0_AM,
+      I1 => M69_0_0_BM,
+      S => UN7_ARG_INT_AXBXC1,
+      O => N_362);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m69_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(11),
+    I1 => FI_DATA1(12),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M69_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m69_0_0_am\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(13),
+    I1 => FI_DATA1(14),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M69_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m76_0_0\: LUT3 
+  generic map(
+    INIT => X"CA"
+  )
+  port map (
+    I0 => N_75,
+    I1 => N_76,
+    I2 => UN7_ARG_INT_AXBXC1,
+    O => N_77);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m98_0_0\: MUXF5 port map (
+      I0 => M98_0_0_AM,
+      I1 => M98_0_0_BM,
+      S => UN7_ARG_INT_AXBXC1,
+      O => N_99);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m98_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(15),
+    I1 => FI_DATA1(16),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M98_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m98_0_0_am\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(17),
+    I1 => FI_DATA1(18),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M98_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m62_0_0\: MUXF5 port map (
+      I0 => M62_0_0_AM,
+      I1 => M62_0_0_BM,
+      S => UN7_ARG_INT_AXBXC1,
+      O => N_357);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m62_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(9),
+    I1 => FI_DATA1(10),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M62_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m62_0_0_am\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(11),
+    I1 => FI_DATA1(12),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M62_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m55_0_0\: MUXF5 port map (
+      I0 => M55_0_0_AM,
+      I1 => M55_0_0_BM,
+      S => UN7_ARG_INT_AXBXC1,
+      O => M55_0_0);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m55_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(4),
+    I1 => FI_DATA1(5),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M55_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m55_0_0_am\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(6),
+    I1 => FI_DATA1(7),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M55_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m47_0_0\: MUXF5 port map (
+      I0 => M47_0_0_AM,
+      I1 => M47_0_0_BM,
+      S => UN7_ARG_INT_AXBXC1,
+      O => M47_0_0);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m47_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(3),
+    I1 => FI_DATA1(4),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M47_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m47_0_0_am\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(5),
+    I1 => FI_DATA1(6),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M47_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m45_0_0\: MUXF5 port map (
+      I0 => M45_0_0_AM,
+      I1 => M45_0_0_BM,
+      S => UN7_ARG_INT_AXBXC1,
+      O => N_345);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m45_0_0_bm\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(7),
+    I1 => FI_DATA1(8),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M45_0_0_BM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m45_0_0_am\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(9),
+    I1 => FI_DATA1(10),
+    I2 => UN7_ARG_INT_AXB0,
+    O => M45_0_0_AM);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m38_0_0\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => N_12,
+    I1 => N_341,
+    I2 => UN7_ARG_INT_AXBXC1,
+    O => M38_0_0);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m12_0_0\: LUT4 
+  generic map(
+    INIT => X"5C05"
+  )
+  port map (
+    I0 => N_12,
+    I1 => FI_DATA1(0),
+    I2 => UN7_ARG_INT_AXB0,
+    I3 => UN182_ARGB2_M20(1),
+    O => M12_0_0);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m11_0_03_0_m2_0_0\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => N_228,
+    I1 => N_229,
+    I2 => UN7_ARG_INT_AXBXC1,
+    O => N_244);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.N_182_i_i_m2_1_0\: LUT3 
+  generic map(
+    INIT => X"C5"
+  )
+  port map (
+    I0 => N_76,
+    I1 => N_229,
+    I2 => UN7_ARG_INT_AXBXC1,
+    O => N_236);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.N_167_i_i_m2_2_0\: LUT3 
+  generic map(
+    INIT => X"CA"
+  )
+  port map (
+    I0 => N_228,
+    I1 => N_233,
+    I2 => UN7_ARG_INT_AXBXC1,
+    O => N_234);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m4\: LUT4 
+  generic map(
+    INIT => X"0A0C"
+  )
+  port map (
+    I0 => FI_DATA1(0),
+    I1 => FI_DATA1(1),
+    I2 => UN7_ARG_INT_AXBXC1,
+    I3 => UN7_ARG_INT_AXB0,
+    O => M4);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m2\: LUT3 
+  generic map(
+    INIT => X"02"
+  )
+  port map (
+    I0 => FI_DATA1(0),
+    I1 => UN7_ARG_INT_AXBXC1,
+    I2 => UN7_ARG_INT_AXB0,
+    O => M2);
+  II_un7_arg_int_axbxc1: LUT2 
+  generic map(
+    INIT => X"6"
+  )
+  port map (
+    I0 => UN7_ARG_INT_AXB0,
+    I1 => UN182_ARGB2_M20(1),
+    O => UN7_ARG_INT_AXBXC1);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.N_171_i_i_m2_0_0_0\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => FI_DATA1(2),
+    I1 => FI_DATA1(3),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_231);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.N_171_i_i_m2_1_0_0\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => FI_DATA1(4),
+    I1 => FI_DATA1(5),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_232);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m11_0_0\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(1),
+    I1 => FI_DATA1(2),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_12);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m16_0_0\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(2),
+    I1 => FI_DATA1(3),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_17);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m17_0_0\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(0),
+    I1 => FI_DATA1(1),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_18);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m33_0_0\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(5),
+    I1 => FI_DATA1(6),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_34);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m37_0_0\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(3),
+    I1 => FI_DATA1(4),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_341);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m93_0_0\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(18),
+    I1 => FI_DATA1(19),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_94);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m94_0_0\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(16),
+    I1 => FI_DATA1(17),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_95);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m74_0_0\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(14),
+    I1 => FI_DATA1(15),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_75);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m75_0_0\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(12),
+    I1 => FI_DATA1(13),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_76);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.m30_0_0\: LUT3 
+  generic map(
+    INIT => X"53"
+  )
+  port map (
+    I0 => FI_DATA1(7),
+    I1 => FI_DATA1(8),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_31);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.N_167_i_i_m2_1_0_0\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => FI_DATA1(6),
+    I1 => FI_DATA1(7),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_233);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.N_182_i_i_m2_0_0_0\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => FI_DATA1(10),
+    I1 => FI_DATA1(11),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_229);
+  \II_convert_block.convert_proc.to_float.un11_arg_int.N_167_i_i_m2_0_0_0\: LUT3 
+  generic map(
+    INIT => X"AC"
+  )
+  port map (
+    I0 => FI_DATA1(8),
+    I1 => FI_DATA1(9),
+    I2 => UN7_ARG_INT_AXB0,
+    O => N_228);
+  \II_un182_argb2_0_a2[3]\: LUT4 
+  generic map(
+    INIT => X"C800"
+  )
+  port map (
+    I0 => FI_DATA1(15),
+    I1 => UN182_ARGB2_M14(3),
+    I2 => UN182_ARGB2_M17(3),
+    I3 => UN182_ARGB2_SM18_I,
+    O => UN182_ARGB2_M20(3));
+  \II_un182_argb2_0_0_bm[1]\: LUT3 
+  generic map(
+    INIT => X"C5"
+  )
+  port map (
+    I0 => FI_DATA1(20),
+    I1 => UN182_ARGB2_M15(1),
+    I2 => UN182_ARGB2_SM18_I,
+    O => UN182_ARGB2_0_0_BM(1));
+  \II_un182_argb2_0_0_am[1]\: LUT4 
+  generic map(
+    INIT => X"DC8C"
+  )
+  port map (
+    I0 => FI_DATA1(15),
+    I1 => UN182_ARGB2_M14(1),
+    I2 => UN182_ARGB2_M14(3),
+    I3 => UN182_ARGB2_M16(1),
+    O => UN182_ARGB2_0_0_AM(1));
+  \II_un182_argb2_m18_0_0[4]\: LUT3 
+  generic map(
+    INIT => X"73"
+  )
+  port map (
+    I0 => FI_DATA1(15),
+    I1 => UN182_ARGB2_M14(3),
+    I2 => UN182_ARGB2_M17(4),
+    O => UN182_ARGB2_M18(4));
+  \II_un182_argb2_0_0[2]\: LUT3 
+  generic map(
+    INIT => X"E4"
+  )
+  port map (
+    I0 => N_273,
+    I1 => UN182_ARGB2_0_0_D(2),
+    I2 => UN182_ARGB2_M17(2),
+    O => UN7_ARG_INT_AXB2);
+  \II_result_1_i_a2[0]\: LUT2 
+  generic map(
+    INIT => X"8"
+  )
+  port map (
+    I0 => N_273,
+    I1 => UN182_ARGB2_M17(4),
+    O => N_256);
+  \II_convert_block.convert_proc.to_float.find_msb.for_loop.5.un138_argb2_0_a2\: LUT4 
+  generic map(
+    INIT => X"0200"
+  )
+  port map (
+    I0 => N_273,
+    I1 => FI_DATA1(5),
+    I2 => FI_DATA1(6),
+    I3 => UN182_ARGB2_SM15_I,
+    O => UN138_ARGB2);
+  \II_un182_argb2_m17_0_a2[4]\: LUT4 
+  generic map(
+    INIT => X"0002"
+  )
+  port map (
+    I0 => N_272,
+    I1 => FI_DATA1(0),
+    I2 => FI_DATA1(1),
+    I3 => FI_DATA1(2),
+    O => UN182_ARGB2_M17(4));
+  \II_convert_block.convert_proc.to_float.find_msb.for_loop.0.un177_argb2_3_a2_1\: LUT3 
+  generic map(
+    INIT => X"02"
+  )
+  port map (
+    I0 => N_272,
+    I1 => FI_DATA1(1),
+    I2 => FI_DATA1(2),
+    O => UN177_ARGB2_1);
+  \II_un182_argb2_m17_0_0[2]\: MUXF6 port map (
+      I0 => UN182_ARGB2_M16(2),
+      I1 => UN182_ARGB2_M15(2),
+      S => UN182_ARGB2_SM15_I,
+      O => UN182_ARGB2_M17(2));
+  \II_un182_argb2_m17_0_0[3]\: LUT4_L 
+  generic map(
+    INIT => X"FCFD"
+  )
+  port map (
+    I0 => N_198,
+    I1 => N_233_0,
+    I2 => N_234_0,
+    I3 => FI_DATA1(7),
+    LO => UN182_ARGB2_M17(3));
+  \II_un182_argb2_0_0_d[0]\: LUT3 
+  generic map(
+    INIT => X"32"
+  )
+  port map (
+    I0 => FI_DATA1(19),
+    I1 => FI_DATA1(20),
+    I2 => UN182_ARGB2_M15(0),
+    O => UN182_ARGB2_0_0_D(0));
+  \II_un182_argb2_m18_0_0_d[0]\: LUT4 
+  generic map(
+    INIT => X"40FB"
+  )
+  port map (
+    I0 => FI_DATA1(15),
+    I1 => UN182_ARGB2_M14(3),
+    I2 => UN182_ARGB2_M16(0),
+    I3 => UN182_ARGB2_SS12,
+    O => UN182_ARGB2_M18_0_0_D(0));
+  \II_convert_block.convert_proc.to_float.find_msb.for_loop.0.un177_argb2_3_a2_0\: LUT2 
+  generic map(
+    INIT => X"4"
+  )
+  port map (
+    I0 => N_229_0,
+    I1 => UN182_ARGB2_SM15_I,
+    O => N_272);
+  \II_un182_argb2_m16_0_0[1]\: MUXF5 port map (
+      I0 => UN182_ARGB2_M16_0_0_AM(1),
+      I1 => UN182_ARGB2_M16_0_0_BM(1),
+      S => N_234_0,
+      O => UN182_ARGB2_M16(1));
+  \II_un182_argb2_m16_0_0_bm[1]\: LUT3 
+  generic map(
+    INIT => X"F1"
+  )
+  port map (
+    I0 => FI_DATA1(12),
+    I1 => FI_DATA1(13),
+    I2 => FI_DATA1(14),
+    O => UN182_ARGB2_M16_0_0_BM(1));
+  \II_un182_argb2_m16_0_0_am[1]\: LUT3 
+  generic map(
+    INIT => X"F1"
+  )
+  port map (
+    I0 => FI_DATA1(8),
+    I1 => FI_DATA1(9),
+    I2 => FI_DATA1(10),
+    O => UN182_ARGB2_M16_0_0_AM(1));
+  \II_un182_argb2_m15_0_0[1]\: MUXF5 port map (
+      I0 => UN182_ARGB2_M15_0_0_AM(1),
+      I1 => UN182_ARGB2_M15_0_0_BM(1),
+      S => N_229_0,
+      O => UN182_ARGB2_M15(1));
+  \II_un182_argb2_m15_0_0_bm[1]\: LUT3 
+  generic map(
+    INIT => X"F1"
+  )
+  port map (
+    I0 => FI_DATA1(4),
+    I1 => FI_DATA1(5),
+    I2 => FI_DATA1(6),
+    O => UN182_ARGB2_M15_0_0_BM(1));
+  \II_un182_argb2_m15_0_0_am[1]\: LUT3 
+  generic map(
+    INIT => X"F1"
+  )
+  port map (
+    I0 => FI_DATA1(0),
+    I1 => FI_DATA1(1),
+    I2 => FI_DATA1(2),
+    O => UN182_ARGB2_M15_0_0_AM(1));
+  II_un182_argb2_0_0_s_1_m3_i_a3: LUT4_L 
+  generic map(
+    INIT => X"1000"
+  )
+  port map (
+    I0 => N_234_0,
+    I1 => FI_DATA1(15),
+    I2 => UN182_ARGB2_0_0_S_1_M3_I_A3_1,
+    I3 => UN182_ARGB2_M14(3),
+    LO => UN182_ARGB2_0_0_S_1_M3_I_A3);
+  II_un182_argb2_m17s2_0_a2: LUT3 
+  generic map(
+    INIT => X"01"
+  )
+  port map (
+    I0 => N_233_0,
+    I1 => N_234_0,
+    I2 => FI_DATA1(7),
+    O => UN182_ARGB2_SM15_I);
+  \II_convert_block.convert_proc.to_float.find_msb.for_loop.5.un138_argb2_0_a2_0\: LUT3 
+  generic map(
+    INIT => X"40"
+  )
+  port map (
+    I0 => FI_DATA1(15),
+    I1 => UN182_ARGB2_M14(3),
+    I2 => UN182_ARGB2_SM18_I,
+    O => N_273);
+  II_fi1_expon_0_sqmuxa: LUT2 
+  generic map(
+    INIT => X"8"
+  )
+  port map (
+    I0 => RX_LL_MOSI_slv(24),
+    I1 => RX_DVALI,
+    O => FI1_EXPON_0_SQMUXA);
+  \II_un182_argb2_0_0_d[2]\: LUT3 
+  generic map(
+    INIT => X"DC"
+  )
+  port map (
+    I0 => FI_DATA1(19),
+    I1 => FI_DATA1(20),
+    I2 => UN182_ARGB2_M14(3),
+    O => UN182_ARGB2_0_0_D(2));
+  \II_un182_argb2_m16_0_0[0]\: MUXF5 port map (
+      I0 => UN182_ARGB2_M16_0_0_AM(0),
+      I1 => UN182_ARGB2_M16_0_0_BM(0),
+      S => N_234_0,
+      O => UN182_ARGB2_M16(0));
+  \II_un182_argb2_m16_0_0_bm[0]\: LUT3 
+  generic map(
+    INIT => X"0D"
+  )
+  port map (
+    I0 => FI_DATA1(12),
+    I1 => FI_DATA1(13),
+    I2 => FI_DATA1(14),
+    O => UN182_ARGB2_M16_0_0_BM(0));
+  \II_un182_argb2_m16_0_0_am[0]\: LUT3 
+  generic map(
+    INIT => X"0D"
+  )
+  port map (
+    I0 => FI_DATA1(8),
+    I1 => FI_DATA1(9),
+    I2 => FI_DATA1(10),
+    O => UN182_ARGB2_M16_0_0_AM(0));
+  \II_un182_argb2_m16_0_0[2]\: MUXF5 port map (
+      I0 => UN182_ARGB2_M16_0_0_AM(2),
+      I1 => UN182_ARGB2_M16_0_0_BM(2),
+      S => N_234_0,
+      O => UN182_ARGB2_M16(2));
+  \II_un182_argb2_m16_0_0_bm[2]\: LUT3 
+  generic map(
+    INIT => X"FE"
+  )
+  port map (
+    I0 => FI_DATA1(12),
+    I1 => FI_DATA1(13),
+    I2 => FI_DATA1(14),
+    O => UN182_ARGB2_M16_0_0_BM(2));
+  \II_un182_argb2_m16_0_0_am[2]\: LUT3 
+  generic map(
+    INIT => X"01"
+  )
+  port map (
+    I0 => FI_DATA1(8),
+    I1 => FI_DATA1(9),
+    I2 => FI_DATA1(10),
+    O => UN182_ARGB2_M16_0_0_AM(2));
+  \II_un182_argb2_m15_0_0[0]\: MUXF5 port map (
+      I0 => UN182_ARGB2_M15_0_0_AM(0),
+      I1 => UN182_ARGB2_M15_0_0_BM(0),
+      S => N_229_0,
+      O => UN182_ARGB2_M15(0));
+  \II_un182_argb2_m15_0_0_bm[0]\: LUT3 
+  generic map(
+    INIT => X"0D"
+  )
+  port map (
+    I0 => FI_DATA1(4),
+    I1 => FI_DATA1(5),
+    I2 => FI_DATA1(6),
+    O => UN182_ARGB2_M15_0_0_BM(0));
+  \II_un182_argb2_m15_0_0_am[0]\: LUT3 
+  generic map(
+    INIT => X"0D"
+  )
+  port map (
+    I0 => FI_DATA1(0),
+    I1 => FI_DATA1(1),
+    I2 => FI_DATA1(2),
+    O => UN182_ARGB2_M15_0_0_AM(0));
+  \II_un182_argb2_m15_0_0[2]\: MUXF5 port map (
+      I0 => UN182_ARGB2_M15_0_0_AM(2),
+      I1 => UN182_ARGB2_M15_0_0_BM(2),
+      S => N_229_0,
+      O => UN182_ARGB2_M15(2));
+  \II_un182_argb2_m15_0_0_bm[2]\: LUT3 
+  generic map(
+    INIT => X"FE"
+  )
+  port map (
+    I0 => FI_DATA1(4),
+    I1 => FI_DATA1(5),
+    I2 => FI_DATA1(6),
+    O => UN182_ARGB2_M15_0_0_BM(2));
+  \II_un182_argb2_m15_0_0_am[2]\: LUT3 
+  generic map(
+    INIT => X"01"
+  )
+  port map (
+    I0 => FI_DATA1(0),
+    I1 => FI_DATA1(1),
+    I2 => FI_DATA1(2),
+    O => UN182_ARGB2_M15_0_0_AM(2));
+  II_N_279_i: LUT3 
+  generic map(
+    INIT => X"EC"
+  )
+  port map (
+    I0 => CE_REG,
+    I1 => HOLD_DVAL,
+    I2 => STAGE3,
+    O => TX_LL_MOSI_slv_1);
+  \II_un182_argb2_m14[1]\: LUT3 
+  generic map(
+    INIT => X"E1"
+  )
+  port map (
+    I0 => FI_DATA1(17),
+    I1 => FI_DATA1(18),
+    I2 => UN182_ARGB2_SS12,
+    O => UN182_ARGB2_M14(1));
+  \II_un182_argb2_m15_i[3]\: LUT4_L 
+  generic map(
+    INIT => X"FFFE"
+  )
+  port map (
+    I0 => N_229_0,
+    I1 => FI_DATA1(0),
+    I2 => FI_DATA1(1),
+    I3 => FI_DATA1(2),
+    LO => N_198);
+  II_RX_DVALi: LUT3 
+  generic map(
+    INIT => X"40"
+  )
+  port map (
+    I0 => ARESET,
+    I1 => RX_LL_MOSI_slv(1),
+    I2 => CONVERT_CE,
+    O => RX_DVALI);
+  II_un182_argb2_0_0_s_1_m3_i_a3_1: LUT4 
+  generic map(
+    INIT => X"0001"
+  )
+  port map (
+    I0 => FI_DATA1(7),
+    I1 => FI_DATA1(8),
+    I2 => FI_DATA1(9),
+    I3 => FI_DATA1(10),
+    O => UN182_ARGB2_0_0_S_1_M3_I_A3_1);
+  \II_un182_argb2_m16_i_o2_1[3]\: LUT4 
+  generic map(
+    INIT => X"FFFE"
+  )
+  port map (
+    I0 => FI_DATA1(3),
+    I1 => FI_DATA1(4),
+    I2 => FI_DATA1(5),
+    I3 => FI_DATA1(6),
+    O => N_229_0);
+  \II_un182_argb2_m16_i_o2_0[3]\: LUT4 
+  generic map(
+    INIT => X"FFFE"
+  )
+  port map (
+    I0 => FI_DATA1(11),
+    I1 => FI_DATA1(12),
+    I2 => FI_DATA1(13),
+    I3 => FI_DATA1(14),
+    O => N_234_0);
+  \II_un182_argb2_m14_0_a2[4]\: LUT3 
+  generic map(
+    INIT => X"01"
+  )
+  port map (
+    I0 => FI_DATA1(16),
+    I1 => FI_DATA1(17),
+    I2 => FI_DATA1(18),
+    O => UN182_ARGB2_M14(3));
+  \II_un182_argb2_m16_i_o2[3]\: LUT3 
+  generic map(
+    INIT => X"FE"
+  )
+  port map (
+    I0 => FI_DATA1(8),
+    I1 => FI_DATA1(9),
+    I2 => FI_DATA1(10),
+    O => N_233_0);
+  II_un182_argb2_ss12_0_o2: LUT3 
+  generic map(
+    INIT => X"F2"
+  )
+  port map (
+    I0 => FI_DATA1(16),
+    I1 => FI_DATA1(17),
+    I2 => FI_DATA1(18),
+    O => UN182_ARGB2_SS12);
+  II_exp3_axb_0: LUT2 
+  generic map(
+    INIT => X"6"
+  )
+  port map (
+    I0 => FI1_EXPON(0),
+    I1 => FP_DATA2_2(20),
+    O => EXP3(0));
+  II_un182_argb2s2_0_a2: LUT2 
+  generic map(
+    INIT => X"1"
+  )
+  port map (
+    I0 => FI_DATA1(19),
+    I1 => FI_DATA1(20),
+    O => UN182_ARGB2_SM18_I);
+  II_convert_ce: LUT2 
+  generic map(
+    INIT => X"1"
+  )
+  port map (
+    I0 => TX_LL_MISO_slv(0),
+    I1 => TX_LL_MISO_slv(1),
+    O => CONVERT_CE);
+  II_expon_1_p4: LUT4 
+  generic map(
+    INIT => X"FFFE"
+  )
+  port map (
+    I0 => UN7_ARG_INT_AXB0,
+    I1 => UN7_ARG_INT_AXB2,
+    I2 => UN182_ARGB2_M20(1),
+    I3 => UN182_ARGB2_M20(3),
+    O => EXPON_1_P4);
+  II_exp3_s_7: XORCY port map (
+      LI => EXP3_AXB_7,
+      CI => EXP3_CRY_6,
+      O => EXP3(7));
+  II_exp3_s_6: XORCY port map (
+      LI => EXP3_AXB_6,
+      CI => EXP3_CRY_5,
+      O => EXP3(6));
+  II_exp3_cry_6: MUXCY_L port map (
+      DI => FI1_EXPON(6),
+      CI => EXP3_CRY_5,
+      S => EXP3_AXB_6,
+      LO => EXP3_CRY_6);
+  II_exp3_s_5: XORCY port map (
+      LI => EXP3_AXB_5,
+      CI => EXP3_CRY_4,
+      O => EXP3(5));
+  II_exp3_cry_5: MUXCY_L port map (
+      DI => FI1_EXPON(5),
+      CI => EXP3_CRY_4,
+      S => EXP3_AXB_5,
+      LO => EXP3_CRY_5);
+  II_exp3_s_4: XORCY port map (
+      LI => EXP3_AXB_4,
+      CI => EXP3_CRY_3,
+      O => EXP3(4));
+  II_exp3_cry_4: MUXCY_L port map (
+      DI => FI1_EXPON(4),
+      CI => EXP3_CRY_3,
+      S => EXP3_AXB_4,
+      LO => EXP3_CRY_4);
+  II_exp3_s_3: XORCY port map (
+      LI => EXP3_AXB_3,
+      CI => EXP3_CRY_2,
+      O => EXP3(3));
+  II_exp3_cry_3: MUXCY_L port map (
+      DI => FI1_EXPON(3),
+      CI => EXP3_CRY_2,
+      S => EXP3_AXB_3,
+      LO => EXP3_CRY_3);
+  II_exp3_s_2: XORCY port map (
+      LI => EXP3_AXB_2,
+      CI => EXP3_CRY_1,
+      O => EXP3(2));
+  II_exp3_cry_2: MUXCY_L port map (
+      DI => FI1_EXPON(2),
+      CI => EXP3_CRY_1,
+      S => EXP3_AXB_2,
+      LO => EXP3_CRY_2);
+  II_exp3_s_1: XORCY port map (
+      LI => EXP3_AXB_1,
+      CI => EXP3_CRY_0,
+      O => EXP3(1));
+  II_exp3_cry_1: MUXCY_L port map (
+      DI => FI1_EXPON(1),
+      CI => EXP3_CRY_0,
+      S => EXP3_AXB_1,
+      LO => EXP3_CRY_1);
+  II_exp3_cry_0: MUXCY_L port map (
+      DI => FI1_EXPON(0),
+      CI => NN_2,
+      S => EXP3(0),
+      LO => EXP3_CRY_0);
+  II_GND: GND port map (
+      G => NN_2);
+  II_VCC: VCC port map (
+      P => NN_1);
+end beh;
+
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+library synplify;
+use synplify.components.all;
+library UNISIM;
+use UNISIM.VCOMPONENTS.all;
+
+entity fi21tofp32_syn_unsigned is
+port(
+  RX_LL_MOSI_slv : in std_logic_vector (24 downto 0);
+  RX_LL_MISO_slv : out std_logic_vector (1 downto 0);
+  TX_LL_MOSI_slv : out std_logic_vector (35 downto 0);
+  TX_LL_MISO_slv : in std_logic_vector (1 downto 0);
+  ARESET :  in std_logic;
+  CLK :  in std_logic);
+end fi21tofp32_syn_unsigned;
+
+architecture beh of fi21tofp32_syn_unsigned is
+  signal NN_1 : std_logic ;
+  component fi21tofp32_1
+    port(
+      RX_LL_MISO_slv : out std_logic_vector(0 downto 0);
+      TX_LL_MISO_slv : in std_logic_vector(1 downto 0);
+      RX_LL_MOSI_slv : in std_logic_vector(24 downto 1);
+      TX_LL_MOSI_slv_1 : out std_logic;
+      TX_LL_MOSI_slv_34 : out std_logic;
+      TX_LL_MOSI_slv_35 : out std_logic;
+      TX_LL_MOSI_slv_32 : out std_logic;
+      TX_LL_MOSI_slv_31 : out std_logic;
+      TX_LL_MOSI_slv_30 : out std_logic;
+      TX_LL_MOSI_slv_29 : out std_logic;
+      TX_LL_MOSI_slv_28 : out std_logic;
+      TX_LL_MOSI_slv_27 : out std_logic;
+      TX_LL_MOSI_slv_26 : out std_logic;
+      TX_LL_MOSI_slv_25 : out std_logic;
+      TX_LL_MOSI_slv_24 : out std_logic;
+      TX_LL_MOSI_slv_23 : out std_logic;
+      TX_LL_MOSI_slv_22 : out std_logic;
+      TX_LL_MOSI_slv_21 : out std_logic;
+      TX_LL_MOSI_slv_20 : out std_logic;
+      TX_LL_MOSI_slv_19 : out std_logic;
+      TX_LL_MOSI_slv_18 : out std_logic;
+      TX_LL_MOSI_slv_17 : out std_logic;
+      TX_LL_MOSI_slv_16 : out std_logic;
+      TX_LL_MOSI_slv_15 : out std_logic;
+      TX_LL_MOSI_slv_14 : out std_logic;
+      TX_LL_MOSI_slv_13 : out std_logic;
+      TX_LL_MOSI_slv_12 : out std_logic;
+      TX_LL_MOSI_slv_11 : out std_logic;
+      TX_LL_MOSI_slv_10 : out std_logic;
+      TX_LL_MOSI_slv_9 : out std_logic;
+      TX_LL_MOSI_slv_8 : out std_logic;
+      TX_LL_MOSI_slv_7 : out std_logic;
+      TX_LL_MOSI_slv_6 : out std_logic;
+      TX_LL_MOSI_slv_5 : out std_logic;
+      ARESET : in std_logic;
+      CLK : in std_logic  );
+  end component;
+begin
+  II_U1: fi21tofp32_1 port map (
+      RX_LL_MISO_slv(0) => RX_LL_MISO_slv(0),
+      TX_LL_MISO_slv(0) => TX_LL_MISO_slv(0),
+      TX_LL_MISO_slv(1) => TX_LL_MISO_slv(1),
+      RX_LL_MOSI_slv(1) => RX_LL_MOSI_slv(1),
+      RX_LL_MOSI_slv(2) => RX_LL_MOSI_slv(2),
+      RX_LL_MOSI_slv(3) => RX_LL_MOSI_slv(3),
+      RX_LL_MOSI_slv(4) => RX_LL_MOSI_slv(4),
+      RX_LL_MOSI_slv(5) => RX_LL_MOSI_slv(5),
+      RX_LL_MOSI_slv(6) => RX_LL_MOSI_slv(6),
+      RX_LL_MOSI_slv(7) => RX_LL_MOSI_slv(7),
+      RX_LL_MOSI_slv(8) => RX_LL_MOSI_slv(8),
+      RX_LL_MOSI_slv(9) => RX_LL_MOSI_slv(9),
+      RX_LL_MOSI_slv(10) => RX_LL_MOSI_slv(10),
+      RX_LL_MOSI_slv(11) => RX_LL_MOSI_slv(11),
+      RX_LL_MOSI_slv(12) => RX_LL_MOSI_slv(12),
+      RX_LL_MOSI_slv(13) => RX_LL_MOSI_slv(13),
+      RX_LL_MOSI_slv(14) => RX_LL_MOSI_slv(14),
+      RX_LL_MOSI_slv(15) => RX_LL_MOSI_slv(15),
+      RX_LL_MOSI_slv(16) => RX_LL_MOSI_slv(16),
+      RX_LL_MOSI_slv(17) => RX_LL_MOSI_slv(17),
+      RX_LL_MOSI_slv(18) => RX_LL_MOSI_slv(18),
+      RX_LL_MOSI_slv(19) => RX_LL_MOSI_slv(19),
+      RX_LL_MOSI_slv(20) => RX_LL_MOSI_slv(20),
+      RX_LL_MOSI_slv(21) => RX_LL_MOSI_slv(21),
+      RX_LL_MOSI_slv(22) => RX_LL_MOSI_slv(22),
+      RX_LL_MOSI_slv(23) => RX_LL_MOSI_slv(23),
+      RX_LL_MOSI_slv(24) => RX_LL_MOSI_slv(24),
+      TX_LL_MOSI_slv_1 => TX_LL_MOSI_slv(1),
+      TX_LL_MOSI_slv_34 => TX_LL_MOSI_slv(34),
+      TX_LL_MOSI_slv_35 => TX_LL_MOSI_slv(35),
+      TX_LL_MOSI_slv_32 => TX_LL_MOSI_slv(32),
+      TX_LL_MOSI_slv_31 => TX_LL_MOSI_slv(31),
+      TX_LL_MOSI_slv_30 => TX_LL_MOSI_slv(30),
+      TX_LL_MOSI_slv_29 => TX_LL_MOSI_slv(29),
+      TX_LL_MOSI_slv_28 => TX_LL_MOSI_slv(28),
+      TX_LL_MOSI_slv_27 => TX_LL_MOSI_slv(27),
+      TX_LL_MOSI_slv_26 => TX_LL_MOSI_slv(26),
+      TX_LL_MOSI_slv_25 => TX_LL_MOSI_slv(25),
+      TX_LL_MOSI_slv_24 => TX_LL_MOSI_slv(24),
+      TX_LL_MOSI_slv_23 => TX_LL_MOSI_slv(23),
+      TX_LL_MOSI_slv_22 => TX_LL_MOSI_slv(22),
+      TX_LL_MOSI_slv_21 => TX_LL_MOSI_slv(21),
+      TX_LL_MOSI_slv_20 => TX_LL_MOSI_slv(20),
+      TX_LL_MOSI_slv_19 => TX_LL_MOSI_slv(19),
+      TX_LL_MOSI_slv_18 => TX_LL_MOSI_slv(18),
+      TX_LL_MOSI_slv_17 => TX_LL_MOSI_slv(17),
+      TX_LL_MOSI_slv_16 => TX_LL_MOSI_slv(16),
+      TX_LL_MOSI_slv_15 => TX_LL_MOSI_slv(15),
+      TX_LL_MOSI_slv_14 => TX_LL_MOSI_slv(14),
+      TX_LL_MOSI_slv_13 => TX_LL_MOSI_slv(13),
+      TX_LL_MOSI_slv_12 => TX_LL_MOSI_slv(12),
+      TX_LL_MOSI_slv_11 => TX_LL_MOSI_slv(11),
+      TX_LL_MOSI_slv_10 => TX_LL_MOSI_slv(10),
+      TX_LL_MOSI_slv_9 => TX_LL_MOSI_slv(9),
+      TX_LL_MOSI_slv_8 => TX_LL_MOSI_slv(8),
+      TX_LL_MOSI_slv_7 => TX_LL_MOSI_slv(7),
+      TX_LL_MOSI_slv_6 => TX_LL_MOSI_slv(6),
+      TX_LL_MOSI_slv_5 => TX_LL_MOSI_slv(5),
+      ARESET => ARESET,
+      CLK => CLK);
+  II_GND: GND port map (
+      G => NN_1);
+  II_VCC: VCC port map (
+      P => TX_LL_MOSI_slv(0));
+  RX_LL_MISO_slv(1) <= TX_LL_MISO_slv(1);
+  TX_LL_MOSI_slv(2) <= NN_1;
+  TX_LL_MOSI_slv(3) <= NN_1;
+  TX_LL_MOSI_slv(4) <= NN_1;
+  TX_LL_MOSI_slv(33) <= NN_1;
+end beh;
+

@@ -1,0 +1,1 @@
+This core has been successfully synthesised and tested in hardware for 100MHz operation.

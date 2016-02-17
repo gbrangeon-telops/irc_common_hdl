@@ -1,0 +1,568 @@
+$WAVE4
+$RESOLUTION 1000
+I 1 "r#9#t_wb_mosi5 DAT a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-WE c#9#std_logicc9 UX01ZWLH-ADR a#29#std_logic_vector(11 downto 0)1 ricd11 0 c#9#std_logicc9 UX01ZWLH-CYC c#9#std_logicc9 UX01ZWLH-STB c#9#std_logicc9 UX01ZWLH-"
+I 2 "a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+I 3 "c#9#std_logicc9 UX01ZWLH-"
+I 4 "a#29#std_logic_vector(11 downto 0)1 ricd11 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS IN 1 1 5 "DPB/FPGA1/S10/RX_WB_MOSI"
+$CHILD 2 0 1
+$CHILD 20 2 1
+$SC 3-19 +2-34
+I 5 "r#9#t_wb_miso2 DAT a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-ACK c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 5 2 21 0 ISO
+$CHILD +1 0 35
+$SC +2-53
+I 6 "r#11#t_ll_mosi326 SOF c#9#std_logicc9 UX01ZWLH-EOF c#9#std_logicc9 UX01ZWLH-DATA a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-DREM a#28#std_logic_vector(1 downto 0)1 ricd1 0 c#9#std_logicc9 UX01ZWLH-DVAL c#9#std_logicc9 UX01ZWLH-SUPPORT_BUSY c#9#std_logicc9 UX01ZWLH-"
+I 7 "a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+I 8 "a#28#std_logic_vector(1 downto 0)1 ricd1 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS IN +1 6 6 14 0 "HX_32_KERNEL/RX_LL_MOSI"
+$CHILD +3 2 54
+$CHILD 90 3 54
+$SC +1 +1 +2-89 +2-+3
+I 9 "r#9#t_ll_miso2 AFULL c#9#std_logicc9 UX01ZWLH-BUSY c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 9 2 34 0 ISO
+$SC +1 +1
+$OUT +1 3 27 0 NEW_FRAME
+$OUT +1 3 31 0 CONFIG
+I 10 "a#28#std_logic_vector(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 10 8 27 0 FRAME_TYPE
+$SC +1-+7
+$OUT +1 3 14 1 NEW_CUB
+$OUT +1 3 14 5 EOF
+$BUS OUT +1 6 6 14 0 "HX_32_KERNEL/TX_LL_MOSI"
+$CHILD +3 2 111
+$CHILD +36 3 111
+$SC +1 +1 +2-+31 +2-+3
+I 11 "r#16#t_output_debug322 H r#14#t_output_debug4 FPGA_ID c#9#std_logicc9 UX01ZWLH-Z a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-Y a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-X a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-L r#14#t_output_debug4 FPGA_ID c#9#std_logicc9 UX01ZWLH-Z a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-Y a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-X a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-"
+I 12 "r#14#t_output_debug4 FPGA_ID c#9#std_logicc9 UX01ZWLH-Z a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-Y a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-X a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-"
+I 13 "a#28#std_logic_vector(4 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 11 2 27 0 DECODED_PIXEL
+$CHILD +1 0 152
+$CHILD +3 1 0 152
+$CHILD +9 2 0 152
+$CHILD +15 3 0 152
+$CHILD +21 1 152
+$CHILD +23 1 1 152
+$CHILD +29 2 1 152
+$CHILD +35 3 1 152
+$SC +2 +2-+4 +2-+4 +2-+4 +2 +2-+4 +2-+4 +2-+4
+$BUS IN +1 9 2 27 0 TX_LL_MISO
+$SC +1 +1
+$BUS S +1 8 2 15 0 "EADER_EXT_WB/PPC_SW_SEL_i"
+$SC +1 +1
+$BUS OUT +1 8 2 14 0 PPC_SW_SEL
+$SC +1 +1
+$NOMODE +1 0 "" -1 0 1500000000
+$BUS VARIABLE +1 10 8 "DPB/FPGA1/S10/HX_32_KERNEL/localink_to_ram/frame_type"
+$SC +1-+7
+I 14 "a#28#std_logic_vector(3 downto 0)1 ricd3 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 14 4 27 0 ctrl_frame_valid
+$SC +1-+3
+I 15 "a#35#std_logic_vector(AWIDTH-1 downto 0)1 ricd5 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 15 6 27 0 ram_addr
+$SC +1-+5
+$BUS S +1 7 32 31 0 data
+$SC +1-+31
+$S +1 3 31 0 we
+$BUS S +1 14 4 27 1 ctrl_frame_typ
+$SC +1-+3
+$BUS S +1 14 4 38 0 colision
+$SC +1-+3
+I 16 "a#8#ram_type1 ricd63 0 a#36#std_logic_vector(D_WIDTH-1 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+I 17 "a#36#std_logic_vector(D_WIDTH-1 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 16 64 27 0 "ram_instantiate/RAM"
+$CHILD +1 0 268
+$CHILD +34 1 268
+$CHILD +67 2 268
+$CHILD 368 3 268
+$CHILD 401 4 268
+$CHILD 434 5 268
+$CHILD 467 6 268
+$CHILD 500 7 268
+$CHILD 533 8 268
+$CHILD 566 9 268
+$CHILD 599 10 268
+$CHILD 632 11 268
+$CHILD 665 12 268
+$CHILD 698 13 268
+$CHILD 731 14 268
+$CHILD 764 15 268
+$CHILD 797 16 268
+$CHILD 830 17 268
+$CHILD 863 18 268
+$CHILD 896 19 268
+$CHILD 929 20 268
+$CHILD 962 21 268
+$CHILD 995 22 268
+$CHILD +760 23 268
+$CHILD +793 24 268
+$CHILD +826 25 268
+$CHILD +859 26 268
+$CHILD +892 27 268
+$CHILD +925 28 268
+$CHILD +958 29 268
+$CHILD +991 30 268
+$CHILD 1292 31 268
+$CHILD 1325 32 268
+$CHILD 1358 33 268
+$CHILD 1391 34 268
+$CHILD 1424 35 268
+$CHILD 1457 36 268
+$CHILD 1490 37 268
+$CHILD 1523 38 268
+$CHILD 1556 39 268
+$CHILD 1589 40 268
+$CHILD 1622 41 268
+$CHILD 1655 42 268
+$CHILD 1688 43 268
+$CHILD 1721 44 268
+$CHILD 1754 45 268
+$CHILD 1787 46 268
+$CHILD 1820 47 268
+$CHILD 1853 48 268
+$CHILD 1886 49 268
+$CHILD 1919 50 268
+$CHILD 1952 51 268
+$CHILD 1985 52 268
+$CHILD 2018 53 268
+$CHILD 2051 54 268
+$CHILD 2084 55 268
+$CHILD 2117 56 268
+$CHILD 2150 57 268
+$CHILD 2183 58 268
+$CHILD 2216 59 268
+$CHILD 2249 60 268
+$CHILD 2282 61 268
+$CHILD 2315 62 268
+$CHILD 2348 63 268
+$SC +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31
+$IN +1 3 43 0 WEA
+I 18 "a#36#std_logic_vector(A_WIDTH-1 downto 0)1 ricd5 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS IN +1 18 6 43 1 ADDR
+$SC +1-+5
+$BUS IN +1 17 32 43 1 DI
+$SC +1-+31
+$BUS OUT +1 17 32 44 1 O
+$SC +1-+31
+$BUS IN +1 18 6 43 0 ADDRB
+$SC +1-+5
+$BUS OUT +1 17 32 43 1 DO
+$SC +1-+31
+$NOMODE +1 0 "" -1 0 1500000000
+$BUS S +1 14 4 "DPB/FPGA1/U16/yes_fifos/fifo/fifo_count_16"
+$SC +1-+3
+$OUT +1 3 29 0 EMPTY
+$OUT +1 3 29 0 FULL
+$NOMODE +1 0 "" -1 0 1500000000
+$S +1 3 "DPB/FPGA1/S10/HEADER_EXT_WB/sreset"
+$BUS S +1 8 2 28 0 PPC_SW_SEL_i
+$SC +1 +1
+$IN +1 3 28 0 ARESET
+$IN +1 3 28 0 CLK
+$BUS IN +1 1 5 28 0 RX_WB_MOSI
+$CHILD +1 0 2510
+$CHILD +19 2 2510
+$SC +2-+16 +2-+13
+$BUS OUT +1 5 2 35 0 ISO
+$CHILD +1 0 2544
+$SC +2-+16
+$BUS OUT +1 1 5 28 0 TX_WB_MOSI
+$CHILD +1 0 2563
+$CHILD +19 2 2563
+$SC +2-+16 +2-+13
+$BUS IN +1 5 2 35 0 ISO
+$CHILD +1 0 2597
+$SC +2-+16
+$BUS IN +1 10 8 28 0 FRAME_TYPE
+$SC +1-+7
+$IN +1 3 28 1 NEW_FRAM
+$BUS OUT +1 8 2 28 0 PPC_SW_SEL
+$SC +1 +1
+$OUT +1 3 28 0 NEW_CUBE
+$OUT +1 3 28 5 EOF
+$OUT +1 3 28 0 STRIP_CONTROL_FRAMES
+$NOMODE +1 0 "" -1 0 1000000000
+I 19 "c#7#booleans2 false true "
+$VARIABLE +1 19 "DPB/FPGA1/S10/HX_32_KERNEL/localink_to_ram/frame_in_progress"
+$BUS VARIABLE +1 10 8 43 0 FRAME_TYPE
+$SC +1-+7
+$BUS VARIABLE +1 10 8 27 0 "wb_read_access/addr16"
+$SC +1-+7
+$VARIABLE +1 3 27 0 "control_extract/new_config_i"
+$VARIABLE +1 3 54 0 dly
+$BUS VARIABLE +1 10 8 43 0 FRAME_TYPE_i
+$SC +1-+7
+I 20 "a#30#ROIC_DCube_Header_array32_v2_61 rict1 9 a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS VARIABLE +1 20 9 43 0 roic_header_array
+$CHILD +1 0 2663
+$CHILD +34 1 2663
+$CHILD +67 2 2663
+$CHILD +100 3 2663
+$CHILD +133 4 2663
+$CHILD +166 5 2663
+$CHILD +199 6 2663
+$CHILD +232 7 2663
+$CHILD +265 8 2663
+$SC +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31
+I 21 "a#30#ROIC_DCube_Footer_array32_v2_61 rict1 11 a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS VARIABLE +1 21 11 48 8 foot
+$CHILD +1 0 2961
+$CHILD +34 1 2961
+$CHILD +67 2 2961
+$CHILD +100 3 2961
+$CHILD +133 4 2961
+$CHILD +166 5 2961
+$CHILD +199 6 2961
+$CHILD +232 7 2961
+$CHILD +265 8 2961
+$CHILD +298 9 2961
+$CHILD +331 10 2961
+$SC +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31
+I 22 "a#29#DPB_DCube_Header_array32_v2_61 rict1 51 a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS VARIABLE +1 22 51 43 8 proc_head
+$CHILD +1 0 3325
+$CHILD +34 1 3325
+$CHILD +67 2 3325
+$CHILD +100 3 3325
+$CHILD +133 4 3325
+$CHILD +166 5 3325
+$CHILD +199 6 3325
+$CHILD +232 7 3325
+$CHILD +265 8 3325
+$CHILD +298 9 3325
+$CHILD +331 10 3325
+$CHILD +364 11 3325
+$CHILD +397 12 3325
+$CHILD +430 13 3325
+$CHILD +463 14 3325
+$CHILD +496 15 3325
+$CHILD +529 16 3325
+$CHILD +562 17 3325
+$CHILD +595 18 3325
+$CHILD +628 19 3325
+$CHILD +661 20 3325
+$CHILD +694 21 3325
+$CHILD +727 22 3325
+$CHILD +760 23 3325
+$CHILD +793 24 3325
+$CHILD +826 25 3325
+$CHILD +859 26 3325
+$CHILD +892 27 3325
+$CHILD +925 28 3325
+$CHILD +958 29 3325
+$CHILD +991 30 3325
+$CHILD 4349 31 3325
+$CHILD 4382 32 3325
+$CHILD 4415 33 3325
+$CHILD 4448 34 3325
+$CHILD 4481 35 3325
+$CHILD 4514 36 3325
+$CHILD 4547 37 3325
+$CHILD 4580 38 3325
+$CHILD 4613 39 3325
+$CHILD 4646 40 3325
+$CHILD 4679 41 3325
+$CHILD 4712 42 3325
+$CHILD 4745 43 3325
+$CHILD 4778 44 3325
+$CHILD 4811 45 3325
+$CHILD 4844 46 3325
+$CHILD 4877 47 3325
+$CHILD 4910 48 3325
+$CHILD 4943 49 3325
+$CHILD 4976 50 3325
+$SC +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31
+I 23 "a#19#CLinkConfig_array321 rict1 10 a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS VARIABLE +1 23 10 43 6 clink_conf
+$CHILD +1 0 5009
+$CHILD +34 1 5009
+$CHILD +67 2 5009
+$CHILD +100 3 5009
+$CHILD +133 4 5009
+$CHILD +166 5 5009
+$CHILD +199 6 5009
+$CHILD +232 7 5009
+$CHILD +265 8 5009
+$CHILD +298 9 5009
+$SC +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31
+$VARIABLE +1 3 43 0 sof_pixels
+$VARIABLE +1 3 43 7 dval
+$VARIABLE +1 3 43 0 pixel_data
+I 24 "a#34#stream_array(1 to CTRL_PIPE_DEPTH)1 rict1 51 a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 24 51 27 0 data_array
+$CHILD +1 0 5343
+$CHILD +34 1 5343
+$CHILD +67 2 5343
+$CHILD +100 3 5343
+$CHILD +133 4 5343
+$CHILD +166 5 5343
+$CHILD +199 6 5343
+$CHILD +232 7 5343
+$CHILD +265 8 5343
+$CHILD +298 9 5343
+$CHILD +331 10 5343
+$CHILD +364 11 5343
+$CHILD +397 12 5343
+$CHILD +430 13 5343
+$CHILD +463 14 5343
+$CHILD +496 15 5343
+$CHILD +529 16 5343
+$CHILD +562 17 5343
+$CHILD +595 18 5343
+$CHILD +628 19 5343
+$CHILD +661 20 5343
+$CHILD +694 21 5343
+$CHILD +727 22 5343
+$CHILD +760 23 5343
+$CHILD +793 24 5343
+$CHILD +826 25 5343
+$CHILD +859 26 5343
+$CHILD +892 27 5343
+$CHILD +925 28 5343
+$CHILD +958 29 5343
+$CHILD +991 30 5343
+$CHILD 6367 31 5343
+$CHILD 6400 32 5343
+$CHILD 6433 33 5343
+$CHILD 6466 34 5343
+$CHILD 6499 35 5343
+$CHILD 6532 36 5343
+$CHILD 6565 37 5343
+$CHILD 6598 38 5343
+$CHILD 6631 39 5343
+$CHILD 6664 40 5343
+$CHILD 6697 41 5343
+$CHILD 6730 42 5343
+$CHILD 6763 43 5343
+$CHILD 6796 44 5343
+$CHILD 6829 45 5343
+$CHILD 6862 46 5343
+$CHILD 6895 47 5343
+$CHILD 6928 48 5343
+$CHILD 6961 49 5343
+$CHILD 6994 50 5343
+$SC +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31
+I 25 "a#38#std_logic_vector(1 to CTRL_PIPE_DEPTH)1 rict1 51 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 25 51 27 0 control_sof
+$SC +1-+50
+$BUS S +1 25 51 35 2 e
+$SC +1-+50
+I 26 "r#21#DPB_DCube_Header_v2_68 DPBStatus a#39#std_logic_vector(DPBSTATLEN-1 downto 0)1 ricd63 0 c#9#std_logicc9 UX01ZWLH-FirmwareVersion a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-FPGATemp a#28#std_logic_vector(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-PCBTemp a#28#std_logic_vector(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-PixelsReceivedCnt a#27#UNSIGNED(DUILEN-1 downto 0)1 ricd28 0 c#9#std_logicc9 UX01ZWLH-ROICHeader r#22#ROIC_DCube_Header_v2_613 Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-Direction c#9#std_logicc9 UX01ZWLH-Acq_Number a#27#UNSIGNED(ACQLEN-1 downto 0)1 ricd22 0 c#9#std_logicc9 UX01ZWLH-Code_Rev a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-Xmin a#26#UNSIGNED(RXLEN-1 downto 0)1 ricd8 0 c#9#std_logicc9 UX01ZWLH-Ymin a#26#UNSIGNED(RYLEN-1 downto 0)1 ricd9 0 c#9#std_logicc9 UX01ZWLH-StartTimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-FPGATemp a#20#UNSIGNED(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-PCBTemp a#20#UNSIGNED(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-FilterPosition c#9#std_logicc9 UX01ZWLH-ArmedStatus c#9#std_logicc9 UX01ZWLH-RealIntTime a#21#UNSIGNED(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-Spare a#21#UNSIGNED(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-ROICFooter r#22#ROIC_DCube_Footer_v2_611 Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-Direction c#9#std_logicc9 UX01ZWLH-Acq_Number a#27#UNSIGNED(ACQLEN-1 downto 0)1 ricd22 0 c#9#std_logicc9 UX01ZWLH-Write_No a#30#UNSIGNED(FRINGELEN-1 downto 0)1 ricd23 0 c#9#std_logicc9 UX01ZWLH-Trig_No a#30#UNSIGNED(FRINGELEN-1 downto 0)1 ricd23 0 c#9#std_logicc9 UX01ZWLH-ZPDPosition a#30#UNSIGNED(FRINGELEN-1 downto 0)1 ricd23 0 c#9#std_logicc9 UX01ZWLH-ZPDPeakVal a#21#UNSIGNED(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-EndTimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-NbPixelsAboveHighLimit a#21#UNSIGNED(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-NbPixelsAboveLowLimit a#21#UNSIGNED(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-Nav_Data_Tag a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-NAVHeader a#21#NAV_DCube_Header_v2_61 rict1 26 a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+I 27 "a#39#std_logic_vector(DPBSTATLEN-1 downto 0)1 ricd63 0 c#9#std_logicc9 UX01ZWLH-"
+I 28 "a#27#UNSIGNED(DUILEN-1 downto 0)1 ricd28 0 c#9#std_logicc9 UX01ZWLH-"
+I 29 "r#22#ROIC_DCube_Header_v2_613 Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-Direction c#9#std_logicc9 UX01ZWLH-Acq_Number a#27#UNSIGNED(ACQLEN-1 downto 0)1 ricd22 0 c#9#std_logicc9 UX01ZWLH-Code_Rev a#29#std_logic_vector(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-Xmin a#26#UNSIGNED(RXLEN-1 downto 0)1 ricd8 0 c#9#std_logicc9 UX01ZWLH-Ymin a#26#UNSIGNED(RYLEN-1 downto 0)1 ricd9 0 c#9#std_logicc9 UX01ZWLH-StartTimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-FPGATemp a#20#UNSIGNED(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-PCBTemp a#20#UNSIGNED(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-FilterPosition c#9#std_logicc9 UX01ZWLH-ArmedStatus c#9#std_logicc9 UX01ZWLH-RealIntTime a#21#UNSIGNED(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-Spare a#21#UNSIGNED(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+I 30 "a#27#UNSIGNED(ACQLEN-1 downto 0)1 ricd22 0 c#9#std_logicc9 UX01ZWLH-"
+I 31 "a#26#UNSIGNED(RXLEN-1 downto 0)1 ricd8 0 c#9#std_logicc9 UX01ZWLH-"
+I 32 "a#26#UNSIGNED(RYLEN-1 downto 0)1 ricd9 0 c#9#std_logicc9 UX01ZWLH-"
+I 33 "a#21#UNSIGNED(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+I 34 "a#20#UNSIGNED(7 downto 0)1 ricd7 0 c#9#std_logicc9 UX01ZWLH-"
+I 35 "a#21#UNSIGNED(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+I 36 "r#22#ROIC_DCube_Footer_v2_611 Status a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-Direction c#9#std_logicc9 UX01ZWLH-Acq_Number a#27#UNSIGNED(ACQLEN-1 downto 0)1 ricd22 0 c#9#std_logicc9 UX01ZWLH-Write_No a#30#UNSIGNED(FRINGELEN-1 downto 0)1 ricd23 0 c#9#std_logicc9 UX01ZWLH-Trig_No a#30#UNSIGNED(FRINGELEN-1 downto 0)1 ricd23 0 c#9#std_logicc9 UX01ZWLH-ZPDPosition a#30#UNSIGNED(FRINGELEN-1 downto 0)1 ricd23 0 c#9#std_logicc9 UX01ZWLH-ZPDPeakVal a#21#UNSIGNED(15 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-EndTimeStamp a#21#UNSIGNED(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-NbPixelsAboveHighLimit a#21#UNSIGNED(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-NbPixelsAboveLowLimit a#21#UNSIGNED(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-Nav_Data_Tag a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+I 37 "a#30#UNSIGNED(FRINGELEN-1 downto 0)1 ricd23 0 c#9#std_logicc9 UX01ZWLH-"
+I 38 "a#21#NAV_DCube_Header_v2_61 rict1 26 a#29#std_logic_vector(31 downto 0)1 ricd31 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 26 8 28 0 ube_header_i
+$CHILD +1 0 7131
+$CHILD +66 1 7131
+$CHILD +83 2 7131
+$CHILD +92 3 7131
+$CHILD +101 4 7131
+$CHILD +131 5 7131
+$CHILD +132 0 5 7131
+$CHILD +166 2 5 7131
+$CHILD +190 3 5 7131
+$CHILD +207 4 5 7131
+$CHILD +217 5 5 7131
+$CHILD +228 6 5 7131
+$CHILD +261 7 5 7131
+$CHILD +270 8 5 7131
+$CHILD +281 11 5 7131
+$CHILD +298 12 5 7131
+$CHILD +315 6 7131
+$CHILD +316 0 6 7131
+$CHILD +350 2 6 7131
+$CHILD +374 3 6 7131
+$CHILD +399 4 6 7131
+$CHILD +424 5 6 7131
+$CHILD +449 6 6 7131
+$CHILD +466 7 6 7131
+$CHILD +499 8 6 7131
+$CHILD +532 9 6 7131
+$CHILD +565 10 6 7131
+$CHILD +598 7 7131
+$CHILD +599 0 7 7131
+$CHILD +632 1 7 7131
+$CHILD +665 2 7 7131
+$CHILD +698 3 7 7131
+$CHILD +731 4 7 7131
+$CHILD +764 5 7 7131
+$CHILD +797 6 7 7131
+$CHILD +830 7 7 7131
+$CHILD +863 8 7 7131
+$CHILD +896 9 7 7131
+$CHILD +929 10 7 7131
+$CHILD +962 11 7 7131
+$CHILD +995 12 7 7131
+$CHILD 8159 13 7 7131
+$CHILD 8192 14 7 7131
+$CHILD 8225 15 7 7131
+$CHILD 8258 16 7 7131
+$CHILD 8291 17 7 7131
+$CHILD 8324 18 7 7131
+$CHILD 8357 19 7 7131
+$CHILD 8390 20 7 7131
+$CHILD 8423 21 7 7131
+$CHILD 8456 22 7 7131
+$CHILD 8489 23 7 7131
+$CHILD 8522 24 7 7131
+$CHILD 8555 25 7 7131
+$SC +2-+63 +2-+15 +2-+7 +2-+7 +2-+28 +3-+32 +2-+22 +2-+15 +2-+8 +2-+9 +2-+31 +2-+7 +2-+9 +2-+15 +2-+15 +3-+32 +2-+22 +2-+23 +2-+23 +2-+23 +2-+15 +2-+31 +2-+31 +2-+31 +2-+31 +3-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31
+$BUS S +1 7 32 27 0 data_buf
+$SC +1-+31
+$BUS S +1 8 2 28 4 rem
+$SC +1 +1
+$S +1 3 27 4 sof
+$S +1 3 27 6 e
+$S +1 3 27 4 dval
+$S +1 3 27 0 ram_we
+$BUS S +1 15 6 31 0 addr
+$SC +1-+5
+$BUS S +1 7 32 31 0 data
+$SC +1-+31
+$BUS S +1 15 6 28 0 d_addr
+$SC +1-+5
+$BUS S +1 7 32 30 0 data
+$SC +1-+31
+$S +1 3 27 0 ack_i
+$S +1 3 27 0 rst_sync
+$BUS S +1 14 4 27 0 ctrl_frame_type
+$SC +1-+3
+$BUS S +1 14 4 38 0 valid
+$SC +1-+3
+$BUS S +1 14 4 38 0 colision
+$SC +1-+3
+$BUS S +1 11 2 27 0 DECODED_PIXEL
+$CHILD +1 0 8725
+$CHILD +3 1 0 8725
+$CHILD +9 2 0 8725
+$CHILD +15 3 0 8725
+$CHILD +21 1 8725
+$CHILD +23 1 1 8725
+$CHILD +29 2 1 8725
+$CHILD +35 3 1 8725
+$SC +2 +2-+4 +2-+4 +2-+4 +2 +2-+4 +2-+4 +2-+4
+$S +1 3 27 0 rx_busy
+$S +1 3 30 0 dval
+$S +1 3 27 0 stop_data_flow
+$S +1 3 27 0 new_frame_i
+$S +1 3 27 0 permit_flow_latch
+$BUS S +1 10 8 27 0 FRAME_TYPE_i
+$SC +1-+7
+$S +1 3 27 0 currently_decoding_head_foot
+I 39 "a#29#std_logic_vector(27 downto 0)1 ricd27 0 e#9#std_logicc9 UX01ZWLH-"
+I 40 "e#9#std_logicc9 UX01ZWLH-"
+$BUS S +1 39 28 27 1 dataCoun
+$SC +1-+27
+$IN +1 3 27 0 CLK
+$IN +1 3 27 0 ARESET
+$IN +1 3 27 0 STRIP_CONTROL_FRAMES
+$BUS IN +1 6 6 27 0 RX_LL_MOSI
+$CHILD +3 2 8813
+$CHILD +36 3 8813
+$SC +1 +1 +2-+31 +2-+3
+$BUS OUT +1 9 2 34 0 ISO
+$SC +1 +1
+$BUS OUT +1 6 6 27 0 TX_LL_MOSI
+$CHILD +3 2 8857
+$CHILD +36 3 8857
+$SC +1 +1 +2-+31 +2-+3
+$BUS IN +1 9 2 34 0 ISO
+$SC +1 +1
+$BUS IN +1 1 5 27 0 WB_MOSI
+$CHILD +1 0 8901
+$CHILD +19 2 8901
+$SC +2-+16 +2-+13
+$BUS OUT +1 5 2 31 0 ISO
+$CHILD +1 0 8935
+$SC +2-+16
+$OUT +1 3 27 0 NEW_CONFIG
+I 41 "r#11#CLinkConfig8 Valid c#7#booleans2 false true LValSize a#28#UNSIGNED(LVALLEN-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-FValSize a#28#UNSIGNED(FVALLEN-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-HeaderSize a#30#UNSIGNED(HEADERLEN-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-LValPause a#30#UNSIGNED(LPAUSELEN-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-FramesPerCube a#37#UNSIGNED(FRAMESPERCUBELEN-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-CLinkMode a#33#UNSIGNED(CLINKMODELEN-1 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-HeaderVersion a#28#std_logic_vector(3 downto 0)1 ricd3 0 c#9#std_logicc9 UX01ZWLH-"
+I 42 "a#28#UNSIGNED(LVALLEN-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+I 43 "a#28#UNSIGNED(FVALLEN-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+I 44 "a#30#UNSIGNED(HEADERLEN-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+I 45 "a#30#UNSIGNED(LPAUSELEN-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+I 46 "a#37#UNSIGNED(FRAMESPERCUBELEN-1 downto 0)1 ricd15 0 c#9#std_logicc9 UX01ZWLH-"
+I 47 "a#33#UNSIGNED(CLINKMODELEN-1 downto 0)1 ricd4 0 c#9#std_logicc9 UX01ZWLH-"
+$BUS OUT +1 41 8 27 0 CLINK_CONF
+$CHILD +2 1 8955
+$CHILD +19 2 8955
+$CHILD +36 3 8955
+$CHILD +53 4 8955
+$CHILD +70 5 8955
+$CHILD +87 6 8955
+$CHILD +93 7 8955
+$SC +1 +2-+15 +2-+15 +2-+15 +2-+15 +2-+15 +2-+4 +2-+3
+$BUS OUT +1 26 8 28 0 UBE_HEADER
+$CHILD +1 0 9053
+$CHILD +66 1 9053
+$CHILD +83 2 9053
+$CHILD +92 3 9053
+$CHILD +101 4 9053
+$CHILD +131 5 9053
+$CHILD +132 0 5 9053
+$CHILD +166 2 5 9053
+$CHILD +190 3 5 9053
+$CHILD +207 4 5 9053
+$CHILD +217 5 5 9053
+$CHILD +228 6 5 9053
+$CHILD +261 7 5 9053
+$CHILD +270 8 5 9053
+$CHILD +281 11 5 9053
+$CHILD +298 12 5 9053
+$CHILD +315 6 9053
+$CHILD +316 0 6 9053
+$CHILD +350 2 6 9053
+$CHILD +374 3 6 9053
+$CHILD +399 4 6 9053
+$CHILD +424 5 6 9053
+$CHILD +449 6 6 9053
+$CHILD +466 7 6 9053
+$CHILD +499 8 6 9053
+$CHILD +532 9 6 9053
+$CHILD +565 10 6 9053
+$CHILD +598 7 9053
+$CHILD +599 0 7 9053
+$CHILD +632 1 7 9053
+$CHILD +665 2 7 9053
+$CHILD +698 3 7 9053
+$CHILD +731 4 7 9053
+$CHILD +764 5 7 9053
+$CHILD +797 6 7 9053
+$CHILD +830 7 7 9053
+$CHILD +863 8 7 9053
+$CHILD +896 9 7 9053
+$CHILD +929 10 7 9053
+$CHILD +962 11 7 9053
+$CHILD +995 12 7 9053
+$CHILD +1028 13 7 9053
+$CHILD +1061 14 7 9053
+$CHILD +1094 15 7 9053
+$CHILD +1127 16 7 9053
+$CHILD +1160 17 7 9053
+$CHILD +1193 18 7 9053
+$CHILD +1226 19 7 9053
+$CHILD +1259 20 7 9053
+$CHILD +1292 21 7 9053
+$CHILD +1325 22 7 9053
+$CHILD +1358 23 7 9053
+$CHILD +1391 24 7 9053
+$CHILD +1424 25 7 9053
+$SC +2-+63 +2-+15 +2-+7 +2-+7 +2-+28 +3-+32 +2-+22 +2-+15 +2-+8 +2-+9 +2-+31 +2-+7 +2-+9 +2-+15 +2-+15 +3-+32 +2-+22 +2-+23 +2-+23 +2-+23 +2-+15 +2-+31 +2-+31 +2-+31 +2-+31 +3-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31 +2-+31
+$OUT +1 3 27 0 NEW_FRAME
+$BUS OUT +1 10 8 27 1 FRAME_TYP
+$SC +1-+7
+$OUT +1 3 27 0 DP_PRESENT
+$IN +1 3 27 0 PERMIT_FLOW
+$IN +1 3 27 0 HX_IN_CLINK
+P 0 1-10522 CS "0"
+P 0 202 2495 +8 +129 EmptyRow "1"
+$ENDWAVE

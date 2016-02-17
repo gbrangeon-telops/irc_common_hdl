@@ -1,0 +1,43 @@
+#*******************************************************************
+#          *********   ******   *        ******   *****   *****    *
+#             *       *        *        *    *   *   *   *         *
+#            *       ******   *        *    *   *****   *****      *
+#           *       *        *        *    *   *           *       *
+#          *       ******   ******   ******   *       *****        *
+#*******************************************************************
+# Copyright (c) Telops Inc. 2009
+#*******************************************************************
+# Project: IRCDEV
+# 
+# Board : ROIC
+# 
+# Description: UCF file for tb
+#              
+# 
+# Revisions: 1.00 a -- Initial version  
+#*******************************************************************/
+# Clock
+NET CLK_50M	LOC = "C9" | IOSTANDARD = LVCMOS33 ;
+NET CLK_50M TNM_NET = "TNM_CLK_50M";
+TIMESPEC "TS_CLK_50M" = PERIOD "TNM_CLK_50M" 20 ns;
+# Reset
+NET ARESET 	LOC = "K17" | IOSTANDARD = LVTTL | PULLDOWN | TIG;
+
+# Other nets
+NET SERIAL_TX	LOC = "N15" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 6 ;
+NET CLK_TX   	LOC = "N14" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 6 ;
+
+NET SERIAL_RX	LOC = "V5" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 6 ;
+NET CLK_RX   	LOC = "V6" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 6 ;
+NET CLK_RX TNM_NET = "TNM_CLK_RX";               
+TIMESPEC "TS_CLK_RX" = PERIOD "TNM_CLK_RX" 50 ns;
+
+
+NET "LED<7>" LOC = "A8" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 8 ;
+NET "LED<6>" LOC = "G9" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 8 ;
+NET "LED<5>" LOC = "A7" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 8 ;
+NET "LED<4>" LOC = "D13" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 8 ;
+NET "LED<3>" LOC = "E6" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 8 ;
+NET "LED<2>" LOC = "D6" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 8 ;
+NET "LED<1>" LOC = "C3" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 8 ;
+NET "LED<0>" LOC = "D4" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 8 ;

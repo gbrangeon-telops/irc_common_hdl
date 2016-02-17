@@ -1,0 +1,871 @@
+Release 9.1.03i - xst J.33
+Copyright (c) 1995-2007 Xilinx, Inc.  All rights reserved.
+--> 
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+     9.1) Device utilization summary
+     9.2) Partition Resource Summary
+     9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "make.prj"
+Input Format                       : mixed
+Synthesis Constraint File          : make.xcf
+Ignore Synthesis Constraint File   : no
+
+---- Target Parameters
+Output File Name                   : "zbt_ctrl_20a_16d.ngc"
+Output Format                      : NGC
+Target Device                      : xc4vfx100ff1152-10
+
+---- Source Options
+Top Module Name                    : zbt_ctrl_20a_16d
+Automatic FSM Extraction           : yes
+FSM Encoding Algorithm             : Auto
+Resource Sharing                   : yes
+FSM Style                          : lut
+RAM Extraction                     : yes
+RAM Style                          : auto
+ROM Extraction                     : yes
+ROM Style                          : auto
+Mux Extraction                     : yes
+Mux Style                          : auto
+Decoder Extraction                 : yes
+Priority Encoder Extraction        : yes
+Shift Register Extraction          : yes
+Logical Shifter Extraction         : yes
+XOR Collapsing                     : yes
+Multiplier Style                   : auto
+Automatic Register Balancing       : yes
+Safe Implementation                : no
+
+---- Target Options
+Add IO Buffers                     : no
+Pack IO Registers into IOBs        : auto
+Global Maximum Fanout              : 25
+Add Generic Clock Buffer(BUFG)     : 0
+Register Duplication               : yes
+Equivalent register Removal        : yes
+Slice Packing                      : yes
+Convert Tristates To Logic         : yes
+Optimize Instantiated Primitives   : no
+Use Clock Enable                   : yes
+Use Synchronous Set                : yes
+Use Synchronous Reset              : yes
+
+---- General Options
+Optimization Effort                : 2
+Optimization Goal                  : speed
+Global Optimization                : allclocknets
+RTL Output                         : no
+Write Timing Constraints           : no
+Verilog 2001                       : yes
+Keep Hierarchy                     : yes
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : maintain
+Cross Clock Analysis               : yes
+Slice Utilization Ratio            : 100
+Read Cores                         : optimize
+Slice Utilization Ratio Delta      : 5
+
+---- Other Options
+Cores Search Directories           : D:\Telops\Common_HDL\CoreGen_V4
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "D:/Telops/Common_HDL/Telops.vhd" in Library Common_HDL.
+Package <Telops> compiled.
+Package body <Telops> compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/Utilities/sync_reset.vhd" in Library work.
+Entity <sync_reset> compiled.
+Entity <sync_reset> (Architecture <RTL>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/Utilities/double_sync.vhd" in Library work.
+Entity <double_sync> compiled.
+Entity <double_sync> (Architecture <RTL>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/ZBT_Ctrl/Active-HDL/compile/Memory_Rqst_Fifo_interface.vhd" in Library work.
+Entity <memory_rqst_fifo_interface> compiled.
+Entity <memory_rqst_fifo_interface> (Architecture <memory_rqst_fifo_interface>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/ZBT_Ctrl/src/ZBT_Ctrl_Interface.vhd" in Library work.
+Entity <ZBT_Ctrl_Interface> compiled.
+Entity <ZBT_Ctrl_Interface> (Architecture <RTL>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/ZBT_Ctrl/src/ZBT_Std_ctrler.vhd" in Library work.
+Entity <zbt_std_ctrler> compiled.
+Entity <zbt_std_ctrler> (Architecture <ZBT_Std_ctrler>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/ZBT_Ctrl/Active-HDL/compile/ZBT_CONTROL.vhd" in Library work.
+Entity <ZBT_CONTROL> compiled.
+Entity <ZBT_CONTROL> (Architecture <ZBT_CONTROL>) compiled.
+Compiling vhdl file "D:/Telops/Common_HDL/ZBT_Ctrl/zbt_ctrl_20a_16d/zbt_ctrl_20a_16d.vhd" in Library work.
+Entity <zbt_ctrl_20a_16d> compiled.
+Entity <zbt_ctrl_20a_16d> (Architecture <SCH>) compiled.
+
+Reading constraint file make.xcf.
+XCF parsing done.
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for entity <zbt_ctrl_20a_16d> in library <work> (architecture <SCH>).
+
+Analyzing hierarchy for entity <ZBT_CONTROL> in library <work> (architecture <ZBT_CONTROL>) with generics.
+	ALEN = 20
+	DLEN = 16
+
+Analyzing hierarchy for entity <Memory_Rqst_Fifo_interface> in library <work> (architecture <memory_rqst_fifo_interface>) with generics.
+	ALEN = 20
+	CLK_SYS_SUP_CLK_ZBT = true
+	DLEN = 16
+
+Analyzing hierarchy for entity <ZBT_Ctrl_Interface> in library <work> (architecture <RTL>) with generics.
+	ALEN = 20
+	DLEN = 16
+	RAF_Latency = 4
+	RDF_Latency = 9
+	SelfTest = true
+	WRF_Latency = 4
+
+Analyzing hierarchy for entity <ZBT_Std_ctrler> in library <work> (architecture <ZBT_Std_ctrler>) with generics.
+	ALEN = 20
+	DLEN = 16
+
+Analyzing hierarchy for entity <sync_reset> in library <work> (architecture <RTL>).
+
+Analyzing hierarchy for entity <double_sync> in library <work> (architecture <RTL>) with generics.
+	INIT_VALUE = '0'
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing Entity <zbt_ctrl_20a_16d> in library <work> (Architecture <SCH>).
+WARNING:Xst:753 - "D:/Telops/Common_HDL/ZBT_Ctrl/zbt_ctrl_20a_16d/zbt_ctrl_20a_16d.vhd" line 116: Unconnected output port 'TEST_ERROR_FOUND' of component 'ZBT_CONTROL'.
+Entity <zbt_ctrl_20a_16d> analyzed. Unit <zbt_ctrl_20a_16d> generated.
+
+Analyzing generic Entity <ZBT_CONTROL> in library <work> (Architecture <ZBT_CONTROL>).
+	ALEN = 20
+	DLEN = 16
+WARNING:Xst:753 - "D:/Telops/Common_HDL/ZBT_Ctrl/Active-HDL/compile/ZBT_CONTROL.vhd" line 282: Unconnected output port 'ZBT_BWC_N' of component 'ZBT_Std_ctrler'.
+WARNING:Xst:753 - "D:/Telops/Common_HDL/ZBT_Ctrl/Active-HDL/compile/ZBT_CONTROL.vhd" line 282: Unconnected output port 'ZBT_BWD_N' of component 'ZBT_Std_ctrler'.
+    Set property "equivalent_register_removal = NO" for signal <DATA_RD> in unit <ZBT_Std_ctrler>.
+    Set user-defined property "IOB =  TRUE" for signal <DATA_RD> in unit <ZBT_Std_ctrler>.
+Entity <ZBT_CONTROL> analyzed. Unit <ZBT_CONTROL> generated.
+
+Analyzing generic Entity <Memory_Rqst_Fifo_interface> in library <work> (Architecture <memory_rqst_fifo_interface>).
+	ALEN = 20
+	CLK_SYS_SUP_CLK_ZBT = true
+	DLEN = 16
+    Set property "fsm_extract = yes" for signal <FIFO_INTERF_SM>.
+    Set property "fsm_fftype = d" for signal <FIFO_INTERF_SM>.
+Entity <Memory_Rqst_Fifo_interface> analyzed. Unit <Memory_Rqst_Fifo_interface> generated.
+
+Analyzing generic Entity <ZBT_Ctrl_Interface> in library <work> (Architecture <RTL>).
+	ALEN = 20
+	DLEN = 16
+	RAF_Latency = 4
+	RDF_Latency = 9
+	SelfTest = true
+	WRF_Latency = 4
+    Set user-defined property "KEEP =  true" for signal <wrf_wr_err>.
+    Set user-defined property "KEEP =  true" for signal <raf_wr_err>.
+    Set user-defined property "KEEP =  true" for signal <rdf_wr_err_sync>.
+    Set user-defined property "KEEP =  true" for signal <rdf_rd_ack>.
+    Set user-defined property "KEEP =  true" for signal <rdf_dout>.
+WARNING:Xst:2211 - "D:/Telops/Common_HDL/ZBT_Ctrl/src/ZBT_Ctrl_Interface.vhd" line 332: Instantiating black box module <fwft_fifo_w36_d16>.
+WARNING:Xst:2211 - "D:/Telops/Common_HDL/ZBT_Ctrl/src/ZBT_Ctrl_Interface.vhd" line 354: Instantiating black box module <as_fifo_w16_d16>.
+WARNING:Xst:2211 - "D:/Telops/Common_HDL/ZBT_Ctrl/src/ZBT_Ctrl_Interface.vhd" line 426: Instantiating black box module <fwft_fifo_w20_d16>.
+WARNING:Xst:1748 - "D:/Telops/Common_HDL/ZBT_Ctrl/src/ZBT_Ctrl_Interface.vhd" line 583: VHDL Assertion Statement with non constant condition is ignored.
+Entity <ZBT_Ctrl_Interface> analyzed. Unit <ZBT_Ctrl_Interface> generated.
+
+Analyzing Entity <sync_reset> in library <work> (Architecture <RTL>).
+Entity <sync_reset> analyzed. Unit <sync_reset> generated.
+
+Analyzing generic Entity <double_sync> in library <work> (Architecture <RTL>).
+	INIT_VALUE = '0'
+WARNING:Xst:2211 - "D:/Telops/Common_HDL/Utilities/double_sync.vhd" line 48: Instantiating black box module <fd>.
+    Set user-defined property "INIT =  0" for instance <flop1> in unit <double_sync>.
+WARNING:Xst:2211 - "D:/Telops/Common_HDL/Utilities/double_sync.vhd" line 49: Instantiating black box module <fd>.
+    Set user-defined property "INIT =  0" for instance <flop2> in unit <double_sync>.
+Entity <double_sync> analyzed. Unit <double_sync> generated.
+
+Analyzing generic Entity <ZBT_Std_ctrler> in library <work> (Architecture <ZBT_Std_ctrler>).
+	ALEN = 20
+	DLEN = 16
+    Set property "equivalent_register_removal = NO" for signal <Data_to_mem>.
+    Set user-defined property "IOB =  TRUE" for signal <Data_to_mem>.
+    Set property "equivalent_register_removal = NO" for signal <data_valid_out>.
+    Set user-defined property "IOB =  TRUE" for signal <data_valid_out>.
+    Set property "equivalent_register_removal = NO" for signal <zbt_data_oe>.
+    Set user-defined property "IOB =  TRUE" for signal <zbt_data_oe>.
+WARNING:Xst:819 - "D:/Telops/Common_HDL/ZBT_Ctrl/src/ZBT_Std_ctrler.vhd" line 158: The following signals are missing in the process sensitivity list:
+   ARESET.
+WARNING:Xst:819 - "D:/Telops/Common_HDL/ZBT_Ctrl/src/ZBT_Std_ctrler.vhd" line 179: The following signals are missing in the process sensitivity list:
+   ARESET.
+INFO:Xst:2679 - Register <ZBT_BWA_N> in unit <ZBT_Std_ctrler> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <ZBT_BWB_N> in unit <ZBT_Std_ctrler> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <ZBT_BWC_N> in unit <ZBT_Std_ctrler> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <ZBT_BWD_N> in unit <ZBT_Std_ctrler> has a constant value of 0 during circuit operation. The register is replaced by logic.
+Entity <ZBT_Std_ctrler> analyzed. Unit <ZBT_Std_ctrler> generated.
+
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <Memory_Rqst_Fifo_interface>.
+    Related source file is "D:/Telops/Common_HDL/ZBT_Ctrl/Active-HDL/compile/Memory_Rqst_Fifo_interface.vhd".
+WARNING:Xst:647 - Input <RAF_EMPTY> is never used.
+WARNING:Xst:647 - Input <WRF_EMPTY> is never used.
+    Found finite state machine <FSM_0> for signal <FIFO_INTERF_SM>.
+    -----------------------------------------------------------------------
+    | States             | 4                                              |
+    | Transitions        | 14                                             |
+    | Inputs             | 3                                              |
+    | Outputs            | 3                                              |
+    | Clock              | CLK_CORE (rising_edge)                         |
+    | Reset              | ARESET (positive)                              |
+    | Reset type         | synchronous                                    |
+    | Reset State        | rd                                             |
+    | Power Up State     | idle                                           |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <WRITE_EN_N>.
+    Found 20-bit register for signal <ADDRESS>.
+    Found 1-bit register for signal <WRF_RD_EN>.
+    Found 1-bit register for signal <RDF_WR_EN>.
+    Found 1-bit register for signal <CMD_VALID>.
+    Found 16-bit register for signal <DATA_TO_MEM>.
+    Found 1-bit register for signal <RAF_RD_EN>.
+    Found 16-bit register for signal <RDF_DIN>.
+    Found 1-bit register for signal <s_read_en>.
+    Found 1-bit register for signal <s_write_en>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred  59 D-type flip-flop(s).
+Unit <Memory_Rqst_Fifo_interface> synthesized.
+
+
+Synthesizing Unit <ZBT_Std_ctrler>.
+    Related source file is "D:/Telops/Common_HDL/ZBT_Ctrl/src/ZBT_Std_ctrler.vhd".
+WARNING:Xst:647 - Input <BWB_N_IN> is never used.
+WARNING:Xst:647 - Input <BWC_N_IN> is never used.
+WARNING:Xst:647 - Input <BWD_N_IN> is never used.
+WARNING:Xst:647 - Input <BWA_N_IN> is never used.
+WARNING:Xst:646 - Signal <data_delay<2>> is assigned but never used.
+WARNING:Xst:1780 - Signal <valid_read_cmd_in<2>> is never used or assigned.
+    Register <ZBT_MODE> equivalent to <ZBT_ADV_LD_N> has been removed
+    Register <ZBT_CE_N> equivalent to <ZBT_CE2_N> has been removed
+    Register <ZBT_CKE_N> equivalent to <ZBT_CE2_N> has been removed
+    Register <ZBT_ZZ> equivalent to <ZBT_CE2_N> has been removed
+    Found 20-bit register for signal <ZBT_ADD>.
+    Found 1-bit register for signal <DATA_VALID>.
+    Found 1-bit register for signal <ZBT_CE2>.
+    Found 16-bit tristate buffer for signal <ZBT_DATA>.
+    Found 16-bit register for signal <DATA_RD>.
+    Found 1-bit register for signal <ZBT_ADV_LD_N>.
+    Found 1-bit register for signal <ZBT_CE2_N>.
+    Found 32-bit register for signal <data_delay<1:0>>.
+    Found 16-bit register for signal <Data_to_mem>.
+    Found 1-bit register for signal <data_valid_out>.
+    Found 2-bit register for signal <valid_read_cmd_in<1:0>>.
+    Found 16-bit register for signal <zbt_data_oe>.
+    Found 1-bit register for signal <ZBT_WE_Ni>.
+    Found 1-bit register for signal <zbt_wr_delay1>.
+    Summary:
+	inferred 109 D-type flip-flop(s).
+	inferred  16 Tristate(s).
+Unit <ZBT_Std_ctrler> synthesized.
+
+
+Synthesizing Unit <sync_reset>.
+    Related source file is "D:/Telops/Common_HDL/Utilities/sync_reset.vhd".
+    Found 1-bit register for signal <SRESET>.
+    Found 1-bit register for signal <temp>.
+    Summary:
+	inferred   2 D-type flip-flop(s).
+Unit <sync_reset> synthesized.
+
+
+Synthesizing Unit <double_sync>.
+    Related source file is "D:/Telops/Common_HDL/Utilities/double_sync.vhd".
+WARNING:Xst:647 - Input <RESET> is never used.
+Unit <double_sync> synthesized.
+
+
+Synthesizing Unit <ZBT_Ctrl_Interface>.
+    Related source file is "D:/Telops/Common_HDL/ZBT_Ctrl/src/ZBT_Ctrl_Interface.vhd".
+WARNING:Xst:646 - Signal <All_5> is assigned but never used.
+WARNING:Xst:646 - Signal <All_A> is assigned but never used.
+WARNING:Xst:1780 - Signal <wrf_din_override> is never used or assigned.
+    Found 1-bit register for signal <SELF_TEST_PASS>.
+    Found 1-bit register for signal <TEST_ERROR_FOUND>.
+    Found 1-bit register for signal <busy_st>.
+    Found 16-bit register for signal <DATA_st>.
+    Found 1-bit register for signal <enable_read>.
+    Found 1-bit register for signal <enable_write>.
+    Found 1-bit register for signal <error_found>.
+    Found 16-bit comparator equal for signal <error_found$cmp_eq0000> created at line 581.
+    Found 16-bit comparator not equal for signal <error_found$cmp_ne0000> created at line 581.
+    Found 4-bit comparator greater for signal <raf_afull$cmp_gt0000> created at line 425.
+    Found 1-bit register for signal <raf_wr_en_st>.
+    Found 21-bit up counter for signal <rd_add0>.
+    Found 8-bit up counter for signal <rd_add_check>.
+    Found 20-bit register for signal <RD_ADD_st>.
+    Found 1-bit register for signal <RD_IDLEi>.
+    Found 4-bit comparator greater for signal <RDF_AFULL$cmp_gt0000> created at line 447.
+    Found 1-bit register for signal <rdf_rd_ack_hold>.
+    Found 21-bit up counter for signal <wr_add0>.
+    Found 21-bit adder for signal <wr_add0$addsub0000> created at line 545.
+    Found 20-bit register for signal <WR_ADD_st>.
+    Found 1-bit register for signal <WR_IDLEi>.
+    Found 4-bit comparator greater for signal <wrf_afull$cmp_gt0000> created at line 331.
+    Found 1-bit register for signal <wrf_wr_en_st>.
+    Found 4-bit up counter for signal <zbt_rd_idle_cnt>.
+    Found 3-bit up counter for signal <zbt_wr_idle_cnt>.
+    Summary:
+	inferred   5 Counter(s).
+	inferred  67 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   5 Comparator(s).
+Unit <ZBT_Ctrl_Interface> synthesized.
+
+
+Synthesizing Unit <ZBT_CONTROL>.
+    Related source file is "D:/Telops/Common_HDL/ZBT_Ctrl/Active-HDL/compile/ZBT_CONTROL.vhd".
+Unit <ZBT_CONTROL> synthesized.
+
+
+Synthesizing Unit <zbt_ctrl_20a_16d>.
+    Related source file is "D:/Telops/Common_HDL/ZBT_Ctrl/zbt_ctrl_20a_16d/zbt_ctrl_20a_16d.vhd".
+Unit <zbt_ctrl_20a_16d> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Adders/Subtractors                                   : 1
+ 21-bit adder                                          : 1
+# Counters                                             : 5
+ 21-bit up counter                                     : 2
+ 3-bit up counter                                      : 1
+ 4-bit up counter                                      : 1
+ 8-bit up counter                                      : 1
+# Registers                                            : 58
+ 1-bit register                                        : 47
+ 16-bit register                                       : 7
+ 20-bit register                                       : 4
+# Comparators                                          : 5
+ 16-bit comparator equal                               : 1
+ 16-bit comparator not equal                           : 1
+ 4-bit comparator greater                              : 3
+# Tristates                                            : 16
+ 1-bit tristate buffer                                 : 16
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <DP_ZBT_CONTROL/RQST_FIFOs_INTERFACE/FIFO_INTERF_SM> on signal <FIFO_INTERF_SM[1:2]> with gray encoding.
+-------------------
+ State | Encoding
+-------------------
+ idle  | 00
+ wr    | 11
+ rd    | 01
+ rst   | 10
+-------------------
+Loading device for application Rf_Device from file '4vfx100.nph' in environment C:\Xilinx.
+Reading core <D:\Telops\Common_HDL\CoreGen_V4/fwft_fifo_w36_d16.ngc>.
+Reading Secure Unit <U0/gen_as.fgas>.
+Reading core <D:\Telops\Common_HDL\CoreGen_V4/as_fifo_w16_d16.ngc>.
+Reading Secure Unit <U0/gen_as.fgas>.
+Reading core <D:\Telops\Common_HDL\CoreGen_V4/fwft_fifo_w20_d16.ngc>.
+Reading Secure Unit <U0/gen_as.fgas>.
+Loading core <fwft_fifo_w36_d16> for timing and area information for instance <Fifo_For_16_Bit.wrf>.
+Loading core <as_fifo_w16_d16> for timing and area information for instance <Fifo_For_16_Bit.rdf>.
+Loading core <fwft_fifo_w20_d16> for timing and area information for instance <raf>.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# FSMs                                                 : 1
+# Adders/Subtractors                                   : 1
+ 6-bit adder                                           : 1
+# Counters                                             : 5
+ 21-bit up counter                                     : 2
+ 3-bit up counter                                      : 1
+ 4-bit up counter                                      : 1
+ 8-bit up counter                                      : 1
+# Registers                                            : 247
+ Flip-Flops                                            : 247
+# Comparators                                          : 5
+ 16-bit comparator equal                               : 1
+ 16-bit comparator not equal                           : 1
+ 4-bit comparator greater                              : 3
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1710 - FF/Latch  <ZBT_ADV_LD_N> (without init value) has a constant value of 0 in block <ZBT_Std_ctrler>.
+WARNING:Xst:2183 - Unit ZBT_Std_ctrler: the following tristate(s) are NOT replaced by logic (Please refer to Answer Record 20048 for more information): ZBT_DATA<0>, ZBT_DATA<10>, ZBT_DATA<11>, ZBT_DATA<12>, ZBT_DATA<13>, ZBT_DATA<14>, ZBT_DATA<15>, ZBT_DATA<1>, ZBT_DATA<2>, ZBT_DATA<3>, ZBT_DATA<4>, ZBT_DATA<5>, ZBT_DATA<6>, ZBT_DATA<7>, ZBT_DATA<8>, ZBT_DATA<9>.
+
+Optimizing unit <zbt_ctrl_20a_16d> ...
+
+Optimizing unit <Memory_Rqst_Fifo_interface> ...
+
+Optimizing unit <ZBT_Std_ctrler> ...
+
+Optimizing unit <sync_reset> ...
+
+Optimizing unit <double_sync> ...
+
+Optimizing unit <Fifo_For_16_Bit.wrf> ...
+
+Optimizing unit <Fifo_For_16_Bit.rdf> ...
+
+Optimizing unit <raf> ...
+
+Optimizing unit <ZBT_Ctrl_Interface> ...
+WARNING:Xst:1710 - FF/Latch  <DATA_st_0> (without init value) has a constant value of 1 in block <ZBT_Ctrl_Interface>.
+INFO:Xst:2261 - The FF/Latch <DATA_st_8> in Unit <ZBT_Ctrl_Interface> is equivalent to the following FF/Latch, which will be removed : <WR_ADD_st_0> 
+
+Optimizing unit <ZBT_CONTROL> ...
+WARNING:Xst:2677 - Node <TEST_ERROR_FOUND> of sequential type is unconnected in block <ZBT_CONTRL_INTERFACE>.
+
+Mapping all equations...
+Annotating constraints using XCF file 'make.xcf'
+XCF parsing done.
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block zbt_ctrl_20a_16d, actual ratio is 0.
+In hierarchy level DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE.
+Forward register balancing over carry chain Mcount_wr_add0_cy<0>
+In hierarchy level DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE.
+Forward register balancing over carry chain enable_write_cmp_eq0000_wg_cy<0>
+
+Pipelining and Register Balancing Report ...
+
+Processing Unit <DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE> :
+	Register(s) wr_add0_3 wr_add0_2 wr_add0_4 enable_write_cmp_eq00001_SW0_FRB has(ve) been forward balanced into : enable_write_cmp_eq00001_FRB.
+Unit <DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE> processed.
+
+Processing Unit <DP_ZBT_CONTROL/ZBT_CTRLER_KERNEL> :
+	Register(s) valid_read_cmd_in_0 has(ve) been backward balanced into : valid_read_cmd_in_0_BRB0 valid_read_cmd_in_0_BRB1.
+	Register(s) valid_read_cmd_in_1 has(ve) been backward balanced into : valid_read_cmd_in_1_BRB0 valid_read_cmd_in_1_BRB1.
+Unit <DP_ZBT_CONTROL/ZBT_CTRLER_KERNEL> processed.
+FlipFlop DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/busy_st has been replicated 2 time(s)
+
+Final Macro Processing ...
+
+Processing Unit <ZBT_CTRLER_KERNEL> :
+	Found 2-bit shift register for signal <valid_read_cmd_in_1_BRB0>.
+	Found 2-bit shift register for signal <valid_read_cmd_in_1_BRB1>.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_0> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_1> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_2> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_3> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_4> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_5> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_6> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_7> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_8> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_9> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_10> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_11> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_12> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_13> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_14> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <data_delay_1_15> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+Unit <ZBT_CTRLER_KERNEL> processed.
+
+Processing Unit <sync_RST> :
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <SRESET> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+Unit <sync_RST> processed.
+
+Processing Unit <sync_RST_CLK> :
+INFO:Xst:741 - HDL ADVISOR - A 2-bit shift register was found for signal <SRESET> and currently occupies 2 logic cells (1 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+Unit <sync_RST_CLK> processed.
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 322
+ Flip-Flops                                            : 322
+# Shift Registers                                      : 2
+ 2-bit shift register                                  : 2
+
+=========================================================================
+
+=========================================================================
+*                          Partition Report                             *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+Top Level Output File Name         : zbt_ctrl_20a_16d.ngc
+Output Format                      : NGC
+Optimization Goal                  : speed
+Keep Hierarchy                     : yes
+
+Design Statistics
+# IOs                              : 134
+
+Cell Usage :
+# BELS                             : 588
+#      BUF                         : 12
+#      GND                         : 11
+#      INV                         : 38
+#      LUT1                        : 49
+#      LUT2                        : 102
+#      LUT2_D                      : 1
+#      LUT3                        : 125
+#      LUT3_L                      : 1
+#      LUT4                        : 108
+#      LUT4_D                      : 4
+#      LUT4_L                      : 7
+#      MUXCY                       : 74
+#      MUXF5                       : 4
+#      VCC                         : 5
+#      XORCY                       : 47
+# FlipFlops/Latches                : 582
+#      FD                          : 25
+#      FDC                         : 180
+#      FDCE                        : 114
+#      FDE                         : 93
+#      FDP                         : 21
+#      FDPE                        : 15
+#      FDR                         : 43
+#      FDRE                        : 81
+#      FDRS                        : 2
+#      FDRSE                       : 1
+#      FDS                         : 2
+#      FDSE                        : 5
+# RAMS                             : 3
+#      RAMB16                      : 3
+# Shift Registers                  : 2
+#      SRL16E                      : 2
+# Tri-States                       : 16
+#      BUFT                        : 16
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 4vfx100ff1152-10 
+
+ Number of Slices:                     363  out of  42176     0%  
+ Number of Slice Flip Flops:           549  out of  84352     0%  
+ Number of 4 input LUTs:               437  out of  84352     0%  
+    Number used as logic:              435
+    Number used as Shift registers:      2
+ Number of IOs:                        134
+ Number of bonded IOBs:                  0  out of    576     0%  
+    IOB Flip Flops:                     33
+ Number of TBUFs:                       16  out of      0        (*) 
+ Number of FIFO16/RAMB16s:               3  out of    376     0%  
+    Number used as RAMB16s:              3
+
+WARNING:Xst:1336 -  (*) More than 100% of Device resources are used
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+---------------------------------------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)                                   | Load  |
+-----------------------------------+---------------------------------------------------------+-------+
+CLK_CORE                           | NONE(DP_ZBT_CONTROL/ZBT_CTRLER_KERNEL/DATA_RD_8)        | 328   |
+CLK                                | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/rd_add_check_5)| 256   |
+-----------------------------------+---------------------------------------------------------+-------+
+INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
+
+Asynchronous Control Signals Information:
+----------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------+
+Control Signal                                                                                                                                                                                                    | Buffer(FF name)                                                                                                                                                                           | Load  |
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------+
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0_2(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0_2:O)                                | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.flblk/clkmod/cx.wrx/PNTR_B_2)                                                                                     | 18    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0_1(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0_1:O)                                | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.memblk/DOUT_18)                                                                                                   | 18    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/RD_DATA_COUNT<0>(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/XST_GND:G)                                 | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.memblk/bmem.bmg.bmg_inst/blk_mem_generator/valid.cstr/ramloop[0].ram.r/v4.ram/SDP.SINGLE_PRIM.SDP)| 4     |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/RD_DATA_COUNT<0>(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/XST_GND:G)                                 | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.memblk/bmem.bmg.bmg_inst/blk_mem_generator/valid.cstr/ramloop[0].ram.r/v4.ram/SDP.SINGLE_PRIM.SDP)| 4     |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_fb(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0:Q)                                       | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.cntblk/gen_cntr.gen_rd_cntr/gen_bin_cnt_top.bin_cnt_top/gen_bsc_bin_cnt.bld_bin_cnt/count_1)                      | 12    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb_1(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb_1:O)      | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.flblk/clkmod/cx.rdx/pntr_gc_x2_0)                                                                 | 18    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/RD_DATA_COUNT<0>(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/XST_GND:G)                                                                 | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.memblk/bmem.bmg.bmg_inst/blk_mem_generator/valid.cstr/ramloop[0].ram.r/v4.ram/SDP.SINGLE_PRIM.SDP)                | 4     |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0_2(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0_2:O)| NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.memblk/DOUT_12)                                                                                   | 23    |
+ARESET                                                                                                                                                                                                            | NONE                                                                                                                                                                                      | 87    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_fb(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0:Q)       | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.cntblk/gen_cntr.gen_rd_cntr_plus1/gen_bin_cnt_top.bin_cnt_top/gen_bsc_bin_cnt.bld_bin_cnt/count_2)| 18    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0_1(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0_1:O)| NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.memblk/DOUT_3)                                                                                    | 23    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb:Q)          | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.cntblk/gen_cntr.gen_wr_cntr/gen_bin_cnt_top.bin_cnt_top/gen_bsc_bin_cnt.bld_bin_cnt/count_0)      | 15    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb_1(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb_1:O)      | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.flblk/clkmod/cx.wrx/pntr_gc_3)                                                                    | 18    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0_1(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0_1:O)| NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.flblk/clkmod/cx.wrx/pntr_gc_x2_2)                                                                 | 15    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb_1(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb_1:O)                                      | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.flblk/clkmod/cx.rdx/PNTR_B_3)                                                                                     | 18    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb:Q)                                          | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.cntblk/gen_cntr.gen_wr_cntr_plus2/gen_bin_cnt_top.bin_cnt_top/gen_bsc_bin_cnt.bld_bin_cnt/count_0)                | 15    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_fb(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.inblk/rd_rst_int_0:Q)       | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.cntblk/gen_cntr.gen_rd_cntr_plus1/gen_bin_cnt_top.bin_cnt_top/gen_bsc_bin_cnt.bld_bin_cnt/count_3)| 11    |
+DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.inblk/wr_rst_fb:Q)          | NONE(DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.wrf_BU2/U0/gen_as.fgas/normgen.cntblk/gen_cntr.gen_wr_cntr/gen_bin_cnt_top.bin_cnt_top/gen_bsc_bin_cnt.bld_bin_cnt/count_3)      | 15    |
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------+
+
+Timing Summary:
+---------------
+Speed Grade: -10
+
+   Minimum period: 5.792ns (Maximum Frequency: 172.659MHz)
+   Minimum input arrival time before clock: 2.751ns
+   Maximum output required time after clock: 2.365ns
+   Maximum combinational path delay: No path found
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'CLK_CORE'
+  Clock period: 0.742ns (frequency: 1347.800MHz)
+  Total number of paths / destination ports: 15 / 15
+-------------------------------------------------------------------------
+Offset:              0.742ns (Levels of Logic = 2)
+  Source:            DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.olblk/gof.ovrflwl/OVERFLOW (FF)
+  Destination:       DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/sync_rdf_wr_err/flop1 (FF)
+  Source Clock:      CLK_CORE rising
+  Destination Clock: CLK rising
+
+  Data Path: DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.olblk/gof.ovrflwl/OVERFLOW to DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/sync_rdf_wr_err/flop1
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q               1   0.360   0.360  normgen.olblk/gof.ovrflwl/OVERFLOW (OVERFLOW)
+     end scope: 'U0/gen_as.fgas'
+     end scope: 'Fifo_For_16_Bit.rdf_BU2'
+     begin scope: 'sync_rdf_wr_err'
+     FD:D                      0.022          flop1
+    ----------------------------------------
+    Total                      0.742ns (0.382ns logic, 0.360ns route)
+                                       (51.5% logic, 48.5% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'CLK'
+  Clock period: 0.742ns (frequency: 1347.800MHz)
+  Total number of paths / destination ports: 12 / 12
+-------------------------------------------------------------------------
+Offset:              0.742ns (Levels of Logic = 0)
+  Source:            DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.flblk/clkmod/cx.wrx/pntr_gc_3 (FF)
+  Destination:       DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.flblk/clkmod/cx.wrx/pntr_gc_x_3 (FF)
+  Source Clock:      CLK rising
+  Destination Clock: CLK_CORE rising
+
+  Data Path: DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.flblk/clkmod/cx.wrx/pntr_gc_3 to DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.flblk/clkmod/cx.wrx/pntr_gc_x_3
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDC:C->Q              1   0.360   0.360  normgen.flblk/clkmod/cx.wrx/pntr_gc_3 (normgen.flblk/clkmod/cx.wrx/pntr_gc<3>)
+     FDC:D                     0.022          normgen.flblk/clkmod/cx.wrx/pntr_gc_x_3
+    ----------------------------------------
+    Total                      0.742ns (0.382ns logic, 0.360ns route)
+                                       (51.5% logic, 48.5% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'CLK_CORE'
+  Clock period: 4.887ns (frequency: 204.639MHz)
+  Total number of paths / destination ports: 967 / 471
+-------------------------------------------------------------------------
+Delay:               4.887ns (Levels of Logic = 6)
+  Source:            DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.flblk/wr_data_count_i_2 (FF)
+  Destination:       DP_ZBT_CONTROL/RQST_FIFOs_INTERFACE/WRF_RD_EN (FF)
+  Source Clock:      CLK_CORE rising
+  Destination Clock: CLK_CORE rising
+
+  Data Path: DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/Fifo_For_16_Bit.rdf_BU2/U0/gen_as.fgas/normgen.flblk/wr_data_count_i_2 to DP_ZBT_CONTROL/RQST_FIFOs_INTERFACE/WRF_RD_EN
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDC:C->Q              1   0.360   0.741  normgen.flblk/wr_data_count_i_2 (WR_DATA_COUNT<2>)
+     end scope: 'U0/gen_as.fgas'
+     end scope: 'Fifo_For_16_Bit.rdf_BU2'
+     LUT3_L:I0->LO         1   0.195   0.163  RDF_AFULL_or0000_SW0 (N127)
+     LUT4:I3->O            3   0.195   0.703  RDF_AFULL_or0000 (RDF_AFULL)
+     end scope: 'ZBT_CONTRL_INTERFACE'
+     begin scope: 'RQST_FIFOs_INTERFACE'
+     LUT2:I1->O            3   0.195   0.703  s_write_en_mux0000111 (N4)
+     LUT4:I1->O            3   0.195   0.375  WRF_RD_EN_mux000121 (FIFO_INTERF_SM_FFd2-In)
+     FDRS:S                    1.062          WRF_RD_EN
+    ----------------------------------------
+    Total                      4.887ns (2.202ns logic, 2.685ns route)
+                                       (45.1% logic, 54.9% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'CLK'
+  Clock period: 5.792ns (frequency: 172.659MHz)
+  Total number of paths / destination ports: 3739 / 573
+-------------------------------------------------------------------------
+Delay:               5.792ns (Levels of Logic = 6)
+  Source:            DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/enable_write (FF)
+  Destination:       DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/SELF_TEST_PASS (FF)
+  Source Clock:      CLK rising
+  Destination Clock: CLK rising
+
+  Data Path: DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/enable_write to DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/SELF_TEST_PASS
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDSE:C->Q             5   0.360   0.764  enable_write (enable_write)
+     LUT4:I0->O            1   0.195   0.585  enable_read_not00011_SW0_SW0 (N164)
+     LUT4:I2->O            3   0.195   0.703  enable_read_not00011 (N110)
+     LUT4:I1->O            1   0.195   0.000  enable_read_mux00001 (N194)
+     MUXF5:I1->O           8   0.374   0.608  enable_read_mux0000_f5 (enable_read_mux0000)
+     LUT4_D:I3->O          1   0.195   0.523  SELF_TEST_PASS_not00013 (N171)
+     LUT4:I3->O            1   0.195   0.360  SELF_TEST_PASS_not0001 (SELF_TEST_PASS_not0001)
+     FDRE:CE                   0.540          SELF_TEST_PASS
+    ----------------------------------------
+    Total                      5.792ns (2.249ns logic, 3.543ns route)
+                                       (38.8% logic, 61.2% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'CLK_CORE'
+  Total number of paths / destination ports: 83 / 83
+-------------------------------------------------------------------------
+Offset:              1.945ns (Levels of Logic = 2)
+  Source:            ARESET (PAD)
+  Destination:       DP_ZBT_CONTROL/RQST_FIFOs_INTERFACE/WRITE_EN_N (FF)
+  Destination Clock: CLK_CORE rising
+
+  Data Path: ARESET to DP_ZBT_CONTROL/RQST_FIFOs_INTERFACE/WRITE_EN_N
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     begin scope: 'DP_ZBT_CONTROL'
+     begin scope: 'RQST_FIFOs_INTERFACE'
+     LUT2:I1->O            1   0.195   0.360  WRITE_EN_N_or00001 (WRITE_EN_N_or0000)
+     FDS:S                     1.062          WRITE_EN_N
+    ----------------------------------------
+    Total                      1.945ns (1.585ns logic, 0.360ns route)
+                                       (81.5% logic, 18.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'CLK'
+  Total number of paths / destination ports: 119 / 108
+-------------------------------------------------------------------------
+Offset:              2.751ns (Levels of Logic = 4)
+  Source:            RD_ADD_EN (PAD)
+  Destination:       DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.memblk/bmem.bmg.bmg_inst/blk_mem_generator/valid.cstr/ramloop[0].ram.r/v4.ram/SDP.SINGLE_PRIM.SDP (RAM)
+  Destination Clock: CLK rising
+
+  Data Path: RD_ADD_EN to DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/raf_BU2/U0/gen_as.fgas/normgen.memblk/bmem.bmg.bmg_inst/blk_mem_generator/valid.cstr/ramloop[0].ram.r/v4.ram/SDP.SINGLE_PRIM.SDP
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     begin scope: 'DP_ZBT_CONTROL'
+     begin scope: 'ZBT_CONTRL_INTERFACE'
+     LUT3:I1->O            2   0.195   0.705  raf_wr_en1 (raf_wr_en)
+     begin scope: 'raf_BU2'
+     begin scope: 'U0/gen_as.fgas'
+     LUT2:I1->O           17   0.195   0.580  normgen.flblk/wpremod/RAM_WR_EN1 (DEBUG_RAM_WR_EN)
+     RAMB16:WEA3               0.748          normgen.memblk/bmem.bmg.bmg_inst/blk_mem_generator/valid.cstr/ramloop[0].ram.r/v4.ram/SDP.SINGLE_PRIM.SDP
+    ----------------------------------------
+    Total                      2.751ns (1.466ns logic, 1.285ns route)
+                                       (53.3% logic, 46.7% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'CLK_CORE'
+  Total number of paths / destination ports: 58 / 42
+-------------------------------------------------------------------------
+Offset:              1.275ns (Levels of Logic = 3)
+  Source:            DP_ZBT_CONTROL/ZBT_CTRLER_KERNEL/zbt_data_oe_15 (FF)
+  Destination:       ZBT_DATA<15> (PAD)
+  Source Clock:      CLK_CORE rising
+
+  Data Path: DP_ZBT_CONTROL/ZBT_CTRLER_KERNEL/zbt_data_oe_15 to ZBT_DATA<15>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q               1   0.360   0.360  zbt_data_oe_15 (zbt_data_oe<15>)
+     INV:I->O              1   0.195   0.360  zbt_data_oe<15>_inv1_INV_0 (zbt_data_oe<15>_inv)
+     BUFT:T->O             1   0.000   0.000  ZBT_DATA<15>_Data_to_mem<15> (ZBT_DATA<15>)
+     end scope: 'ZBT_CTRLER_KERNEL'
+     end scope: 'DP_ZBT_CONTROL'
+    ----------------------------------------
+    Total                      1.275ns (0.555ns logic, 0.720ns route)
+                                       (43.5% logic, 56.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'CLK'
+  Total number of paths / destination ports: 36 / 24
+-------------------------------------------------------------------------
+Offset:              2.365ns (Levels of Logic = 4)
+  Source:            DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/sync_RST_CLK/SRESET (FF)
+  Destination:       RD_ADD_AFULL (PAD)
+  Source Clock:      CLK rising
+
+  Data Path: DP_ZBT_CONTROL/ZBT_CONTRL_INTERFACE/sync_RST_CLK/SRESET to RD_ADD_AFULL
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDP:C->Q             23   0.360   0.904  SRESET (SRESET)
+     end scope: 'sync_RST_CLK'
+     LUT4_D:I3->O          5   0.195   0.711  RD_ADD_AFULL11 (N141)
+     LUT2:I1->O            0   0.195   0.000  RD_ADD_AFULL2 (RD_ADD_AFULL)
+     end scope: 'ZBT_CONTRL_INTERFACE'
+     end scope: 'DP_ZBT_CONTROL'
+    ----------------------------------------
+    Total                      2.365ns (0.750ns logic, 1.615ns route)
+                                       (31.7% logic, 68.3% route)
+
+=========================================================================
+CPU : 17.99 / 18.10 s | Elapsed : 18.00 / 18.00 s
+ 
+--> 
+
+Total memory usage is 369136 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :   28 (   0 filtered)
+Number of infos    :   24 (   0 filtered)
+

@@ -1,0 +1,77 @@
+
+COPYRIGHT (c) 2006 XILINX, INC.
+ALL RIGHTS RESERVED
+
+Core name : Aurora
+Version : 2.4
+Release Date : Jan 2006
+File : release_notes.txt 
+
+
+INTRODUCTION
+
+RELEASE NOTES
+  1. Enhancements
+  2. Known Issues
+
+TECHNICAL SUPPORT
+
+========================================================================
+
+INTRODUCTION
+============
+
+Thank you for using the Aurora LogiCORE from Xilinx. To obtain the latest
+core updates and documentation, please visit the Aurora LogiCORE Lounge. The  
+lounge is accessible from the Aurora landing page:
+
+http://www.xilinx.com/aurora
+
+Please refer to the LogiCORE Aurora Getting Started Guide for  more information
+about how to set up and use the Aurora Core.  
+
+This document contains the release notes for version 2.4 of the Aurora Core, covering
+enhancements to the core, resolved issues from version 2.3, and a link to the current
+listing of all known issues.
+
+
+
+RELEASE NOTES
+=============
+
+This section lists the enhancements and known issues associated with  
+this release.
+
+1. Enhancements 
+
+   * Updated for ISE 8.1i
+   * Calibration blocks added for Virtex-4
+   * make_aurora.pl has more flexible options for synplify
+   * Simpler ucf files: parameters defined in HDL
+
+
+2. Known Issues 
+
+   * Avoid using REFCLK for multilane ProX designs. There are problems in map and par that prevent them from working
+   * Avoid using MGTs in col0 and col1 in a singe V4 core. These do not route well
+   * Note that the calibration block makes V4 simulations run longer. You will have to run for about 180 us
+   * Remember to set pin constraints in the aurora_sample.ucf file before using the aurora_sample design.
+
+   For a list of all known issues with the Aurora core, please refer to Answer Record 21263:   
+  
+   http://support.xilinx.com/xlnx/xil_ans_display.jsp?iLanguageID=1&iCountryID=1&getPagePath=21263 
+
+
+
+TECHNICAL SUPPORT
+=================
+The fastest method for obtaining specific technical support for the 
+Aurora core is through the http://www.xilinx.com/support
+website. Questions are routed to a team of engineers with specific 
+expertise in using Aurora. Xilinx will provide 
+technical support for use of this product as described in the
+LogiCORE Aurora User Guide and the LogiCORE Aurora
+Getting Started User Guide. Xilinx cannot guarantee timing,
+functionality, or support of this product for designs that do not
+follow these guidelines.
+
