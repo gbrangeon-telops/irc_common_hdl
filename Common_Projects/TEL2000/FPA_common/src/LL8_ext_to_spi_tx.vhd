@@ -122,16 +122,19 @@ begin
    
    ------------------------------------------------------
    --Outputs map                        
-   ------------------------------------------------------ 
-   
-   FRM_DONE  <= frm_done_i;
-   
+   ------------------------------------------------------   
    RX_MISO.AFULL <= '0';
    RX_MISO.BUSY <= busy_i; 
    
-   SCLK0 <= sclk_o;
-   SD <= sd_o;
-   CS_N <= cs_n_o; 
+   Ureg : process(CLK)
+   begin
+      if rising_edge(CLK) then    
+         SCLK0 <= sclk_o;
+         SD <= sd_o;
+         CS_N <= cs_n_o; 
+         FRM_DONE  <= frm_done_i;    
+      end if;
+   end process;
    
    --------------------------------------------------
    -- Sync reset

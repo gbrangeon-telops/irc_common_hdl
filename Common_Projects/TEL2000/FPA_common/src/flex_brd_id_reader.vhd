@@ -72,12 +72,18 @@ architecture rtl of flex_brd_id_reader is
    signal reader_done    : std_logic;
    signal flex_id_sm     : flex_id_sm_type;
    signal clean_miso     : std_logic;
+   signal rqst_i         : std_logic;
    
    
 begin
    
-   DONE <=  reader_done; 
-   
+   U0 : process(CLK_100M)
+   begin
+      if rising_edge(CLK_100M) then
+         DONE <= reader_done; 
+         RQST <= rqst_i;
+      end if;
+   end process;
    
    --------------------------------------------------
    -- Sync reset
@@ -121,7 +127,7 @@ begin
       if rising_edge(CLK_100M) then 
          if sreset = '1' then 
             flex_id_sm <= wait_reader_st; 
-            RQST <= '0';
+            rqst_i <= '0';
             reader_run <= '0';
          else 
             
@@ -133,14 +139,14 @@ begin
                   end if;
                
                when idle =>             -- on demande à lire i'ID et on lance l'id)_reader dès que la demande est accordée
-                  RQST <= '1';
+                  rqst_i <= '1';
                   if EN = '1' then 
                      flex_id_sm <= end_rqst_st;
                      reader_run <= '1';
                   end if;
                
                when end_rqst_st =>         -- on s'assure que l'ID reader est lancé pour effacer la demande.
-                  RQST <= '0';
+                  rqst_i <= '0';
                   if reader_done = '0' then  
                      reader_run <= '0';
                   end if;

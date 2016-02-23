@@ -77,18 +77,27 @@ architecture rtl of adc_brd_id_reader is
    signal clean_miso     : std_logic;
    signal rqst_i         : std_logic;
    
-   attribute dont_touch : string;
-   attribute dont_touch of ADC_BRD_INFO     : signal is "TRUE";
-   attribute dont_touch of rqst_i            : signal is "TRUE";
+   --attribute dont_touch : string;
+   --attribute dont_touch of ADC_BRD_INFO     : signal is "TRUE";
+   --attribute dont_touch of rqst_i            : signal is "TRUE";
    
    
 begin
    
-   DONE <=  reader_done;
+   --------------------------------------------------
+   -- outputs
+   --------------------------------------------------  
    CSN <='1';
    SCLK <= '0';
    MOSI <= '0';
    
+   U0 : process(CLK_100M)
+   begin
+      if rising_edge(CLK_100M) then     
+         RQST <= rqst_i;
+         DONE <=  reader_done;
+      end if;
+   end process;
    
    --------------------------------------------------
    -- MISO est filtré avant d'être utilisé
@@ -130,7 +139,7 @@ begin
       if rising_edge(CLK_100M) then 
          if sreset = '1' then 
             adc_id_sm <= wait_reader_st; 
-            RQST <= '0';
+            -- RQST <= '0';
             rqst_i <='0';
             reader_run <= '0';
          else 
@@ -143,7 +152,7 @@ begin
                   end if;
                
                when idle =>             -- on demande à lire i'ID et on lance l'id)_reader dès que la demande est accordée
-                  RQST <= '1';
+                  -- RQST <= '1';
                   rqst_i <='1';
                   if EN = '1' then 
                      adc_id_sm <= end_rqst_st;
@@ -151,7 +160,7 @@ begin
                   end if;
                
                when end_rqst_st =>         -- on s'assure que l'ID reader est lancé pour effacer la demande et on ne sort plus de cet etat
-                  RQST <= '0';
+                  -- RQST <= '0';
                   rqst_i <='0';
                   if reader_done = '0' then  
                      reader_run <= '0';

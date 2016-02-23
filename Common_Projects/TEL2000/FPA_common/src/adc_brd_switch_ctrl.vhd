@@ -81,7 +81,7 @@ architecture rtl of adc_brd_switch_ctrl is
    end component;
    
    type switch_fsm_type is (idle, wait_cfg_st, rqst_st, start_spi_st, end_spi_st);
-   type cfg_word_fsm_type is (idle, current_src_st, flex_psp_st, roic_en_st, digioV_st, cfg_done_st);
+   type cfg_word_fsm_type is (idle, current_src_st1, current_src_st2, current_src_st3, flex_psp_st1, flex_psp_st2, flex_psp_st3, roic_en_st, digioV_st1, digioV_st2, digioV_st3, cfg_done_st);
    
    signal done_i               : std_logic;
    signal spi_sclk_i           : std_logic;
@@ -95,16 +95,21 @@ architecture rtl of adc_brd_switch_ctrl is
    signal switch_cfg_word      : std_logic_vector(8 downto 1);
    signal switch_data          : std_logic_vector(7 downto 0);
    signal switch_cfg_word_dval : std_logic; 
-   
+   signal rqst_i               : std_logic;
    
 begin
    
    --------------------------------------
-   -- Outputs
+   -- Outputs registered
    --------------------------------------  
-   SWITCH_DONE <= done_i;
-   DONE <= done_i;
-   
+   U0 : process(CLK)
+   begin
+      if rising_edge(CLK) then 
+         SWITCH_DONE <= done_i;
+         DONE <= done_i;
+         RQST <= rqst_i;
+      end if;
+   end process;
    
    ------------------------------------
    -- sync reset
@@ -161,7 +166,7 @@ begin
       if rising_edge(CLK) then 
          if sreset = '1' then 
             switch_fsm <=  idle;
-            RQST <= '0';
+            rqst_i <= '0';
             done_i <= '0';
             switch_cfg_word_last <= (others => '1'); -- fait expres pour qu'au demarrage, la switch se programme à x"00".
          else       
@@ -170,7 +175,7 @@ begin
             case  switch_fsm is               
                
                when idle =>
-                  RQST <= '0';
+                  rqst_i <= '0';
                   done_i <= '1';
                   cfg_mosi.dval <= '0';
                   if SWITCH_PROG = '1' or switch_cfg_word /= switch_cfg_word_last then  -- SWITCH_PROG permet de programmer la switch meme si 
@@ -185,13 +190,13 @@ begin
                   end if;
                
                when rqst_st =>  
-                  RQST <= '1';
+                  rqst_i <= '1';
                   if EN = '1' then 
                      switch_fsm <=  start_spi_st;
                   end if;
                
                when start_spi_st => 
-                  RQST <= '0';
+                  rqst_i <= '0';
                   cfg_mosi.data <= switch_data;
                   cfg_mosi.sof  <= '1';
                   cfg_mosi.eof  <= '1';
@@ -240,46 +245,64 @@ begin
                when idle =>                  
                   switch_cfg_word(8) <= GLOBAL_ERR;       -- error
                   switch_cfg_word_dval <= '1';
-                  if SWITCH_PROG = '1' then      -- SWITCH_PROG passe à '1' ssi le HW est conforme
+                  if SWITCH_PROG = '1' then               -- SWITCH_PROG passe à '1' ssi le HW est conforme
                      switch_cfg_word_dval <= '0';
-                     cfg_word_fsm <= current_src_st;
+                     cfg_word_fsm <= current_src_st1;
                   end if;
                   
                -- current source
-               when current_src_st =>
-                  if DEFINE_FPA_TEMP_DIODE_CURRENT_uA = 100 then     -- courant de 100uA
-                     switch_cfg_word(2 downto 1) <= "01"; 
-                  elsif DEFINE_FPA_TEMP_DIODE_CURRENT_uA = 1000 then -- courant de 1000uA
-                     switch_cfg_word(2 downto 1) <= "11"; 
-                  else                                               -- courant de 25uA 
-                     switch_cfg_word(2 downto 1) <= "00";                         
-                  end if;                                            
-                  cfg_word_fsm <= flex_psp_st;
+               when current_src_st1 =>                  
+                  switch_cfg_word(2 downto 1) <= "00";                -- courant de 25uA (valeur par defaut                        
+                  cfg_word_fsm <= current_src_st2;
+               
+               when current_src_st2 =>    
+                  if DEFINE_FPA_TEMP_DIODE_CURRENT_uA = 100 then      -- courant de 100uA
+                     switch_cfg_word(2 downto 1) <= "01";
+                  end if;
+                  cfg_word_fsm <= current_src_st3;
+               
+               when current_src_st3 =>    
+                  if DEFINE_FPA_TEMP_DIODE_CURRENT_uA = 1000 then     -- courant de 1000uA
+                     switch_cfg_word(2 downto 1) <= "11";
+                  end if;
+                  cfg_word_fsm <= flex_psp_st1;          
                   
                -- Flex V+ 
-               when flex_psp_st =>
-                  if DEFINE_FLEX_VOLTAGEP_mV    = 6_500 then         -- flex_PSP de 6.5V
+               when flex_psp_st1 =>                                            
+                  switch_cfg_word(4 downto 3) <= "00";                -- flex_PSP de 5V                                                          
+                  cfg_word_fsm <= flex_psp_st2;
+               
+               when flex_psp_st2 =>
+                  if DEFINE_FLEX_VOLTAGEP_mV    = 6_500 then          -- flex_PSP de 6.5V
                      switch_cfg_word(4 downto 3) <= "01"; 
-                  elsif DEFINE_FLEX_VOLTAGEP_mV = 8_000 then         -- flex_PSP de 8V
+                  end if;
+                  cfg_word_fsm <= flex_psp_st3;    
+               
+               when flex_psp_st3 =>
+                  if DEFINE_FLEX_VOLTAGEP_mV = 8_000 then             -- flex_PSP de 8V
                      switch_cfg_word(4 downto 3) <= "11"; 
-                  else                                               -- flex_PSP de 5V  
-                     switch_cfg_word(4 downto 3) <= "00";                       
-                  end if;                                      
-                  cfg_word_fsm <= roic_en_st;
+                  end if;
+                  cfg_word_fsm <= roic_en_st;  
                   
                -- roic_en
                when roic_en_st =>
-                  switch_cfg_word(5) <= '1';                         -- toujours à '1'. On permet l'allumage du flex mais le dernier mot revient au driver.
-                  cfg_word_fsm <= digioV_st;
+                  switch_cfg_word(5) <= '1';                          -- toujours à '1'. On permet l'allumage du flex mais le dernier mot revient au driver.
+                  cfg_word_fsm <= digioV_st1;
                   
                -- digioV
-               when digioV_st =>
-                  if DEFINE_FPA_INPUT    = LVTTL50 then              -- digioV de 5.0V
-                     switch_cfg_word(7 downto 6) <= "11"; 
-                  elsif DEFINE_FPA_INPUT = LVCMOS33 then             -- digioV de 3.3V
-                     switch_cfg_word(7 downto 6) <= "01"; 
-                  else                                               -- digioV de 2.5V
-                     switch_cfg_word(7 downto 6) <= "00";                       
+               when digioV_st1 =>
+                  switch_cfg_word(7 downto 6) <= "00";                -- digioV de 2.5V (valeur par defaut)          
+                  cfg_word_fsm <= digioV_st2;
+               
+               when digioV_st2 =>
+                  if DEFINE_FPA_INPUT = LVCMOS33 then                 -- digioV de 3.3V
+                     switch_cfg_word(7 downto 6) <= "01";
+                  end if;
+                  cfg_word_fsm <= digioV_st3;
+               
+               when digioV_st3 =>
+                  if DEFINE_FPA_INPUT = LVTTL50 then                  -- digioV de 5.0V
+                     switch_cfg_word(7 downto 6) <= "11";   
                   end if;
                   cfg_word_fsm <= cfg_done_st;
                   

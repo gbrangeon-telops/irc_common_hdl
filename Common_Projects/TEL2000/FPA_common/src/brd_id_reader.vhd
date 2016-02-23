@@ -87,11 +87,16 @@ begin
    --------------------------------------------------
    -- mapping des sorties
    --------------------------------------------------    
-   ADC_BRD_INFO <= adc_brd_info_i;
-   DDC_BRD_INFO <= ddc_brd_info_i;
-   FLEX_BRD_INFO <= flex_brd_info_i;
-   ERR <= '0';
-   DONE <= done_i;
+   U0 : process(CLK_100M)
+   begin
+      if rising_edge(CLK_100M) then 
+         ADC_BRD_INFO <= adc_brd_info_i;
+         DDC_BRD_INFO <= ddc_brd_info_i;
+         FLEX_BRD_INFO <= flex_brd_info_i;
+         ERR <= '0';
+         DONE <= done_i;
+      end if;
+   end process;
    
    --------------------------------------------------
    -- Sync reset

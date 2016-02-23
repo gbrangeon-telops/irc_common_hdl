@@ -62,7 +62,7 @@ architecture RTL of fpa_intf_sequencer is
    end component;
    
    type status_type is (not_available, success, failure);
-   type fpa_sequencer_sm_type is (init_st, idle, trig_ctrl_st, active_prog_st, wait_trig_done_st, wait_prog_end_st, trig_en_st);
+   type fpa_sequencer_sm_type is (init_st1, init_st2, idle, trig_ctrl_st, active_prog_st, wait_trig_done_st, wait_prog_end_st, trig_en_st);
    signal fpa_hardw_up2date   : status_type;
    signal fpa_hardw_type      : status_type;
    signal fpa_vhd_stat_i      : status_type;
@@ -127,8 +127,7 @@ begin
    -----------------------------------------------------------
    U2: process(CLK)
    begin          
-      if rising_edge(CLK) then    
-         
+      if rising_edge(CLK) then         
          
          if FPA_HARDW_STAT.DVAL = '1' and FPA_VHD_STAT.DVAL = '1' then     -- dval est requis pour eviter de sortir des fausses erreurs
             
@@ -293,7 +292,7 @@ begin
    begin          
       if rising_edge(CLK) then 
          if sreset = '1' then 
-            fpa_sequencer_sm <= init_st;
+            fpa_sequencer_sm <= init_st1;
             trig_ctler_en_i <= '0';
             fpa_driver_en_i <= '0';
             done <= '0';
@@ -303,22 +302,25 @@ begin
             
             case fpa_sequencer_sm is 
                
-               when init_st => 
+               when init_st1 => 
                   done <= '0';
                   trig_ctler_en_i <= '0';
                   fpa_driver_en_i <= '0';
                   diag_mode_only_i <= '0'; 
                   if firmw_global_status = success then 
-                     diag_mode_only_i <= '1'; -- si le firmware est correct, au moins le mode diag est possible. 
-                     if hardw_global_status = success then                        
-                        fpa_sequencer_sm <= idle;
-                     elsif hardw_global_status = failure then     
-                        fpa_sequencer_sm <= idle;
-                     else  -- statut non encore disponible, on attend
-                        trig_ctler_en_i <= FPA_INTF_CFG.COMN.FPA_DIAG_MODE; -- le contrôleur de trig est activé si le mode diag est demandé. Sinon , rien ne se passe
-                     end if;
+                     fpa_sequencer_sm <= init_st2; 
                   else     -- statut non encore disponible ou failure, rien à faire sauf attendre
-                  end if;  
+                  end if;
+               
+               when init_st2 =>
+                  diag_mode_only_i <= '1'; -- si le firmware est correct, au moins le mode diag est possible. 
+                  if hardw_global_status = success then                        
+                     fpa_sequencer_sm <= idle;
+                  elsif hardw_global_status = failure then     
+                     fpa_sequencer_sm <= idle;
+                  else  -- statut non encore disponible, on attend
+                     trig_ctler_en_i <= FPA_INTF_CFG.COMN.FPA_DIAG_MODE; -- le contrôleur de trig est activé si le mode diag est demandé. Sinon , rien ne se passe
+                  end if;                  
                
                when idle =>      -- on ne vient ici que lorsqu'au moins le firmware est correct                    
                   done <= '1';

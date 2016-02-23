@@ -85,13 +85,13 @@ architecture rtl of spi_mux_ctler is
    attribute IOB of spi_sclk_iob         : signal is "TRUE";
    attribute IOB of spi_csn_iob          : signal is "TRUE";
    
-   attribute dont_touch : string;
-   attribute dont_touch of client_id     : signal is "TRUE"; 
+   --attribute dont_touch : string;
+   --attribute dont_touch of client_id     : signal is "TRUE"; 
    --attribute keep of mux_iob            : signal is "TRUE"; 
-   attribute dont_touch of rqst_fsm      : signal is "TRUE"; 
-   attribute dont_touch of DONE          : signal is "TRUE"; 
-   attribute dont_touch of EN            : signal is "TRUE";
-   attribute dont_touch of RQST          : signal is "TRUE";
+   --attribute dont_touch of rqst_fsm      : signal is "TRUE"; 
+   --attribute dont_touch of DONE          : signal is "TRUE"; 
+   --attribute dont_touch of EN            : signal is "TRUE";
+   --attribute dont_touch of RQST          : signal is "TRUE";
 begin
    
    MISO <= spi_sdo_iob;
@@ -99,7 +99,7 @@ begin
    --------------------------------------------------
    -- IOs
    -------------------------------------------------- 
-   -- ATTENTION : contrôle des signaux SPI sortants et MUX sortants sur '0' et 'HiZ (voir schema EFA-00253) -- non plus maintenant (voir patch)
+   -- ATTENTION : contrôle des signaux SPI sortants et MUX sortants sur '0' et '1'
    SPI_MUX0 <= mux_iob(0);
    SPI_MUX1 <= mux_iob(1);  
    SPI_SDI  <= spi_sdi_iob;

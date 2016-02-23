@@ -161,9 +161,9 @@ architecture rtl of afpa_data_dispatcher is
    --signal quad_fifo_ovfl_sync          : std_logic;
    signal pix_count                    : unsigned(31 downto 0);
    
-   attribute dont_touch                     : string; 
-   attribute dont_touch of int_time         : signal is "true"; 
-   attribute dont_touch of int_time_100MHz  : signal is "true";
+--   attribute dont_touch                     : string; 
+--   attribute dont_touch of int_time         : signal is "true"; 
+--   attribute dont_touch of int_time_100MHz  : signal is "true";
    
 begin
    
