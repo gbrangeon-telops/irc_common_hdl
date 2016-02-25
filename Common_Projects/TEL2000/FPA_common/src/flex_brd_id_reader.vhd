@@ -67,12 +67,13 @@ architecture rtl of flex_brd_id_reader is
    
    type flex_id_sm_type is (idle, wait_reader_st, end_rqst_st);
    
-   signal sreset         : std_logic;
-   signal reader_run     : std_logic;
-   signal reader_done    : std_logic;
-   signal flex_id_sm     : flex_id_sm_type;
-   signal clean_miso     : std_logic;
-   signal rqst_i         : std_logic;
+   signal sreset          : std_logic;
+   signal reader_run      : std_logic;
+   signal reader_done     : std_logic;
+   signal flex_id_sm      : flex_id_sm_type;
+   signal clean_miso      : std_logic;
+   signal rqst_i          : std_logic;
+   signal flex_brd_info_i : flex_brd_info_type;
    
    
 begin
@@ -82,6 +83,7 @@ begin
       if rising_edge(CLK_100M) then
          DONE <= reader_done; 
          RQST <= rqst_i;
+		 FLEX_BRD_INFO <= flex_brd_info_i;
       end if;
    end process;
    
@@ -114,7 +116,7 @@ begin
       DONE          => reader_done, 
       FREQ_ID       => clean_miso,        
       ADC_BRD_INFO  => open,
-      FLEX_BRD_INFO => FLEX_BRD_INFO,
+      FLEX_BRD_INFO => flex_brd_info_i,
       DDC_BRD_INFO  => open,
       ERR           => ERR 
       );   
