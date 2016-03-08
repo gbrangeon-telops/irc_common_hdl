@@ -88,6 +88,7 @@ package fpa_common_pkg is
    constant  ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V    : freq_id_type := (10582, 11696);   -- Analog ISC0207 RICOR K548/LSF
    constant  ID_DIGITAL_SCORPIO_MW_INPUT_LVDS25_COOL_23V_TO_25V : freq_id_type := (11905, 13158);   -- Digital SCORPIO MW RM3 (w MGLK)
    constant  ID_ANALOG_ISC0209_INPUT_LVTTL50_COOL_20V_TO_28V    : freq_id_type := ( 8282, 9153);    -- Analog ISC0209 RICOR Kxxx/LSF
+   constant  ID_ANALOG_SCORPIO_MW_INPUT_LVCMOS33_COOL_23V_TO_25V: freq_id_type := ( 7326, 8097);    -- Analog Scorpio MW RM3 (wo MGLK)         
    
    ----------------------------------------------------------------------------------
    -- Les frequences de reconnaissance des cartes ADC (en coups de clocks 100 MHz)   
@@ -353,7 +354,16 @@ package body fpa_common_pkg is
             flex_brd_info.cooler_volt_max_mV   := 28_000;--28_000;   -- ENO: 19 janv 2016: on accommode le 12V (IRC1505 et son problème de stator qui ne peut être remplacé à cause de la cassure du tournevis) et le 24V mais attention le 12V n'est plus protegé.
             flex_brd_info.chn_diversity_num    := 2;
             
-            -- flex_brd inconnu 
+            -- scorpioMW with cooler 24V  (EFA-00270-XXX) 
+         elsif (Tosc >= ID_ANALOG_SCORPIO_MW_INPUT_LVCMOS33_COOL_23V_TO_25V.freq_id_min) and (Tosc <= ID_ANALOG_SCORPIO_MW_INPUT_LVCMOS33_COOL_23V_TO_25V.freq_id_max) then
+            flex_brd_info.fpa_roic             := FPA_ROIC_SCORPIO_MW;
+            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input            := LVCMOS33;
+            flex_brd_info.cooler_volt_min_mV   := 23_000;  
+            flex_brd_info.cooler_volt_max_mV   := 25_000;   
+            flex_brd_info.chn_diversity_num    := 2; 
+            
+            -- flex_brd inconnu  
          else
             flex_brd_info.fpa_roic             := FPA_ROIC_UNKNOWN;
             flex_brd_info.fpa_output           := OUTPUT_UNKNOWN;
