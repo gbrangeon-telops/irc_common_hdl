@@ -208,6 +208,7 @@ begin
             SWITCH_PROG <= '0';
             disable_quad_default_clk_i <= '0';
             brd_feedback_err <= '0';
+            FPA_HARDW_STAT.DVAL <= '0';
          else
             
             case decision_sm is
