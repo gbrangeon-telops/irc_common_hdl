@@ -88,6 +88,7 @@ architecture rtl of afpa_hw_driver_ctrler is
    signal vdac_value                : fleg_vdac_value_type;
    signal post_update_img           : std_logic;
    signal fpa_intf_cfg_i            : fpa_intf_cfg_type;
+   signal fpa_first_cfg_done        : std_logic;
    
 begin
    
@@ -137,6 +138,7 @@ begin
             valid_rqst_pending <= '0';
             prog_trig_i <= '0';
             fpa_intf_cfg_i <= FPA_INTF_CFG_DEFAULT;
+            fpa_first_cfg_done <= '0';
          else                   
             
             -- misc
@@ -184,9 +186,16 @@ begin
                   hw_rqst_i <= '0';
                   if valid_dac_rqst = '1' then
                      hw_seq_fsm <= dac_prog_st;
-                  elsif valid_prog_rqst = '1' then                  
-                     hw_seq_fsm <= prog_img_start_st;               -- ENO : 26 janv 2016: pour le Hawk, on doit au moins prendre une image avec int_time = 0.2usec avant de le programer. C'est tres utile surtout pour eviter de la saturation en windowing. Cette modif ne derangera pas les autres détecteurs 
-                  end if;                   
+                  end if;
+                  if valid_prog_rqst = '1' then                  
+                     --hw_seq_fsm <= check_fpa_first_cfg_st;               
+                     if fpa_first_cfg_done = '0' then                  
+                        hw_seq_fsm <= fpa_prog_st;
+                     else   
+                        hw_seq_fsm <= prog_img_start_st;               -- ENO : 26 janv 2016: pour le Hawk, on doit au moins prendre une image avec int_time = 0.2usec avant de le programer. C'est tres utile surtout pour eviter de la saturation en windowing. Cette modif ne derangera pas les autres détecteurs 
+                     end if;
+                  end if;
+                  
                   
                   ----------------------------------------------------
                   -- accès accordé au dac                
@@ -248,11 +257,11 @@ begin
                   prog_trig_i <= '1';
                   if readout_i = '1' then
                      hw_seq_fsm <= prog_img_end_st;
+                     prog_trig_i <= '0';
                   end if;                  
                   
                -- fin d'une image prog_trig
                when prog_img_end_st =>
-                  prog_trig_i <= '0';
                   if readout_i = '0' then
                      img_cnt <= img_cnt + 1;
                      hw_seq_fsm <= check_prog_mode_end_st;
@@ -283,11 +292,12 @@ begin
                   
                -- update_fpa_cfg_st : phase finale où on met à jour la partie FPA (non DAC)  de la config 
                when update_fpa_cfg_st2 =>
+                  fpa_first_cfg_done <= '1';
                   fpa_intf_cfg_i <= USER_CFG;
                   fpa_intf_cfg_i.vdac_value <= vdac_value;
                   if post_update_img = '1' then
                      hw_seq_fsm <= idle;
-                  else                           -- ENO 24 janv 2015: même après la sortie de la config, on prend pareille des images post prog pour que le module readout_ctrler puisse generer le bon nombre de coups de clocks requis pour la config dans le detecteur et assurer convenablement les resets des detecteurs comme le Hawk
+                  else                           -- ENO 24 janv 2016: même après la sortie de la config, on prend pareille des images post prog pour que le module readout_ctrler puisse generer le bon nombre de coups de clocks requis pour la config dans le detecteur et assurer convenablement les resets des detecteurs comme le Hawk
                      post_update_img <= '1';
                      hw_seq_fsm <= prog_img_start_st;
                   end if;

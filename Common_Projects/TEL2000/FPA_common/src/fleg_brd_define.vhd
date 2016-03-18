@@ -27,7 +27,7 @@ package fleg_brd_define is
    
    constant DEFINE_DAC_VALUE_DEFAULT      : unsigned(13 downto 0) := (others => '0'); -- par defaut tous les dacs sont programmés à 0 => 0*(2^14)/VREF 
    constant DEFINE_FLEG_LDO_DLY_mSEC      : natural := 3_000;      -- le delai max de U14 + 1000 msec         
-   constant DEFINE_FLEG_DAC_PWR_WAIT_mSEC : natural := 200;        -- après allumage du dac, le temps d'attente avant de les declarer rdy
+   constant DEFINE_FLEG_DAC_PWR_WAIT_mSEC : natural := 400;      -- après allumage du dac, le temps d'attente avant de les declarer rdy doit être inférieur à 1sec
    constant DEFINE_FPA_100M_CLK_RATE_KHZ  : integer := 100_000;    -- horloge de 100M en KHz
    constant DEFINE_FPA_80M_CLK_RATE_KHZ   : integer := 80_000;     -- horloge de 80M en KHz
    

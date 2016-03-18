@@ -137,8 +137,8 @@ begin
                   end if;  
                
                when launch_cfg_mode_st =>
-               done_i <= '0';
-               rqst_i <= '0';
+                  done_i <= '0';
+                  rqst_i <= '0';
                   dac_new_data_pending <= '1';
                   if dac_cfg_done = '0' then
                      new_data_pending_fsm <= wait_cfg_mode_end_st;
