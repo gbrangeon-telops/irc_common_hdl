@@ -198,11 +198,14 @@ begin
                when check_rqst_st => 
                   hw_done_i <= '0';
                   hw_rqst_i <= '0';
-                  hw_seq_fsm <= wait_client_run_st;
                   if valid_dac_rqst = '1' then
                      run_dac_prog_client <= '1';
-                  else                                   -- si on arrive ici c'est que valid_rqst_pending = '1' et que  valid_dac_rqst = '0' => valid_prog_rqst = '1';
+                     hw_seq_fsm <= wait_client_run_st;
+                  elsif valid_prog_rqst = '1' then              
                      run_fpa_prog_client <= '1';
+                     hw_seq_fsm <= wait_client_run_st;
+                  else 
+                     hw_seq_fsm <= pause_st;                     -- aller en pause et non en idle permet de faire durer hw_done_i d'au moins 2 clk en l'état '0'
                   end if;
                   
                -- valider que le client soit lancé
@@ -210,8 +213,8 @@ begin
                   if client_done = '0' then                  
                      run_dac_prog_client  <= '0';
                      run_fpa_prog_client <= '0';
-                  end if;
-                  hw_seq_fsm <= wait_client_done_st;
+                     hw_seq_fsm <= wait_client_done_st;
+                  end if;                  
                   
                -- attendre que le client ait terminé 
                when wait_client_done_st =>    
@@ -230,8 +233,7 @@ begin
          end if;
       end if;   
    end process; 
-   
-   
+     
    --------------------------------------------------
    --  mise à jour de la config
    --------------------------------------------------
@@ -281,8 +283,7 @@ begin
          end if;
       end if;   
    end process; 
-   
-   
+     
    --------------------------------------------------
    --  FSM pour programmation DAC
    --------------------------------------------------
@@ -352,7 +353,6 @@ begin
          end if;
       end if;   
    end process;
-   
    
    -------------------------------------------------
    -- accès accordé au programmateur du détecteur      
