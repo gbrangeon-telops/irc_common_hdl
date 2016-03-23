@@ -207,7 +207,7 @@ begin
                when delay_st =>               -- delai en nombre de samples avant d'aller chercher les pixels de l'image 
                   incr := '0'& din_dval_i;
                   dly_cnt <= dly_cnt + to_integer(unsigned(incr));                 
-                  if dly_cnt = to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then -- REAL_MODE_ACTIVE_PIXEL_DLY est configurable via microblaze
+                  if dly_cnt >= to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then -- REAL_MODE_ACTIVE_PIXEL_DLY est configurable via microblaze
                      sync_flow_fsm <= sync_flow_st;  
                   end if;                    
                
@@ -303,17 +303,31 @@ begin
       valid       => samp_fifo_dval
       );
    
-   U4B : process(CLK)
-   begin
-      if rising_edge(CLK) then         
-         if DEFINE_FPA_VIDEO_DATA_INVERTED = '1' then 
+   -- pour synchro parfaite avec les données allant vers le detecteur 
+   -- données inversées
+   Data_Inv_Gen : if DEFINE_FPA_VIDEO_DATA_INVERTED = '1' generate      
+      U4_inv : process(CLK)
+      begin
+         if rising_edge(CLK) then         
             samp_fifo_din <= not FPA_DIN(55 downto 0);
-         else
-            samp_fifo_din <= FPA_DIN(55 downto 0);
-         end if;         
-         samp_fifo_wr_en <= FPA_DIN_DVAL and samp_fifo_enabled;         
-      end if;
-   end process;
+            samp_fifo_wr_en <= FPA_DIN_DVAL and samp_fifo_enabled;         
+         end if;
+      end process;
+   end generate;
+   
+   -- pour synchro parfaite avec les données allant vers le detecteur
+   -- données non inversées
+   Data_Ninv_Gen : if DEFINE_FPA_VIDEO_DATA_INVERTED = '0' generate      
+      U4_Ninv : process(CLK)
+      begin
+         if rising_edge(CLK) then         
+            samp_fifo_din <= FPA_DIN(55 downto 0);      
+            samp_fifo_wr_en <= FPA_DIN_DVAL and samp_fifo_enabled;         
+         end if;
+      end process;
+   end generate; 
+   
+   
    
    --------------------------------------------------
    --  sortie des identificateurs de trames 
