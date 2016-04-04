@@ -27,6 +27,7 @@ entity fpa_status_gen is
       
       FPA_INTF_CFG     : in fpa_intf_cfg_type;
       
+      --ISERDES_STAT     : in std_logic_vector(7 downto 0);
       TRIG_CTLER_STAT  : in std_logic_vector(7 downto 0);
       FPA_DRIVER_STAT  : in std_logic_vector(15 downto 0);
       INTF_SEQ_STAT    : in std_logic_vector(7 downto 0);
@@ -70,6 +71,10 @@ architecture rtl of fpa_status_gen is
    signal dpath_samp_sel_err           : std_logic;
    signal dpath_samp_cnt_err           : std_logic;
    signal dpath_done                   : std_logic;
+   signal iserdes_ch0_err              : std_logic := '0';
+   signal iserdes_ch1_err              : std_logic := '0';
+   signal iserdes_ch2_err              : std_logic := '0';
+   signal iserdes_ch3_err              : std_logic := '0';
    signal trig_ctler_done              : std_logic;
    signal fpa_powered                  : std_logic;
    signal fpa_driver_rqst              : std_logic;
@@ -161,7 +166,15 @@ begin
    dpath_samp_sum_or_mean_err <= DATA_PATH_STAT(3);   -- afpa    
    dpath_samp_sel_err         <= DATA_PATH_STAT(2);   -- afpa     
    dpath_samp_cnt_err         <= DATA_PATH_STAT(1);   -- afpa     
-   dpath_done                 <= DATA_PATH_STAT(0);   -- dfpa and afpa 
+   dpath_done                 <= DATA_PATH_STAT(0);   -- dfpa and afpa
+   
+   -----------------------------------------------
+   -- Inputs maps: ISERDES_STAT 
+   -----------------------------------------------
+   iserdes_ch3_err   <= ISERDES_STAT(3);
+   iserdes_ch2_err   <= ISERDES_STAT(2);
+   iserdes_ch1_err   <= ISERDES_STAT(1);
+   iserdes_ch0_err   <= ISERDES_STAT(0);
    
    -----------------------------------------------
    -- Inputs maps:  TRIG_CTLER_STAT
@@ -254,7 +267,11 @@ begin
             global_done <= acq_trig_done;-- fpa_seq_done, fpa_driver_done, trig_ctler_done ne comptent pas parmi le global_done
             
             -- les erreurs à latcher (connecter les signaux des erreurs ici)
-            error(31 downto 15) <= (others => '0');  -- non utilisés
+            error(31 downto 19) <= (others => '0');  -- non utilisés
+            error(18) <= iserdes_ch3_err;
+            error(17) <= iserdes_ch2_err;
+            error(16) <= iserdes_ch1_err;
+            error(15) <= iserdes_ch0_err;
             error(14) <= fpa_driver_trig_err;
             error(13) <= fpa_driver_ram_err;
             error(12) <= fpa_driver_seq_err;
