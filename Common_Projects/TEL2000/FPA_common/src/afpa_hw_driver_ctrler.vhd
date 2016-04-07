@@ -271,14 +271,18 @@ begin
                fpa_intf_cfg_i.vdac_value <= USER_CFG.VDAC_VALUE;
             end if;
             
-            -- ENO : 24 janv 2015: mis ici pour une simulation correcte
+            -- ENO : 24 janv 2016: mis ici pour une simulation correcte
             -- mise à jour de la partie int_time de la cfg : le module du temps d'integration a un latch qui est synchrone avec le frame, donc pas de pb.
             fpa_intf_cfg_i.int_time  <= USER_CFG.INT_TIME;
             fpa_intf_cfg_i.int_indx  <= USER_CFG.INT_INDX;
             fpa_intf_cfg_i.int_signal_high_time <= USER_CFG.INT_SIGNAL_HIGH_TIME;
             
-            -- ENO : 25 janv 2015: mis ici pour un fonctionnement correct. Sinon, sans reprogrammation du dtecteur, la partie common est figée
+            -- ENO : 25 janv 2016: mis ici pour un fonctionnement correct. Sinon, sans reprogrammation du dtecteur, la partie common est figée
             fpa_intf_cfg_i.comn <= USER_CFG.COMN;
+            
+            -- ENO : 05 avril 2016: mis ici pour que les ajustements via VIO se fassent en temps réel 
+            fpa_intf_cfg_i.adc_clk_phase <= USER_CFG.ADC_CLK_PHASE;
+            fpa_intf_cfg_i.real_mode_active_pixel_dly <= USER_CFG.REAL_MODE_ACTIVE_PIXEL_DLY;
             
          end if;
       end if;   
