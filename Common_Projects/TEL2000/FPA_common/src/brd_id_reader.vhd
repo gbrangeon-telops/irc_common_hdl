@@ -55,9 +55,9 @@ architecture RTL of brd_id_reader is
    end component;
    
    type freq_id_sm_type is (init_st, idle, wait_signal_st, meas_period_st, fetch_intf_st, check_result_adc_st, check_result_ddc_st, check_result_flex_st, check_meas_number_st, meas_result_st1, meas_result_st2);
-   type detected_adc_type is array  (1 to MEAS_NUMBER_MAX) of adc_brd_info_type;
-   type detected_ddc_type is array  (1 to MEAS_NUMBER_MAX) of ddc_brd_info_type;
-   type detected_flex_type is array (1 to MEAS_NUMBER_MAX) of flex_brd_info_type;
+   type detected_adc_type is array  (0 to MEAS_NUMBER_MAX) of adc_brd_info_type;
+   type detected_ddc_type is array  (0 to MEAS_NUMBER_MAX) of ddc_brd_info_type;
+   type detected_flex_type is array (0 to MEAS_NUMBER_MAX) of flex_brd_info_type;
    
    signal freq_id_sm             : freq_id_sm_type;
    signal adc_brd_info_i         : adc_brd_info_type;
@@ -121,6 +121,9 @@ begin
    U3: Clk_Divider
    Generic map(
       Factor => CLK_100M_RATE
+      -- pragma translate_off 
+      /10_000
+      -- pragma translate_on
       )
    Port map( 
       Clock   => CLK_100M,
@@ -163,9 +166,6 @@ begin
                   if pause_clk_en = '1' then             
                      pause_cnter <= pause_cnter + 1;
                   end if;
-                  -- pragma translate_off  
-                  freq_id_sm <= idle;
-                  -- pragma translate_on  
                
                when idle => 
                   done_i <= '1';
@@ -189,7 +189,7 @@ begin
                      previous_meas_number <= meas_number;   
                      meas_number <= meas_number + 1;                     
                   end if;
-                  if pause_cnter = 2 then                   -- S'il ne venait pas après 2 secondes environ, on statut que la nmesure a echoué
+                  if pause_cnter = 2 then                   -- S'il ne venait pas après 2 secondes environ, on statue que la nmesure a echoué
                      adc_detection_err  <= '1';
                      ddc_detection_err  <= '1';
                      flex_detection_err <= '1';
@@ -254,6 +254,9 @@ begin
                   adc_brd_info_i  <= detected_adc(meas_number);
                   ddc_brd_info_i  <= detected_ddc(meas_number);
                   flex_brd_info_i <= detected_flex(meas_number);
+                  adc_brd_info_i.dval  <= '0';
+                  ddc_brd_info_i.dval  <= '0';
+                  flex_brd_info_i.dval <= '0';
                   freq_id_sm <= meas_result_st2;
                
                when meas_result_st2 =>                       -- Sinon, on vient ecraser avec BRD_INFO_UNKNOWN                   
