@@ -118,7 +118,7 @@ begin
       );
    
    --------------------------------------------------
-   -- 4 fifos de 32 bits pour les données 
+   -- 2 fifos de 32 bits pour les données 
    --------------------------------------------------   
    U2 : for ii in 1 to 2 generate
       dfifo_ii : fwft_sfifo_w33_d16 

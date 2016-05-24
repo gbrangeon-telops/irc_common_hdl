@@ -58,6 +58,9 @@ architecture rtl of flex_brd_id_reader is
    end component; 
    
    component signal_filter
+      generic(
+         SCAN_WINDOW_LEN : natural range 3 to 127 := 64
+         );
       port (
          CLK : in STD_LOGIC;
          SIG_IN : in STD_LOGIC;
@@ -83,7 +86,7 @@ begin
       if rising_edge(CLK_100M) then
          DONE <= reader_done; 
          RQST <= rqst_i;
-		 FLEX_BRD_INFO <= flex_brd_info_i;
+         FLEX_BRD_INFO <= flex_brd_info_i;
       end if;
    end process;
    
@@ -98,6 +101,9 @@ begin
    -- freqID est filtré avant d'être utilisé
    -------------------------------------------------- 
    U10 : signal_filter
+   generic map(
+      SCAN_WINDOW_LEN => 64
+      )
    port map(
       CLK => CLK_100M,
       SIG_IN => FREQ_ID,

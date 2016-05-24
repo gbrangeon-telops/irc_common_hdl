@@ -17,6 +17,9 @@ use IEEE.NUMERIC_STD.all;
 use work.tel2000.all;
 
 entity signal_filter is
+   generic(
+      SCAN_WINDOW_LEN : natural range 3 to 127 := 64 -- c'Est la longueur en coups de CLK d'obersvation du signal SIG_IN
+      );    
    port(
       --ARESET   : in STD_LOGIC;
       CLK      : in STD_LOGIC;
@@ -29,19 +32,19 @@ end signal_filter;
 
 architecture rtl of signal_filter is
    
-   constant RAW_SIG_WINDOW_LEN       : natural := 64;   -- etendue de la fenetre d'observation
+   constant RAW_SIG_WINDOW_LEN       : natural := SCAN_WINDOW_LEN;   -- etendue de la fenetre d'observation
    constant OUT_HIGH_THRESHOLD_VALUE : natural := (2*RAW_SIG_WINDOW_LEN)/3;
    constant OUT_LOW_THRESHOLD_VALUE  : natural := RAW_SIG_WINDOW_LEN/3;
    
---   component sync_reset
---      port (
---         ARESET : in std_logic;
---         CLK    : in std_logic;
---         SRESET : out std_logic := '1'
---         );
---   end component;  
+   --   component sync_reset
+   --      port (
+   --         ARESET : in std_logic;
+   --         CLK    : in std_logic;
+   --         SRESET : out std_logic := '1'
+   --         );
+   --   end component;  
    
---   signal sreset                      : std_logic;
+   --   signal sreset                      : std_logic;
    signal raw_sig_pipe                : std_logic_vector(RAW_SIG_WINDOW_LEN downto 1) := (others => '0');
    signal incr                        : integer range -1 to 1 := 0;
    signal pipe_one_num                : integer range 0 to RAW_SIG_WINDOW_LEN := 0;
@@ -59,21 +62,21 @@ begin
    --------------------------------------------------
    -- synchro reset 
    --------------------------------------------------   
---   U1 : sync_reset
---   port map(
---      ARESET => ARESET,
---      CLK    => CLK,
---      SRESET => sreset
---      ); 
---   
+   --   U1 : sync_reset
+   --   port map(
+   --      ARESET => ARESET,
+   --      CLK    => CLK,
+   --      SRESET => sreset
+   --      ); 
+   --   
    --------------------------------------------------
    -- signal entrant dans IOB
    -------------------------------------------------- 
    U3 : process(CLK)
-   
-   variable raw_sig_pipe_1 : std_logic_vector(1 downto 0);
-   variable raw_sig_pipe_N : std_logic_vector(1 downto 0);
-   
+      
+      variable raw_sig_pipe_1 : std_logic_vector(1 downto 0);
+      variable raw_sig_pipe_N : std_logic_vector(1 downto 0);
+      
    begin          
       if rising_edge(CLK) then 
          

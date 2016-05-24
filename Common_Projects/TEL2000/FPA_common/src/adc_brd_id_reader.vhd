@@ -61,6 +61,9 @@ architecture rtl of adc_brd_id_reader is
    end component;
    
    component signal_filter
+      generic(
+         SCAN_WINDOW_LEN : natural range 3 to 127 := 64
+         );       
       port (
          CLK : in STD_LOGIC;
          SIG_IN : in STD_LOGIC;
@@ -103,6 +106,9 @@ begin
    -- MISO est filtré avant d'être utilisé
    -------------------------------------------------- 
    U10 : signal_filter
+   generic map(
+      SCAN_WINDOW_LEN => 64
+      )
    port map(
       CLK => CLK_100M,
       SIG_IN => MISO,

@@ -49,7 +49,7 @@ architecture rtl of afpa_real_mode_dval_gen is
          CLK : in std_logic);
    end component;
    
-   component fwft_sfifo_w8_d64
+   component fwft_sfifo_w8_d256
       port (
          clk : in std_logic;
          rst : in std_logic;
@@ -65,7 +65,7 @@ architecture rtl of afpa_real_mode_dval_gen is
          );
    end component;
    
-   component fwft_sfifo_w56_d16
+   component fwft_sfifo_w56_d256
       port (
          clk : in std_logic;
          rst : in std_logic;
@@ -262,7 +262,7 @@ begin
    
    flag_fifo_rst <= fsm_areset;
    
-   U3A : fwft_sfifo_w8_d64
+   U3A : fwft_sfifo_w8_d256
    port map (
       clk         => CLK,
       rst         => flag_fifo_rst,
@@ -289,7 +289,7 @@ begin
    --  ecriture desa echantillons des ADcs dans un fifo pour synchro avec readout_info
    ------------------------------------------------------------------------------------
    samp_fifo_rst <= flush_fifo_o or fsm_areset;
-   U4A : fwft_sfifo_w56_d16
+   U4A : fwft_sfifo_w56_d256
    port map (
       clk         => CLK,
       rst         => samp_fifo_rst,
