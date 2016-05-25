@@ -116,6 +116,8 @@ architecture rtl of afpa_real_mode_dval_gen is
    signal samp_fifo_rst     : std_logic;
    signal fsm_sreset        : std_logic;
    
+   signal sync_flag_edge_detected : std_logic;  
+   
    attribute dont_touch     : string;
    attribute dont_touch of dout_dval_o         : signal is "true"; 
    attribute dont_touch of dout_o              : signal is "true";
@@ -128,8 +130,7 @@ begin
    -- Outputs map
    -------------------------------------------------- 
    FPA_DOUT_DVAL <= dout_dval_o;
-   FLUSH_FIFO <= flush_fifo_o;    
-   
+   FLUSH_FIFO <= flush_fifo_o; 
    FPA_DOUT <= dout_o; --
    
    --------------------------------------------------
@@ -138,6 +139,7 @@ begin
    sync_flag <= FPA_DIN(56);               -- sync_flag 
    din_dval_i <= FPA_DIN_DVAL;
    fsm_areset <= ARESET or DIAG_MODE_EN;   -- tout le module sera en reset tant qu'on est en mode diag 
+   
    --------------------------------------------------
    -- synchro reset 
    --------------------------------------------------   
@@ -146,7 +148,20 @@ begin
       ARESET => fsm_areset,
       CLK    => CLK,
       SRESET => fsm_sreset
-      );
+      );      
+   
+   --------------------------------------------------
+   -- flag valid sur RE ou FE
+   -------------------------------------------------- 
+   Uflag1 : if not DEFINE_FPA_SYNC_FLAG_VALID_ON_FE  generate  -- avec le scorpiomwA, il faut reduire le delai sur le flag en regardant juste sa montée et non sa descente
+      begin                                             
+      sync_flag_edge_detected <= not sync_flag_last and sync_flag;      
+   end generate; 
+   
+   Uflag2 : if DEFINE_FPA_SYNC_FLAG_VALID_ON_FE generate  -- 
+      begin                                             
+      sync_flag_edge_detected <= sync_flag_last and not sync_flag;      
+   end generate; 
    
    --------------------------------------------------
    -- Process
@@ -200,7 +215,7 @@ begin
                   flag_fifo_enabled <= '1';   -- permet l'écriture dans les fifos de syncrhonisation des flows de données adc et les infos de readout
                   flush_fifo_o <= '0';
                   dly_cnt <= (others => '0');
-                  if sync_flag_last = '1' and sync_flag = '0' then      
+                  if sync_flag_edge_detected = '1' then      
                      sync_flow_fsm <= delay_st;
                   end if;
                
