@@ -28,6 +28,12 @@ package fpa_common_pkg is
    constant FPA_ROIC_UNKNOWN    : std_logic_vector(7 downto 0) := x"FF";       --  interface inconnue 
    
    -------------------------------------------------------------------------- 
+   -- les types de PROXY (détecteurs numériques)
+   --------------------------------------------------------------------------
+   constant PROXY_MGLK          : std_logic_vector(2 downto 0) := "000";
+   constant PROXY_SCD           : std_logic_vector(2 downto 0) := "001";
+   
+   -------------------------------------------------------------------------- 
    -- les Gains de FPA dans le module FPA_INTF (FPAs analogiques)
    --------------------------------------------------------------------------
    --constant FPA_GAIN_0          : std_logic_vector(7 downto 0) := x"00";       -- plus gros puits
