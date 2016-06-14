@@ -292,6 +292,9 @@ package fpa_common_pkg is
    ------------------------------------------
    -- functions --
    --------------------------------------------  
+   function MAX(LEFT, RIGHT: INTEGER) return INTEGER;
+   function MIN(LEFT, RIGHT: INTEGER) return INTEGER;
+   
    function freq_to_flex_brd_info (Tosc: natural; MEAS_CLK_RATE: natural) return flex_brd_info_type;
    function freq_to_adc_brd_info (Tosc: natural; MEAS_CLK_RATE: natural) return adc_brd_info_type;
    function freq_to_ddc_brd_info (Tosc: natural; MEAS_CLK_RATE: natural) return ddc_brd_info_type;
@@ -306,6 +309,20 @@ package fpa_common_pkg is
 end fpa_common_pkg;
 
 package body fpa_common_pkg is
+   
+   function MAX(LEFT, RIGHT: INTEGER) return INTEGER is
+   begin
+      if LEFT > RIGHT then return LEFT;
+      else return RIGHT;
+      end if;
+   end;
+
+   function MIN(LEFT, RIGHT: INTEGER) return INTEGER is
+   begin
+      if LEFT < RIGHT then return LEFT;
+      else return RIGHT;
+      end if;
+   end;
    
    ---------------------------------------------------------------------------------------------
    -- function de conversion de la frequence de reconnaissance en type d'interface FLEX
