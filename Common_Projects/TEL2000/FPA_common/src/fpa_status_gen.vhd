@@ -12,10 +12,11 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use IEEE.std_logic_misc.all;
 use work.fpa_common_pkg.all;
 use work.fpa_define.all;
 use work.proxy_define.all;
---use work.fpa_serdes_define.all;
+use work.fpa_serdes_define.all;
 use work.tel2000.all;   
 
 
@@ -28,7 +29,7 @@ entity fpa_status_gen is
       
       FPA_INTF_CFG     : in fpa_intf_cfg_type;
       
-      --FPA_SERDES_STAT  : in fpa_serdes_stat_type;
+      FPA_SERDES_STAT  : in fpa_serdes_stat_type;
       TRIG_CTLER_STAT  : in std_logic_vector(7 downto 0);
       FPA_DRIVER_STAT  : in std_logic_vector(15 downto 0);
       INTF_SEQ_STAT    : in std_logic_vector(7 downto 0);
@@ -72,7 +73,10 @@ architecture rtl of fpa_status_gen is
    signal dpath_samp_sel_err           : std_logic;
    signal dpath_samp_cnt_err           : std_logic;
    signal dpath_done                   : std_logic;
-   --signal fpa_serdes_err               : std_logic_vector(fpa_serdes_stat_type.done'range) := (others => '0');
+   signal fpa_serdes_done              : std_logic_vector(fpa_serdes_stat_type.done'range);
+   signal fpa_serdes_success           : std_logic_vector(fpa_serdes_stat_type.success'range);
+   signal fpa_serdes_delay             : delay_array;
+   signal fpa_serdes_edges             : edges_array;
    signal trig_ctler_done              : std_logic;
    signal fpa_powered                  : std_logic;
    signal fpa_driver_rqst              : std_logic;
@@ -88,6 +92,8 @@ architecture rtl of fpa_status_gen is
    signal cooler_volt_max_mV_out       : std_logic_vector(15 downto 0);
    signal cooler_powered               : std_logic;
    signal global_done                  : std_logic;
+   signal fpa_init_done                : std_logic;
+   signal fpa_init_success             : std_logic;
    signal error_found                  : std_logic;
    signal stat_read_add                : std_logic_vector(15 downto 0);
    signal stat_read_reg                : std_logic_vector(31 downto 0);
@@ -169,9 +175,10 @@ begin
    -----------------------------------------------
    -- Inputs maps: FPA_SERDES_STAT 
    -----------------------------------------------
---   fpa_serdes_stat_gen : for i in fpa_serdes_stat_type.done'range generate
---      fpa_serdes_err(i) <= '0' when (FPA_SERDES_STAT.done(i) = '1' and FPA_SERDES_STAT.success(i) = '1') else '1';
---   end generate;
+   fpa_serdes_done <= FPA_SERDES_STAT.done;
+   fpa_serdes_success <= FPA_SERDES_STAT.success;
+   fpa_serdes_delay <= FPA_SERDES_STAT.delay;
+   fpa_serdes_edges <= FPA_SERDES_STAT.edges;
    
    -----------------------------------------------
    -- Inputs maps:  TRIG_CTLER_STAT
@@ -252,6 +259,8 @@ begin
       if rising_edge(FPA_INTF_CLK) then
          if sreset_fpa_intf_clk = '1' then
             global_done <= '0';
+            fpa_init_done <= '0';
+            fpa_init_success <= '0';
             error_latch <= (others => '0');
             error <= (others => '0');
             error_found <= '0';
@@ -263,9 +272,12 @@ begin
             -- statut : signal done  
             global_done <= acq_trig_done;-- fpa_seq_done, fpa_driver_done, trig_ctler_done ne comptent pas parmi le global_done
             
+            -- FPA init status: pour l'instant seulement le résultat de l'init des serdes est utilisé
+            fpa_init_done <= and_reduce(fpa_serdes_done);
+            fpa_init_success <= and_reduce(fpa_serdes_success);
+            
             -- les erreurs à latcher (connecter les signaux des erreurs ici)
             error(31 downto 15) <= (others => '0');  -- non utilisés
-            --error(18 downto 15) <= fpa_serdes_err;
             error(14) <= fpa_driver_trig_err;
             error(13) <= fpa_driver_ram_err;
             error(12) <= fpa_driver_seq_err;
@@ -441,9 +453,42 @@ begin
                
                when  x"005C" =>   -- flex_present
                   stat_read_reg <= resize('0'& flex_present, 32);
+               -----------------------------------
                
                when  x"0060" =>   -- cmd en erreur
                   stat_read_reg <= resize('0'& FPA_DRIVER_STAT(15 downto 8), 32);
+               
+               -- FPA_SERDES_STAT
+               when  x"0064" =>   -- fpa serdes done
+                  stat_read_reg <=  resize(fpa_serdes_done, 32);
+               
+               when  x"0068" =>   -- fpa serdes success
+                  stat_read_reg <=  resize(fpa_serdes_success, 32);
+               
+               when  x"006C" =>   -- fpa serdes delay
+                  stat_read_reg <=  resize(fpa_serdes_delay(3), 8) & 
+                                    resize(fpa_serdes_delay(2), 8) & 
+                                    resize(fpa_serdes_delay(1), 8) & 
+                                    resize(fpa_serdes_delay(0), 8);
+               
+               when  x"0070" =>   -- fpa serdes edges ch0
+                  stat_read_reg <=  resize(fpa_serdes_edges(0), 32);
+               
+               when  x"0074" =>   -- fpa serdes edges ch1
+                  stat_read_reg <=  resize(fpa_serdes_edges(1), 32);
+               
+               when  x"0078" =>   -- fpa serdes edges ch2
+                  stat_read_reg <=  resize(fpa_serdes_edges(2), 32);
+               
+               when  x"007C" =>   -- fpa serdes edges ch3
+                  stat_read_reg <=  resize(fpa_serdes_edges(3), 32);
+               
+               -- FPA init status
+               when  x"0080" =>   -- fpa init done
+                  stat_read_reg <=  (0 => fpa_init_done, others => '0');
+               
+               when  x"0084" =>   -- fpa init success
+                  stat_read_reg <=  (0 => fpa_init_success, others => '0');
                   
                
                when others =>   
