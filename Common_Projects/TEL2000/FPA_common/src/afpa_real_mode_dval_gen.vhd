@@ -118,11 +118,11 @@ architecture rtl of afpa_real_mode_dval_gen is
    
    signal sync_flag_edge_detected : std_logic;  
    
-   attribute dont_touch     : string;
-   attribute dont_touch of dout_dval_o         : signal is "true"; 
-   attribute dont_touch of dout_o              : signal is "true";
-   attribute dont_touch of samp_fifo_ovfl      : signal is "true";
-   attribute dont_touch of flag_fifo_ovfl      : signal is "true";
+   --attribute dont_touch     : string;
+   --attribute dont_touch of dout_dval_o         : signal is "true"; 
+   --attribute dont_touch of dout_o              : signal is "true";
+   --attribute dont_touch of samp_fifo_ovfl      : signal is "true";
+   --attribute dont_touch of flag_fifo_ovfl      : signal is "true";
    
 begin
    
