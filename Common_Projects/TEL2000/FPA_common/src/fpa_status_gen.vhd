@@ -99,12 +99,14 @@ architecture rtl of fpa_status_gen is
    signal stat_read_reg                : std_logic_vector(31 downto 0);
    signal stat_read_dval               : std_logic;
    signal stat_read_err                : std_logic;
+   signal fpa_driver_dvalid_err        : std_logic;
    -- pour le power management de DAL
    signal adc_ddc_detect_process_done  : std_logic;
    signal adc_ddc_present              : std_logic;
    signal flex_detect_process_done     : std_logic;
    signal flex_present                 : std_logic;
    signal acq_trig_done                : std_logic;
+   signal fpa_permit_int_change        : std_logic;
    
    
    component sync_reset
@@ -190,13 +192,15 @@ begin
    -- FPA_DRIVER_STAT                             
    -----------------------------------------------
    
-   fpa_driver_trig_err  <= FPA_DRIVER_STAT(6);
-   fpa_driver_ram_err   <= FPA_DRIVER_STAT(5);
-   fpa_powered          <= FPA_DRIVER_STAT(4);        -- dit si le Fpa est effectivement allumé ou pas
-   fpa_driver_seq_err   <= FPA_DRIVER_STAT(3);
-   fpa_cfg_err          <= FPA_DRIVER_STAT(2);
-   fpa_driver_rqst      <= FPA_DRIVER_STAT(1);
-   fpa_driver_done      <= FPA_DRIVER_STAT(0);    
+   fpa_driver_dvalid_err <= FPA_DRIVER_STAT(8);        -- upour les sofradir: un fpa_data_valid est manquant après integration
+   fpa_permit_int_change <= FPA_DRIVER_STAT(7);
+   fpa_driver_trig_err   <= FPA_DRIVER_STAT(6);
+   fpa_driver_ram_err    <= FPA_DRIVER_STAT(5);
+   fpa_powered           <= FPA_DRIVER_STAT(4);        -- dit si le Fpa est effectivement allumé ou pas
+   fpa_driver_seq_err    <= FPA_DRIVER_STAT(3);
+   fpa_cfg_err           <= FPA_DRIVER_STAT(2);
+   fpa_driver_rqst       <= FPA_DRIVER_STAT(1);
+   fpa_driver_done       <= FPA_DRIVER_STAT(0);    
    
    -----------------------------------------------
    -- Inputs maps:  FPA_TEMP_STAT                               
@@ -277,7 +281,8 @@ begin
             fpa_init_success <= and_reduce(fpa_serdes_success);
             
             -- les erreurs à latcher (connecter les signaux des erreurs ici)
-            error(31 downto 15) <= (others => '0');  -- non utilisés
+            error(31 downto 16) <= (others => '0');  -- non utilisés
+            error(15) <= fpa_driver_dvalid_err;
             error(14) <= fpa_driver_trig_err;
             error(13) <= fpa_driver_ram_err;
             error(12) <= fpa_driver_seq_err;

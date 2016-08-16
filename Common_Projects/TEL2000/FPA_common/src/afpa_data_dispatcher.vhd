@@ -107,7 +107,7 @@ architecture rtl of afpa_data_dispatcher is
    end component;
    
    
-   type fast_hder_sm_type is (idle, send_hder_st);                    
+   type fast_hder_sm_type is (idle, exp_info_dval_st, send_hder_st);                    
    type acq_fringe_fsm_type is (idle, wait_fval_st);
    
    signal fast_hder_sm                 : fast_hder_sm_type;
@@ -160,10 +160,11 @@ architecture rtl of afpa_data_dispatcher is
    signal int_indx_i                   : std_logic_vector(7 downto 0);
    --signal quad_fifo_ovfl_sync          : std_logic;
    signal pix_count                    : unsigned(31 downto 0);
+   signal pause_cnt                    : unsigned(7 downto 0);
    
---   attribute dont_touch                     : string; 
---   attribute dont_touch of int_time         : signal is "true"; 
---   attribute dont_touch of int_time_100MHz  : signal is "true";
+   --   attribute dont_touch                     : string; 
+   --   attribute dont_touch of int_time         : signal is "true"; 
+   --   attribute dont_touch of int_time_100MHz  : signal is "true";
    
 begin
    
@@ -370,12 +371,22 @@ begin
                   hder_mosi_i.wstrb <= (others => '0');
                   hcnt <= to_unsigned(1, hcnt'length);
                   dispatch_info_i.exp_info.exp_dval <= '0';
+                  pause_cnt <= (others => '0');
                   if hder_param.rdy = '1' and acq_fringe = '1' then
-                     fast_hder_sm <= send_hder_st;                     
+                     fast_hder_sm <= exp_info_dval_st;                     
                   end if;
                
-               when send_hder_st =>
-                  dispatch_info_i.exp_info.exp_dval <= '1';  -- il durera au moins 3 CLK
+               when exp_info_dval_st =>
+                  pause_cnt <= pause_cnt + 1;
+                  if pause_cnt = 4 then 
+                     dispatch_info_i.exp_info.exp_dval <= '1';  -- sortira après dispatch_info_i.exp_info afin de reduire les risques d'aleas de séquences sur les regitres
+                  end if;
+                  if pause_cnt = 12 then                         -- ainsi dispatch_info_i.exp_info.exp_dval durera au moins 12-4 = 8 CLK
+                     dispatch_info_i.exp_info.exp_dval <= '0';
+                     fast_hder_sm <= send_hder_st;           
+                  end if;
+               
+               when send_hder_st =>                  
                   if hder_link_rdy = '1' then                         
                      if hcnt = 1 then -- frame_id 
                         hder_mosi_i.awaddr <= x"0000" &  std_logic_vector(hder_param.frame_id(7 downto 0)) &  std_logic_vector(resize(FrameIDAdd32, 8));--

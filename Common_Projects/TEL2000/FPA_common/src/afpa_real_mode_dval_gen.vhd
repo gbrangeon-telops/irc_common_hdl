@@ -178,6 +178,10 @@ begin
             samp_fifo_enabled <= '0';
             flush_fifo_o <= '0';       -- ENO 20 nov 2015 : fait expres sinon en mode diag fsm_sreset = '1' et les fifos seront en reset. Le ARESET flushera le fifo (voir generation de QUAD_FIFO_RST fifo)
             
+            -- pragma translate_off
+            sync_flow_fsm <= idle;
+            -- pragma translate_on
+            
          else           
             
             readout_sync <= READOUT;
