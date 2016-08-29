@@ -409,9 +409,11 @@ begin
                         hder_mosi_i.wvalid <= '1';
                         hder_mosi_i.wstrb <= ExposureTimeBWE;
                         fast_hder_sm <= idle;
-                     end if;
-                     
+                     end if;                     
                      hcnt <= hcnt + 1;
+                  else
+                     hder_mosi_i.awvalid <= '0';
+                     hder_mosi_i.wvalid <= '0';
                   end if;
                
                when others =>

@@ -212,7 +212,7 @@ begin
                   if fpa_int_feedbk_i = '1' then --! on attend le feedback de l'integration qui peut ne pas venir dans le cas des détecteurs numeriques (le détecteur n'est pas allumé bien que le proxy le soit).
                      fpa_trig_sm <= check_trig_ctrl_mode_st;
                   else
-                     if permit_trig = '1' then --! en l'absence du feedback d'intégration, le permit_trig permet de retour en idle en ayant au moins respectée la frequence minimale des trigs 
+                     if permit_trig = '1' and DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL then --! en l'absence du feedback d'intégration, le permit_trig permet de retour en idle en ayant au moins respectée la frequence minimale des trigs 
                         fpa_trig_sm <= idle; 
                      end if;
                   end if;
