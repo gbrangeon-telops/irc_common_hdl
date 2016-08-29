@@ -107,6 +107,7 @@ architecture rtl of fpa_status_gen is
    signal flex_present                 : std_logic;
    signal acq_trig_done                : std_logic;
    signal fpa_permit_int_change        : std_logic;
+   signal fpa_prog_init_done           : std_logic;
    
    
    component sync_reset
@@ -192,6 +193,7 @@ begin
    -- FPA_DRIVER_STAT                             
    -----------------------------------------------
    
+   fpa_prog_init_done    <= FPA_DRIVER_STAT(9);        -- monte à '1' lorsque la 1ere config est programmée dans le ROIC. Ce qui est intéressant pour les ROIC necessitant une config d'initialisation 
    fpa_driver_dvalid_err <= FPA_DRIVER_STAT(8);        -- upour les sofradir: un fpa_data_valid est manquant après integration
    fpa_permit_int_change <= FPA_DRIVER_STAT(7);
    fpa_driver_trig_err   <= FPA_DRIVER_STAT(6);
@@ -494,7 +496,9 @@ begin
                
                when  x"0084" =>   -- fpa init success
                   stat_read_reg <=  (0 => fpa_init_success, others => '0');
-                  
+               
+               when  x"0088" =>   -- prog_init_done
+                  stat_read_reg <=  (0 => fpa_prog_init_done, others => '0');
                
                when others =>   
                   stat_read_reg <= (others => '0');

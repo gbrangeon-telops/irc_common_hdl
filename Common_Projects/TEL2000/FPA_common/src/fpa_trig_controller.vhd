@@ -87,15 +87,15 @@ architecture RTL of fpa_trig_controller is
    signal fpa_readout_i                : std_logic;
    signal fpa_int_feedbk_i             : std_logic;
    
---   attribute dont_touch                : string;
---   attribute dont_touch of acq_trig_i  : signal is "true";
---   attribute dont_touch of acq_trig_o  : signal is "true";
---   attribute dont_touch of xtra_trig_i : signal is "true";
---   attribute dont_touch of xtra_trig_o : signal is "true";
---   attribute dont_touch of permit_trig       : signal is "true";
---   attribute dont_touch of fpa_readout_last  : signal is "true";
---   attribute dont_touch of period_count : signal is "true"; 
---   attribute dont_touch of dly_cnt     : signal is "true"; 
+   --   attribute dont_touch                : string;
+   --   attribute dont_touch of acq_trig_i  : signal is "true";
+   --   attribute dont_touch of acq_trig_o  : signal is "true";
+   --   attribute dont_touch of xtra_trig_i : signal is "true";
+   --   attribute dont_touch of xtra_trig_o : signal is "true";
+   --   attribute dont_touch of permit_trig       : signal is "true";
+   --   attribute dont_touch of fpa_readout_last  : signal is "true";
+   --   attribute dont_touch of period_count : signal is "true"; 
+   --   attribute dont_touch of dly_cnt     : signal is "true"; 
    
    
 begin
@@ -212,7 +212,7 @@ begin
                   if fpa_int_feedbk_i = '1' then --! on attend le feedback de l'integration qui peut ne pas venir dans le cas des détecteurs numeriques (le détecteur n'est pas allumé bien que le proxy le soit).
                      fpa_trig_sm <= check_trig_ctrl_mode_st;
                   else
-                     if permit_trig = '1' and DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL then --! en l'absence du feedback d'intégration, le permit_trig permet de retour en idle en ayant au moins respectée la frequence minimale des trigs 
+                     if permit_trig = '1' then --! en l'absence du feedback d'intégration, le permit_trig permet de retour en idle en ayant au moins respectée la frequence minimale des trigs 
                         fpa_trig_sm <= idle; 
                      end if;
                   end if;
@@ -270,53 +270,59 @@ begin
    --------------------------------------------------
    -- fsm de contrôle de la periode minimale du trig
    --------------------------------------------------
-   -- 
-   U3: process(CLK_100M)
-   begin
-      if rising_edge(CLK_100M) then 
-         if sreset = '1' then  
-            permit_trig <= '0';
-            trig_period_min_sm <= idle;
-            period_count <= (others => '0');
-            
-         else
-            
-            -- séquenceur
-            case trig_period_min_sm is 
+   -- pour les détecteurs numériques, utilisation de permit_trig   
+   Digital_gen : if not DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL  generate       
+      U3: process(CLK_100M)
+      begin
+         if rising_edge(CLK_100M) then 
+            if sreset = '1' then  
+               permit_trig <= '0';
+               trig_period_min_sm <= idle;
+               period_count <= (others => '0');
                
-               -- etat idle
-               when idle => 
-                  permit_trig <= '1';
-                  period_count <= (others => '0');
-                  if acq_trig_last = '0' and acq_trig_i = '1' then                 
-                     period_count <= FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_PERIOD_MIN; -- determine la periode minimale des acq trigs 
-                     trig_period_min_sm <= period_cnt_st;            
-                  end if;
-                  if xtra_trig_last = '0' and xtra_trig_i = '1' then
-                     period_count <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_PERIOD_MIN; -- determine la periode minimale des xtra trigs 
-                     trig_period_min_sm <= period_cnt_st; 
-                  end if;
-                  if prog_trig_last = '0' and prog_trig_i = '1' then
-                     period_count <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_PERIOD_MIN; -- periode minimale des prog trigs = periode mininale des xtra_trigs
-                     trig_period_min_sm <= period_cnt_st;
-                  end if;
+            else
+               
+               -- séquenceur
+               case trig_period_min_sm is 
                   
-               -- obervation du delai minimal inter-trig 
-               when period_cnt_st => 
-                  permit_trig <= '0';          
-                  period_count <= period_count - 1;                
-                  if period_count = 0 then --or acq_trig_i = '1' or xtra_trig_i = '1' then  -- acq_trig_i or xtra_trig_i sont là pour une resynchronisation dans les modes autre MODE_TRIG_START_TO_TRIG_START
-                     trig_period_min_sm <= idle;
-                  end if;
+                  -- etat idle
+                  when idle => 
+                     permit_trig <= '1';
+                     period_count <= (others => '0');
+                     if acq_trig_last = '0' and acq_trig_i = '1' then                 
+                        period_count <= FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_PERIOD_MIN; -- determine la periode minimale des acq trigs 
+                        trig_period_min_sm <= period_cnt_st;            
+                     end if;
+                     if xtra_trig_last = '0' and xtra_trig_i = '1' then
+                        period_count <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_PERIOD_MIN; -- determine la periode minimale des xtra trigs 
+                        trig_period_min_sm <= period_cnt_st; 
+                     end if;
+                     if prog_trig_last = '0' and prog_trig_i = '1' then
+                        period_count <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_PERIOD_MIN; -- periode minimale des prog trigs = periode mininale des xtra_trigs
+                        trig_period_min_sm <= period_cnt_st;
+                     end if;
+                     
+                  -- obervation du delai minimal inter-trig 
+                  when period_cnt_st => 
+                     permit_trig <= '0';          
+                     period_count <= period_count - 1;                
+                     if period_count = 0 then --or acq_trig_i = '1' or xtra_trig_i = '1' then  -- acq_trig_i or xtra_trig_i sont là pour une resynchronisation dans les modes autre MODE_TRIG_START_TO_TRIG_START
+                        trig_period_min_sm <= idle;
+                     end if;
+                  
+                  when others =>
+                  
+               end case;
                
-               when others =>
-               
-            end case;
-            
-         end if;         
-      end if;
-      
-   end process;
-   
+            end if;         
+         end if;
+         
+      end process;
+   end generate;
+  
+      -- pour les détecteurs analogiques, utilisation de permit_trig prohibée
+   Analog_gen : if not DEFINE_FPA_OUTPUT = OUTPUT_ANALOG  generate       
+      permit_trig <= '0';
+   end generate;
    
 end RTL;

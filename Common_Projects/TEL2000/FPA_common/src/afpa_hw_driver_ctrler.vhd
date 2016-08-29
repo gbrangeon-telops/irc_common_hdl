@@ -41,6 +41,7 @@ entity afpa_hw_driver_ctrler is
       PROG_RQST        : in std_logic;
       PROG_EN          : out std_logic;
       PROG_DONE        : in std_logic;
+      PROG_INIT_DONE   : out std_logic;
       
       -- post prog détecteur
       READOUT          : in std_logic;
@@ -105,6 +106,8 @@ architecture rtl of afpa_hw_driver_ctrler is
    signal update_fpa_part_only      : std_logic;
    signal update_dac_cfg            : std_logic;
    signal update_fpa_cfg            : std_logic;
+   signal prog_init_done_i          : std_logic;
+   signal fpa_at_least_one_prog_done: std_logic;
    
 begin
    
@@ -114,6 +117,8 @@ begin
    DAC_EN <= dac_en_i;
    HW_RQST <= hw_rqst_i;
    HW_DONE <= hw_done_i;
+   PROG_INIT_DONE <= prog_init_done_i;
+   
    
    --------------------------------------------------
    -- synchro reset 
@@ -153,6 +158,8 @@ begin
             update_whole_cfg <= '0';
             run_dac_prog_client <= '0';
             run_fpa_prog_client <= '0';
+            fpa_at_least_one_prog_done <= '0';
+            prog_init_done_i <= '0';
             
          else                   
             
@@ -174,6 +181,7 @@ begin
                   hw_rqst_i <= '0';
                   post_update_img <= '0';
                   update_whole_cfg <= '0';
+                  prog_init_done_i <= fpa_at_least_one_prog_done;
                   if DIAG_MODE_ONLY = '1' then
                      hw_seq_fsm <= diag_mode_only_st;
                   elsif valid_rqst_pending = '1' then 
@@ -203,6 +211,7 @@ begin
                      hw_seq_fsm <= wait_client_run_st;
                   elsif valid_prog_rqst = '1' then              
                      run_fpa_prog_client <= '1';
+                     fpa_at_least_one_prog_done <= '1';
                      hw_seq_fsm <= wait_client_run_st;
                   else 
                      hw_seq_fsm <= pause_st;                     -- aller en pause et non en idle permet de faire durer hw_done_i d'au moins 2 clk en l'état '0'
