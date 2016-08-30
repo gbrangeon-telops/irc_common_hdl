@@ -271,7 +271,7 @@ begin
    -- fsm de contrôle de la periode minimale du trig
    --------------------------------------------------
    -- pour les détecteurs numériques, utilisation de permit_trig   
-   Digital_gen : if not DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL  generate       
+   Digital_gen : if DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL  generate       
       U3: process(CLK_100M)
       begin
          if rising_edge(CLK_100M) then 
@@ -321,7 +321,7 @@ begin
    end generate;
   
       -- pour les détecteurs analogiques, utilisation de permit_trig prohibée
-   Analog_gen : if not DEFINE_FPA_OUTPUT = OUTPUT_ANALOG  generate       
+   Analog_gen : if DEFINE_FPA_OUTPUT = OUTPUT_ANALOG  generate       
       permit_trig <= '0';
    end generate;
    
