@@ -223,6 +223,15 @@ package fpa_common_pkg is
    end record fpa_temp_stat_type; 
    
    --------------------------------------------------------------------------------
+   -- record pour acheminer les statuts divers vers microBlaze                           
+   --------------------------------------------------------------------------------
+   type array32_type is array (0 to 5) of std_logic_vector(31 downto 0);
+   type misc_stat_type is
+   record      
+      reg                  :  array32_type;
+   end record misc_stat_type; 
+   
+   --------------------------------------------------------------------------------
    -- types  pour transferer des données                                 
    --------------------------------------------------------------------------------
    type t_ll_ext_mosi1 is record
@@ -316,7 +325,7 @@ package body fpa_common_pkg is
       else return RIGHT;
       end if;
    end;
-
+   
    function MIN(LEFT, RIGHT: INTEGER) return INTEGER is
    begin
       if LEFT < RIGHT then return LEFT;
