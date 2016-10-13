@@ -107,7 +107,7 @@ architecture rtl of afpa_hw_driver_ctrler is
    signal update_dac_cfg            : std_logic;
    signal update_fpa_cfg            : std_logic;
    signal prog_init_done_i          : std_logic;
-   signal fpa_at_least_one_prog_done: std_logic;
+   signal first_prog_done: std_logic;
    
 begin
    
@@ -158,7 +158,7 @@ begin
             update_whole_cfg <= '0';
             run_dac_prog_client <= '0';
             run_fpa_prog_client <= '0';
-            fpa_at_least_one_prog_done <= '0';
+            first_prog_done <= '0';
             prog_init_done_i <= '0';
             
          else                   
@@ -181,7 +181,7 @@ begin
                   hw_rqst_i <= '0';
                   post_update_img <= '0';
                   update_whole_cfg <= '0';
-                  prog_init_done_i <= fpa_at_least_one_prog_done;
+                  prog_init_done_i <= first_prog_done;    -- Par principe pour le scorpiomwA, la premiere config est celle d'initialisation.
                   if DIAG_MODE_ONLY = '1' then
                      hw_seq_fsm <= diag_mode_only_st;
                   elsif valid_rqst_pending = '1' then 
@@ -211,7 +211,7 @@ begin
                      hw_seq_fsm <= wait_client_run_st;
                   elsif valid_prog_rqst = '1' then              
                      run_fpa_prog_client <= '1';
-                     fpa_at_least_one_prog_done <= '1';
+                     first_prog_done <= '1';    -- la premiere config
                      hw_seq_fsm <= wait_client_run_st;
                   else 
                      hw_seq_fsm <= pause_st;                     -- aller en pause et non en idle permet de faire durer hw_done_i d'au moins 2 clk en l'état '0'
