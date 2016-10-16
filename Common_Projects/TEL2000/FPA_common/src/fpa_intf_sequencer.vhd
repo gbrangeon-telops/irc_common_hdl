@@ -26,7 +26,7 @@ entity fpa_intf_sequencer is
       ARESET             : in std_logic;       
       FPA_INTF_CFG       : in fpa_intf_cfg_type; --! configuration           
       TRIG_CTLER_STAT    : in std_logic_vector(7 downto 0); --! statuts du gestionnaire des trigs du FPA          
-      FPA_DRIVER_STAT    : in std_logic_vector(15 downto 0); --! statuts du pilote Hardware du FPA     
+      FPA_DRIVER_STAT    : in std_logic_vector(31 downto 0); --! statuts du pilote Hardware du FPA     
       FPA_COOLER_STAT    : in fpa_cooler_stat_type; --! statut du refroidisseur     
       FPA_HARDW_STAT     : in fpa_hardw_stat_type; --! statut (type + mise-à-jour) de toutes les cartes de proximité (proxy, flex, DDC, ADC, harnais etc...)   
       FPA_SOFTW_STAT     : in fpa_firmw_stat_type;--
@@ -85,6 +85,7 @@ architecture RTL of fpa_intf_sequencer is
    signal diag_mode_only_i    : std_logic;
    signal fpa_softw_err       : std_logic;
    signal fpa_vhd_err         : std_logic;
+   signal fpa_init_cfg_rdy    : std_logic;
    
    
    
@@ -204,13 +205,15 @@ begin
    end process; 
    
    -----------------------------------------------------------
-   -- Vérification du statut du refroidisseur 
+   -- Vérification du statut du refroidisseur de la cfg d'initisalisation
    -----------------------------------------------------------
    -- on vérifie que le refroidisseur est allumé 
+   -- on vérifie que la config d'initialisation est prête
    U5: process(CLK)
    begin          
       if rising_edge(CLK) then 
          fpa_cooler_on <= FPA_COOLER_STAT.COOLER_ON;
+         fpa_init_cfg_rdy <= (DEFINE_FPA_INIT_CFG_NEEDED and FPA_INTF_CFG.COMN.FPA_INIT_CFG_RECEIVED) or not DEFINE_FPA_INIT_CFG_NEEDED; 
       end if;
    end process;  
    
@@ -275,8 +278,9 @@ begin
             -- 2) le refroidisseur est en fonction
             -- 3) la température du détecteur est conforme
             -- 4) on reçoit l'ordre d'allumage en provenance du PPC/µBlaze
+            -- 5) le statut relatif à la config d'initialisation est conforme
             if hardw_global_status = success and firmw_global_status = success and fpa_temp_stat_i = success then 
-               fpa_power_i <= FPA_INTF_CFG.COMN.FPA_PWR_ON and fpa_cooler_on; 
+               fpa_power_i <= FPA_INTF_CFG.COMN.FPA_PWR_ON and fpa_cooler_on and fpa_init_cfg_rdy; 
             else
                fpa_power_i <= '0';
             end if;            

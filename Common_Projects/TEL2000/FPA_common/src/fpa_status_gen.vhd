@@ -31,7 +31,7 @@ entity fpa_status_gen is
       
       FPA_SERDES_STAT  : in fpa_serdes_stat_type;
       TRIG_CTLER_STAT  : in std_logic_vector(7 downto 0);
-      FPA_DRIVER_STAT  : in std_logic_vector(15 downto 0);
+      FPA_DRIVER_STAT  : in std_logic_vector(31 downto 0);
       INTF_SEQ_STAT    : in std_logic_vector(7 downto 0);
       DATA_PATH_STAT   : in std_logic_vector(15 downto 0);
       
@@ -108,6 +108,7 @@ architecture rtl of fpa_status_gen is
    signal acq_trig_done                : std_logic;
    signal fpa_permit_int_change        : std_logic;
    signal fpa_prog_init_done           : std_logic;
+   signal fpa_driver_cmd_in_err        : std_logic_vector(7 downto 0);
    
    
    component sync_reset
@@ -193,8 +194,9 @@ begin
    -- FPA_DRIVER_STAT                             
    -----------------------------------------------
    
-   fpa_prog_init_done    <= FPA_DRIVER_STAT(9);        -- monte à '1' lorsque la 1ere config est programmée dans le ROIC. Ce qui est intéressant pour les ROIC necessitant une config d'initialisation 
-   fpa_driver_dvalid_err <= FPA_DRIVER_STAT(8);        -- upour les sofradir: un fpa_data_valid est manquant après integration
+   fpa_prog_init_done    <= FPA_DRIVER_STAT(17);            -- monte à '1' lorsque la config d'initialisation est programmée dans le ROIC. Ce qui est intéressant pour les ROIC necessitant une config d'initialisation 
+   fpa_driver_dvalid_err <= FPA_DRIVER_STAT(16);            -- upour les sofradir: un fpa_data_valid est manquant après integration
+   fpa_driver_cmd_in_err <= FPA_DRIVER_STAT(15 downto 8);   -- pour les détecteurs numériques principalement, c'est l'ID de la cmd en erreur
    fpa_permit_int_change <= FPA_DRIVER_STAT(7);
    fpa_driver_trig_err   <= FPA_DRIVER_STAT(6);
    fpa_driver_ram_err    <= FPA_DRIVER_STAT(5);
@@ -463,7 +465,7 @@ begin
                -----------------------------------
                
                when  x"0060" =>   -- cmd en erreur
-                  stat_read_reg <= resize('0'& FPA_DRIVER_STAT(15 downto 8), 32);
+                  stat_read_reg <= resize(fpa_driver_cmd_in_err, 32);
                
                -- FPA_SERDES_STAT
                when  x"0064" =>   -- fpa serdes done

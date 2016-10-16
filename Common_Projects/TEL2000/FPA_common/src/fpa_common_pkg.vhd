@@ -120,8 +120,10 @@ package fpa_common_pkg is
    record     
       fpa_diag_mode            : std_logic;  --! à '1' si on est en mode diag telops
       fpa_diag_type            : std_logic_vector(7 downto 0);  --! diag telops constant ou non (valeurs dans fpa_common_pkg 
-      fpa_pwr_on               : std_logic;  --! à '1' si on veut allumer le détecteur ou le proxy
-      
+      fpa_pwr_on               : std_logic;  --! à '1' si on veut allumer le détecteur ou le proxy                                                              
+      fpa_init_cfg             : std_logic;  --! à '1' si la config en cours de progression est une config d'initialisation 
+      fpa_init_cfg_received    : std_logic; -- ne provient pas du µBlaze. À '1' si on a reçu une config d'initialisation de la part du pilote. Cela devrait être le cas au reset et à tout pwrUp de la carte ADC/DDC
+           
       -- config pour le contrôleur des trigs
       fpa_trig_ctrl_mode       : std_logic_vector(7 downto 0);  -- mode d'operation du contrôleur des trigs (voir fichier fpa_common_pkg)
       fpa_acq_trig_ctrl_dly    : unsigned(31 downto 0);         -- delai pour le contrôleur des trigs (depend des modes. Voir le trig_controller.vhd) 

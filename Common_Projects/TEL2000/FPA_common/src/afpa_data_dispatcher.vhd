@@ -66,7 +66,13 @@ entity afpa_data_dispatcher is
       );
 end afpa_data_dispatcher;
 
-architecture rtl of afpa_data_dispatcher is  
+architecture rtl of afpa_data_dispatcher is 
+   
+   constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS : natural := 26;  -- log2 de FPA_EXP_TIME_CONV_DENOMINATOR  
+   constant C_EXP_TIME_CONV_DENOMINATOR  : integer := 2**C_EXP_TIME_CONV_DENOMINATOR_BIT_POS;
+   constant C_EXP_TIME_CONV_NUMERATOR    : unsigned(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 4 downto 0):= to_unsigned(integer(real(DEFINE_FPA_100M_CLK_RATE_KHZ)*real(2**C_EXP_TIME_CONV_DENOMINATOR_BIT_POS)/real(DEFINE_FPA_MCLK_RATE_KHZ)), C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 5);     --
+   constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_26  : natural := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 26; --pour un total de 26 bits pour le temps d'integration
+   constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_M_1   : natural := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS - 1; 
    
    component sync_reset
       port(
@@ -106,10 +112,12 @@ architecture rtl of afpa_data_dispatcher is
          );
    end component;
    
-   
-   type fast_hder_sm_type is (idle, exp_info_dval_st, send_hder_st);                    
    type acq_fringe_fsm_type is (idle, wait_fval_st);
+   type fast_hder_sm_type is (idle, exp_info_dval_st, send_hder_st);                    
+   type exp_time_pipe_type is array (0 to 3) of unsigned(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_26 downto 0);
    
+   signal exp_time_pipe                : exp_time_pipe_type;
+   signal exp_dval_pipe                : std_logic_vector(7 downto 0) := (others => '0');
    signal fast_hder_sm                 : fast_hder_sm_type;
    signal acq_fringe_fsm               : acq_fringe_fsm_type;
    signal sreset                       : std_logic;
@@ -152,6 +160,7 @@ architecture rtl of afpa_data_dispatcher is
    signal pix_link_rdy                 : std_logic;
    signal hder_link_rdy                : std_logic;
    signal int_time_100MHz              : unsigned(31 downto 0);
+   signal int_time_100MHz_dval         : std_logic;
    --signal int_time_100MHz_corr         : unsigned(31 downto 0);
    signal dispatch_info_i              : img_info_type;
    signal hder_param                   : hder_param_type;
@@ -162,9 +171,9 @@ architecture rtl of afpa_data_dispatcher is
    signal pix_count                    : unsigned(31 downto 0);
    signal pause_cnt                    : unsigned(7 downto 0);
    
-   --   attribute dont_touch                     : string; 
-   --   attribute dont_touch of int_time         : signal is "true"; 
-   --   attribute dont_touch of int_time_100MHz  : signal is "true";
+   --  attribute dont_touch                     : string; 
+   --  attribute dont_touch of int_time         : signal is "true"; 
+   --  attribute dont_touch of int_time_100MHz_x_2P15  : signal is "true";
    
 begin
    
@@ -338,13 +347,11 @@ begin
             acq_fringe_last <= acq_fringe;
             
             -- construction des données hder fast
-            int_time_100MHz <= to_unsigned(to_integer(int_time_i)*DEFINE_FPA_MCLK_RATE_FACTOR_100M, 32);
-            
-            hder_param.exp_time <= int_time_100MHz;
+            hder_param.exp_time <= int_time_100MHz; 
             hder_param.frame_id <= unsigned(frame_id_i);
             hder_param.sensor_temp_raw <= FPA_TEMP_STAT.TEMP_DATA(hder_param.sensor_temp_raw'length-1 downto 0);--others => '0');-- à faire plus tard 
             hder_param.exp_index <= unsigned(int_indx_i);
-            hder_param.rdy <= acq_fringe and not acq_fringe_last;
+            hder_param.rdy <= int_time_100MHz_dval;
             
             --  generation des données de l'image info (exp_feedbk et frame_id proviennent de hw_driver pour eviter d'ajouter un clk supplementaire dans le présent module)
             dispatch_info_i.exp_info.exp_time <= hder_param.exp_time;
@@ -411,9 +418,9 @@ begin
                         fast_hder_sm <= idle;
                      end if;                     
                      hcnt <= hcnt + 1;
---                  else
---                     hder_mosi_i.awvalid <= '0';
---                     hder_mosi_i.wvalid <= '0';
+                     --                  else
+                     --                     hder_mosi_i.awvalid <= '0';
+                     --                     hder_mosi_i.wvalid <= '0';
                   end if;
                
                when others =>
@@ -424,10 +431,36 @@ begin
       end if;
    end process; 
    
+   -----------------------------------------------------  
+   -- calcul du temps d'integration en coups de 100MHz                               
+   -----------------------------------------------------
+   U7: process (CLK)
+   begin
+      if rising_edge(CLK) then 
+         
+         -- pipe pour le calcul du temps d'integration en clk de 100 MHz
+         exp_time_pipe(0) <= resize(int_time_i, exp_time_pipe(0)'length) ;
+         exp_time_pipe(1) <= resize(exp_time_pipe(0) * C_EXP_TIME_CONV_NUMERATOR, exp_time_pipe(0)'length);          
+         exp_time_pipe(2) <= resize(exp_time_pipe(1)(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_26 downto C_EXP_TIME_CONV_DENOMINATOR_BIT_POS), exp_time_pipe(0)'length);  -- soit une division par 2^EXP_TIME_CONV_DENOMINATOR
+         exp_time_pipe(3) <= exp_time_pipe(2) + resize("00"& exp_time_pipe(1)(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_M_1), exp_time_pipe(0)'length);  -- pour l'operation d'arrondi
+         int_time_100MHz  <= exp_time_pipe(3)(int_time_100MHz'length-1 downto 0);
+         
+         -- pipe pour rendre valide la donnée qques CLKs apres sa sortie
+         exp_dval_pipe(0)           <= acq_fringe and not acq_fringe_last;
+         exp_dval_pipe(1)           <= exp_dval_pipe(0); 
+         exp_dval_pipe(2)           <= exp_dval_pipe(1); 
+         exp_dval_pipe(3)           <= exp_dval_pipe(2);
+         exp_dval_pipe(4)           <= exp_dval_pipe(3);
+         exp_dval_pipe(5)           <= exp_dval_pipe(4);
+         int_time_100MHz_dval       <= exp_dval_pipe(5);         
+         
+      end if;
+   end process; 
+   
    -------------------------------------------------------------------
    -- generation misc signaux
    -------------------------------------------------------------------   
-   U7: process(CLK)
+   U8: process(CLK)
    begin          
       if rising_edge(CLK) then
          if sreset = '1' then
