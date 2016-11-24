@@ -130,6 +130,7 @@ package fpa_common_pkg is
       fpa_acq_trig_period_min  : unsigned(31 downto 0);         -- periode minimale pour les acq_trigs    
       fpa_xtra_trig_ctrl_dly   : unsigned(31 downto 0);         -- delai pour le contrôleur des trigs (depend des modes. Voir le trig_controller.vhd) 
       fpa_xtra_trig_period_min : unsigned(31 downto 0);         -- periode minimale pour les xtra_trigs (peut être identique à celle des acq_trig si necessaire) 
+      fpa_stretch_acq_trig     : std_logic;                     -- permet d'utiliser une version étirée du trig pour supporter les instabilités de la roue à filtre
    end record;    
    
    --------------------------------------------------------------------------------
