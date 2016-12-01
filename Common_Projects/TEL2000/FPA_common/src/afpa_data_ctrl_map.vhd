@@ -54,7 +54,7 @@ begin
    --------------------------------------------------
    -- outputs maps
    -------------------------------------------------- 
-   DOUT_MOSI.TDATA <= QUAD_MOSI.DATA(15 downto 0) & QUAD_MOSI.DATA(33 downto 18) & QUAD_MOSI.DATA(51 downto 36) & QUAD_MOSI.DATA(69 downto 54) ; -- 
+   DOUT_MOSI.TDATA <= QUAD_MOSI.DATA(69 downto 54) & QUAD_MOSI.DATA(51 downto 36) & QUAD_MOSI.DATA(33 downto 18) & QUAD_MOSI.DATA(15 downto 0); -- 
    DOUT_MOSI.TVALID<= QUAD_MOSI.DVAL;
    DOUT_MOSI.TSTRB <= (others => '1');
    DOUT_MOSI.TKEEP <= (others => '1');
