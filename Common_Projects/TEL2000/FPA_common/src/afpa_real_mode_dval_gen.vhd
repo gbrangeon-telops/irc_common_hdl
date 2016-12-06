@@ -252,10 +252,10 @@ begin
                      sync_flow_fsm <= flush_fifo_st;
                   end if;
                
-               when flush_fifo_st =>            -- le reset dure 7 coups d'horloge. Le fifo est reseté pour qu'un manque de pixel dans l'image actuelle n'affecte pas la suivante.
+               when flush_fifo_st =>            -- le reset dure 20 coups d'horloge. Le fifo est reseté pour qu'un manque de pixel dans l'image actuelle n'affecte pas la suivante.
                   flush_fifo_o <= '1';
                   dly_cnt <= dly_cnt + 1;
-                  if dly_cnt = 7 then 
+                  if dly_cnt = 20 then 
                      sync_flow_fsm <= idle; 
                   end if;                       
                
