@@ -27,7 +27,10 @@ use work.fpa_common_pkg.all;
 
 
 entity afpa_diag_data_gen is
-   
+   generic(
+      G_DIAG_QUAD_ID     : integer range 1 to 16 := 1;   -- le numero du quad à emuler en mode diag. Si diversité de canal, alors vaut le numero du quad qui a subi la diversité de canal
+      G_DIAG_TAP_NUMBER  : integer range 1 to 64 := DEFINE_FPA_TAP_NUMBER
+      );
    port(      
       ARESET            : in std_logic;
       MCLK_SOURCE       : in std_logic;
@@ -84,11 +87,12 @@ architecture rtl of afpa_diag_data_gen is
          );
    end component;
    
-   constant  C_FPA_TAP_NUMBER_M1 : integer := DEFINE_FPA_TAP_NUMBER - 1; 
+   constant  C_DIAG_TAP_NUMBER_M1 : integer := G_DIAG_TAP_NUMBER - 1;
+   constant  C_DIAG_BASE_OFFSET   : integer := (G_DIAG_QUAD_ID - 1) * DEFINE_DIAG_DATA_INC * G_DIAG_TAP_NUMBER;
    
    type diag_fsm_type is (idle, int_st, junk_data_st, tir_dly_st, get_line_data_st, cfg_line_gen_st, check_end_st, write_end_id_st);
    type img_change_sm_type is (idle, change_st); 
-   type data_type is array (0 to C_FPA_TAP_NUMBER_M1) of std_logic_vector(15 downto 0);
+   type data_type is array (0 to C_DIAG_TAP_NUMBER_M1) of std_logic_vector(15 downto 0);
    
    signal diag_fsm          : diag_fsm_type;
    signal img_change_sm     : img_change_sm_type;
@@ -103,8 +107,8 @@ architecture rtl of afpa_diag_data_gen is
    signal fpa_2xmclk_dummy  : std_logic;
    
    signal diag_data_i       : data_type;
-   signal diag_dval_i       : std_logic_vector(C_FPA_TAP_NUMBER_M1 downto 0);
-   signal diag_done         : std_logic_vector(C_FPA_TAP_NUMBER_M1 downto 0);
+   signal diag_dval_i       : std_logic_vector(C_DIAG_TAP_NUMBER_M1 downto 0);
+   signal diag_done         : std_logic_vector(C_DIAG_TAP_NUMBER_M1 downto 0);
    signal dly_cnt           : unsigned(15 downto 0);
    signal data_cnt          : unsigned(15 downto 0);
    signal line_cnt          : unsigned(FPA_INTF_CFG.YSIZE'length-1 downto 0);
@@ -118,8 +122,8 @@ architecture rtl of afpa_diag_data_gen is
    signal diag_quad_clk_i   : std_logic;
    signal diag_quad_clk_last: std_logic;
    signal diag_done_last    : std_logic;
-   signal diag_sol          : std_logic_vector(C_FPA_TAP_NUMBER_M1 downto 0);
-   signal diag_eol          : std_logic_vector(C_FPA_TAP_NUMBER_M1 downto 0);
+   signal diag_sol          : std_logic_vector(C_DIAG_TAP_NUMBER_M1 downto 0);
+   signal diag_eol          : std_logic_vector(C_DIAG_TAP_NUMBER_M1 downto 0);
    signal sof_i             : std_logic;
    signal eof_i             : std_logic;
    signal sol_i             : std_logic;
@@ -179,7 +183,7 @@ begin
    end process;
    
    -- smapping avec generateur de données
-   U1 : for ii in 0 to C_FPA_TAP_NUMBER_M1 generate 
+   U1 : for ii in 0 to C_DIAG_TAP_NUMBER_M1 generate 
       diag_line_ii : fpa_diag_line_gen 
       generic map(
          ANALOG_IDDCA => true,      
@@ -258,13 +262,13 @@ begin
             
             -- configuration des generateurs de lignes
             if FPA_INTF_CFG.COMN.FPA_DIAG_TYPE = DEFINE_TELOPS_DIAG_CNST then  -- constant
-               for ii in 0 to C_FPA_TAP_NUMBER_M1 loop
+               for ii in 0 to C_DIAG_TAP_NUMBER_M1 loop
                   first_value(ii) <= std_logic_vector(to_unsigned(4096, first_value(0)'length)); 
                   incr_value <= (others => '0');
                end loop;               
             else                                                       
-               for ii in 0 to C_FPA_TAP_NUMBER_M1 loop                  -- degradé lineaire constant et dégradé linéaire dynamique
-                  first_value(ii) <= std_logic_vector(to_unsigned(ii*DEFINE_DIAG_DATA_INC, first_value(0)'length));
+               for ii in 0 to C_DIAG_TAP_NUMBER_M1 loop                  -- degradé lineaire constant et dégradé linéaire dynamique
+                  first_value(ii) <= std_logic_vector(to_unsigned(C_DIAG_BASE_OFFSET + ii*DEFINE_DIAG_DATA_INC, first_value(0)'length));
                   incr_value <= std_logic_vector(to_unsigned(DEFINE_FPA_TAP_NUMBER*DEFINE_DIAG_DATA_INC, first_value(0)'length));
                end loop;                        
             end if;
@@ -309,11 +313,11 @@ begin
                   end if;
                   -- on se branche sur le module generateur de données diag
                   if revert_img = '1' then
-                     for ii in 0 to C_FPA_TAP_NUMBER_M1 loop
+                     for ii in 0 to C_DIAG_TAP_NUMBER_M1 loop
                         data(ii) <= not diag_data_i(ii);                  -- dégradé vers la gauche
                      end loop;
                   else                                                              
-                     for ii in 0 to C_FPA_TAP_NUMBER_M1 loop
+                     for ii in 0 to C_DIAG_TAP_NUMBER_M1 loop
                         data(ii) <= diag_data_i(ii);                      -- dégradé vers la droite 
                      end loop;
                   end if;                  
