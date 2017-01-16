@@ -2,7 +2,7 @@ SCHM0104
 
 HEADER
 {
- FREEID 44339
+ FREEID 44357
  VARIABLES
  {
   #ARCHITECTURE="sch"
@@ -2790,9 +2790,9 @@ PAGE ""
     #COMPONENT="afpa_dval_gen"
     #CUSTOM_NAME=""
     #GENERIC0="G_DIAG_TAP_NUMBER : integer range 1 to 64 := 4"
-    #GENERIC1="G_DIAG_QUAD_ID : integer range 1 to 16 := 1"
-    #IMPL="sch"
+    #GENERIC1="G_DIAG_QUAD_ID : integer range 1 to 16 := DIAG_QUAD_ID_A"
     #LIBRARY="#default"
+    #NO_CONF="1"
     #PRAGMED_GENERICS=""
     #REFERENCE="U2"
     #SYMBOL="afpa_dval_gen"
@@ -2845,8 +2845,8 @@ PAGE ""
    {
     #COMPONENT="afpa_dval_gen"
     #CUSTOM_NAME=""
-    #GENERIC0="G_DIAG_TAP_NUMBER : integer range 1 to 64 := 4"
-    #GENERIC1="G_DIAG_QUAD_ID : integer range 1 to 16 := 3"
+    #GENERIC0="G_DIAG_QUAD_ID : integer range 1 to 16 := DIAG_QUAD_ID_B"
+    #GENERIC1="G_DIAG_TAP_NUMBER : integer range 1 to 64 := 4"
     #IMPL="sch"
     #LIBRARY="#default"
     #PRAGMED_GENERICS=""
@@ -3705,8 +3705,8 @@ PAGE ""
    {
     #COMPONENT="afpa_dval_gen"
     #CUSTOM_NAME=""
-    #GENERIC0="G_DIAG_QUAD_ID : integer range 1 to 16 := 2"
-    #GENERIC1="G_DIAG_TAP_NUMBER : integer range 1 to 64 := 4"
+    #GENERIC0="G_DIAG_TAP_NUMBER : integer range 1 to 64 := 4"
+    #GENERIC1="G_DIAG_QUAD_ID : integer range 1 to 16 := DIAG_QUAD_ID_C"
     #IMPL="sch"
     #LIBRARY="#default"
     #PRAGMED_GENERICS=""
@@ -3739,7 +3739,7 @@ PAGE ""
     #COMPONENT="afpa_dval_gen"
     #CUSTOM_NAME=""
     #GENERIC0="G_DIAG_TAP_NUMBER : integer range 1 to 64 := 4"
-    #GENERIC1="G_DIAG_QUAD_ID : integer range 1 to 16 := 4"
+    #GENERIC1="G_DIAG_QUAD_ID : integer range 1 to 16 := DIAG_QUAD_ID_D"
     #IMPL="sch"
     #LIBRARY="#default"
     #PRAGMED_GENERICS=""
@@ -7695,26 +7695,48 @@ PAGE ""
   TEXT  44289, 0, 0
   {
    TEXT "@GENERIC_ACTUAL_VALUES()"
-   RECT (800,1340,1188,1406)
+   RECT (800,1340,1352,1406)
    PARENT 34092
   }
   TEXT  44293, 0, 0
   {
    TEXT "@GENERIC_ACTUAL_VALUES()"
-   RECT (780,2136,1168,2202)
+   RECT (780,2136,1332,2202)
    PARENT 34290
   }
   TEXT  44297, 0, 0
   {
    TEXT "@GENERIC_ACTUAL_VALUES()"
-   RECT (780,2936,1168,3002)
+   RECT (780,2936,1334,3002)
    PARENT 40354
   }
   TEXT  44301, 0, 0
   {
    TEXT "@GENERIC_ACTUAL_VALUES()"
-   RECT (780,3736,1168,3802)
+   RECT (780,3736,1334,3802)
    PARENT 40373
+  }
+  ARCHITECTUREDECLARATIONSBC  44339, 0, 0
+  {
+   LABEL "Architecture declarations before components"
+   TEXT 
+"-- tient compte de la diversité de canaux lorsqu'on est en 8 taps\n"+
+"constant   DIAG_QUAD_ID_A : integer  :=  1;\n"+
+"constant   DIAG_QUAD_ID_B : integer  :=  DEFINE_FPA_TAP_NUMBER/4 - 1;\n"+
+"constant   DIAG_QUAD_ID_C : integer  :=  2;\n"+
+"constant   DIAG_QUAD_ID_D : integer  :=  DEFINE_FPA_TAP_NUMBER/4;\n"+
+"\n"+
+""
+   RECT (3540,580,4640,820)
+   OUTLINE 5,1, (0,0,0)
+   FILL (0,(203,215,255),0)
+   MARGINS (20,20)
+   FONT (12,0,0,400,0,0,0,"Arial")
+   MULTILINE
+   SYNTAXCOLORED
+   SHOWLABEL
+   SHOWTEXT
+   CORNER 10
   }
  }
  
@@ -7741,7 +7763,7 @@ PAGE ""
  
  BODY
  {
-  TEXT  44322, 0, 0
+  TEXT  44340, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -7752,7 +7774,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  44323, 0, 0
+  TEXT  44341, 0, 0
   {
    PAGEALIGN 10
    TEXT "$CREATIONDATE"
@@ -7763,7 +7785,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  44324, 0, 0
+  TEXT  44342, 0, 0
   {
    PAGEALIGN 10
    TEXT "Title:"
@@ -7773,7 +7795,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  44325, 0, 0
+  TEXT  44343, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -7785,7 +7807,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  44326, 0, 0
+  TEXT  44344, 0, 0
   {
    PAGEALIGN 10
    TEXT 
@@ -7798,7 +7820,7 @@ PAGE ""
    FONT (12,0,0,700,0,0,0,"Arial")
    MULTILINE
   }
-  TEXT  44327, 0, 0
+  TEXT  44345, 0, 0
   {
    PAGEALIGN 10
    TEXT "Page:"
@@ -7808,7 +7830,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  44328, 0, 0
+  TEXT  44346, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -7820,7 +7842,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  44329, 0, 0
+  TEXT  44347, 0, 0
   {
    PAGEALIGN 10
    TEXT "Revision:"
@@ -7830,7 +7852,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  44330, 0, 0
+  TEXT  44348, 0, 0
   {
    PAGEALIGN 10
    TEXT "$Revision"
@@ -7841,7 +7863,7 @@ PAGE ""
    FONT (12,0,0,700,0,204,0,"Arial")
    UPDATE 0
   }
-  GROUP  44331, 0, 0
+  GROUP  44349, 0, 0
   {
    PAGEALIGN 10
    RECT (4920,4020,5801,4401)
@@ -7853,7 +7875,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  44332, 0, 0
+  GROUP  44350, 0, 0
   {
    PAGEALIGN 10
    RECT (4920,4220,5801,4221)
@@ -7865,7 +7887,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  44333, 0, 0
+  GROUP  44351, 0, 0
   {
    PAGEALIGN 10
    RECT (4920,4160,5801,4161)
@@ -7877,7 +7899,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  44334, 0, 0
+  GROUP  44352, 0, 0
   {
    PAGEALIGN 10
    RECT (4920,4280,5801,4281)
@@ -7889,7 +7911,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  44335, 0, 0
+  GROUP  44353, 0, 0
   {
    PAGEALIGN 10
    RECT (4920,4340,5801,4341)
@@ -7901,7 +7923,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  44336, 0, 0
+  GROUP  44354, 0, 0
   {
    PAGEALIGN 10
    RECT (5100,4020,5101,4161)
@@ -7912,7 +7934,7 @@ PAGE ""
     POINTS ( (0,0), (0,140) )
    }
   }
-  GROUP  44337, 0, 0
+  GROUP  44355, 0, 0
   {
    PAGEALIGN 10
    RECT (5100,4160,5101,4401)
@@ -7923,7 +7945,7 @@ PAGE ""
     POINTS ( (0,0), (0,240) )
    }
   }
-  BMPPICT  44338, 0, 0
+  BMPPICT  44356, 0, 0
   {
    PAGEALIGN 10
    RECT (4940,4080,5079,4125)
