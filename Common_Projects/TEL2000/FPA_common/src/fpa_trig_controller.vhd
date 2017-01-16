@@ -76,7 +76,7 @@ architecture RTL of fpa_trig_controller is
    signal prog_trig_o                  : std_logic;
    signal done                         : std_logic;
    signal fpa_readout_last             : std_logic;
-   signal count                        : unsigned(2 downto 0);
+   signal count                        : unsigned(3 downto 0);
    signal dly_cnt                      : unsigned(FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_CTRL_DLY'LENGTH-1  downto 0);
    signal permit_trig                  : std_logic;
    signal period_count                 : unsigned(FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_PERIOD_MIN'LENGTH-1 downto 0);
@@ -86,6 +86,9 @@ architecture RTL of fpa_trig_controller is
    signal acq_trig_done                : std_logic;
    signal fpa_readout_i                : std_logic;
    signal fpa_int_feedbk_i             : std_logic;
+   signal acq_trig_in_i                : std_logic; 
+   signal xtra_trig_in_i               : std_logic; 
+   signal prog_trig_in_i               : std_logic; 
    
    --   attribute dont_touch                : string;
    --   attribute dont_touch of acq_trig_i  : signal is "true";
@@ -152,6 +155,10 @@ begin
             
             fpa_int_feedbk_i <= FPA_INT_FEEDBK;
             
+            acq_trig_in_i  <= ACQ_TRIG_IN;
+            xtra_trig_in_i <= XTRA_TRIG_IN;
+            prog_trig_in_i <= PROG_TRIG_IN;
+            
             -- séquenceur
             case fpa_trig_sm is 
                
@@ -168,14 +175,14 @@ begin
                   dly_cnt <= (others => '0');
                   acq_trig_done <= '1';
                   if TRIG_CTLER_EN = '1' then  --! TRIG_CTLER_EN = '1' ssi le détecteur/proxy est allumé ou si on est en mode diag
-                     if ACQ_TRIG_IN = '1' then 
+                     if acq_trig_in_i = '1' then 
                         acq_trig_i <= not PROG_TRIG_IN;
                         acq_trig_o <= not PROG_TRIG_IN;
                         dly_cnt <= FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_CTRL_DLY;
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '0';
                         done <= '0';
-                     elsif XTRA_TRIG_IN = '1' then   
+                     elsif xtra_trig_in_i = '1' then   
                         xtra_trig_i <= not PROG_TRIG_IN;         
                         xtra_trig_o <= not PROG_TRIG_IN;
                         dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;
@@ -185,7 +192,7 @@ begin
                      end if;                     
                   end if;
                   
-                  if PROG_TRIG_IN = '1' then
+                  if prog_trig_in_i = '1' then
                      prog_trig_i <= '1';         
                      prog_trig_o <= '1';
                      dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;
@@ -197,7 +204,7 @@ begin
                -- pulse ordonnant l'integration  
                when int_trig_st => 
                   count <= count + 1;
-                  if count >= 5 then --! le pulse pour le debut de l'integration dure au moins 50ns 
+                  if count >= 10 then --! le pulse pour le debut de l'integration dure au moins 100ns 
                      xtra_trig_o <= '0';                                   
                      acq_trig_o <= '0'; 
                      prog_trig_o <= '0';
