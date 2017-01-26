@@ -25,6 +25,7 @@ package fpa_common_pkg is
    constant FPA_ROIC_PELICAND   : std_logic_vector(7 downto 0) := x"16";       -- 
    constant FPA_ROIC_SCORPIO_LW : std_logic_vector(7 downto 0) := x"17";
    constant FPA_ROIC_SCORPIO_MW : std_logic_vector(7 downto 0) := x"18";
+   constant FPA_ROIC_ISC0804    : std_logic_vector(7 downto 0) := x"19";
    constant FPA_ROIC_UNKNOWN    : std_logic_vector(7 downto 0) := x"FF";       --  interface inconnue 
    
    -------------------------------------------------------------------------- 
@@ -83,18 +84,21 @@ package fpa_common_pkg is
       freq_id_max  : natural;    -- nombre de coups d'horloges de 100 MHz de la valeur maximale de la frequence id   
    end record freq_id_type;
    
-   constant  ID_DIGITAL_PELICAND_INPUT_LVDS25_COOL_20V_TO_28V   : freq_id_type := (31746, 35088);   -- Digital PELICAND RICOR K508
-   constant  ID_DIGITAL_HERCULES_INPUT_LVDS25_COOL_20V_TO_28V   : freq_id_type := (27211, 30075);   -- Digital HERCULES RICOR K548
-   constant  ID_DIGITAL_SCORPIO_LW_INPUT_LVDS25_COOL_23V_TO_25V : freq_id_type := (23810, 26316);   -- Digital SCORPIO LW RM3 (w MGLK)
-   constant  ID_ANALOG_SCORPIO_LW_INPUT_LVTTL50_COOL_23V_TO_25V : freq_id_type := (21164, 23392);   -- Analog SCORPIO LW RM3  (wo MGLK)
-   constant  ID_ANALOG_MARS_INPUT_LVTTL50_COOL_9V_TO_15V        : freq_id_type := (19048, 21053);   -- Analog MARS RM4
-   constant  ID_ANALOG_MARS_INPUT_LVTTL50_COOL_18V_TO_32V       : freq_id_type := (15873, 17544);   -- Analog MARS LSF (linear)
-   constant  ID_ANALOG_HAWK_INPUT_LVCMOS33_COOL_18V_TO_32V      : freq_id_type := ( 9524, 10526);   -- Analog HAWK RM4
-   constant  ID_DIGITAL_MARS_INPUT_LVTTL50_COOL_9V_TO_15V       : freq_id_type := (13605, 15038);   -- Digital Mars RM4 (w MGLK)
-   constant  ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V    : freq_id_type := (10582, 11696);   -- Analog ISC0207 RICOR K548/LSF
-   constant  ID_DIGITAL_SCORPIO_MW_INPUT_LVDS25_COOL_23V_TO_25V : freq_id_type := (11905, 13158);   -- Digital SCORPIO MW RM3 (w MGLK)
-   constant  ID_ANALOG_ISC0209_INPUT_LVTTL50_COOL_20V_TO_28V    : freq_id_type := ( 8282, 9153);    -- Analog ISC0209 RICOR Kxxx/LSF
-   constant  ID_ANALOG_SCORPIO_MW_INPUT_LVCMOS33_COOL_23V_TO_25V: freq_id_type := ( 7326, 8097);    -- Analog Scorpio MW RM3 (wo MGLK)         
+   constant  ID_DIGITAL_PELICAND_INPUT_LVDS25_COOL_20V_TO_28V              : freq_id_type := (31746, 35088);   --  3.0 KHz, Digital PELICAND RICOR K508
+   constant  ID_DIGITAL_HERCULES_INPUT_LVDS25_COOL_20V_TO_28V              : freq_id_type := (27211, 30075);   --  3.5 KHz, Digital HERCULES RICOR K548
+   constant  ID_DIGITAL_SCORPIO_LW_INPUT_LVDS25_COOL_23V_TO_25V            : freq_id_type := (23810, 26316);   --  4.0 KHz, Digital SCORPIO LW RM3 (w MGLK)
+   constant  ID_ANALOG_SCORPIO_LW_INPUT_LVTTL50_COOL_23V_TO_25V            : freq_id_type := (21164, 23392);   --  4.5 KHz, Analog SCORPIO LW RM3  (wo MGLK)
+   constant  ID_ANALOG_MARS_INPUT_LVTTL50_COOL_9V_TO_15V                   : freq_id_type := (19048, 21053);   --  5.0 KHz, Analog MARS RM4
+   constant  ID_ANALOG_MARS_INPUT_LVTTL50_COOL_18V_TO_32V                  : freq_id_type := (15873, 17544);   --  6.0 KHz, Analog MARS LSF (linear)
+   constant  ID_DIGITAL_MARS_INPUT_LVTTL50_COOL_9V_TO_15V                  : freq_id_type := (13605, 15038);   --  7.0 KHz, Digital Mars RM4 (w MGLK)
+   constant  ID_DIGITAL_SCORPIO_MW_INPUT_LVDS25_COOL_23V_TO_25V            : freq_id_type := (11905, 13158);   --  8.0 KHz, Digital SCORPIO MW RM3 (w MGLK)
+   constant  ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V               : freq_id_type := (10582, 11696);   --  9.0 KHz, Analog ISC0207 RICOR K548/LSF with Flex
+   constant  ID_ANALOG_HAWK_INPUT_LVCMOS33_COOL_18V_TO_32V                 : freq_id_type := ( 9524, 10526);   -- 10.0 KHz, Analog HAWK RM4
+   constant  ID_ANALOG_ISC0209_INPUT_LVTTL50_COOL_20V_TO_28V               : freq_id_type := ( 8282, 9153);    -- 11.5 KHz, Analog ISC0209 RICOR Kxxx/LSF
+   constant  ID_ANALOG_SCORPIO_MW_INPUT_LVCMOS33_COOL_23V_TO_25V           : freq_id_type := ( 7326, 8097);    -- 13.0 KHz, Analog Scorpio MW RM3 (wo MGLK)
+   constant  ID_ANALOG_ISC0804_INPUT_LVTTL50_COOL_20V_TO_28V               : freq_id_type := ( 6568,  7260);   -- 14.5 KHz, Analog ISC0207 RICOR K548/LSF with FleG-X
+   constant  ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V_WITH_FLEGX    : freq_id_type := ( 5772,  6380);   -- 16.5 KHz, Analog ISC0207 RICOR K548/LSF with FleG-X
+   
    
    ----------------------------------------------------------------------------------
    -- Les frequences de reconnaissance des cartes ADC (en coups de clocks 100 MHz)   
@@ -123,7 +127,7 @@ package fpa_common_pkg is
       fpa_pwr_on               : std_logic;  --! à '1' si on veut allumer le détecteur ou le proxy                                                              
       fpa_init_cfg             : std_logic;  --! à '1' si la config en cours de progression est une config d'initialisation 
       fpa_init_cfg_received    : std_logic; -- ne provient pas du µBlaze. À '1' si on a reçu une config d'initialisation de la part du pilote. Cela devrait être le cas au reset et à tout pwrUp de la carte ADC/DDC
-           
+      
       -- config pour le contrôleur des trigs
       fpa_trig_ctrl_mode       : std_logic_vector(7 downto 0);  -- mode d'operation du contrôleur des trigs (voir fichier fpa_common_pkg)
       fpa_acq_trig_ctrl_dly    : unsigned(31 downto 0);         -- delai pour le contrôleur des trigs (depend des modes. Voir le trig_controller.vhd) 
@@ -396,7 +400,16 @@ package body fpa_common_pkg is
             flex_brd_info.fpa_input            := LVCMOS33;
             flex_brd_info.cooler_volt_min_mV   := 23_000;  
             flex_brd_info.cooler_volt_max_mV   := 25_000;   
-            flex_brd_info.chn_diversity_num    := 2; 
+            flex_brd_info.chn_diversity_num    := 2;
+            
+            -- isc0207A with cooler 24V  (EFA-00272-XXX & EFA-00271-001)
+         elsif (Tosc >= ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V_WITH_FLEGX.freq_id_min) and (Tosc <= ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V_WITH_FLEGX.freq_id_max) then
+            flex_brd_info.fpa_roic             := FPA_ROIC_ISC0207;
+            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input            := LVTTL50;
+            flex_brd_info.cooler_volt_min_mV   := 20_000;
+            flex_brd_info.cooler_volt_max_mV   := 28_000;
+            flex_brd_info.chn_diversity_num    := 1;
             
             -- flex_brd inconnu  
          else
