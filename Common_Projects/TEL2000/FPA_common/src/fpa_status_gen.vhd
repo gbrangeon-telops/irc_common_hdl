@@ -101,14 +101,15 @@ architecture rtl of fpa_status_gen is
    signal stat_read_err                : std_logic;
    signal fpa_driver_dvalid_err        : std_logic;
    -- pour le power management de DAL
-   signal adc_ddc_detect_process_done  : std_logic;
-   signal adc_ddc_present              : std_logic;
-   signal flex_detect_process_done     : std_logic;
-   signal flex_present                 : std_logic;
-   signal acq_trig_done                : std_logic;
-   signal fpa_permit_int_change        : std_logic;
-   signal fpa_prog_init_done           : std_logic;
-   signal fpa_driver_cmd_in_err        : std_logic_vector(7 downto 0);
+   signal adc_ddc_detect_process_done    : std_logic;
+   signal adc_ddc_present                : std_logic;
+   signal flex_flegx_detect_process_done : std_logic;
+   signal flex_flegx_present             : std_logic;
+   signal acq_trig_done                  : std_logic;
+   signal fpa_permit_int_change          : std_logic;
+   signal fpa_prog_init_done             : std_logic;
+   signal fpa_driver_cmd_in_err          : std_logic_vector(7 downto 0);
+   signal flegx_present                  : std_logic;
    
    
    component sync_reset
@@ -248,13 +249,17 @@ begin
             adc_ddc_present <= '0';
          end if;
          
-         -- flex
-         flex_detect_process_done <= FPA_HARDW_STAT.DVAL;
-         if FPA_HARDW_STAT.DVAL ='1'and FPA_HARDW_STAT.FLEX_BRD_INFO /= FLEX_BRD_INFO_UNKNOWN then 
-            flex_present <= '1';
+         -- flex ou flegx
+         flex_flegx_detect_process_done <= FPA_HARDW_STAT.DVAL;
+         if FPA_HARDW_STAT.DVAL = '1'and FPA_HARDW_STAT.FLEX_BRD_INFO /= FLEX_BRD_INFO_UNKNOWN then 
+            flex_flegx_present <= '1';
+            flegx_present <= FPA_HARDW_STAT.FLEX_BRD_INFO.FLEGX_BRD_PRESENT;
          else                   
-            flex_present <= '0';
+            flex_flegx_present <= '0';
+            flegx_present <= '0';
          end if;  
+         
+         
          
       end if;
    end process;
@@ -396,8 +401,9 @@ begin
                when  x"0008" =>   -- résoltuion des ADC soudés sur la carte (provient du mode diagnostic des adcs)
                   stat_read_reg <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.ADC_BRD_INFO.ADC_RESOLUTION,32));
                
-               when  x"000C" =>   -- adc status spare
-                  stat_read_reg <= (others => '0');
+               when  x"000C" =>   --  status spare for promimity electronics
+                  stat_read_reg(31 downto 1) <= (others => '0');
+                  stat_read_reg(0) <= flegx_present;
                   
                -- DDC_BRD 
                when  x"0010" =>   -- fpa roic
@@ -457,11 +463,11 @@ begin
                when  x"0054" =>   -- adc_ddc_present
                   stat_read_reg <= resize('0'& adc_ddc_present, 32);
                
-               when  x"0058" =>   -- flex_detect_process_done
-                  stat_read_reg <= resize('0'& flex_detect_process_done, 32); 
+               when  x"0058" =>   -- flex_flegx_detect_process_done
+                  stat_read_reg <= resize('0'& flex_flegx_detect_process_done, 32); 
                
-               when  x"005C" =>   -- flex_present
-                  stat_read_reg <= resize('0'& flex_present, 32);
+               when  x"005C" =>   -- flex_flegx_present
+                  stat_read_reg <= resize('0'& flex_flegx_present, 32);
                -----------------------------------
                
                when  x"0060" =>   -- cmd en erreur
