@@ -57,7 +57,7 @@ package DPB_Define is
    constant DUILEN   : integer := 29;   
    constant DPBSTATLEN : integer := 64;
    constant PPCSTATLEN : integer := 16;
-   constant CLINKMODELEN     : integer := 5;
+   constant CLINKMODELEN     : integer := 6;
    constant FRAMESPERCUBELEN : integer := 16;
    constant DIAGSIZELEN      : integer := 16;
    constant ACQNUMLEN        : integer := 10;
@@ -101,6 +101,7 @@ package DPB_Define is
    constant CL_RIOTX_BIT : integer := 2; -- Cameralink Transmit on RIO for external loopback bit position
    constant CL_DUAL_BIT  : integer := 3; -- Cameralink Enable DUAL ports in Base mode bit position
    constant CL_SWAP_BIT  : integer := 4; -- Cameralink Enable Pixel Byte Swapping (Pixel Endianness for Bitflow Board)
+   constant CL_DATASWAP_BIT  : integer := 5; -- Cameralink Enable Pixel Byte Swapping for data only (Pixel Endianness for data part only)
    
    -- Reintroduced these constants, it doesn't hurt anyone ;)
    constant CLINK_BASE_MODE      : unsigned := to_unsigned(0,CLINKMODELEN);   -- 16 bit CLINK transfers
@@ -832,7 +833,7 @@ package body DPB_Define is
       y.HeaderSize     := a.Camera_Link_Param.HeaderSize;
       y.LValPause      := a.Camera_Link_Param.LValPause;
       y.FramesPerCube  := x"0001"; -- No multi frames
-      y.CLinkMode      := "00000";
+      y.CLinkMode      := (others => '0');
       y.HeaderVersion  := x"3";
       -- y.Mode           := "001"; -- Normal mode
       -- y.DiagSize       := x"0001";

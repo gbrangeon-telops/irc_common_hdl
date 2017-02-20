@@ -20,8 +20,8 @@ setlibrarymode -rw Common_HDL
 -- Compile CoreGen components						  
 ------------------------------------------------------
 # Needed for CameraLink
-#do "$LIBPATH\Active-HDL\src\do_compile_coregenV2_lib.do"
-do "$LIBPATH\Active-HDL\src\do_compile_coregenV4_lib.do"
+do "$LIBPATH\Active-HDL\src\do_compile_coregenV2_lib.do"
+#do "$LIBPATH\Active-HDL\src\do_compile_coregenV4_lib.do"
 #do "$LIBPATH\Active-HDL\src\do_compile_coregenS3_lib.do"
 
 ------------------------------------------------------
@@ -348,15 +348,15 @@ acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_v4.bde"
 
 -- V2Pro version of Aurora_402 added by OBO
 acom  -work Common_HDL "$LIBPATH\Aurora\aurora_dcm_402_v2p.vhd"
-#acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_2gb_v2p\Aurora_402_v2p_merged.vhd"
+acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_2gb_v2p\Aurora_402_v2p_merged.vhd"
 acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_2gb_v2p\Aurora_402_v2p_sim.vhd"
 #acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_2gb_v2p\aurora_402_2gb_v2p_wrapper.vhd"
 acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_v2p.bde"
 #New version of v2p_v1 that supports the reset of fifo but don't reset the aurora core (jumbo frame for ircdev
 acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_v2p_v1.bde"
 
-#acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_1gb_v2p\aurora_402_1gb_v2p_merged.vhd"
-#acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_1gb_v2p.bde"
+acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_1gb_v2p\aurora_402_1gb_v2p_merged.vhd"
+acom  -work Common_HDL "$LIBPATH\Aurora\aurora_402_1gb_v2p.bde"
 
 -- Locallink Math 
 acom  -work Common_HDL "$LIBPATH\LocalLink\Math\LL_addsub\LL_addsub.vhd"
