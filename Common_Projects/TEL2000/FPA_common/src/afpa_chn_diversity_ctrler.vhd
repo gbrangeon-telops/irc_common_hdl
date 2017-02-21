@@ -205,6 +205,7 @@ begin
                         quad1_fifo_rd_en <= '1';
                      end if;
                   else
+                     quad1_fifo_rd_en <= '1';
                      quad2_fifo_rd_en <= '1';   --n si quad2 n'est pas activé, laisser couler le fifo
                   end if;
                
