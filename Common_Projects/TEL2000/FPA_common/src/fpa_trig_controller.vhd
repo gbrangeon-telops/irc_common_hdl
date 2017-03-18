@@ -63,6 +63,18 @@ architecture RTL of fpa_trig_controller is
          );
    end component;
    
+   component double_sync is
+      generic(
+         INIT_VALUE : bit := '0'
+         );
+      port(
+         D     : in std_logic;
+         Q     : out std_logic := '0';
+         RESET : in std_logic;
+         CLK   : in std_logic
+         );
+   end component;
+   
    type fpa_trig_sm_type is (idle, int_trig_st, wait_permit_trig_st, check_trig_ctrl_mode_st, check_int_feedback_st, wait_readout_end_st, wait_int_end_st, dly_to_apply_st);
    type trig_period_min_sm_type is (idle, period_cnt_st);
    signal fpa_trig_sm                  : fpa_trig_sm_type;
@@ -118,12 +130,31 @@ begin
    --------------------------------------------------
    -- synchro reset 
    --------------------------------------------------   
-   U1 : sync_reset
+   U1A : sync_reset
    port map(
       ARESET => ARESET,
       CLK    => CLK_100M,
       SRESET => sreset
       ); 
+   
+   --------------------------------------------------
+   -- synchro feedback 
+   --------------------------------------------------    
+   U1B : double_sync
+   port map(
+      CLK => CLK_100M,
+      D   => FPA_READOUT,
+      Q   => fpa_readout_i,
+      RESET => sreset
+      );
+   
+   U1C : double_sync
+   port map(
+      CLK => CLK_100M,
+      D   => FPA_INT_FEEDBK,
+      Q   => fpa_int_feedbk_i,
+      RESET => sreset
+      );   
    
    --------------------------------------------------
    -- fsm de contrôle/filtrage des trigs 
@@ -150,10 +181,10 @@ begin
          else
             
             -- pour detection front de FPA_readout
-            fpa_readout_i <= FPA_READOUT;
+            --fpa_readout_i <= FPA_READOUT;
             fpa_readout_last <= fpa_readout_i;
             
-            fpa_int_feedbk_i <= FPA_INT_FEEDBK;
+            --fpa_int_feedbk_i <= FPA_INT_FEEDBK;
             
             acq_trig_in_i  <= ACQ_TRIG_IN;
             xtra_trig_in_i <= XTRA_TRIG_IN;
@@ -326,8 +357,8 @@ begin
          
       end process;
    end generate;
-  
-      -- pour les détecteurs analogiques, utilisation de permit_trig prohibée
+   
+   -- pour les détecteurs analogiques, utilisation de permit_trig prohibée
    Analog_gen : if DEFINE_FPA_OUTPUT = OUTPUT_ANALOG  generate       
       permit_trig <= '0';
    end generate;

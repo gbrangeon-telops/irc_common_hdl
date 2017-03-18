@@ -52,6 +52,18 @@ architecture rtl of afpa_int_signal_gen is
          CLK    : in std_logic);
    end component;
    
+   component double_sync is
+      generic(
+         INIT_VALUE : bit := '0'
+         );
+      port(
+         D     : in std_logic;
+         Q     : out std_logic := '0';
+         RESET : in std_logic;
+         CLK   : in std_logic
+         );
+   end component;
+   
    type int_gen_fsm_type is (idle, post_prog_param_st, xtra_trig_param_st, acq_trig_param_st, check_int_cnt_st, int_gen_st, check_end_st, end_st);
    
    signal int_gen_fsm               : int_gen_fsm_type;
@@ -60,12 +72,15 @@ architecture rtl of afpa_int_signal_gen is
    signal acq_int_i                 : std_logic;
    signal fpa_int_i                 : std_logic;
    signal sreset                    : std_logic;
-   signal int_cnt                       : unsigned(31 downto 0);
+   signal int_cnt                   : unsigned(31 downto 0);
    signal acq_frame                 : std_logic;
    signal int_indx_i                : std_logic_vector(7 downto 0);
    signal fpa_mclk_last             : std_logic;
    signal fpa_mclk_rising_edge      : std_logic;
    signal permit_int_change_i       : std_logic;
+   signal acq_trig_i                : std_logic;
+   signal xtra_trig_i               : std_logic;
+   signal prog_trig_i               : std_logic;
    
 begin
    
@@ -82,15 +97,38 @@ begin
    PERMIT_INT_CHANGE <= permit_int_change_i;
    
    --------------------------------------------------
-   -- synchro reset 
+   -- synchro 
    --------------------------------------------------   
-   U1 : sync_reset
+   U1A : sync_reset
    port map(
       ARESET => ARESET,
       CLK    => MCLK_SOURCE,
       SRESET => sreset
-      ); 
+      );
    
+   U1B : double_sync
+   port map(
+      CLK => MCLK_SOURCE,
+      D   => ACQ_TRIG,
+      Q   => acq_trig_i,
+      RESET => sreset
+      );
+   
+   U1C : double_sync
+   port map(
+      CLK => MCLK_SOURCE,
+      D   => XTRA_TRIG,
+      Q   => xtra_trig_i,
+      RESET => sreset
+      );
+   
+   U1D : double_sync
+   port map(
+      CLK => MCLK_SOURCE,
+      D   => PROG_TRIG,
+      Q   => prog_trig_i,
+      RESET => sreset
+      );
    
    --------------------------------------------------
    --  generation de acq_int_i et fpa_int_i
@@ -120,16 +158,16 @@ begin
                   int_cnt <= (others => '0');                 
                   acq_frame <= '0';
                   fpa_int_i <= '0';
-                  permit_int_change_i <= not ACQ_TRIG and not XTRA_TRIG and not PROG_TRIG;
-                  if ACQ_TRIG = '1' then        -- ACQ_TRIG uniquement car ne jamais envoyer acq_int_i en mode XTRA_TRIG
+                  permit_int_change_i <= not acq_trig_i and not xtra_trig_i and not prog_trig_i;
+                  if acq_trig_i = '1' then        -- acq_trig_i uniquement car ne jamais envoyer acq_int_i en mode xtra_trig_i
                      acq_frame <= '1';
                      int_gen_fsm <= acq_trig_param_st;
                   end if;
-                  if XTRA_TRIG = '1' then    --                      
+                  if xtra_trig_i = '1' then    --                      
                      acq_frame <= '0';
                      int_gen_fsm <= xtra_trig_param_st;
                   end if;
-                  if PROG_TRIG = '1' then    --                      
+                  if prog_trig_i = '1' then    --                      
                      acq_frame <= '0';
                      int_gen_fsm <= post_prog_param_st;
                   end if;

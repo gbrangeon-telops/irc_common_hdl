@@ -79,7 +79,19 @@ architecture rtl of afpa_data_dispatcher is
          ARESET : in std_logic;
          SRESET : out std_logic;
          CLK : in std_logic);
-   end component;    
+   end component;
+   
+   component double_sync is
+      generic(
+         INIT_VALUE : bit := '0'
+         );
+      port(
+         D     : in std_logic;
+         Q     : out std_logic := '0';
+         RESET : in std_logic;
+         CLK   : in std_logic
+         );
+   end component;
    
    component fwft_afifo_w62_d16
       port (
@@ -199,13 +211,21 @@ begin
    pix_eof  <= quad_fifo_dout(61);
    
    --------------------------------------------------
-   -- synchro reset 
+   -- synchro 
    --------------------------------------------------   
-   U0: sync_reset
+   U0A: sync_reset
    port map(
       ARESET => ARESET,
       CLK    => CLK,
       SRESET => sreset
+      );
+   
+   U0B : double_sync
+   port map(
+      CLK => CLK,
+      D   => ACQ_INT,
+      Q   => acq_int_sync,
+      RESET => sreset
       );
    
    --------------------------------------------------
@@ -259,11 +279,11 @@ begin
             acq_fringe <= '0';
             readout_i <= '0';
             acq_int_sync_last <= '1'; 
-            acq_int_sync <= '0';
+            --acq_int_sync <= '0';
             
          else         
             
-            acq_int_sync <= ACQ_INT;
+            --acq_int_sync <= ACQ_INT;
             acq_int_sync_last <= acq_int_sync;
             
             -- ecriture de FRAME_ID dans le acq fringe fifo
