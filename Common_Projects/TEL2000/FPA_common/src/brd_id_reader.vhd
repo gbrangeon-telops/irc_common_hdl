@@ -122,7 +122,7 @@ begin
    Generic map(
       Factor => CLK_100M_RATE
       -- pragma translate_off 
-      /10_000
+      /2_000
       -- pragma translate_on
       )
    Port map( 
