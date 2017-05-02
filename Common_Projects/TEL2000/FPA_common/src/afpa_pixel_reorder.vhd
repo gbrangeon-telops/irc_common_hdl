@@ -23,11 +23,11 @@ entity afpa_pixel_reorder is
       ARESET        : in std_logic;
       CLK           : in std_logic;
       
-      --FPA_INTF_CFG  : fpa_intf_cfg_type;
+      FPA_INTF_CFG  : fpa_intf_cfg_type;
       
-      QUAD_MOSI    : in t_ll_ext_mosi72;
-      QUAD_MISO    : out t_ll_ext_miso;
-          
+      QUAD_MOSI     : in t_ll_ext_mosi72;
+      QUAD_MISO     : out t_ll_ext_miso;
+      
       DOUT_MOSI     : out t_axi4_stream_mosi32; 
       DOUT_MISO     : in t_axi4_stream_miso;
       
@@ -78,7 +78,7 @@ architecture rtl of afpa_pixel_reorder is
    signal dout_eof         : std_logic;
    signal count            : integer range 1 to 2;
    signal err_i            : std_logic;
-           
+   
 begin    
    
    --------------------------------------------------
@@ -101,11 +101,20 @@ begin
    --------------------------------------------------
    -- inputs maps
    --------------------------------------------------        
-   fifo_din(2) <= QUAD_MOSI.EOF & QUAD_MOSI.DATA(69 downto 54) & QUAD_MOSI.DATA(51 downto 36); 
-   fifo_wr_en(2) <= QUAD_MOSI.DVAL;
-   
-   fifo_din(1) <= '0' & QUAD_MOSI.DATA(33 downto 18) & QUAD_MOSI.DATA(15 downto 0); 
-   fifo_wr_en(1) <= QUAD_MOSI.DVAL;                                              
+   U0 : process(CLK)
+   begin
+      if rising_edge(CLK) then 
+         if FPA_INTF_CFG.REORDER_COLUMN = '0' then
+            fifo_din(1)   <= '0' & QUAD_MOSI.DATA(33 downto 18) & QUAD_MOSI.DATA(15 downto 0); 
+            fifo_din(2)   <= QUAD_MOSI.EOF & QUAD_MOSI.DATA(69 downto 54) & QUAD_MOSI.DATA(51 downto 36);
+         else
+            fifo_din(1)   <= '0' & QUAD_MOSI.DATA(51 downto 36) & QUAD_MOSI.DATA(69 downto 54); 
+            fifo_din(2)   <= QUAD_MOSI.EOF & QUAD_MOSI.DATA(15 downto 0) & QUAD_MOSI.DATA(33 downto 18);
+         end if;
+         fifo_wr_en(1) <= QUAD_MOSI.DVAL;
+         fifo_wr_en(2) <= QUAD_MOSI.DVAL;
+      end if;
+   end process;
    
    --------------------------------------------------
    -- synchro reset 
@@ -167,5 +176,6 @@ begin
             
          end if;                             
       end if;
-   end process; 
+   end process;
+   
 end rtl;

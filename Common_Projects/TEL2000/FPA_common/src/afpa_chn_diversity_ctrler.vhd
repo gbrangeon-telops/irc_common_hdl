@@ -206,11 +206,11 @@ begin
                      end if;
                   else
                      quad1_fifo_rd_en <= '1';
-                     quad2_fifo_rd_en <= '1';   --n si quad2 n'est pas activé, laisser couler le fifo
+                     quad2_fifo_rd_en <= '1';             -- n si quad2 n'est pas activé, laisser couler le fifo
                   end if;
                
                when quad2_out_st =>
-                  dout_mosi_i <= quad2_dout_mosi;           -- pix5, pix6, pix7, pix8
+                  dout_mosi_i <= quad2_dout_mosi;         -- pix5, pix6, pix7, pix8
                   dout_mosi_i.sof  <= '0';
                   dout_mosi_i.sol  <= '0';
                   if quad2_dout_mosi.dval = '1' then 
