@@ -18,6 +18,11 @@ use work.FPA_Define.all;
 use work.Proxy_Define.all;
 
 entity fpa_intf_sequencer is
+   
+   generic (       
+      BYPASS_FPA_PROTECTION : boolean := false  -- en simulation, permet de contourner  toutes les protections. Doit toujours démeurer à false en mode réel 
+      );
+   
    port(       
       --------------------------------------------------
       -- INPUTS
@@ -230,6 +235,13 @@ begin
          else
             fpa_temp_stat_i <= failure;
          end if;
+         
+         -- pragma translate_off
+         if BYPASS_FPA_PROTECTION = true then
+            fpa_temp_stat_i <= success;
+         end if;         
+         -- pragma translate_on
+         
       end if;
    end process;
    
@@ -249,7 +261,13 @@ begin
          else
             hardw_global_status <= failure;
          end if;
-         --
+         
+         -- pragma translate_off
+         if BYPASS_FPA_PROTECTION = true then
+            hardw_global_status <= success;
+         end if;         
+         -- pragma translate_on
+         
          -- compilation des statuts firmware (vhd et du software (PPC/µBlaze))
          if fpa_softw_stat_i = not_available or fpa_vhd_stat_i = not_available then 
             firmw_global_status <= not_available;
@@ -258,7 +276,13 @@ begin
          else
             firmw_global_status <= failure;
          end if;
-         --      
+         
+         -- pragma translate_off
+         if BYPASS_FPA_PROTECTION = true then
+            firmw_global_status <= success;
+         end if;         
+         -- pragma translate_on
+         
       end if;      
    end process;     
    

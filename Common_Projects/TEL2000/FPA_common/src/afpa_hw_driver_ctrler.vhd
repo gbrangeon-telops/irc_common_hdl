@@ -250,7 +250,7 @@ begin
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then
-            fpa_intf_cfg_i <= FPA_INTF_CFG_DEFAULT;
+            --fpa_intf_cfg_i <= FPA_INTF_CFG_DEFAULT;
             update_dac_part_temp <= '0';
             update_dac_part_only <= '0';
             update_fpa_part_temp <= '0';

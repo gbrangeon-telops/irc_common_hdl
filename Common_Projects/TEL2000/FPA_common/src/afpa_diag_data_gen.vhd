@@ -90,7 +90,7 @@ architecture rtl of afpa_diag_data_gen is
    constant  C_DIAG_TAP_NUMBER_M1 : integer := G_DIAG_TAP_NUMBER - 1;
    constant  C_DIAG_BASE_OFFSET   : integer := (G_DIAG_QUAD_ID - 1) * DEFINE_DIAG_DATA_INC * G_DIAG_TAP_NUMBER;
    
-   type diag_fsm_type is (idle, int_st, junk_data_st, tir_dly_st, get_line_data_st, cfg_line_gen_st, check_end_st, write_end_id_st);
+   type diag_fsm_type is (idle, int_st, junk_data_st, tir_dly_st, get_line_data_st, cfg_line_gen_st, lovh_dly_st, check_end_st, write_end_id_st);
    type img_change_sm_type is (idle, change_st); 
    type data_type is array (0 to C_DIAG_TAP_NUMBER_M1) of std_logic_vector(15 downto 0);
    
@@ -110,8 +110,9 @@ architecture rtl of afpa_diag_data_gen is
    signal diag_dval_i       : std_logic_vector(C_DIAG_TAP_NUMBER_M1 downto 0);
    signal diag_done         : std_logic_vector(C_DIAG_TAP_NUMBER_M1 downto 0);
    signal dly_cnt           : unsigned(15 downto 0);
+   signal lovh_dly_cnt      : unsigned(15 downto 0);
    signal data_cnt          : unsigned(15 downto 0);
-   signal line_cnt          : unsigned(FPA_INTF_CFG.YSIZE'length-1 downto 0);
+   signal line_cnt          : unsigned(FPA_INTF_CFG.DIAG.YSIZE'length-1 downto 0);
    signal fpa_int_last      : std_logic;
    signal revert_img        : std_logic;
    signal clk_div_i         : std_logic;
@@ -302,8 +303,9 @@ begin
                when cfg_line_gen_st =>
                   diag_line_gen_en <= '1';                              -- on active le module généateur des données diag
                   fval_i <= '1';
-                  line_size <= std_logic_vector(resize(FPA_INTF_CFG.XSIZE_DIV_TAPNUM, line_size'length)); 
-                  dly_cnt <= (others => '0');                  
+                  line_size <= std_logic_vector(resize(FPA_INTF_CFG.DIAG.XSIZE_DIV_TAPNUM, line_size'length)); 
+                  dly_cnt <= (others => '0');
+                  lovh_dly_cnt <= (others => '0');
                   diag_fsm <=  get_line_data_st;
                
                when get_line_data_st => 
@@ -336,7 +338,7 @@ begin
                   else
                      sof_i <= '0';
                   end if;
-                  if line_cnt = FPA_INTF_CFG.YSIZE then 
+                  if line_cnt = to_integer(FPA_INTF_CFG.DIAG.YSIZE) then 
                      eof_i <= diag_eol(0);
                   else
                      eof_i <= '0';
@@ -345,11 +347,17 @@ begin
                   eol_i <= diag_eol(0);
                
                when check_end_st =>
-                  if line_cnt >= FPA_INTF_CFG.YSIZE then
+                  if line_cnt >= to_integer(FPA_INTF_CFG.DIAG.YSIZE) then
                      diag_fsm <=  write_end_id_st;
                   else
-                     diag_fsm <=  cfg_line_gen_st; 
+                     diag_fsm <=  lovh_dly_st; 
                      line_cnt <= line_cnt + 1; 
+                  end if;
+               
+               when lovh_dly_st =>         -- permet de ralentir le mode diag express. Ainsi le détecteur ne sera pas surcadencé
+                  lovh_dly_cnt <= lovh_dly_cnt + 1;                  
+                  if lovh_dly_cnt >= to_integer(FPA_INTF_CFG.DIAG.LOVH_MCLK_SOURCE) then 
+                     diag_fsm <= cfg_line_gen_st;
                   end if;
                
                when write_end_id_st =>
