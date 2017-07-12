@@ -22,7 +22,7 @@ package fpa_common_pkg is
    constant FPA_ROIC_HAWK       : std_logic_vector(7 downto 0) := x"13";       -- 
    constant FPA_ROIC_HERCULES   : std_logic_vector(7 downto 0) := x"14";       -- 
    constant FPA_ROIC_JUPITER    : std_logic_vector(7 downto 0) := x"15";
-   constant FPA_ROIC_PELICAND   : std_logic_vector(7 downto 0) := x"16";       -- 
+   constant FPA_ROIC_PELICAND   : std_logic_vector(7 downto 0) := x"16";       -- also used for Blackbird
    constant FPA_ROIC_SCORPIO_LW : std_logic_vector(7 downto 0) := x"17";
    constant FPA_ROIC_SCORPIO_MW : std_logic_vector(7 downto 0) := x"18";
    constant FPA_ROIC_ISC0804    : std_logic_vector(7 downto 0) := x"19";
@@ -94,8 +94,8 @@ package fpa_common_pkg is
    constant  ID_DIGITAL_SCORPIO_MW_INPUT_LVDS25_COOL_23V_TO_25V            : freq_id_type := (11905, 13158);   --  8.0 KHz, Digital SCORPIO MW RM3 (w MGLK)
    constant  ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V               : freq_id_type := (10582, 11696);   --  9.0 KHz, Analog ISC0207 RICOR K548/LSF with Flex
    constant  ID_ANALOG_HAWK_INPUT_LVCMOS33_COOL_18V_TO_32V                 : freq_id_type := ( 9524, 10526);   -- 10.0 KHz, Analog HAWK RM4
-   constant  ID_ANALOG_ISC0209_INPUT_LVTTL50_COOL_20V_TO_28V               : freq_id_type := ( 8282, 9153);    -- 11.5 KHz, Analog ISC0209 RICOR Kxxx/LSF
-   constant  ID_ANALOG_SCORPIO_MW_INPUT_LVCMOS33_COOL_23V_TO_25V           : freq_id_type := ( 7326, 8097);    -- 13.0 KHz, Analog Scorpio MW RM3 (wo MGLK)
+   constant  ID_ANALOG_ISC0209_INPUT_LVTTL50_COOL_20V_TO_28V               : freq_id_type := ( 8282,  9153);   -- 11.5 KHz, Analog ISC0209 RICOR Kxxx/LSF
+   constant  ID_ANALOG_SCORPIO_MW_INPUT_LVCMOS33_COOL_23V_TO_25V           : freq_id_type := ( 7326,  8097);   -- 13.0 KHz, Analog Scorpio MW RM3 (wo MGLK)
    constant  ID_ANALOG_ISC0804_INPUT_LVCMOS33_COOL_20V_TO_28V              : freq_id_type := ( 6568,  7260);   -- 14.5 KHz, Analog ISC0207 RICOR K548/LSF with FleG-X
    constant  ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V_WITH_FLEGX    : freq_id_type := ( 5772,  6380);   -- 16.5 KHz, Analog ISC0207 RICOR K548/LSF with FleG-X
    
@@ -112,10 +112,10 @@ package fpa_common_pkg is
    constant  ID_ADC_BRD_08CHN_FREQMAX_40MHZ                     : freq_id_type := (13605, 15038);   -- 2 quads LTC2171 soudés sur le board
    constant  ID_ADC_BRD_12CHN_FREQMAX_40MHZ                     : freq_id_type := (11905, 13158);   -- 3 quads LTC2171 soudés sur le board
    constant  ID_ADC_BRD_16CHN_FREQMAX_40MHZ                     : freq_id_type := (10582, 11696);   -- 4 quads LTC2171 soudés sur le board
-   constant  ID_ADC_BRD_04CHN_FREQMAX_65MHZ                     : freq_id_type := ( 8282, 9153);    -- 1 quad  LTC2172 soudé  sur le board
-   constant  ID_ADC_BRD_08CHN_FREQMAX_65MHZ                     : freq_id_type := ( 7326, 8097);    -- 2 quads LTC2172 soudés sur le board
-   constant  ID_ADC_BRD_12CHN_FREQMAX_65MHZ                     : freq_id_type := ( 6568, 7260);    -- 3 quads LTC2172 soudés sur le board
-   constant  ID_ADC_BRD_16CHN_FREQMAX_65MHZ                     : freq_id_type := ( 5772, 6380);    -- 4 quads LTC2172 soudés sur le board
+   constant  ID_ADC_BRD_04CHN_FREQMAX_65MHZ                     : freq_id_type := ( 8282,  9153);   -- 1 quad  LTC2172 soudé  sur le board
+   constant  ID_ADC_BRD_08CHN_FREQMAX_65MHZ                     : freq_id_type := ( 7326,  8097);   -- 2 quads LTC2172 soudés sur le board
+   constant  ID_ADC_BRD_12CHN_FREQMAX_65MHZ                     : freq_id_type := ( 6568,  7260);   -- 3 quads LTC2172 soudés sur le board
+   constant  ID_ADC_BRD_16CHN_FREQMAX_65MHZ                     : freq_id_type := ( 5772,  6380);   -- 4 quads LTC2172 soudés sur le board
    
    --------------------------------------------------------------------------------
    -- Configuration partie commune du Bloc FPA_interface
