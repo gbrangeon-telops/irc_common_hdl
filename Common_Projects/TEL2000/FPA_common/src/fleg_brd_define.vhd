@@ -20,7 +20,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
 use IEEE.MATH_REAL.all;
-use work.fpa_common_pkg.all;  
+--use work.fpa_common_pkg.all;  
 
 
 package fleg_brd_define is    

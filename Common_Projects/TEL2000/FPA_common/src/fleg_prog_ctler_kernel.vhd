@@ -39,8 +39,6 @@ entity fleg_prog_ctler_kernel is
       );
 end fleg_prog_ctler_kernel;
 
-
-
 architecture rtl of fleg_prog_ctler_kernel is
    
    constant DAC_NUM : integer := 8;
