@@ -119,7 +119,6 @@ begin
    HW_DONE <= hw_done_i;
    PROG_INIT_DONE <= prog_init_done_i;
    
-   
    --------------------------------------------------
    -- synchro reset 
    --------------------------------------------------   
@@ -242,7 +241,7 @@ begin
          end if;
       end if;   
    end process; 
-     
+   
    --------------------------------------------------
    --  mise à jour de la config
    --------------------------------------------------
@@ -250,7 +249,7 @@ begin
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then
-            --fpa_intf_cfg_i <= FPA_INTF_CFG_DEFAULT;
+            fpa_intf_cfg_i <= USER_CFG;   -- ENO 25 juillet 2017: fpa_intf_cfg_i <= USER_CFG implique que dans mb_intf.vhd, tant qu'aucune config n'est reçue, MB_RESET ou CTRLED_RESET soit à '1'. S'inspirer de isc0804A_mb_intf.vhd
             update_dac_part_temp <= '0';
             update_dac_part_only <= '0';
             update_fpa_part_temp <= '0';
@@ -293,10 +292,22 @@ begin
             fpa_intf_cfg_i.adc_clk_phase <= USER_CFG.ADC_CLK_PHASE;
             fpa_intf_cfg_i.real_mode_active_pixel_dly <= USER_CFG.REAL_MODE_ACTIVE_PIXEL_DLY;
             
+            -- à effacer après implantation fastwindowing sur ISC0804A 
+--            if readout_i = '0' then 
+--               fpa_intf_cfg_i.speedup_lsydel        <= USER_CFG.speedup_lsydel;      
+--               fpa_intf_cfg_i.speedup_lsync         <= USER_CFG.speedup_lsync;       
+--               fpa_intf_cfg_i.speedup_sample_row    <= USER_CFG.speedup_sample_row;  
+--               fpa_intf_cfg_i.speedup_unused_area   <= USER_CFG.speedup_unused_area; 
+--               fpa_intf_cfg_i.raw_area              <= USER_CFG.raw_area;            
+--               fpa_intf_cfg_i.user_area             <= USER_CFG.user_area;
+--               fpa_intf_cfg_i.adc_clk_pipe_sync_pos <= USER_CFG.adc_clk_pipe_sync_pos;
+--            end if;
+            
+            
          end if;
       end if;   
    end process; 
-     
+   
    --------------------------------------------------
    --  FSM pour programmation DAC
    --------------------------------------------------
