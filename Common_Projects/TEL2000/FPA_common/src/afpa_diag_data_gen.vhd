@@ -28,7 +28,7 @@ use work.fpa_common_pkg.all;
 
 entity afpa_diag_data_gen is
    generic(
-      G_DIAG_QUAD_ID     : integer range 1 to 16 := 1;   -- le numero du quad à emuler en mode diag. Si diversité de canal, alors vaut le numero du quad qui a subi la diversité de canal
+      G_DIAG_QUAD_ID     : integer range 0 to 16 := 1;   -- le numero du quad à emuler en mode diag. Si diversité de canal, alors vaut le numero du quad qui a subi la diversité de canal
       G_DIAG_TAP_NUMBER  : integer range 1 to 64 := DEFINE_FPA_TAP_NUMBER
       );
    port(      

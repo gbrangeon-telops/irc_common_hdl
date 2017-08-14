@@ -2,7 +2,7 @@ SCHM0104
 
 HEADER
 {
- FREEID 40107
+ FREEID 40149
  VARIABLES
  {
   #ARCHITECTURE="sch"
@@ -950,13 +950,13 @@ HEADER
    {
     #CUSTOM_NAME=""
     #DESCRIPTION=""
-    #GENERIC0="G_DIAG_QUAD_ID:integer range 1 to 16:=1"
+    #GENERIC0="G_DIAG_QUAD_ID:integer range 0 to 16:=1"
     #GENERIC1="G_DIAG_TAP_NUMBER:integer range 1 to 64:=DEFINE_FPA_TAP_NUMBER"
     #HDL_ENTRIES=
 "library IEEE,WORK;\n"+
 "use ieee.std_logic_1164.all,work.FPA_define.all;"
     #LANGUAGE="VHDL"
-    #MODIFIED="1498101028"
+    #MODIFIED="1502725928"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="96ffbaae-a551-47c7-9bdd-6fb30dfd88c5"
    }
   }
@@ -3984,8 +3984,11 @@ PAGE ""
    {
     #COMPONENT="afpa_dval_gen"
     #CUSTOM_NAME=""
+    #GENERIC0="G_DIAG_TAP_NUMBER : integer range 1 to 64 := DEFINE_FPA_TAP_NUMBER"
+    #GENERIC1="G_DIAG_QUAD_ID : integer range 0 to 16 := 1"
     #IMPL="sch"
     #LIBRARY="work"
+    #PRAGMED_GENERICS=""
     #REFERENCE="U2"
     #SYMBOL="afpa_dval_gen"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="96ffbaae-a551-47c7-9bdd-6fb30dfd88c5"
@@ -4037,8 +4040,11 @@ PAGE ""
    {
     #COMPONENT="afpa_dval_gen"
     #CUSTOM_NAME=""
+    #GENERIC0="G_DIAG_QUAD_ID : integer range 0 to 16 := 1"
+    #GENERIC1="G_DIAG_TAP_NUMBER : integer range 1 to 64 := DEFINE_FPA_TAP_NUMBER"
     #IMPL="sch"
     #LIBRARY="work"
+    #PRAGMED_GENERICS=""
     #REFERENCE="U1"
     #SYMBOL="afpa_dval_gen"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="96ffbaae-a551-47c7-9bdd-6fb30dfd88c5"
@@ -6781,6 +6787,18 @@ PAGE ""
     #NAMED="1"
    }
   }
+  TEXT  40124, 0, 0
+  {
+   TEXT "@GENERIC_ACTUAL_VALUES()"
+   RECT (660,1336,1422,1402)
+   PARENT 34092
+  }
+  TEXT  40128, 0, 0
+  {
+   TEXT "@GENERIC_ACTUAL_VALUES()"
+   RECT (660,2136,1422,2202)
+   PARENT 34290
+  }
  }
  
 }
@@ -6806,7 +6824,7 @@ PAGE ""
  
  BODY
  {
-  TEXT  40090, 0, 0
+  TEXT  40132, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -6817,7 +6835,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  40091, 0, 0
+  TEXT  40133, 0, 0
   {
    PAGEALIGN 10
    TEXT "$CREATIONDATE"
@@ -6828,7 +6846,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  40092, 0, 0
+  TEXT  40134, 0, 0
   {
    PAGEALIGN 10
    TEXT "Title:"
@@ -6838,7 +6856,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  40093, 0, 0
+  TEXT  40135, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -6850,7 +6868,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  40094, 0, 0
+  TEXT  40136, 0, 0
   {
    PAGEALIGN 10
    TEXT 
@@ -6863,7 +6881,7 @@ PAGE ""
    FONT (12,0,0,700,0,0,0,"Arial")
    MULTILINE
   }
-  TEXT  40095, 0, 0
+  TEXT  40137, 0, 0
   {
    PAGEALIGN 10
    TEXT "Page:"
@@ -6873,7 +6891,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  40096, 0, 0
+  TEXT  40138, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -6885,7 +6903,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  40097, 0, 0
+  TEXT  40139, 0, 0
   {
    PAGEALIGN 10
    TEXT "Revision:"
@@ -6895,7 +6913,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  40098, 0, 0
+  TEXT  40140, 0, 0
   {
    PAGEALIGN 10
    TEXT "$Revision"
@@ -6906,7 +6924,7 @@ PAGE ""
    FONT (12,0,0,700,0,204,0,"Arial")
    UPDATE 0
   }
-  GROUP  40099, 0, 0
+  GROUP  40141, 0, 0
   {
    PAGEALIGN 10
    RECT (4920,3420,5801,3801)
@@ -6918,7 +6936,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  40100, 0, 0
+  GROUP  40142, 0, 0
   {
    PAGEALIGN 10
    RECT (4920,3620,5801,3621)
@@ -6930,7 +6948,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  40101, 0, 0
+  GROUP  40143, 0, 0
   {
    PAGEALIGN 10
    RECT (4920,3560,5801,3561)
@@ -6942,7 +6960,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  40102, 0, 0
+  GROUP  40144, 0, 0
   {
    PAGEALIGN 10
    RECT (4920,3680,5801,3681)
@@ -6954,7 +6972,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  40103, 0, 0
+  GROUP  40145, 0, 0
   {
    PAGEALIGN 10
    RECT (4920,3740,5801,3741)
@@ -6966,7 +6984,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  40104, 0, 0
+  GROUP  40146, 0, 0
   {
    PAGEALIGN 10
    RECT (5100,3420,5101,3561)
@@ -6977,7 +6995,7 @@ PAGE ""
     POINTS ( (0,0), (0,140) )
    }
   }
-  GROUP  40105, 0, 0
+  GROUP  40147, 0, 0
   {
    PAGEALIGN 10
    RECT (5100,3560,5101,3801)
@@ -6988,7 +7006,7 @@ PAGE ""
     POINTS ( (0,0), (0,240) )
    }
   }
-  BMPPICT  40106, 0, 0
+  BMPPICT  40148, 0, 0
   {
    PAGEALIGN 10
    RECT (4940,3480,5079,3525)
