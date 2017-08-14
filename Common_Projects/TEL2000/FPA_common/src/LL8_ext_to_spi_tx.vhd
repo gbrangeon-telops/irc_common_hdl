@@ -305,7 +305,7 @@ begin
                   if sof_o = '1' then
                      spi_fsm <= active_cs_st; 
                   else
-                     spi_fsm <=  output_data_st;   -- s'il n'ya jamais eu de sof, alors cs_n ne sera jamais activé bien que la fsm  roule
+                     spi_fsm <= output_data_st;   -- s'il n'ya jamais eu de sof, alors cs_n ne sera jamais activé bien que la fsm  roule
                   end if;
                
                when active_cs_st =>
