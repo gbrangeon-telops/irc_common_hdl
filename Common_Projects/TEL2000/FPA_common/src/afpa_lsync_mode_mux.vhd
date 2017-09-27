@@ -10,7 +10,9 @@
 --!   $URL$
 ------------------------------------------------------------------
 
-
+-- ENO 27 sept 2017 :  
+--    revision en profondeur pour tenir compte de le necessité de sortir les données hors AOI.
+--    le flushing des fifos est abandonné. le frame sync ne sert qu'à l'initialisation. Ainsi, le mode IWR sera facilité puisque frame_sync est une entrave dans ce cas.  
 
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -32,9 +34,8 @@ entity afpa_lsync_mode_mux is
       
       READOUT         : in std_logic;
       DIN             : in std_logic_vector(57 downto 0);
-      DIN_DVAL        : in std_logic;
+      DIN_DVAL        : in std_logic
       
-      FLUSH_FIFO      : out std_logic      
       );  
 end afpa_lsync_mode_mux;
 
@@ -60,12 +61,9 @@ architecture rtl of afpa_lsync_mode_mux is
          );
    end component;
    
-   type line_mux_fsm_type is (init_st1, init_st2, init_st3, init_st4, idle, sync_flow_st, wait_feedback_st, flush_fifo_st);
+   type line_mux_fsm_type is (init_st1, init_st2, init_st3, init_st4, sync_flow_st);
    signal line_mux_fsm     : line_mux_fsm_type;
    signal sreset            : std_logic;
-   signal flush_fifo_i      : std_logic;
-   signal dly_cnt           : unsigned(7 downto 0);
-   signal readout_sync      : std_logic;
    signal pix_count         : unsigned(7 downto 0);   
    signal readout_info_pipe : readout_info_type;
    signal frame_sync        : std_logic;
@@ -85,7 +83,6 @@ begin
    -- Outputs map
    -------------------------------------------------- 
    READOUT_INFO_O <= readout_info_pipe;
-   FLUSH_FIFO <= flush_fifo_i;
    LINE_GEN_ENABLE <= std_logic_vector(line_gen_enable_i);
    
    --------------------------------------------------
@@ -98,14 +95,6 @@ begin
       SRESET => sreset
       );      
    
-   U1B : double_sync
-   port map(
-      CLK => CLK,
-      D   => READOUT,
-      Q   => readout_sync,
-      RESET => sreset
-      );
-   
    --------------------------------------------------
    -- Process
    --------------------------------------------------
@@ -115,10 +104,9 @@ begin
       if rising_edge(CLK) then         
          if sreset = '1' then      -- tant qu'on est en mode diag, la fsm est en reset.      
             line_mux_fsm <= init_st1;
-            flush_fifo_i <= '0';       -- ENO 20 nov 2015 : fait expres sinon en mode diag sreset = '1' et les fifos seront en reset. Le ARESET flushera le fifo (voir generation de QUAD_FIFO_RST fifo)
             line_gen_enable_i <= (others => '0');
             -- pragma translate_off
-            line_mux_fsm <= idle;
+            line_mux_fsm <= sync_flow_st;
             -- pragma translate_on
             
          else           
@@ -126,14 +114,13 @@ begin
             frame_sync <= DIN(57);             -- sync_flag 
             din_dval_i <= DIN_DVAL;           
             
-            readout_info_pipe <= READOUT_INFO_I;      -- pour une synchro avec line_gen_enable_i
+            readout_info_pipe <= READOUT_INFO_I;      -- delai requis pour une synchro avec line_gen_enable_i (très important!)
             
             sol_last <= READOUT_INFO_I.SOL;
             
             case line_mux_fsm is         -- ENO: 23 juillet 2014. les etats init_st sont requis pour éviter des problèmes de synchro          
                
                when init_st1 =>      
-                  flush_fifo_i <= '0';
                   pix_count <= (others => '0');
                   if frame_sync = '1' then  -- je vois un signal de synchro
                      line_mux_fsm <= init_st2;
@@ -154,39 +141,15 @@ begin
                
                when init_st4 =>             -- la carte ADc est connectée sinon on ne parviendra pas ici
                   if READOUT_INFO_I.READ_END = '1' then  -- je vois la tombée du fval d'une readout_info =>
-                     line_mux_fsm <= idle; 
+                     line_mux_fsm <= sync_flow_st; 
                   end if;
                   
                -- une fois ici, je suis certain que les deux flows seront synchronisables
-               when idle =>   
-                  flush_fifo_i <= '0';
-                  line_gen_enable_i <= "00";
-                  dly_cnt <= (others => '0');
-                  if frame_sync = '1' then      
-                     line_mux_fsm <= sync_flow_st;
-                     line_gen_enable_i <= "01";
-                  end if;
-               
                when sync_flow_st =>
                   if READOUT_INFO_I.SOL = '1' and sol_last = '0' then 
-                     line_gen_enable_i <= not line_gen_enable_i;
+                     line_gen_enable_i <= not line_gen_enable_i; -- on commute indefininement entre les synchronisateurs de lignes
                   end if;
-                  if READOUT_INFO_I.READ_END = '1'  then      --
-                     line_mux_fsm <= wait_feedback_st;
-                  end if;
-               
-               when wait_feedback_st =>
-                  if readout_sync = '0' then    -- on attend la fin du readout en aval pour reset des fifos
-                     line_mux_fsm <= flush_fifo_st;
-                  end if;
-               
-               when flush_fifo_st =>            -- le reset dure 20 coups d'horloge. Le fifo est reseté pour qu'un manque de pixel dans l'image actuelle n'affecte pas la suivante.
-                  flush_fifo_i <= '1';
-                  dly_cnt <= dly_cnt + 1;
-                  if dly_cnt = 20 then 
-                     line_mux_fsm <= idle; 
-                  end if;                       
-               
+                                 
                when others =>
                
             end case;

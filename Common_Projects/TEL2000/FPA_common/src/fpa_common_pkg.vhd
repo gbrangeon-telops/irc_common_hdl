@@ -244,52 +244,53 @@ package fpa_common_pkg is
    -- types  pour transferer des données                                 
    --------------------------------------------------------------------------------
    type t_ll_ext_mosi1 is record
-      sof   : std_logic;
-      eof   : std_logic;
-      sol   : std_logic;   -- start of line
-      eol   : std_logic;   -- eol of line
-      data  : std_logic;
-      dval  : std_logic;
+      sof         : std_logic;
+      eof         : std_logic;
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic;
+      dval        : std_logic;
       support_busy : std_logic;
    end record;
    
    type t_ll_ext_mosi8 is record
-      sof   : std_logic;
-      eof   : std_logic;
-      sol   : std_logic;   -- start of line
-      eol   : std_logic;   -- eol of line
-      data  : std_logic_vector(7 downto 0);
-      dval  : std_logic;
+      sof         : std_logic;
+      eof         : std_logic;
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic_vector(7 downto 0);
+      dval        : std_logic;
       support_busy : std_logic;
    end record;
    
    type t_ll_ext_mosi16 is record
-      sof   : std_logic;
-      eof   : std_logic; 
-      sol   : std_logic;   -- start of line
-      eol   : std_logic;   -- eol of line
-      data  : std_logic_vector(15 downto 0);
-      dval  : std_logic;
+      sof         : std_logic;
+      eof         : std_logic; 
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic_vector(15 downto 0);
+      dval        : std_logic;
       support_busy : std_logic;
    end record;
    
    type t_ll_ext_mosi32 is record
-      sof   : std_logic;
-      eof   : std_logic; 
-      sol   : std_logic;   -- start of line
-      eol   : std_logic;   -- eol of line
-      data  : std_logic_vector(31 downto 0); 
-      dval  : std_logic;
+      sof         : std_logic;
+      eof         : std_logic; 
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic_vector(31 downto 0); 
+      dval        : std_logic;
       support_busy : std_logic;
    end record;
    
    type t_ll_ext_mosi72 is record
-      sof   : std_logic;
-      eof   : std_logic; 
-      sol   : std_logic;   -- start of line
-      eol   : std_logic;   -- eol of line
-      data  : std_logic_vector(71 downto 0);  
-      dval  : std_logic;
+      sof         : std_logic;
+      eof         : std_logic; 
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic_vector(71 downto 0);  
+      dval        : std_logic;
+      misc        : std_logic_vector(7 downto 0);  -- ENO 26 sept 2017: regroupent différents tags pour diverses utilisation
       support_busy : std_logic;
    end record;
    

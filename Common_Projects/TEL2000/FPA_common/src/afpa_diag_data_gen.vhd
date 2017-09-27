@@ -40,7 +40,7 @@ entity afpa_diag_data_gen is
       
       FPA_INT           : in std_logic;
       
-      DIAG_DATA         : out std_logic_vector(61 downto 0); --! sortie des données 
+      DIAG_DATA         : out std_logic_vector(71 downto 0); --! sortie des données 
       DIAG_DVAL         : out std_logic
       );
 end afpa_diag_data_gen;
@@ -140,14 +140,15 @@ begin
    ----------------------------------------------
    -- OUTPUTS                                    
    ----------------------------------------------
-   DIAG_DATA(61)          <= eof_i;  -- eof
-   DIAG_DATA(60)          <= sof_i;  -- sof
-   DIAG_DATA(59)          <= fval_i; -- fval
-   DIAG_DATA(58)          <= eol_i;  -- eol
-   DIAG_DATA(57)          <= sol_i;  -- sol
-   DIAG_DATA(56)          <= '0';    -- lval  -- non géneré
-   DIAG_DATA(55 downto 0) <= data(3)(13 downto 0)  & data(2)(13 downto 0)  & data(1)(13 downto 0)  & data(0)(13 downto 0);
-   DIAG_DVAL              <= dval_i;
+   DIAG_DATA(71 downto 62) <= (others => '0');  -- eof   
+   DIAG_DATA(61)           <= eof_i;  -- eof
+   DIAG_DATA(60)           <= sof_i;  -- sof
+   DIAG_DATA(59)           <= fval_i; -- fval
+   DIAG_DATA(58)           <= eol_i;  -- eol
+   DIAG_DATA(57)           <= sol_i;  -- sol
+   DIAG_DATA(56)           <= '0';    -- lval  -- non géneré
+   DIAG_DATA(55 downto 0)  <= data(3)(13 downto 0)  & data(2)(13 downto 0)  & data(1)(13 downto 0)  & data(0)(13 downto 0);
+   DIAG_DVAL               <= dval_i;
    
    --------------------------------------------------
    -- synchro reset 

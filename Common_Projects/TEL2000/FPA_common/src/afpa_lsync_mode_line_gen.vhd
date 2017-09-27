@@ -1,5 +1,5 @@
 ------------------------------------------------------------------
---!   @file : mglk_DOUT_DVALiter
+--!   @file : mglk_DOUT_WR_ENiter
 --!   @brief
 --!   @details
 --!
@@ -9,6 +9,10 @@
 --!   $Id$
 --!   $URL$
 ------------------------------------------------------------------
+
+-- ENO 27 sept 2017 :  
+--    revision en profondeur pour tenir compte de le necessité de sortir les données hors AOI.
+--    le flushing des fifos est abandonné. le frame sync ne sert qu'à l'initialisation. Ainsi, le mode IWR sera facilité puisque frame_sync est une entrave dans ce cas.  
 
 
 library IEEE;
@@ -31,8 +35,8 @@ entity afpa_lsync_mode_line_gen is
       
       READOUT_INFO    : in readout_info_type;
       
-      DOUT            : out std_logic_vector(61 downto 0);
-      DOUT_DVAL       : out std_logic;
+      DOUT            : out std_logic_vector(71 downto 0);
+      DOUT_WR_EN      : out std_logic;
       
       ERR             : out std_logic
       );  
@@ -84,7 +88,7 @@ architecture rtl of afpa_lsync_mode_line_gen is
    
    signal sync_fsm          : sync_fsm_type;
    signal sreset            : std_logic;
-   signal dout_dval_o       : std_logic;
+   signal dout_wr_en_o       : std_logic;
    
    signal flush_fifo_o      : std_logic;
    signal dly_cnt           : unsigned(7 downto 0);
@@ -108,7 +112,7 @@ architecture rtl of afpa_lsync_mode_line_gen is
    
    signal samp_fifo_en      : std_logic;
    
-   signal dout_o            : std_logic_vector(61 downto 0);
+   signal dout_o            : std_logic_vector(DOUT'LENGTH-1 downto 0);
    
    signal readout_info_o      : readout_info_type;
    signal fifo_rd_en          : std_logic;
@@ -124,7 +128,7 @@ begin
    --------------------------------------------------
    -- Outputs map
    -------------------------------------------------- 
-   DOUT_DVAL <= dout_dval_o; 
+   DOUT_WR_EN <= dout_wr_en_o; 
    DOUT <= dout_o; --
    
    --------------------------------------------------
@@ -266,23 +270,34 @@ begin
    begin
       if rising_edge(CLK) then         
          if sreset = '1' then      -- tant qu'on est en mode diag, la fsm est en reset.      
-            dout_dval_o <= '0';
+            dout_wr_en_o <= '0';
             line_in_progress <= '0';
          else      
-            dout_dval_o <= fifo_rd_en and (readout_info_o.dval or readout_info_o.read_end); -- readout_info_o.read_end permet de faire tomber fval en aval
-            dout_o(61)  <= readout_info_o.eof and fifo_rd_en;  -- eof
-            dout_o(60)  <= readout_info_o.sof and fifo_rd_en;  -- sof
-            if fifo_rd_en = '1' then         -- permet de ne pas couper virtuelelement les signaux en simulation et dans chipscope. Aucun changement réel
-               dout_o(59)  <= readout_info_o.fval; -- fval 
-               dout_o(56)  <= readout_info_o.lval; -- lval
-            end if;
-            dout_o(58)  <= readout_info_o.eol and fifo_rd_en;  -- eol
-            dout_o(57)  <= readout_info_o.sol and fifo_rd_en;  -- sol
             
-            dout_o(55 downto 0) <= samp_fifo_dout; --            
+            -- ecriture des données en aval
+            dout_wr_en_o <= fifo_rd_en or ; -- readout_info_o.read_end permet de faire tomber fval en aval
+            
+            -- non_aoi_data flag
+            dout_o(65) <= fifo_rd_en xor readout_info_o.dval; -- out_aoi_dval (ie non aoi data dval)
+            
+            -- aoi_data_flags
+            dout_o(64) <= fifo_rd_en and readout_info_o.read_end; -- aoi_read_end
+            dout_o(63) <= fifo_rd_en and readout_info_o.dval;     -- aoi_dval                  
+            dout_o(62) <= fifo_rd_en and readout_info_o.dval;     -- aoi_dval
+            dout_o(61) <= readout_info_o.eof and fifo_rd_en;      -- aoi_eof
+            dout_o(60) <= readout_info_o.sof and fifo_rd_en;      -- aoi_sof
+            if fifo_rd_en = '1' then         -- permet de ne pas couper en apparence les signaux en simulation et dans chipscope. Aucun changement réel
+               dout_o(59)  <= readout_info_o.fval;                -- aoi_fval 
+               dout_o(56)  <= readout_info_o.lval;                -- aoi_lval
+            end if;
+            dout_o(58) <= readout_info_o.eol and fifo_rd_en;      -- aoi_eol
+            dout_o(57) <= readout_info_o.sol and fifo_rd_en;      -- aoi_sol
+            
+            -- data (either aoi or not)
+            dout_o(55 downto 0) <= samp_fifo_dout; --             -- data (aoi_data or outside aoi_data)   
             
             -- fin d'une ligne sortante
-            if (readout_info_o.sol and fifo_rd_en) = '1' then    -- line_in_progress à '1' via sol 
+            if (readout_info_o.sol and fifo_rd_en) = '1' then     -- line_in_progress à '1' via sol 
                line_in_progress <= '1'; 
             end if;
             

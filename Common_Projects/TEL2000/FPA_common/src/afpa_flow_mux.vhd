@@ -38,13 +38,13 @@ entity afpa_flow_mux is
       READOUT           : in std_logic;
       DIAG_MODE_EN      : out std_logic;
       
-      FPA_QUAD_DATA     : in std_logic_vector(61 downto 0);
+      FPA_QUAD_DATA     : in std_logic_vector(71 downto 0);
       FPA_QUAD_DVAL     : in std_logic; 
       
-      DIAG_QUAD_DATA    : in std_logic_vector(61 downto 0);
+      DIAG_QUAD_DATA    : in std_logic_vector(71 downto 0);
       DIAG_QUAD_DVAL    : in std_logic;
       
-      QUAD_DATA         : out std_logic_vector(61 downto 0);
+      QUAD_DATA         : out std_logic_vector(71 downto 0);
       QUAD_DVAL         : out std_logic
       
       );
