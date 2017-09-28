@@ -147,7 +147,7 @@ architecture rtl of afpa_data_dispatcher is
    signal img_end                      : std_logic;     
    signal quad_fifo_dout               : std_logic_vector(71 downto 0);
    signal acq_fringe_last              : std_logic;    
-   signal quad_fifo_rd                 : std_logic;
+   --signal quad_fifo_rd                : std_logic;
    signal quad_fifo_ovfl               : std_logic;
    signal fringe_fifo_din              : std_logic_vector(71 downto 0);
    signal fringe_fifo_wr               : std_logic;
@@ -197,35 +197,40 @@ begin
    hder_link_rdy <= HDER_MISO.WREADY and HDER_MISO.AWREADY;
    pix_link_rdy  <= not PIX_MISO.BUSY;
    
-   quad_fifo_rd  <= quad_fifo_dval; -- les données sortent dès leur arrivée. Elle se retrouvent sur le bus PIX_MOSI. PIX_MOSI.DVAL permet de savoir que la donnée est valide pour AOI ou non. PIX_MOSI.MISC permet d'identifier les données (pour correction offset par exemple)     
+   --quad_fifo_dval  <= quad_fifo_dval; -- les données sortent dès leur arrivée. Elle se retrouvent sur le bus PIX_MOSI. PIX_MOSI.DVAL permet de savoir que la donnée est valide pour AOI ou non. PIX_MOSI.MISC permet d'identifier les données (pour correction offset par exemple)     
    
    ------------------------------------------------
    -- decodage données sortant du fifo
    ------------------------------------------------
-   pix_data       <= quad_fifo_dout(55 downto 0);
-   pix_lval       <= quad_fifo_dout(56);   -- aoi Lval  
-   pix_sol        <= quad_fifo_dout(57);  
-   pix_eol        <= quad_fifo_dout(58);
-   pix_fval       <= quad_fifo_dout(59);
-   pix_sof        <= quad_fifo_dout(60);  
-   pix_eof        <= quad_fifo_dout(61);
-   pix_dval       <= quad_fifo_dout(62);   -- aoi dval
-   
-   img_start      <= quad_fifo_dout(63);              -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
-   img_end        <= quad_fifo_dout(64);              -- img_end . À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
-   img_misc       <= quad_fifo_dout(71 downto 65);    -- misc flags. proviennent de afpa_lsync_mode_dval_gen.vhd 
+   U0A: process(CLK)
+   begin          
+      if rising_edge(CLK) then         
+         pix_data       <= quad_fifo_dout(55 downto 0);
+         pix_lval       <= quad_fifo_dout(56);   -- aoi Lval  
+         pix_sol        <= quad_fifo_dout(57);  
+         pix_eol        <= quad_fifo_dout(58);
+         pix_fval       <= quad_fifo_dout(59);
+         pix_sof        <= quad_fifo_dout(60);  
+         pix_eof        <= quad_fifo_dout(61);
+         pix_dval       <= quad_fifo_dout(62) and quad_fifo_dval;   -- aoi dval
+         
+         img_start      <= quad_fifo_dout(63);              -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
+         img_end        <= quad_fifo_dout(64);              -- img_end . À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
+         img_misc       <= quad_fifo_dout(71 downto 65);    -- misc flags. proviennent de afpa_lsync_mode_dval_gen.vhd 
+      end if;
+   end process;   
    
    --------------------------------------------------
    -- synchro 
    --------------------------------------------------   
-   U0A: sync_reset
+   U0B: sync_reset
    port map(
       ARESET => ARESET,
       CLK    => CLK,
       SRESET => sreset
       );
    
-   U0B : double_sync
+   U0C: double_sync
    port map(
       CLK => CLK,
       D   => ACQ_INT,
@@ -243,7 +248,7 @@ begin
       rd_clk => CLK,
       din => QUAD_FIFO_DIN,
       wr_en => QUAD_FIFO_WR,
-      rd_en => quad_fifo_rd,
+      rd_en => quad_fifo_dval,   -- les données sortent dès leur arrivée. Elle se retrouvent sur le bus PIX_MOSI. PIX_MOSI.DVAL permet de savoir que la donnée est valide pour AOI ou non. PIX_MOSI.MISC permet d'identifier les données (pour correction offset par exemple)     
       dout => quad_fifo_dout,
       valid  => quad_fifo_dval,
       full => open,
@@ -317,7 +322,7 @@ begin
                
                when wait_fval_st =>
                   fringe_fifo_rd <= '0';
-                  if img_end = '0' then
+                  if img_end = '1' then
                      readout_i <= '0';
                      acq_fringe <= '0';
                      acq_fringe_fsm <= idle;
@@ -338,7 +343,7 @@ begin
    begin          
       if rising_edge(CLK) then                   
          -- sortie des pixels
-         pix_mosi_i.dval   <= quad_fifo_rd and quad_fifo_dval and pix_dval and acq_fringe and not sreset;
+         pix_mosi_i.dval   <= pix_dval and acq_fringe and not sreset;
          pix_mosi_i.data   <= resize(pix_data(55 downto 42),18) & resize(pix_data(41 downto 28),18) & resize(pix_data(27 downto 14),18) & resize(pix_data(13 downto 0),18);            
          pix_mosi_i.sof    <= pix_sof;
          pix_mosi_i.eof    <= pix_eof;

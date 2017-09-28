@@ -131,6 +131,9 @@ architecture rtl of afpa_diag_data_gen is
    signal eol_i             : std_logic;
    signal fval_i            : std_logic;
    signal diag_eol_last     : std_logic;
+   signal img_end           : std_logic;
+   signal img_start         : std_logic;
+   signal img_dval          : std_logic;
    
    --attribute dont_touch     : string;
    --attribute dont_touch of diag_fsm : signal is "true";
@@ -140,7 +143,11 @@ begin
    ----------------------------------------------
    -- OUTPUTS                                    
    ----------------------------------------------
-   DIAG_DATA(71 downto 62) <= (others => '0');  -- eof   
+   DIAG_DATA(71 downto 65) <= (others => '0');  
+   
+   DIAG_DATA(64)           <= img_end;    -- img_end
+   DIAG_DATA(63)           <= img_start;  -- img_start         
+   DIAG_DATA(62)           <= dval_i;     -- aoi_dval          
    DIAG_DATA(61)           <= eof_i;  -- eof
    DIAG_DATA(60)           <= sof_i;  -- sof
    DIAG_DATA(59)           <= fval_i; -- fval
@@ -148,7 +155,7 @@ begin
    DIAG_DATA(57)           <= sol_i;  -- sol
    DIAG_DATA(56)           <= '0';    -- lval  -- non géneré
    DIAG_DATA(55 downto 0)  <= data(3)(13 downto 0)  & data(2)(13 downto 0)  & data(1)(13 downto 0)  & data(0)(13 downto 0);
-   DIAG_DVAL               <= dval_i;
+   DIAG_DVAL               <= img_dval;
    
    --------------------------------------------------
    -- synchro reset 
@@ -243,6 +250,8 @@ begin
             fpa_int_last <= '0';
             diag_line_gen_en <= '0';
             diag_eol_last <= '0';
+            img_end <= '0';
+            img_start <= '0';
             
          else   
             
@@ -279,11 +288,13 @@ begin
             case diag_fsm is 
                
                when idle =>
+                  img_end <= '0';
                   dly_cnt <= (others => '0');
                   data_cnt <= to_unsigned(1, data_cnt'length);
                   line_cnt <= to_unsigned(1, line_cnt'length);
                   dval_i <= '0';
                   fval_i <= '0';
+                  img_dval <= '0';
                   diag_frame_done <= '1';
                   diag_line_gen_en <= '0';
                   sof_i <= '0';
@@ -298,10 +309,14 @@ begin
                   diag_frame_done <= '0';   
                   dly_cnt <= dly_cnt + 1;              
                   if dly_cnt >= to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then 
-                     diag_fsm <=  cfg_line_gen_st;                   
+                     diag_fsm <=  cfg_line_gen_st;
+                     img_start <= '1';
+                     img_dval <= '1';
                   end if;                         
                
                when cfg_line_gen_st =>
+                  img_start <= '0';
+                  img_dval <= '0';
                   diag_line_gen_en <= '1';                              -- on active le module généateur des données diag
                   fval_i <= '1';
                   line_size <= std_logic_vector(resize(FPA_INTF_CFG.DIAG.XSIZE_DIV_TAPNUM, line_size'length)); 
@@ -310,7 +325,8 @@ begin
                   diag_fsm <=  get_line_data_st;
                
                when get_line_data_st => 
-                  dval_i <= diag_dval_i(0);         
+                  dval_i <= diag_dval_i(0);
+                  img_dval <= diag_dval_i(0);
                   if diag_done(0) = '0' then
                      diag_line_gen_en <= '0';              
                   end if;
@@ -351,7 +367,7 @@ begin
                   if line_cnt >= to_integer(FPA_INTF_CFG.DIAG.YSIZE) then
                      diag_fsm <=  write_end_id_st;
                   else
-                     diag_fsm <=  lovh_dly_st; 
+                     diag_fsm <= lovh_dly_st; 
                      line_cnt <= line_cnt + 1; 
                   end if;
                
@@ -362,9 +378,10 @@ begin
                   end if;
                
                when write_end_id_st =>
-                  eof_i <= '0';
-                  dval_i <= '1';
-                  fval_i <= '0'; -- pour faire tomber fval en aval
+                  eof_i <= '0';  
+                  img_dval <= '1'; -- permet d'écrire img_end dans le fifo en aval
+                  img_end <= '1';
+                  fval_i <= '0'; 
                   diag_fsm <=  idle;
                
                when others =>
