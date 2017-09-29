@@ -284,13 +284,14 @@ package fpa_common_pkg is
    end record;
    
    type t_ll_ext_mosi72 is record
-      sof         : std_logic;
-      eof         : std_logic; 
-      sol         : std_logic;   -- start of line
-      eol         : std_logic;   -- eol of line
-      data        : std_logic_vector(71 downto 0);  
-      dval        : std_logic;
-      misc        : std_logic_vector(7 downto 0);  -- ENO 26 sept 2017: regroupent différents tags pour diverses utilisation
+      sof          : std_logic;
+      eof          : std_logic; 
+      sol          : std_logic;  -- start of line
+      eol          : std_logic;  -- eol of line
+      data         : std_logic_vector(71 downto 0);  
+      dval         : std_logic;  -- à '1' dit que les données sur le bus data sont couplées aux tags sof, sol, eof, eol.
+      misc         : std_logic_vector(5 downto 0);  -- ENO 26 sept 2017 : regroupent différents tags pour diverses utilisation
+      misc_dval    : std_logic;  -- à '1' dit que les données sur le bus data sont couplés aux tags contenues dans misc 
       support_busy : std_logic;
    end record;
    

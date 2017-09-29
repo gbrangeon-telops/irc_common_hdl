@@ -80,28 +80,34 @@ architecture rtl of afpa_lsync_mode_dval_gen is
    end component;
    
    type init_fsm_type is (init_st1, init_st2, init_st3, init_st4, init_done_st);
-   type sync_fsm_type is (wait_init_done_st, idle, active_pixel_dly_st, info_sync_st);   
+   type sync_fsm_type is (wait_init_done_st, idle, active_pixel_dly_st, launch_sync_st);   
    
    signal init_fsm          : init_fsm_type;
+   
    signal sync_fsm          : sync_fsm_type;
+   signal dly_cnt           : unsigned(7 downto 0); 
+   signal sync_err_i        : std_logic;
+   
    signal global_areset     : std_logic;
    signal sreset            : std_logic;
    signal init_done         : std_logic;
    signal pix_count         : unsigned(7 downto 0);
-   signal dly_cnt           : unsigned(7 downto 0);
+   
    signal frame_sync        : std_logic;
    signal frame_sync_last   : std_logic;
    signal img_start         : std_logic;
    signal img_end           : std_logic;
    signal din_dval_i        : std_logic;
-   signal sync_err_i        : std_logic;
+   signal fpa_line_in_progress      : std_logic;
+   
    
    signal flag_fifo_dval    : std_logic;
    signal flag_fifo_dout    : std_logic_vector(7 downto 0);
    signal flag_fifo_din     : std_logic_vector(7 downto 0);
    signal flag_fifo_wr      : std_logic;
-   signal flag_fifo_ovfl    : std_logic;
    signal flag_fifo_rd      : std_logic;
+   signal flag_fifo_ovfl    : std_logic;
+   
    signal flag_fifo_rst     : std_logic;
    
    signal dout_o            : std_logic_vector(FPA_DOUT'LENGTH-1 downto 0);
@@ -145,7 +151,7 @@ begin
       if rising_edge(CLK) then          
          
          -- erreurs
-         err_i(0) <= sync_err_i; 
+         err_i(0) <= sync_err_i or sync_err_i; 
          err_i(1) <= flag_fifo_ovfl;         
          
          -- sync_flag 
@@ -156,7 +162,7 @@ begin
          
          -- debut et fin de l'image
          img_start <= not frame_sync_last and frame_sync;
-         img_end <= flag_fifo_rd and readout_info_o.read_end;
+         img_end <= flag_fifo_dval and readout_info_o.read_end;
          
          -- line sync
          line_sync  <= FPA_DIN(56); 
@@ -205,7 +211,7 @@ begin
                   if din_dval_i = '1' then      
                      pix_count <= pix_count + DEFINE_FPA_TAP_NUMBER;
                   end if;                                           
-                  if pix_count >= 64 then    -- je vois au moins un nombre de pixels équivalent à la plus petite ligne d'image de TEL-2000. cela implique que le système en amont est actif. je m'en vais en idle et attend la prochaine synchro 
+                  if pix_count >= 64 then   -- je vois au moins un nombre de pixels équivalent à la plus petite ligne d'image de TEL-2000. cela implique que le système en amont est actif. je m'en vais en idle et attend la prochaine synchro 
                      init_fsm <= init_st4;     
                   end if;
                
@@ -235,9 +241,14 @@ begin
       if rising_edge(CLK) then         
          if sreset = '1' then          
             sync_fsm <= wait_init_done_st;
-            flag_fifo_rd <= '0';
             sync_err_i <= '0';
-         else            
+            fpa_line_in_progress <= '0';
+            
+         else        
+            
+            if readout_info_o.eol = '1' and FPA_DIN_DVAL = '1' then -- FPA_DIN_DVAL assure qu'effectivement eol est lu
+               fpa_line_in_progress <= '0';
+            end if;
             
             case sync_fsm is        
                
@@ -247,25 +258,24 @@ begin
                   end if;                   
                
                when idle =>               -- en idle, on sort les données non AOI
-                  dly_cnt <= (others => '0');
+                  dly_cnt <= (others => '0');                  
                   if line_sync_edge_detected = '1' then
-                     sync_fsm <= active_pixel_dly_st;                     
+                     sync_fsm <= active_pixel_dly_st;
                   end if; 
                
-               when active_pixel_dly_st =>                                               -- delai en nombre de samples avant d'aller chercher les pixels d'une ligne
+               when active_pixel_dly_st =>  -- delai en nombre de samples avant d'aller chercher les pixels d'une ligne
                   incr := '0'& FPA_DIN_DVAL;
                   dly_cnt <= dly_cnt + to_integer(unsigned(incr));                 
                   if dly_cnt >= to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then -- REAL_MODE_ACTIVE_PIXEL_DLY est configurable via microblaze
-                     sync_fsm <= info_sync_st;                     
+                     sync_fsm <= launch_sync_st;                     
                   end if;                    
                
-               when info_sync_st =>  
-                  flag_fifo_rd <= '1';
+               when launch_sync_st =>     -- 
+                  fpa_line_in_progress <= '1';
                   sync_err_i <= not flag_fifo_dval; -- erreur grave! pendant la sortie d'une ligne AOI, il manquait des données Flag. Problème de débit 
-                  if readout_info_o.eol = '1' then  -- le eol vient de sortir du flag fifo. C'est la fin de la présente ligne de l'AOI.
-                     flag_fifo_rd <= '0';
-                     sync_fsm <= idle;
-                  end if;                 
+                  if FPA_DIN_DVAL = '1' then        -- on est certain ainsi que flag_fifo_rd a été activé
+                     sync_fsm <= idle;          
+                  end if;                   
                
                when others =>
                
@@ -273,12 +283,11 @@ begin
             
          end if;
       end if;
-   end process;   
+   end process;
    
    --------------------------------------------------
    -- synchronisateur des données sortantes
    --------------------------------------------------
-      
    U4: process(CLK)
    begin
       if rising_edge(CLK) then         
@@ -298,19 +307,19 @@ begin
             end if;            
             
             -- flags AOI
-            dout_o(56) <= readout_info_o.lval and flag_fifo_rd;
-            dout_o(57) <= readout_info_o.sol and flag_fifo_rd;                     -- aoi_sol
-            dout_o(58) <= readout_info_o.eol and flag_fifo_rd;                     -- aoi_eol
-            dout_o(59) <= readout_info_o.fval;                                     -- aoi_fval 
-            dout_o(60) <= readout_info_o.sof and flag_fifo_rd;                     -- aoi_sof
-            dout_o(61) <= readout_info_o.eof and flag_fifo_rd;                     -- aoi_eof
+            dout_o(56) <= readout_info_o.lval and fpa_line_in_progress;
+            dout_o(57) <= readout_info_o.sol and fpa_line_in_progress;                       -- aoi_sol
+            dout_o(58) <= readout_info_o.eol and fpa_line_in_progress;                       -- aoi_eol
+            dout_o(59) <= readout_info_o.fval;                                               -- aoi_fval 
+            dout_o(60) <= readout_info_o.sof and fpa_line_in_progress;                       -- aoi_sof
+            dout_o(61) <= readout_info_o.eof and fpa_line_in_progress;                       -- aoi_eof
             
-            dout_o(62) <= flag_fifo_rd and readout_info_o.dval and FPA_DIN_DVAL;   -- aoi_dval  (nouvel ajout)
-            dout_o(63) <= img_start;                                               -- img_start (nouvel ajout) À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
-            dout_o(64) <= img_end;                                                 -- img_end   (nouvel ajout) À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
+            dout_o(62) <= readout_info_o.dval and fpa_line_in_progress and FPA_DIN_DVAL;     -- aoi_dval  (nouvel ajout)
+            dout_o(63) <= img_start;                                                         -- img_start (nouvel ajout) À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
+            dout_o(64) <= img_end;                                                           -- img_end   (nouvel ajout) À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
             
             -- flags non AOI
-            dout_o(65) <= not flag_fifo_rd and FPA_DIN_DVAL;                       -- outside_aoi_dval    (ie non aoi data dval)
+            dout_o(65) <= not (fpa_line_in_progress and FPA_DIN_DVAL) and FPA_DIN_DVAL;                                 -- outside_aoi_dval    (ie non aoi data dval)
             
             -- spares pour le futur
             dout_o(71 downto 66) <= (others => '0');                                
@@ -318,11 +327,13 @@ begin
          end if;
       end if;
    end process;
-   
-   ------------------------------------------------------------------------------------
+  
+   ------------------------------------------------
    -- Gestionnaires des Flags
-   ------------------------------------------------------------------------------------
-   -- fag fifo mapping   
+   ------------------------------------------------
+   flag_fifo_rd <= (fpa_line_in_progress and FPA_DIN_DVAL) or readout_info_o.read_end;
+   
+   -- fag fifo mapping      
    U5A : fwft_sfifo_w8_d256
    port map (
       clk         => CLK,

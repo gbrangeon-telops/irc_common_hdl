@@ -173,7 +173,7 @@ architecture rtl of afpa_data_dispatcher is
    signal hder_link_rdy                : std_logic;
    signal int_time_100MHz              : unsigned(31 downto 0);
    signal int_time_100MHz_dval         : std_logic;
-   signal img_misc                     : std_logic_vector(6 downto 0);
+   signal img_misc                     : std_logic_vector(5 downto 0);
    signal dispatch_info_i              : img_info_type;
    signal hder_param                   : hder_param_type;
    signal hcnt                         : unsigned(7 downto 0);
@@ -182,6 +182,7 @@ architecture rtl of afpa_data_dispatcher is
    --signal quad_fifo_ovfl_sync          : std_logic;
    signal pix_count                    : unsigned(31 downto 0);
    signal pause_cnt                    : unsigned(7 downto 0);
+   signal img_misc_dval                : std_logic := '0';
    
    --  attribute dont_touch                     : string; 
    --  attribute dont_touch of int_time         : signal is "true"; 
@@ -206,17 +207,18 @@ begin
    begin          
       if rising_edge(CLK) then         
          pix_data       <= quad_fifo_dout(55 downto 0);
-         pix_lval       <= quad_fifo_dout(56);   -- aoi Lval  
+         pix_lval       <= quad_fifo_dout(56);                       -- aoi Lval  
          pix_sol        <= quad_fifo_dout(57);  
          pix_eol        <= quad_fifo_dout(58);
          pix_fval       <= quad_fifo_dout(59);
          pix_sof        <= quad_fifo_dout(60);  
          pix_eof        <= quad_fifo_dout(61);
-         pix_dval       <= quad_fifo_dout(62) and quad_fifo_dval;   -- aoi dval
+         pix_dval       <= quad_fifo_dout(62) and quad_fifo_dval;    -- aoi dval
          
-         img_start      <= quad_fifo_dout(63);              -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
-         img_end        <= quad_fifo_dout(64);              -- img_end . À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
-         img_misc       <= quad_fifo_dout(71 downto 65);    -- misc flags. proviennent de afpa_lsync_mode_dval_gen.vhd 
+         img_start      <= quad_fifo_dout(63) and quad_fifo_dval;    -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
+         img_end        <= quad_fifo_dout(64) and quad_fifo_dval;    -- img_end  . À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
+         img_misc_dval  <= quad_fifo_dout(65) and quad_fifo_dval;
+         img_misc       <= quad_fifo_dout(71 downto 66);             -- misc flags. proviennent de afpa_lsync_mode_dval_gen.vhd 
       end if;
    end process;   
    
@@ -343,13 +345,14 @@ begin
    begin          
       if rising_edge(CLK) then                   
          -- sortie des pixels
-         pix_mosi_i.dval   <= pix_dval and acq_fringe and not sreset;
-         pix_mosi_i.data   <= resize(pix_data(55 downto 42),18) & resize(pix_data(41 downto 28),18) & resize(pix_data(27 downto 14),18) & resize(pix_data(13 downto 0),18);            
-         pix_mosi_i.sof    <= pix_sof;
-         pix_mosi_i.eof    <= pix_eof;
-         pix_mosi_i.sol    <= pix_sol;
-         pix_mosi_i.eol    <= pix_eol;
-         pix_mosi_i.misc   <= pix_misc;
+         pix_mosi_i.dval         <= pix_dval and acq_fringe and not sreset;
+         pix_mosi_i.data         <= resize(pix_data(55 downto 42),18) & resize(pix_data(41 downto 28),18) & resize(pix_data(27 downto 14),18) & resize(pix_data(13 downto 0),18);            
+         pix_mosi_i.sof          <= pix_sof;
+         pix_mosi_i.eof          <= pix_eof;
+         pix_mosi_i.sol          <= pix_sol;
+         pix_mosi_i.eol          <= pix_eol;
+         pix_mosi_i.misc_dval    <= img_misc_dval;
+         pix_mosi_i.misc         <= img_misc;
       end if;
    end process; 
    
