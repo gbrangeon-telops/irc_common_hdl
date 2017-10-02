@@ -28,7 +28,8 @@ entity afpa_elec_offset_calc is
       RX_MISO        : out t_ll_ext_miso;
       
       TX_MISO        : in t_ll_ext_miso;    
-      TX_MOSI        : out t_ll_ext_mosi72
+      TX_MOSI        : out t_ll_ext_mosi72;
+      ERR            : out std_logic
       );
 end afpa_elec_offset_calc;
 
@@ -61,7 +62,11 @@ architecture rtl of afpa_elec_offset_calc is
    signal samp_sum_data       : samp_sum_type;
    signal samp_sum_en         : std_logic;
    signal numerator           : unsigned(FPA_INTF_CFG.ELEC_OFS_SAMP_MEAN_NUMERATOR'LENGTH-1 downto 0);
-   
+   signal result_dval         : std_logic;
+   signal result              : result_type;
+   signal send_result_i       : std_logic;
+   signal send_result_last    : std_logic;
+   signal temp_result         : temp_result_type;
    
 begin
    
@@ -89,10 +94,10 @@ begin
    ------------------------------------------------------
    -- input map
    ------------------------------------------------------	
-   samp_data(4) <= unsigned(RX_MOSI.DATA(71 downto 54));
-   samp_data(3) <= unsigned(RX_MOSI.DATA(53 downto 36));
-   samp_data(2) <= unsigned(RX_MOSI.DATA(35 downto 18));
-   samp_data(1) <= unsigned(RX_MOSI.DATA(17 downto 0));	
+   samp_data(4) <= resize(unsigned(RX_MOSI.DATA(71 downto 54)), samp_data(4)'length);
+   samp_data(3) <= resize(unsigned(RX_MOSI.DATA(53 downto 36)), samp_data(3)'length);
+   samp_data(2) <= resize(unsigned(RX_MOSI.DATA(35 downto 18)), samp_data(2)'length);
+   samp_data(1) <= resize(unsigned(RX_MOSI.DATA(17 downto 0)) , samp_data(1)'length);	
    
    
    ------------------------------------------------------
