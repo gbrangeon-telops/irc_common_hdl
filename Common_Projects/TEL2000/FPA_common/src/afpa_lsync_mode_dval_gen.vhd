@@ -12,7 +12,7 @@
 
 -- ENO 27 sept 2017 :  
 --    revision en profondeur pour tenir compte de le necessité de sortir les données hors AOI.
---    le flushing des fifos est abandonné. le frame sync ne sert qu'à l'initialisation. Ainsi, le mode IWR sera facilité puisque frame_sync est une entrave dans ce cas.  
+--    le flushing des fifos est abandonné. le frame sync ne sert qu'à l'initialisation. Ainsi, le mode IWR sera facilité puisque frame_sync aurait été une entrave.  
 
 library IEEE;
 use IEEE.std_logic_1164.all;
