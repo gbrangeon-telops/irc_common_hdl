@@ -331,7 +331,7 @@ begin
    ------------------------------------------------
    -- Gestionnaires des Flags
    ------------------------------------------------
-   flag_fifo_rd <= (fpa_line_in_progress and FPA_DIN_DVAL) or readout_info_o.read_end;
+   flag_fifo_rd <= (fpa_line_in_progress and FPA_DIN_DVAL) or (readout_info_o.read_end and flag_fifo_dval);
    
    -- fag fifo mapping      
    U5A : fwft_sfifo_w8_d256
