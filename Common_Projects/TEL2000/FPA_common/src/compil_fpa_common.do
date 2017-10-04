@@ -44,7 +44,13 @@ acom -nowarn DAGGEN_0523 -incr \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_data_ctrl_map.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_fsync_mode_dval_gen.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_lsync_mode_dval_gen.vhd \
-  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_real_data_gen.bde \
+ 
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\LL_ext_sync_flow.vhd \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_quad_add.vhd \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_quad_subtract.vhd \
+ 
+ 
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_real_data_gen.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_dval_gen.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_hsample_proc.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_vsample_proc.bde \

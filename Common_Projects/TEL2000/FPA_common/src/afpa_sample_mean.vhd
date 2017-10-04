@@ -104,7 +104,7 @@ begin
    samp_sum_pix(1) <= unsigned(RX_MOSI.DATA(17 downto 0));	
    
    ------------------------------------------------------
-   --process de calcul des sommes
+   --process de calcul des moyennes
    ------------------------------------------------------
    process(CLK) 
    begin
@@ -135,8 +135,7 @@ begin
             
             
          end if;
-      end if;
-      
+      end if;       
       
    end process;
    

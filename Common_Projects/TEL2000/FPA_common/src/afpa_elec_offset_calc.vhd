@@ -64,12 +64,12 @@ architecture rtl of afpa_elec_offset_calc is
    signal numerator           : unsigned(FPA_INTF_CFG.ELEC_OFS_SAMP_MEAN_NUMERATOR'LENGTH-1 downto 0);
    signal result_dval         : std_logic;
    signal result              : result_type;
-   signal send_result_i       : std_logic;
-   signal send_result_last    : std_logic;
+   signal send_result_i       : std_logic := '0';
+   signal send_result_last    : std_logic := '0';
    signal temp_result         : temp_result_type;
    
-begin
    
+begin
    
    ------------------------------------------------------
    -- output map
@@ -97,8 +97,7 @@ begin
    samp_data(4) <= resize(unsigned(RX_MOSI.DATA(71 downto 54)), samp_data(4)'length);
    samp_data(3) <= resize(unsigned(RX_MOSI.DATA(53 downto 36)), samp_data(3)'length);
    samp_data(2) <= resize(unsigned(RX_MOSI.DATA(35 downto 18)), samp_data(2)'length);
-   samp_data(1) <= resize(unsigned(RX_MOSI.DATA(17 downto 0)) , samp_data(1)'length);	
-   
+   samp_data(1) <= resize(unsigned(RX_MOSI.DATA(17 downto 0)) , samp_data(1)'length);	   
    
    ------------------------------------------------------
    --process de calcul des sommes
@@ -172,7 +171,7 @@ begin
          end loop;
          
          -- validation de la sortie
-         result_dval <= not send_result_last and send_result_i;
+         result_dval <= not send_result_last and send_result_i; -- donnée sort uniquement sur front montant de send_result_i
          
       end if;      
       
