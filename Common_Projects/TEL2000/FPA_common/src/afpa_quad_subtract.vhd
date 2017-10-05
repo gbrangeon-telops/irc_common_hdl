@@ -19,19 +19,21 @@ use work.tel2000.all;
 
 entity afpa_quad_subtract is
    port(
-      ARESET     : in std_logic;
-      CLK        : in std_logic;
+      ARESET         : in std_logic;
+      CLK            : in std_logic;
       
-      RXA_MOSI   : in t_ll_ext_mosi72; 
-      RXA_MISO   : out t_ll_ext_miso;
+      RXB_MINUS_RXA  : in std_logic;
       
-      RXB_MOSI   : in t_ll_ext_mosi72;
-      RXB_MISO   : out t_ll_ext_miso;
+      RXA_MOSI       : in t_ll_ext_mosi72; 
+      RXA_MISO       : out t_ll_ext_miso;
       
-      TX_MISO    : in t_ll_ext_miso;
-      TX_MOSI    : out t_ll_ext_mosi72;
+      RXB_MOSI       : in t_ll_ext_mosi72;
+      RXB_MISO       : out t_ll_ext_miso;
       
-      ERR        : out std_logic
+      TX_MISO        : in t_ll_ext_miso;
+      TX_MOSI        : out t_ll_ext_mosi72;
+      
+      ERR            : out std_logic
       );
 end afpa_quad_subtract;
 
@@ -113,13 +115,19 @@ begin
             tx_mosi_i.sol  <= RXA_MOSI.SOL;
             tx_mosi_i.eol  <= RXA_MOSI.EOL;
             tx_mosi_i.dval <= sync_dval_i;
-            tx_mosi_i.data(71 downto 54) <= std_logic_vector(unsigned(RXA_MOSI.DATA(71 downto 54)) - unsigned(RXB_MOSI.DATA(71 downto 54)));
-            tx_mosi_i.data(53 downto 36) <= std_logic_vector(unsigned(RXA_MOSI.DATA(53 downto 36)) - unsigned(RXB_MOSI.DATA(53 downto 36)));
-            tx_mosi_i.data(35 downto 18) <= std_logic_vector(unsigned(RXA_MOSI.DATA(35 downto 18)) - unsigned(RXB_MOSI.DATA(35 downto 18)));
-            tx_mosi_i.data(17 downto 0)  <= std_logic_vector(unsigned(RXA_MOSI.DATA(17 downto 0))  - unsigned(RXB_MOSI.DATA(17 downto 0)));
-            
+            if RXB_MINUS_RXA = '0' then    -- operation normale: soustraction de l'offset electronique
+               tx_mosi_i.data(71 downto 54) <= std_logic_vector(unsigned(RXA_MOSI.DATA(71 downto 54)) - unsigned(RXB_MOSI.DATA(71 downto 54)));
+               tx_mosi_i.data(53 downto 36) <= std_logic_vector(unsigned(RXA_MOSI.DATA(53 downto 36)) - unsigned(RXB_MOSI.DATA(53 downto 36)));
+               tx_mosi_i.data(35 downto 18) <= std_logic_vector(unsigned(RXA_MOSI.DATA(35 downto 18)) - unsigned(RXB_MOSI.DATA(35 downto 18)));
+               tx_mosi_i.data(17 downto 0)  <= std_logic_vector(unsigned(RXA_MOSI.DATA(17 downto 0))  - unsigned(RXB_MOSI.DATA(17 downto 0)));
+            else                          -- operation en mode map: on sort l'offset électronique (RXA vaut 0.)
+               tx_mosi_i.data(71 downto 54) <= std_logic_vector(unsigned(RXB_MOSI.DATA(71 downto 54)) - unsigned(RXA_MOSI.DATA(71 downto 54)));
+               tx_mosi_i.data(53 downto 36) <= std_logic_vector(unsigned(RXB_MOSI.DATA(53 downto 36)) - unsigned(RXA_MOSI.DATA(53 downto 36)));
+               tx_mosi_i.data(35 downto 18) <= std_logic_vector(unsigned(RXB_MOSI.DATA(35 downto 18)) - unsigned(RXA_MOSI.DATA(35 downto 18)));
+               tx_mosi_i.data(17 downto 0)  <= std_logic_vector(unsigned(RXB_MOSI.DATA(17 downto 0))  - unsigned(RXA_MOSI.DATA(17 downto 0)));
+            end if;
             err_i <= tx_mosi_i.data(71) or tx_mosi_i.data(53) or tx_mosi_i.data(35) or tx_mosi_i.data(17); -- l'operation a donné un nombre negatif!!!
-         
+            
          end if;
       end if;
    end process;    

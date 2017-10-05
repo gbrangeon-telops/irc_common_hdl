@@ -27,12 +27,12 @@ entity afpa_fsync_mode_dval_gen is
       DIAG_MODE_EN    : in std_logic;
       
       READOUT         : in std_logic;
-      FPA_DIN         : in std_logic_vector(57 downto 0);
+      FPA_DIN         : in std_logic_vector(71 downto 0);
       FPA_DIN_DVAL    : in std_logic;
       
       READOUT_INFO    : in readout_info_type;
       
-      FPA_DOUT        : out std_logic_vector(61 downto 0);
+      FPA_DOUT        : out std_logic_vector(95 downto 0);
       FPA_DOUT_DVAL   : out std_logic;   
       
       FLUSH_FIFO      : out std_logic      
@@ -49,14 +49,14 @@ architecture rtl of afpa_fsync_mode_dval_gen is
          CLK : in std_logic);
    end component;
    
-   component fwft_sfifo_w8_d256
+   component fwft_sfifo_w32_d256
       port (
          clk : in std_logic;
-         rst : in std_logic;
-         din : in std_logic_vector(7 downto 0);
+         srst: in std_logic;
+         din : in std_logic_vector(31 downto 0);
          wr_en : in std_logic;
          rd_en : in std_logic;
-         dout : out std_logic_vector(7 downto 0);
+         dout : out std_logic_vector(31 downto 0);
          full : out std_logic;
          almost_full : out std_logic;
          overflow : out std_logic;
@@ -93,8 +93,8 @@ architecture rtl of afpa_fsync_mode_dval_gen is
    signal din_dval_i        : std_logic;
    
    signal flag_fifo_dval    : std_logic;
-   signal flag_fifo_dout    : std_logic_vector(7 downto 0);
-   signal flag_fifo_din     : std_logic_vector(7 downto 0);
+   signal flag_fifo_dout    : std_logic_vector(31 downto 0);
+   signal flag_fifo_din     : std_logic_vector(31 downto 0);
    signal flag_fifo_wr_en   : std_logic;
    signal flag_fifo_ovfl    : std_logic;
    signal fifo_rd_en        : std_logic;
@@ -106,7 +106,7 @@ architecture rtl of afpa_fsync_mode_dval_gen is
    signal samp_fifo_ovfl    : std_logic;
    
    signal pix_count         : unsigned(7 downto 0);
-   signal dout_o            : std_logic_vector(61 downto 0);
+   signal dout_o            : std_logic_vector(95 downto 0);
    
    signal readout_info_o    : readout_info_type;
    signal flag_fifo_enabled : std_logic;
@@ -283,10 +283,10 @@ begin
    
    flag_fifo_rst <= fsm_areset;
    
-   U3A : fwft_sfifo_w8_d256
+   U3A : fwft_sfifo_w32_d256
    port map (
       clk         => CLK,
-      rst         => flag_fifo_rst,
+      srst        => flag_fifo_rst,
       din         => flag_fifo_din,
       wr_en       => flag_fifo_wr_en,
       rd_en       => fifo_rd_en,
@@ -301,7 +301,7 @@ begin
    U3B : process(CLK)
    begin
       if rising_edge(CLK) then         
-         flag_fifo_din <= READOUT_INFO.SOF & READOUT_INFO.EOF & READOUT_INFO.SOL & READOUT_INFO.EOL & READOUT_INFO.FVAL & READOUT_INFO.LVAL & READOUT_INFO.DVAL & READOUT_INFO.READ_END;
+         flag_fifo_din <= x"00" & READOUT_INFO.SOF & READOUT_INFO.EOF & READOUT_INFO.SOL & READOUT_INFO.EOL & READOUT_INFO.FVAL & READOUT_INFO.LVAL & READOUT_INFO.DVAL & READOUT_INFO.READ_END;
          flag_fifo_wr_en <= (READOUT_INFO.SAMP_PULSE or  READOUT_INFO.READ_END) and flag_fifo_enabled;         
       end if;
    end process;

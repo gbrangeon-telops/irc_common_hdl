@@ -145,15 +145,17 @@ begin
    ----------------------------------------------
    DIAG_DATA(71 downto 65) <= (others => '0');  
    
-   DIAG_DATA(64)           <= img_end;    -- img_end
-   DIAG_DATA(63)           <= img_start;  -- img_start         
-   DIAG_DATA(62)           <= dval_i;     -- aoi_dval          
-   DIAG_DATA(61)           <= eof_i;  -- eof
-   DIAG_DATA(60)           <= sof_i;  -- sof
-   DIAG_DATA(59)           <= fval_i; -- fval
-   DIAG_DATA(58)           <= eol_i;  -- eol
-   DIAG_DATA(57)           <= sol_i;  -- sol
-   DIAG_DATA(56)           <= '0';    -- lval  -- non géneré
+   DIAG_DATA(80)           <= img_end;    -- img_end
+   DIAG_DATA(79)           <= img_start;  -- img_start
+   
+   DIAG_DATA(78 downto 63) <= (others => '0');  --aoi misc
+   DIAG_DATA(62)           <= dval_i;           -- aoi_dval          
+   DIAG_DATA(61)           <= eof_i;            -- eof
+   DIAG_DATA(60)           <= sof_i;            -- sof
+   DIAG_DATA(59)           <= fval_i;           -- fval
+   DIAG_DATA(58)           <= eol_i;            -- eol
+   DIAG_DATA(57)           <= sol_i;            -- sol
+   DIAG_DATA(56)           <= '0';              -- lval  -- non géneré
    DIAG_DATA(55 downto 0)  <= data(3)(13 downto 0)  & data(2)(13 downto 0)  & data(1)(13 downto 0)  & data(0)(13 downto 0);
    DIAG_DVAL               <= img_dval;
    

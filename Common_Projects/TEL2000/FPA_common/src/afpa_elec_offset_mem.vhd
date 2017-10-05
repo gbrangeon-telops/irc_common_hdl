@@ -43,7 +43,6 @@ entity afpa_elec_offset_mem is
 end afpa_elec_offset_mem;
 
 
-
 architecture rtl of afpa_elec_offset_mem is
    
    component sync_reset
@@ -81,7 +80,7 @@ architecture rtl of afpa_elec_offset_mem is
    signal ofs_fifo_dval  : std_logic;
    signal dly_count      : unsigned(4 downto 0);
    signal flush_done_i   : std_logic;
-   --signal err_i          : std_logic;
+   signal flush_fifo_last: std_logic;
    --signal sreset   : std_logic;
    
 begin
@@ -132,9 +131,12 @@ begin
             ofs_fifo_rst <= '1';
             fifo_rst_fsm <= idle;
             flush_done_i <= '0';
+            flush_fifo_last <= FLUSH_FIFO;
             
          else
-
+            
+            flush_fifo_last <= FLUSH_FIFO;
+            
             -- mux des données à ecrire dans le fifo
             if OFS1_MOSI.DVAL = '1' then 
                ofs_fifo_din <= resize(OFS1_MOSI.DATA, ofs_fifo_din'length);               
@@ -152,7 +154,7 @@ begin
                   ofs_fifo_rst <= '0';
                   flush_done_i <= '1';
                   dly_count <= (others => '0');
-                  if FLUSH_FIFO = '1' then 
+                  if FLUSH_FIFO = '1' and flush_fifo_last = '0' then 
                      fifo_rst_fsm <= flush_fifo_st;  
                   end if;
                

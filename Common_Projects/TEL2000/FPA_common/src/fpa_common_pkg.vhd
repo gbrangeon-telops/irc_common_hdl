@@ -284,16 +284,38 @@ package fpa_common_pkg is
    end record;
    
    type t_ll_ext_mosi72 is record
-      sof          : std_logic;
-      eof          : std_logic; 
-      sol          : std_logic;  -- start of line
-      eol          : std_logic;  -- eol of line
-      data         : std_logic_vector(71 downto 0);  
-      dval         : std_logic;  -- à '1' dit que les données sur le bus data sont couplées aux tags sof, sol, eof, eol.
-      misc         : std_logic_vector(5 downto 0);  -- ENO 26 sept 2017 : regroupent différents tags pour diverses utilisation
-      misc_dval    : std_logic;  -- à '1' dit que les données sur le bus data sont couplés aux tags contenues dans misc 
+      sof         : std_logic;
+      eof         : std_logic; 
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic_vector(71 downto 0); 
+      dval        : std_logic;
+      misc        : std_logic_vector(15 downto 0);
       support_busy : std_logic;
    end record;
+   
+   type t_ll_area_mosi72 is record -- dedié exclusivement aux données AOi ou non      
+      -- données
+      data             : std_logic_vector(71 downto 0);
+      
+      -- AOI_area
+      aoi_sof          : std_logic;
+      aoi_eof          : std_logic; 
+      aoi_sol          : std_logic;  -- start of line
+      aoi_eol          : std_logic;  -- eol of line      
+      aoi_dval         : std_logic;  -- à '1' dit que les données sur le bus data sont des pixels de l'image 
+      aoi_misc         : std_logic_vector(15 downto 0);  -- ENO 26 sept 2017 : regroupent différents tags pour diverses utilisation pour la zone AOI   
+      
+      -- non AOI_area
+      non_aoi_dval     : std_logic;  -- à '1' dit que les données sur le bus data sont couplés aux flags non_aoi_misc. 
+      non_aoi_misc     : std_logic_vector(13 downto 0);
+      support_busy     : std_logic;
+   end record;
+   
+   type t_ll_area_miso is record
+      afull	: std_logic;
+      busy  : std_logic;
+   end record; 
    
    type t_ll_ext_miso is record
       afull	: std_logic;

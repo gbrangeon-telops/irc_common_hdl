@@ -28,13 +28,13 @@ entity afpa_lsync_mode_dval_gen is
       FPA_INTF_CFG  : in fpa_intf_cfg_type;
       
       READOUT       : in std_logic;
-      FPA_DIN       : in std_logic_vector(57 downto 0);
+      FPA_DIN       : in std_logic_vector(71 downto 0);
       FPA_DIN_DVAL  : in std_logic;
       READOUT_INFO  : in readout_info_type;
       
       DIAG_MODE_EN  : in std_logic;
       
-      FPA_DOUT      : out std_logic_vector(71 downto 0);
+      FPA_DOUT      : out std_logic_vector(95 downto 0);
       FPA_DOUT_DVAL : out std_logic;
       
       ERR           : out std_logic_vector(1 downto 0)
@@ -51,14 +51,14 @@ architecture rtl of afpa_lsync_mode_dval_gen is
          CLK : in std_logic);
    end component;
    
-   component fwft_sfifo_w8_d256
+   component fwft_sfifo_w32_d256
       port (
          clk : in std_logic;
-         rst : in std_logic;
-         din : in std_logic_vector(7 downto 0);
+         srst: in std_logic;
+         din : in std_logic_vector(31 downto 0);
          wr_en : in std_logic;
          rd_en : in std_logic;
-         dout : out std_logic_vector(7 downto 0);
+         dout : out std_logic_vector(31 downto 0);
          full : out std_logic;
          almost_full : out std_logic;
          overflow : out std_logic;
@@ -102,8 +102,8 @@ architecture rtl of afpa_lsync_mode_dval_gen is
    
    
    signal flag_fifo_dval    : std_logic;
-   signal flag_fifo_dout    : std_logic_vector(7 downto 0);
-   signal flag_fifo_din     : std_logic_vector(7 downto 0);
+   signal flag_fifo_dout    : std_logic_vector(31 downto 0);
+   signal flag_fifo_din     : std_logic_vector(31 downto 0);
    signal flag_fifo_wr      : std_logic;
    signal flag_fifo_rd      : std_logic;
    signal flag_fifo_ovfl    : std_logic;
@@ -306,24 +306,22 @@ begin
                dout_o(55 downto 0) <= FPA_DIN(55 downto 0);   
             end if;            
             
-            -- flags AOI
-            dout_o(56) <= readout_info_o.lval and fpa_line_in_progress;
-            dout_o(57) <= readout_info_o.sol and fpa_line_in_progress;                       -- aoi_sol
-            dout_o(58) <= readout_info_o.eol and fpa_line_in_progress;                       -- aoi_eol
-            dout_o(59) <= readout_info_o.fval;                                               -- aoi_fval 
-            dout_o(60) <= readout_info_o.sof and fpa_line_in_progress;                       -- aoi_sof
-            dout_o(61) <= readout_info_o.eof and fpa_line_in_progress;                       -- aoi_eof
+            -- zone AOI
+            dout_o(56)           <= readout_info_o.lval and fpa_line_in_progress;
+            dout_o(57)           <= readout_info_o.sol and fpa_line_in_progress;                       -- aoi_sol
+            dout_o(58)           <= readout_info_o.eol and fpa_line_in_progress;                       -- aoi_eol
+            dout_o(59)           <= readout_info_o.fval;                                               -- aoi_fval 
+            dout_o(60)           <= readout_info_o.sof and fpa_line_in_progress;                       -- aoi_sof
+            dout_o(61)           <= readout_info_o.eof and fpa_line_in_progress;                       -- aoi_eof            
+            dout_o(62)           <= readout_info_o.dval and fpa_line_in_progress and FPA_DIN_DVAL;     -- aoi_dval  (nouvel ajout)
+            dout_o(78 downto 63) <= readout_info_o.misc;                                               -- aoi_misc  (nouvel ajout)
+            dout_o(79)           <= img_start;                                                         -- img_start (nouvel ajout) À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
+            dout_o(80)           <= img_end;                                                           -- img_end   (nouvel ajout) À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
             
-            dout_o(62) <= readout_info_o.dval and fpa_line_in_progress and FPA_DIN_DVAL;     -- aoi_dval  (nouvel ajout)
-            dout_o(63) <= img_start;                                                         -- img_start (nouvel ajout) À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
-            dout_o(64) <= img_end;                                                           -- img_end   (nouvel ajout) À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
-            
-            -- flags non AOI
-            dout_o(65) <= not (fpa_line_in_progress and FPA_DIN_DVAL) and FPA_DIN_DVAL;                                 -- outside_aoi_dval    (ie non aoi data dval)
-            
-            -- spares pour le futur
-            dout_o(71 downto 66) <= (others => '0');                                
-            
+            -- Zone NON AOI
+            dout_o(81)           <= not (fpa_line_in_progress and FPA_DIN_DVAL) and FPA_DIN_DVAL;      -- outside_aoi_dval    (ie non aoi data dval)      
+            dout_o(95 downto 82) <= FPA_DIN(71 downto 58);                                             -- outside_aoi_misc
+                                                               
          end if;
       end if;
    end process;
@@ -334,10 +332,10 @@ begin
    flag_fifo_rd <= (fpa_line_in_progress and FPA_DIN_DVAL) or (readout_info_o.read_end and flag_fifo_dval);
    
    -- fag fifo mapping      
-   U5A : fwft_sfifo_w8_d256
+   U5A : fwft_sfifo_w32_d256
    port map (
       clk         => CLK,
-      rst         => flag_fifo_rst,
+      srst        => flag_fifo_rst,
       din         => flag_fifo_din,
       wr_en       => flag_fifo_wr,
       rd_en       => flag_fifo_rd,
@@ -353,12 +351,13 @@ begin
    U5B : process(CLK)
    begin
       if rising_edge(CLK) then         
-         flag_fifo_din <= READOUT_INFO.SOF & READOUT_INFO.EOF & READOUT_INFO.SOL & READOUT_INFO.EOL & READOUT_INFO.FVAL & READOUT_INFO.LVAL & READOUT_INFO.DVAL & READOUT_INFO.READ_END;
+         flag_fifo_din <= x"00" & READOUT_INFO.MISC & READOUT_INFO.SOF & READOUT_INFO.EOF & READOUT_INFO.SOL & READOUT_INFO.EOL & READOUT_INFO.FVAL & READOUT_INFO.LVAL & READOUT_INFO.DVAL & READOUT_INFO.READ_END;
          flag_fifo_wr <= (READOUT_INFO.SAMP_PULSE and READOUT_INFO.DVAL) or  READOUT_INFO.READ_END; -- remarquer qu'on n'ecrit pas les samples d'interligne! on écrit juste les données AOI !!!!!       
       end if;
    end process;        
    
-   -- flag fifo out 
+   -- flag fifo out
+   readout_info_o.misc <= flag_fifo_dout(23 downto 8);
    readout_info_o.sof  <= flag_fifo_dout(7);
    readout_info_o.eof  <= flag_fifo_dout(6);
    readout_info_o.sol  <= flag_fifo_dout(5);

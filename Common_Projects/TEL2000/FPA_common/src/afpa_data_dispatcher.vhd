@@ -44,13 +44,13 @@ entity afpa_data_dispatcher is
       
       QUAD_FIFO_RST     : in std_logic;
       QUAD_FIFO_CLK     : in std_logic;
-      QUAD_FIFO_DIN     : in std_logic_vector(71 downto 0);      
+      QUAD_FIFO_DIN     : in std_logic_vector(95 downto 0);      
       QUAD_FIFO_WR      : in std_logic;
       
       READOUT           : out std_logic;
       
-      PIX_MOSI          : out t_ll_ext_mosi72;
-      PIX_MISO          : in t_ll_ext_miso;
+      DATA_MOSI         : out t_ll_area_mosi72;
+      DATA_MISO          : in t_ll_area_miso;
       
       HDER_MOSI         : out t_axi4_lite_mosi;
       HDER_MISO         : in t_axi4_lite_miso;
@@ -93,15 +93,15 @@ architecture rtl of afpa_data_dispatcher is
          );
    end component;
    
-   component fwft_afifo_w72_d128
+   component fwft_afifo_w96_d128
       port (
          rst      : in std_logic;
          wr_clk   : in std_logic;
          rd_clk   : in std_logic;
-         din      : in std_logic_vector(71 downto 0);
+         din      : in std_logic_vector(95 downto 0);
          wr_en    : in std_logic;
          rd_en    : in std_logic;
-         dout     : out std_logic_vector(71 downto 0);
+         dout     : out std_logic_vector(95 downto 0);
          valid    : out std_logic;
          full     : out std_logic;
          overflow : out std_logic;
@@ -134,18 +134,18 @@ architecture rtl of afpa_data_dispatcher is
    signal acq_fringe_fsm               : acq_fringe_fsm_type;
    signal sreset                       : std_logic;
    signal quad_fifo_dval               : std_logic;
-   signal pix_data                     : std_logic_vector(55 downto 0); 
-   signal pix_fval                     : std_logic;
-   signal pix_lval                     : std_logic;
-   signal pix_sol                      : std_logic;
-   signal pix_eol                      : std_logic;
-   signal pix_sof                      : std_logic;
-   signal pix_eof                      : std_logic;
-   signal pix_misc                     : std_logic_vector(7 downto 0);
-   signal pix_dval                     : std_logic;
+   signal data                         : std_logic_vector(55 downto 0); 
+   signal aoi_fval                     : std_logic;
+   signal aoi_lval                     : std_logic;
+   signal aoi_sol                      : std_logic;
+   signal aoi_eol                      : std_logic;
+   signal aoi_sof                      : std_logic;
+   signal aoi_eof                      : std_logic;
+   signal aoi_misc                     : std_logic_vector(15 downto 0);
+   signal aoi_dval                     : std_logic;
    signal img_start                    : std_logic;
    signal img_end                      : std_logic;     
-   signal quad_fifo_dout               : std_logic_vector(71 downto 0);
+   signal quad_fifo_dout               : std_logic_vector(QUAD_FIFO_DIN'LENGTH-1 downto 0);
    signal acq_fringe_last              : std_logic;    
    --signal quad_fifo_rd                : std_logic;
    signal quad_fifo_ovfl               : std_logic;
@@ -168,8 +168,8 @@ architecture rtl of afpa_data_dispatcher is
    signal int_time_i                   : unsigned(31 downto 0);
    signal temp_reg                     : std_logic_vector(15 downto 0);
    signal hder_mosi_i                  : t_axi4_lite_mosi;
-   signal pix_mosi_i                   : t_ll_ext_mosi72;
-   signal pix_link_rdy                 : std_logic;
+   signal data_mosi_i                  : t_ll_area_mosi72;
+   signal data_link_rdy                 : std_logic;
    signal hder_link_rdy                : std_logic;
    signal int_time_100MHz              : unsigned(31 downto 0);
    signal int_time_100MHz_dval         : std_logic;
@@ -182,7 +182,8 @@ architecture rtl of afpa_data_dispatcher is
    --signal quad_fifo_ovfl_sync          : std_logic;
    signal pix_count                    : unsigned(31 downto 0);
    signal pause_cnt                    : unsigned(7 downto 0);
-   signal img_misc_dval                : std_logic := '0';
+   signal non_aoi_dval                 : std_logic := '0';
+   signal non_aoi_misc                 : std_logic_vector(13 downto 0);
    
    --  attribute dont_touch                     : string; 
    --  attribute dont_touch of int_time         : signal is "true"; 
@@ -191,12 +192,12 @@ architecture rtl of afpa_data_dispatcher is
 begin
    
    HDER_MOSI <= hder_mosi_i;
-   PIX_MOSI <= pix_mosi_i;
+   DATA_MOSI <= data_mosi_i;
    DISPATCH_INFO <= dispatch_info_i;
    
    READOUT <= readout_i;
    hder_link_rdy <= HDER_MISO.WREADY and HDER_MISO.AWREADY;
-   pix_link_rdy  <= not PIX_MISO.BUSY;
+   data_link_rdy  <= not DATA_MISO.BUSY;
    
    --quad_fifo_dval  <= quad_fifo_dval; -- les données sortent dès leur arrivée. Elle se retrouvent sur le bus PIX_MOSI. PIX_MOSI.DVAL permet de savoir que la donnée est valide pour AOI ou non. PIX_MOSI.MISC permet d'identifier les données (pour correction offset par exemple)     
    
@@ -205,20 +206,26 @@ begin
    ------------------------------------------------
    U0A: process(CLK)
    begin          
-      if rising_edge(CLK) then         
-         pix_data       <= quad_fifo_dout(55 downto 0);
-         pix_lval       <= quad_fifo_dout(56);                       -- aoi Lval  
-         pix_sol        <= quad_fifo_dout(57);  
-         pix_eol        <= quad_fifo_dout(58);
-         pix_fval       <= quad_fifo_dout(59);
-         pix_sof        <= quad_fifo_dout(60);  
-         pix_eof        <= quad_fifo_dout(61);
-         pix_dval       <= quad_fifo_dout(62) and quad_fifo_dval;    -- aoi dval
+      if rising_edge(CLK) then
          
-         img_start      <= quad_fifo_dout(63) and quad_fifo_dval;    -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
-         img_end        <= quad_fifo_dout(64) and quad_fifo_dval;    -- img_end  . À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
-         img_misc_dval  <= quad_fifo_dout(65) and quad_fifo_dval;
-         img_misc       <= quad_fifo_dout(71 downto 66);             -- misc flags. proviennent de afpa_lsync_mode_dval_gen.vhd 
+         -- data  (AOI ou non AOI data)
+         data       <= quad_fifo_dout(55 downto 0);
+         
+         -- AOI area flags
+         aoi_lval       <= quad_fifo_dout(56);                       -- aoi Lval  
+         aoi_sol        <= quad_fifo_dout(57);  
+         aoi_eol        <= quad_fifo_dout(58);
+         aoi_fval       <= quad_fifo_dout(59);
+         aoi_sof        <= quad_fifo_dout(60);  
+         aoi_eof        <= quad_fifo_dout(61);
+         aoi_dval       <= quad_fifo_dout(62) and quad_fifo_dval;    -- aoi dval         
+         aoi_misc       <= quad_fifo_dout(78 downto 63);             -- aoi misc 
+         img_start      <= quad_fifo_dout(79) and quad_fifo_dval;    -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
+         img_end        <= quad_fifo_dout(80) and quad_fifo_dval;    -- img_end  . À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
+         
+         -- non AOI area flags         
+         non_aoi_dval   <= quad_fifo_dout(81) and quad_fifo_dval;
+         non_aoi_misc   <= quad_fifo_dout(95 downto 82);             -- misc flags. proviennent de afpa_lsync_mode_dval_gen.vhd 
       end if;
    end process;   
    
@@ -243,7 +250,7 @@ begin
    --------------------------------------------------
    -- fifo fwft quad_DATA 
    -------------------------------------------------- 
-   U1 : fwft_afifo_w72_d128
+   U1 : fwft_afifo_w96_d128
    port map (
       rst => QUAD_FIFO_RST,
       wr_clk => QUAD_FIFO_CLK,
@@ -343,16 +350,19 @@ begin
    -------------------------------------------------------------------   
    U5: process(CLK)
    begin          
-      if rising_edge(CLK) then                   
-         -- sortie des pixels
-         pix_mosi_i.dval         <= pix_dval and acq_fringe and not sreset;
-         pix_mosi_i.data         <= resize(pix_data(55 downto 42),18) & resize(pix_data(41 downto 28),18) & resize(pix_data(27 downto 14),18) & resize(pix_data(13 downto 0),18);            
-         pix_mosi_i.sof          <= pix_sof;
-         pix_mosi_i.eof          <= pix_eof;
-         pix_mosi_i.sol          <= pix_sol;
-         pix_mosi_i.eol          <= pix_eol;
-         pix_mosi_i.misc_dval    <= img_misc_dval;
-         pix_mosi_i.misc         <= img_misc;
+      if rising_edge(CLK) then 
+         --données
+         data_mosi_i.data             <= resize(data(55 downto 42),18) & resize(data(41 downto 28),18) & resize(data(27 downto 14),18) & resize(data(13 downto 0),18);            
+         -- flags de données des pixels
+         data_mosi_i.aoi_dval         <= aoi_dval and acq_fringe and not sreset;
+         data_mosi_i.aoi_sof          <= aoi_sof;
+         data_mosi_i.aoi_eof          <= aoi_eof;
+         data_mosi_i.aoi_sol          <= aoi_sol;
+         data_mosi_i.aoi_eol          <= aoi_eol;
+         data_mosi_i.aoi_misc         <= aoi_misc;
+         -- flags de données non pixels
+         data_mosi_i.non_aoi_dval     <= non_aoi_dval;
+         data_mosi_i.non_aoi_misc     <= non_aoi_misc;
       end if;
    end process; 
    
@@ -392,9 +402,9 @@ begin
             dispatch_info_i.exp_info.exp_indx <= int_indx_i;
             
             -- pragma translate_off
-            if pix_mosi_i.dval = '1' then 
+            if data_mosi_i.aoi_dval = '1' then 
                pix_count <= pix_count + 4;               
-               if pix_mosi_i.sof = '1' then
+               if data_mosi_i.aoi_sof = '1' then
                   pix_count <= to_unsigned(4, pix_count'length);
                end if;
             end if;
@@ -506,7 +516,7 @@ begin
          else
             
             -- erreur grave de vitesse
-            SPEED_ERR <= pix_mosi_i.dval and not pix_link_rdy;           
+            SPEED_ERR <= data_mosi_i.aoi_dval and not data_link_rdy;           
             
             -- errer de fifo
             FIFO_ERR <= quad_fifo_ovfl or fringe_fifo_ovfl;
