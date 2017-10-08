@@ -78,7 +78,7 @@ architecture rtl of afpa_elec_offset_mem is
    signal ofs_fifo_wr    : std_logic;
    signal ofs_fifo_rd    : std_logic;
    signal ofs_fifo_dval  : std_logic;
-   signal dly_count      : unsigned(4 downto 0);
+   signal dly_count      : unsigned(5 downto 0);
    signal flush_done_i   : std_logic;
    signal flush_fifo_last: std_logic;
    --signal sreset   : std_logic;
@@ -92,7 +92,9 @@ begin
    OFS_MOSI.SUPPORT_BUSY <= '1';
    OFS_MOSI.DVAL <= ofs_fifo_dval;
    FLUSH_DONE <= flush_done_i; 
-   ofs_fifo_rd <= not OFS_MISO.BUSY;
+   ofs_fifo_rd <= (not OFS_MISO.BUSY) and ofs_fifo_dval;
+   OFS1_MISO <= OFS_MISO;
+   OFS2_MISO <= OFS_MISO;
    
    --------------------------------------------------
    -- synchro reset 
@@ -132,6 +134,7 @@ begin
             fifo_rst_fsm <= idle;
             flush_done_i <= '0';
             flush_fifo_last <= FLUSH_FIFO;
+            ofs_fifo_wr <= '0';
             
          else
             
@@ -139,13 +142,17 @@ begin
             
             -- mux des données à ecrire dans le fifo
             if OFS1_MOSI.DVAL = '1' then 
-               ofs_fifo_din <= resize(OFS1_MOSI.DATA, ofs_fifo_din'length);               
+               ofs_fifo_din <= resize(OFS1_MOSI.DATA, ofs_fifo_din'length);
+               ofs_fifo_wr <= '1';
             elsif OFS2_MOSI.DVAL = '1' then
                ofs_fifo_din <= resize(OFS2_MOSI.DATA, ofs_fifo_din'length);
+               ofs_fifo_wr <= '1';
+            elsif OFS_MISO.BUSY = '0' and ofs_fifo_dval = '1' then -- recyclage
+               ofs_fifo_din <= ofs_fifo_dout;
+               ofs_fifo_wr <= '1';
             else
-               ofs_fifo_din <= ofs_fifo_dout;   -- recyclage
-            end if;               
-            ofs_fifo_wr <= OFS1_MOSI.DVAL or OFS2_MOSI.DVAL or (ofs_fifo_dval and ofs_fifo_rd);            
+               ofs_fifo_wr <= '0';
+            end if;                       
             
             -- fsm pour reset
             case fifo_rst_fsm is                          
@@ -162,7 +169,7 @@ begin
                   ofs_fifo_rst <= '1'; 
                   flush_done_i <= '0';
                   dly_count <= dly_count + 1;
-                  if dly_count(4) = '1' then 
+                  if dly_count(5) = '1' then 
                      fifo_rst_fsm <= idle;
                   end if;           
                

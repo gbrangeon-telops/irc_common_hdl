@@ -96,7 +96,8 @@ begin
       SYNC_BUSY => TX_MISO.BUSY,
       SYNC_DVAL => sync_dval_i      
       );
-   
+    RXA_MISO.AFULL <= '0';
+    RXB_MISO.AFULL <= '0';
    --------------------------------------------------    
    -- operateur de soustraction (A-B)                          
    --------------------------------------------------

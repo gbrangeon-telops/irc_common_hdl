@@ -20,12 +20,12 @@ entity afpa_elec_offset_ctrler is
    port(
       ARESET            : in std_logic;
       CLK               : in std_logic;
-                        
+      
       FPA_INTF_CFG      : in fpa_intf_cfg_type;
-                        
+      
       RX_MOSI           : in t_ll_ext_mosi72;
       RX_MISO           : out t_ll_ext_miso;
-                        
+      
       ABORT_CALC        : out std_logic;
       FLUSH_FIFO        : out std_logic;
       FLUSH_FIFO_DONE   : in std_logic;
@@ -33,7 +33,7 @@ entity afpa_elec_offset_ctrler is
       TX0_MOSI          : out t_ll_ext_mosi72;
       TX0_MISO          : in t_ll_ext_miso;
       SEND_RESULT0      : out std_logic;
-                       
+      
       TX1_MOSI          : out t_ll_ext_mosi72;
       TX1_MISO          : in t_ll_ext_miso;
       SEND_RESULT1      : out std_logic;
@@ -107,8 +107,12 @@ begin
             
          else
             
-            -- definition des données 
-            tx_data  <= RX_MOSI.DATA;
+            -- definition des données
+            if FPA_INTF_CFG.ELEC_OFS_ENABLED = '1' then
+               tx_data  <= RX_MOSI.DATA;
+            else
+               tx_data  <= (others => '0');  -- lorsque la correction est desactivée, soustrait 0 aux valeurs des pixels.
+            end if;
             tx_dval(0) <= RX_MOSI.DVAL and lane_enabled(0);  
             tx_dval(1) <= RX_MOSI.DVAL and lane_enabled(1);         
             
@@ -151,7 +155,7 @@ begin
                   dcount <= (others => '0');
                   if elec_ofs_start_i = '1' then 
                      ofs_ctrl_fsm <= active_dly_st;
-                     flush_fifo_i <= '1';            -- on flush la memoire des offsets
+                     flush_fifo_i <= '1';            -- on flushe la memoire des offsets
                   end if;                                    
                
                when active_dly_st =>                 -- delai en nombre de samples avant d'aller chercher les pixels d'une ligne
