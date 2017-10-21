@@ -60,6 +60,7 @@ architecture rtl of afpa_elec_offset_calc is
    signal samp_count          : integer range 0 to 127;
    signal samp_sum_dval       : std_logic;
    signal samp_sum_data       : samp_sum_type;
+   signal samp_sum_data_latch : samp_sum_type;
    signal samp_sum_en         : std_logic;
    signal numerator           : unsigned(FPA_INTF_CFG.ELEC_OFS_SAMP_MEAN_NUMERATOR'LENGTH-1 downto 0);
    signal result_dval         : std_logic;
@@ -110,7 +111,7 @@ begin
          else
             
             err_i <= TX_MISO.BUSY and RX_MOSI.DVAL;
-            if FPA_INTF_CFG.ELEC_OFS_SAMP_NUM_PER_CH > 1 then
+            if to_integer(FPA_INTF_CFG.ELEC_OFS_SAMP_NUM_PER_CH) > 1 then
                samp_sum_en <= '1';
             else
                samp_sum_en <= '0';
@@ -161,11 +162,16 @@ begin
          send_result_i <= SEND_RESULT;
          send_result_last <= send_result_i;
          
+         -- latch des sommes
+         if samp_sum_dval = '1' then 
+            for ii in 1 to 4 loop               
+               samp_sum_data_latch(ii) <= samp_sum_data(ii);
+            end loop;
+         end if; 
+         
          -- division
          for ii in 1 to 4 loop
-            if samp_sum_dval = '1' then 
-               temp_result(ii) <= resize(samp_sum_data(ii) * numerator, temp_result(1)'length);
-            end if;
+            temp_result(ii) <= resize(samp_sum_data_latch(ii) * numerator, temp_result(1)'length);
             result(ii) <= temp_result(ii)(C_RESULT_MSB_POS downto C_DENOM_CONV_BIT_POS);       -- soit une division par 2^denom_conv_bit_pos
          end loop;
          

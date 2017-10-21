@@ -62,14 +62,30 @@ architecture rtl of afpa_quad_subtract is
          );
    end component;
    
-   signal tx_mosi_i        : t_ll_ext_mosi72;
+   type data_type is array (0 to 3) of std_logic_vector(18 downto 0);
+    
+   signal data_i           : data_type;
+   signal sof_i            : std_logic;
+   signal sol_i            : std_logic;
+   signal eol_i            : std_logic;
+   signal eof_i            : std_logic;
+   signal dval_i           : std_logic;
+   signal support_busy     : std_logic;
+   
    signal sreset           : std_logic;
    signal sync_dval_i      : std_logic;
    signal err_i            : std_logic;
    
 begin
    
-   TX_MOSI <= tx_mosi_i;
+   TX_MOSI.SOF  <= sof_i;
+   TX_MOSI.EOF  <= eof_i;
+   TX_MOSI.DVAL <= dval_i;
+   TX_MOSI.SOL  <= sol_i;
+   TX_MOSI.EOL  <= eol_i;
+   TX_MOSI.SUPPORT_BUSY <= '1';
+   TX_MOSI.DATA <= data_i(3)(17 downto 0) & data_i(2)(17 downto 0) & data_i(1)(17 downto 0) & data_i(0)(17 downto 0);
+   
    ERR <= err_i;
    
    --------------------------------------------------
@@ -105,29 +121,28 @@ begin
    begin
       if rising_edge(CLK) then
          if sreset = '1' then 
-            tx_mosi_i.dval <= '0'; 
-            tx_mosi_i.support_busy <= '1';
+            dval_i <= '0'; 
             err_i <= '0';
             
          else
             
-            tx_mosi_i.sof  <= RXA_MOSI.SOF;
-            tx_mosi_i.eof  <= RXA_MOSI.EOF;
-            tx_mosi_i.sol  <= RXA_MOSI.SOL;
-            tx_mosi_i.eol  <= RXA_MOSI.EOL;
-            tx_mosi_i.dval <= sync_dval_i;
-            if RXB_MINUS_RXA = '0' then    -- operation normale: soustraction de l'offset electronique
-               tx_mosi_i.data(71 downto 54) <= std_logic_vector(unsigned(RXA_MOSI.DATA(71 downto 54)) - unsigned(RXB_MOSI.DATA(71 downto 54)));
-               tx_mosi_i.data(53 downto 36) <= std_logic_vector(unsigned(RXA_MOSI.DATA(53 downto 36)) - unsigned(RXB_MOSI.DATA(53 downto 36)));
-               tx_mosi_i.data(35 downto 18) <= std_logic_vector(unsigned(RXA_MOSI.DATA(35 downto 18)) - unsigned(RXB_MOSI.DATA(35 downto 18)));
-               tx_mosi_i.data(17 downto 0)  <= std_logic_vector(unsigned(RXA_MOSI.DATA(17 downto 0))  - unsigned(RXB_MOSI.DATA(17 downto 0)));
+            sof_i  <= RXA_MOSI.SOF;
+            eof_i  <= RXA_MOSI.EOF;
+            sol_i  <= RXA_MOSI.SOL;
+            eol_i  <= RXA_MOSI.EOL;
+            dval_i <= sync_dval_i;
+            if RXB_MINUS_RXA = '0' then    -- operation normale: soustraction de l'offset electronique. Utilisation des valeyrs signées
+                data_i(3) <= std_logic_vector(signed('0'& RXA_MOSI.DATA(71 downto 54)) - signed('0'& RXB_MOSI.DATA(71 downto 54)));
+                data_i(2) <= std_logic_vector(signed('0'& RXA_MOSI.DATA(53 downto 36)) - signed('0'& RXB_MOSI.DATA(53 downto 36)));
+                data_i(1) <= std_logic_vector(signed('0'& RXA_MOSI.DATA(35 downto 18)) - signed('0'& RXB_MOSI.DATA(35 downto 18)));
+                data_i(0) <= std_logic_vector(signed('0'& RXA_MOSI.DATA(17 downto 0))  - signed('0'& RXB_MOSI.DATA(17 downto 0)));
             else                          -- operation en mode map: on sort l'offset électronique (RXA vaut 0.)
-               tx_mosi_i.data(71 downto 54) <= std_logic_vector(unsigned(RXB_MOSI.DATA(71 downto 54)) - unsigned(RXA_MOSI.DATA(71 downto 54)));
-               tx_mosi_i.data(53 downto 36) <= std_logic_vector(unsigned(RXB_MOSI.DATA(53 downto 36)) - unsigned(RXA_MOSI.DATA(53 downto 36)));
-               tx_mosi_i.data(35 downto 18) <= std_logic_vector(unsigned(RXB_MOSI.DATA(35 downto 18)) - unsigned(RXA_MOSI.DATA(35 downto 18)));
-               tx_mosi_i.data(17 downto 0)  <= std_logic_vector(unsigned(RXB_MOSI.DATA(17 downto 0))  - unsigned(RXA_MOSI.DATA(17 downto 0)));
+                data_i(3) <= std_logic_vector(signed('0'& RXB_MOSI.DATA(71 downto 54)) - signed('0'& RXA_MOSI.DATA(71 downto 54)));
+                data_i(2) <= std_logic_vector(signed('0'& RXB_MOSI.DATA(53 downto 36)) - signed('0'& RXA_MOSI.DATA(53 downto 36)));
+                data_i(1) <= std_logic_vector(signed('0'& RXB_MOSI.DATA(35 downto 18)) - signed('0'& RXA_MOSI.DATA(35 downto 18)));
+                data_i(0) <= std_logic_vector(signed('0'& RXB_MOSI.DATA(17 downto 0))  - signed('0'& RXA_MOSI.DATA(17 downto 0)));
             end if;
-            err_i <= tx_mosi_i.data(71) or tx_mosi_i.data(53) or tx_mosi_i.data(35) or tx_mosi_i.data(17); -- l'operation a donné un nombre negatif!!!
+            err_i <= data_i(3)(18) or data_i(2)(18) or data_i(1)(18) or data_i(0)(18); -- l'operation a donné un nombre negatif!!!
             
          end if;
       end if;

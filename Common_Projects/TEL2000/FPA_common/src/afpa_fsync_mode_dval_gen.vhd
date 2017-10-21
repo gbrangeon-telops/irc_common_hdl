@@ -212,7 +212,7 @@ begin
                   end if;
                
                when init_st4 =>             -- la carte ADc est connectée sinon on ne parviendra pas ici
-                  if READOUT_INFO.READ_END = '1' then  -- je vois la tombée du fval d'une readout_info =>
+                  if READOUT_INFO.AOI.READ_END = '1' then  -- je vois la tombée du fval d'une readout_info =>
                      sync_flow_fsm <= idle; 
                   end if;
                   
@@ -238,12 +238,12 @@ begin
                   sync_flow_fsm <= wait_img_start_st; 
                
                when wait_img_start_st => 
-                  if readout_info_o.fval = '1' and flag_fifo_dval = '1' then 
+                  if readout_info_o.aoi.fval = '1' and flag_fifo_dval = '1' then 
                      sync_flow_fsm <= wait_img_end_st;
                   end if;
                
                when wait_img_end_st =>
-                  if readout_info_o.read_end = '1'  then      --
+                  if readout_info_o.aoi.read_end = '1'  then      --
                      sync_flow_fsm <= wait_feedback_st;
                   end if;
                
@@ -272,14 +272,14 @@ begin
    ------------------------------------------------------------------------------------
    --  ecriture de readout_info dans un fifo pour synchro avec donnée entrante
    ------------------------------------------------------------------------------------
-   readout_info_o.sof  <= flag_fifo_dout(7);
-   readout_info_o.eof  <= flag_fifo_dout(6);
-   readout_info_o.sol  <= flag_fifo_dout(5);
-   readout_info_o.eol  <= flag_fifo_dout(4);
-   readout_info_o.fval <= flag_fifo_dout(3);
-   readout_info_o.lval <= flag_fifo_dout(2);
-   readout_info_o.dval <= flag_fifo_dout(1);
-   readout_info_o.read_end <= flag_fifo_dout(0);
+   readout_info_o.aoi.sof  <= flag_fifo_dout(7);
+   readout_info_o.aoi.eof  <= flag_fifo_dout(6);
+   readout_info_o.aoi.sol  <= flag_fifo_dout(5);
+   readout_info_o.aoi.eol  <= flag_fifo_dout(4);
+   readout_info_o.aoi.fval <= flag_fifo_dout(3);
+   readout_info_o.aoi.lval <= flag_fifo_dout(2);
+   readout_info_o.aoi.dval <= flag_fifo_dout(1);
+   readout_info_o.aoi.read_end <= flag_fifo_dout(0);
    
    flag_fifo_rst <= fsm_areset;
    
@@ -301,8 +301,8 @@ begin
    U3B : process(CLK)
    begin
       if rising_edge(CLK) then         
-         flag_fifo_din <= x"00" & READOUT_INFO.SOF & READOUT_INFO.EOF & READOUT_INFO.SOL & READOUT_INFO.EOL & READOUT_INFO.FVAL & READOUT_INFO.LVAL & READOUT_INFO.DVAL & READOUT_INFO.READ_END;
-         flag_fifo_wr_en <= (READOUT_INFO.SAMP_PULSE or  READOUT_INFO.READ_END) and flag_fifo_enabled;         
+         flag_fifo_din <= x"00" & READOUT_INFO.AOI.SOF & READOUT_INFO.AOI.EOF & READOUT_INFO.AOI.SOL & READOUT_INFO.AOI.EOL & READOUT_INFO.AOI.FVAL & READOUT_INFO.AOI.LVAL & READOUT_INFO.AOI.DVAL & READOUT_INFO.AOI.READ_END;
+         flag_fifo_wr_en <= (READOUT_INFO.AOI.SAMP_PULSE or  READOUT_INFO.AOI.READ_END) and flag_fifo_enabled;         
       end if;
    end process;
    
@@ -357,14 +357,14 @@ begin
    U3: process(CLK)
    begin
       if rising_edge(CLK) then
-         dout_dval_o <= fifo_rd_en and (readout_info_o.dval or readout_info_o.read_end); -- readout_info_o.read_end permet de faire tomber fval en aval
+         dout_dval_o <= fifo_rd_en and (readout_info_o.aoi.dval or readout_info_o.aoi.read_end); -- readout_info_o.aoi.read_end permet de faire tomber fval en aval
          dout_o(55 downto 0) <= samp_fifo_dout; --
-         dout_o(56) <= readout_info_o.lval;  
-         dout_o(57) <= readout_info_o.sol;
-         dout_o(58) <= readout_info_o.eol;  -- eol
-         dout_o(59) <= readout_info_o.fval; -- fval
-         dout_o(60) <= readout_info_o.sof;  -- sof
-         dout_o(61) <= readout_info_o.eof;  -- eof
+         dout_o(56) <= readout_info_o.aoi.lval;  
+         dout_o(57) <= readout_info_o.aoi.sol;
+         dout_o(58) <= readout_info_o.aoi.eol;  -- eol
+         dout_o(59) <= readout_info_o.aoi.fval; -- fval
+         dout_o(60) <= readout_info_o.aoi.sof;  -- sof
+         dout_o(61) <= readout_info_o.aoi.eof;  -- eof
       end if;
    end process;
    

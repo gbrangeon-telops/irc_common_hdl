@@ -59,8 +59,6 @@ architecture rtl of afpa_elec_offset_ctrler is
    signal tx_dval             : std_logic_vector(1 downto 0);
    signal tx_data             : std_logic_vector(RX_MOSI.DATA'LENGTH-1 downto 0);
    signal lane_enabled        : std_logic_vector(1 downto 0);
-   signal elec_ofs_start_i    : std_logic;
-   signal elec_ofs_end_i      : std_logic;
    signal flush_fifo_i        : std_logic;
    signal abort_calc_i        : std_logic;
    signal send_result         : std_logic_vector(1 downto 0);
@@ -116,10 +114,6 @@ begin
             tx_dval(0) <= RX_MOSI.DVAL and lane_enabled(0);  
             tx_dval(1) <= RX_MOSI.DVAL and lane_enabled(1);         
             
-            -- autres definitions
-            elec_ofs_start_i <= RX_MOSI.MISC(0) and RX_MOSI.DVAL;
-            elec_ofs_end_i   <= RX_MOSI.MISC(1) and RX_MOSI.DVAL;
-            
             err_i <= not FLUSH_FIFO_DONE and (tx_dval(0) or  tx_dval(1));
             
          end if;
@@ -153,7 +147,7 @@ begin
                   abort_calc_i <= '0'; 
                   dly_cnt <= (others => '0');
                   dcount <= (others => '0');
-                  if elec_ofs_start_i = '1' then 
+                  if RX_MOSI.SOF = '1' and  RX_MOSI.DVAL = '1' then 
                      ofs_ctrl_fsm <= active_dly_st;
                      flush_fifo_i <= '1';            -- on flushe la memoire des offsets
                   end if;                                    
@@ -167,11 +161,11 @@ begin
                      lane_enabled <= "01";     -- pour activation du lane0
                   end if;                
                
-               when dispatch_samp_st =>            -- on envoie les echantillons aux deux lanes de moyenneurs
+               when dispatch_samp_st =>              -- on envoie les echantillons aux deux lanes de moyenneurs
                   if RX_MOSI.DVAL = '1' then 
                      lane_enabled <= not lane_enabled;
                   end if;
-                  if elec_ofs_end_i = '1' then       -- fin de la zone de calcul d'offset
+                  if RX_MOSI.EOF = '1' and  RX_MOSI.DVAL = '1' then       -- fin de la zone de calcul d'offset
                      lane_enabled <= "00";
                      ofs_ctrl_fsm <= send_result_st0;
                   end if;

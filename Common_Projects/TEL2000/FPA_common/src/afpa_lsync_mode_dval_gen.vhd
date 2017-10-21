@@ -79,50 +79,63 @@ architecture rtl of afpa_lsync_mode_dval_gen is
          );
    end component;
    
-   type init_fsm_type is (init_st1, init_st2, init_st3, init_st4, init_done_st);
-   type sync_fsm_type is (wait_init_done_st, idle, active_pixel_dly_st, launch_sync_st);   
+   type init_fsm_type is (init_st1, init_st2, init_st3, init_st4, init_done_st, non_init_done_st);
+   type sync_fsm_type is (wait_init_done_st, idle, active_data_dly_st, launch_sync_st);   
    
-   signal init_fsm          : init_fsm_type;
+   signal init_fsm                  : init_fsm_type;
    
-   signal sync_fsm          : sync_fsm_type;
-   signal dly_cnt           : unsigned(7 downto 0); 
-   signal sync_err_i        : std_logic;
+   signal aoi_sync_fsm              : sync_fsm_type;
+   signal naoi_sync_fsm             : sync_fsm_type;  
+   signal aoi_dly_cnt               : unsigned(7 downto 0);
+   signal naoi_dly_cnt              : unsigned(7 downto 0); 
+   signal sync_err_i                : std_logic;
    
-   signal global_areset     : std_logic;
-   signal sreset            : std_logic;
-   signal init_done         : std_logic;
-   signal pix_count         : unsigned(7 downto 0);
+   signal global_areset             : std_logic;
+   signal sreset                    : std_logic;
+   signal aoi_init_done             : std_logic;
+   signal naoi_init_done            : std_logic;
+   signal pix_count                 : unsigned(7 downto 0);
    
-   signal frame_sync        : std_logic;
-   signal frame_sync_last   : std_logic;
-   signal img_start         : std_logic;
-   signal img_end           : std_logic;
-   signal din_dval_i        : std_logic;
-   signal fpa_line_in_progress      : std_logic;
+   signal frame_sync                : std_logic;
+   signal frame_sync_last           : std_logic;
+   signal din_dval_i                : std_logic;
+   
+   signal aoi_in_progress           : std_logic;  
+   signal aoi_flag_fifo_dval        : std_logic;
+   signal aoi_flag_fifo_dout        : std_logic_vector(31 downto 0);
+   signal aoi_flag_fifo_din         : std_logic_vector(31 downto 0);
+   signal aoi_flag_fifo_wr          : std_logic;
+   signal aoi_flag_fifo_rd          : std_logic;
+   signal aoi_flag_fifo_ovfl        : std_logic;                                    
+   signal aoi_flag_fifo_rst         : std_logic;
+   
+   signal naoi_in_progress          : std_logic;  
+   signal naoi_flag_fifo_dval       : std_logic;
+   signal naoi_flag_fifo_dout       : std_logic_vector(31 downto 0);
+   signal naoi_flag_fifo_din        : std_logic_vector(31 downto 0);
+   signal naoi_flag_fifo_wr         : std_logic;
+   signal naoi_flag_fifo_rd         : std_logic;
+   signal naoi_flag_fifo_ovfl       : std_logic;                                    
+   signal naoi_flag_fifo_rst        : std_logic;
+   
+   signal dout_o                    : std_logic_vector(FPA_DOUT'LENGTH-1 downto 0);
+   signal dout_wr_en_o              : std_logic;
+   
+   signal aoi_lsync                 : std_logic;      
+   signal aoi_lsync_last            : std_logic;
+   signal aoi_lsync_edge_detected   : std_logic;
+   signal err_i                     : std_logic_vector(ERR'LENGTH-1 downto 0);
+   signal readout_info_o            : readout_info_type;
+   signal naoi_start_sync                : std_logic; 
+   signal naoi_start_sync_last           : std_logic;
+   signal naoi_start_sync_edge_detected  : std_logic;
    
    
-   signal flag_fifo_dval    : std_logic;
-   signal flag_fifo_dout    : std_logic_vector(31 downto 0);
-   signal flag_fifo_din     : std_logic_vector(31 downto 0);
-   signal flag_fifo_wr      : std_logic;
-   signal flag_fifo_rd      : std_logic;
-   signal flag_fifo_ovfl    : std_logic;
-   
-   signal flag_fifo_rst     : std_logic;
-   
-   signal dout_o            : std_logic_vector(FPA_DOUT'LENGTH-1 downto 0);
-   signal dout_wr_en_o      : std_logic;
-   
-   signal line_sync         : std_logic;      
-   signal line_sync_last    : std_logic;
-   signal line_sync_edge_detected : std_logic;
-   signal err_i             : std_logic_vector(ERR'LENGTH-1 downto 0);
-   signal readout_info_o    : readout_info_type;
    --attribute dont_touch     : string;
    --attribute dont_touch of dout_dval_o         : signal is "true"; 
    --attribute dont_touch of dout_o              : signal is "true";
    --attribute dont_touch of samp_fifo_ovfl      : signal is "true";
-   --attribute dont_touch of flag_fifo_ovfl      : signal is "true";
+   --attribute dont_touch of aoi_flag_fifo_ovfl      : signal is "true";
    
 begin
    
@@ -135,7 +148,7 @@ begin
    --------------------------------------------------
    -- synchro reset 
    --------------------------------------------------
-   U1A: sync_reset
+   U1: sync_reset
    port map(
       ARESET => global_areset,
       CLK    => CLK,
@@ -146,13 +159,13 @@ begin
    --------------------------------------------------
    -- quelques definitions
    -------------------------------------------------- 
-   U1B: process(CLK)
+   U2: process(CLK)
    begin
       if rising_edge(CLK) then          
          
          -- erreurs
          err_i(0) <= sync_err_i or sync_err_i; 
-         err_i(1) <= flag_fifo_ovfl;         
+         err_i(1) <= aoi_flag_fifo_ovfl;         
          
          -- sync_flag 
          frame_sync <= FPA_DIN(57);
@@ -160,34 +173,40 @@ begin
          
          din_dval_i <= FPA_DIN_DVAL;
          
-         -- debut et fin de l'image
-         img_start <= not frame_sync_last and frame_sync;
-         img_end <= flag_fifo_dval and readout_info_o.read_end;
+         -- aoi_lsync
+         aoi_lsync  <= FPA_DIN(56); 
+         aoi_lsync_last <= aoi_lsync;       
          
-         -- line sync
-         line_sync  <= FPA_DIN(56); 
-         line_sync_last <= line_sync;       
+         -- naoi_start
+         naoi_start_sync <= FPA_DIN(58);
+         naoi_start_sync_last <= naoi_start_sync;      
          
          -- front montant ou descendant
          if DEFINE_FPA_SYNC_FLAG_VALID_ON_FE then 
-            line_sync_edge_detected <= line_sync_last and not line_sync; 
+            aoi_lsync_edge_detected <= aoi_lsync_last and not aoi_lsync; 
+            naoi_start_sync_edge_detected <= naoi_start_sync_last and not naoi_start_sync; 
          else
-            line_sync_edge_detected <= not line_sync_last and line_sync; 
-         end if;         
+            aoi_lsync_edge_detected <= not aoi_lsync_last and aoi_lsync;
+            naoi_start_sync_edge_detected <= not naoi_start_sync_last and naoi_start_sync; 
+         end if;    
+         
+         -- 
       end if;
    end process;
    
    --------------------------------------------------
    -- Process d'initialisation
    --------------------------------------------------
-   U2: process(CLK)
+   U3: process(CLK)
       variable incr :std_logic_vector(1 downto 0);
    begin
       if rising_edge(CLK) then         
          if sreset = '1' then      -- tant qu'on est en mode diag, la fsm est en reset.      
             init_fsm <= init_st1;
-            init_done <= '0';
-            flag_fifo_rst <= '1';
+            aoi_init_done <= '0';
+            naoi_init_done <= '0';
+            aoi_flag_fifo_rst <= '1';
+            naoi_flag_fifo_rst <= '1';
             -- pragma translate_off
             init_fsm <= init_done_st;
             -- pragma translate_on
@@ -212,17 +231,25 @@ begin
                      pix_count <= pix_count + DEFINE_FPA_TAP_NUMBER;
                   end if;                                           
                   if pix_count >= 64 then   -- je vois au moins un nombre de pixels équivalent à la plus petite ligne d'image de TEL-2000. cela implique que le système en amont est actif. je m'en vais en idle et attend la prochaine synchro 
-                     init_fsm <= init_st4;     
+                     init_fsm <= init_done_st;     
                   end if;
                
-               when init_st4 =>                        -- la carte ADC est connectée sinon on ne parviendra pas ici
-                  if READOUT_INFO.READ_END = '1' then  -- je vois la tombée du fval d'une readout_info =>
-                     init_fsm <= init_done_st; 
+               when init_done_st => 
+                  if READOUT_INFO.AOI.READ_END = '1' then  -- je vois la tombée du fval d'une readout_info.aoi =>
+                     aoi_init_done <= '1';
+                     aoi_flag_fifo_rst <= '0';
                   end if;
-               
-               when init_done_st =>
-                  init_done <= '1';
-                  flag_fifo_rst <= '0';
+                  if READOUT_INFO.NAOI.STOP = '1' then  -- je vois la fin d'une readout_info.naoi =>
+                     naoi_init_done <= '1';
+                     naoi_flag_fifo_rst <= '0';
+                  end if;
+                  
+                  -- pragma translate_off                
+                  aoi_init_done <= '1';
+                  aoi_flag_fifo_rst <= '0';
+                  naoi_init_done <= '1';
+                  naoi_flag_fifo_rst <= '0';                  
+                  -- pragma translate_on
                
                when others =>
                
@@ -233,48 +260,48 @@ begin
    end process; 
    
    ----------------------------------------------------------------
-   -- contrôle du synchronisateur des données avec les flags 
+   -- AOI: contrôle du synchronisateur des données avec les flags 
    ----------------------------------------------------------------
-   U3: process(CLK)
+   Uaoi1: process(CLK)
       variable incr :std_logic_vector(1 downto 0);
    begin
       if rising_edge(CLK) then         
          if sreset = '1' then          
-            sync_fsm <= wait_init_done_st;
+            aoi_sync_fsm <= wait_init_done_st;
             sync_err_i <= '0';
-            fpa_line_in_progress <= '0';
+            aoi_in_progress <= '0';
             
          else        
             
-            if readout_info_o.eol = '1' and FPA_DIN_DVAL = '1' then -- FPA_DIN_DVAL assure qu'effectivement eol est lu
-               fpa_line_in_progress <= '0';
+            if readout_info_o.aoi.eol = '1' and FPA_DIN_DVAL = '1' then -- FPA_DIN_DVAL assure qu'effectivement eol est lu
+               aoi_in_progress <= '0';
             end if;
             
-            case sync_fsm is        
+            case aoi_sync_fsm is        
                
                when wait_init_done_st =>  -- si l'on quitte cet état, c'est que la fsm précédente assure que les deux flows seront synchronisables
-                  if init_done = '1' then
-                     sync_fsm <= idle;                     
+                  if aoi_init_done = '1' then
+                     aoi_sync_fsm <= idle;                     
                   end if;                   
                
                when idle =>               -- en idle, on sort les données non AOI
-                  dly_cnt <= (others => '0');                  
-                  if line_sync_edge_detected = '1' then
-                     sync_fsm <= active_pixel_dly_st;
+                  aoi_dly_cnt <= (others => '0');                  
+                  if aoi_lsync_edge_detected = '1' then
+                     aoi_sync_fsm <= active_data_dly_st;
                   end if; 
                
-               when active_pixel_dly_st =>  -- delai en nombre de samples avant d'aller chercher les pixels d'une ligne
+               when active_data_dly_st =>  -- delai en nombre de samples avant d'aller chercher les pixels d'une ligne
                   incr := '0'& FPA_DIN_DVAL;
-                  dly_cnt <= dly_cnt + to_integer(unsigned(incr));                 
-                  if dly_cnt >= to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then -- REAL_MODE_ACTIVE_PIXEL_DLY est configurable via microblaze
-                     sync_fsm <= launch_sync_st;                     
+                  aoi_dly_cnt <= aoi_dly_cnt + to_integer(unsigned(incr));                 
+                  if aoi_dly_cnt >= to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then -- REAL_MODE_ACTIVE_PIXEL_DLY est configurable via microblaze
+                     aoi_sync_fsm <= launch_sync_st;                     
                   end if;                    
                
                when launch_sync_st =>     -- 
-                  fpa_line_in_progress <= '1';
-                  sync_err_i <= not flag_fifo_dval; -- erreur grave! pendant la sortie d'une ligne AOI, il manquait des données Flag. Problème de débit 
-                  if FPA_DIN_DVAL = '1' then        -- on est certain ainsi que flag_fifo_rd a été activé
-                     sync_fsm <= idle;          
+                  aoi_in_progress <= '1';
+                  sync_err_i <= not aoi_flag_fifo_dval; -- erreur grave! pendant la sortie d'une ligne AOI, il manquait des données Flag. Problème de débit 
+                  if FPA_DIN_DVAL = '1' then        -- on est certain ainsi que aoi_flag_fifo_rd a été activé
+                     aoi_sync_fsm <= idle;          
                   end if;                   
                
                when others =>
@@ -284,6 +311,137 @@ begin
          end if;
       end if;
    end process;
+   
+   ------------------------------------------------
+   -- AOI: Gestionnaire des Flags
+   ------------------------------------------------
+   aoi_flag_fifo_rd <= aoi_in_progress and FPA_DIN_DVAL;
+   
+   -- aoi fag fifo mapping      
+   Uaoi2 : fwft_sfifo_w32_d256
+   port map (
+      clk         => CLK,
+      srst        => aoi_flag_fifo_rst,
+      din         => aoi_flag_fifo_din,
+      wr_en       => aoi_flag_fifo_wr,
+      rd_en       => aoi_flag_fifo_rd,
+      dout        => aoi_flag_fifo_dout,
+      full        => open,
+      almost_full => open,
+      overflow    => aoi_flag_fifo_ovfl,
+      empty       => open,
+      valid       => aoi_flag_fifo_dval
+      );
+   
+   -- AOi flag fifo write
+   Uaoi3 : process(CLK)
+   begin
+      if rising_edge(CLK) then         
+         aoi_flag_fifo_din(21 downto 0) <= READOUT_INFO.AOI.SPARE & READOUT_INFO.AOI.SOF & READOUT_INFO.AOI.EOF & READOUT_INFO.AOI.SOL & READOUT_INFO.AOI.EOL & READOUT_INFO.AOI.FVAL & READOUT_INFO.AOI.LVAL & READOUT_INFO.AOI.DVAL;  -- read_end n'est plus ecrit dans les fifos
+         aoi_flag_fifo_wr <= READOUT_INFO.AOI.SAMP_PULSE and READOUT_INFO.AOI.DVAL; -- remarquer qu'on n'ecrit pas les samples d'interligne! on écrit juste les données AOI !!!!!       
+      end if;
+   end process;        
+   
+   
+   
+   ----------------------------------------------------------------
+   -- NON AOI: contrôle du synchronisateur des données avec les flags 
+   ----------------------------------------------------------------
+   Unaoi1: process(CLK)
+      variable incr :std_logic_vector(1 downto 0);
+   begin
+      if rising_edge(CLK) then         
+         if sreset = '1' then          
+            naoi_sync_fsm <= wait_init_done_st;
+            naoi_in_progress <= '0';
+            
+         else        
+            
+            if readout_info_o.naoi.stop = '1' and FPA_DIN_DVAL = '1' then -- FPA_DIN_DVAL assure qu'effectivement eol est lu
+               naoi_in_progress <= '0';
+            end if;
+            
+            case naoi_sync_fsm is        
+               
+               when wait_init_done_st =>  -- si l'on quitte cet état, c'est que la fsm précédente assure que les deux flows seront synchronisables
+                  if naoi_init_done = '1' then
+                     naoi_sync_fsm <= idle;                     
+                  end if;                   
+               
+               when idle =>               -- en idle, on sort les données non AOI
+                  naoi_dly_cnt <= (others => '0');                  
+                  if naoi_start_sync_edge_detected = '1' then
+                     naoi_sync_fsm <= active_data_dly_st;
+                  end if; 
+               
+               when active_data_dly_st =>  -- delai en nombre de samples avant d'aller chercher les pixels d'une ligne
+                  incr := '0'& FPA_DIN_DVAL;
+                  naoi_dly_cnt <= naoi_dly_cnt + to_integer(unsigned(incr));                 
+                  if naoi_dly_cnt >= to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then -- REAL_MODE_ACTIVE_PIXEL_DLY est configurable via microblaze -- rigoureusement le même delai qu,en AOI pour conserver le mpeme chronogramme
+                     naoi_sync_fsm <= launch_sync_st;                     
+                  end if;                    
+               
+               when launch_sync_st =>     -- 
+                  naoi_in_progress <= '1';
+                  if FPA_DIN_DVAL = '1' then        -- on est certain ainsi que aoi_flag_fifo_rd a été activé
+                     naoi_sync_fsm <= idle;          
+                  end if;                   
+               
+               when others =>
+               
+            end case;
+            
+         end if;
+      end if;
+   end process;
+   
+   ------------------------------------------------
+   -- NON_ AOI: Gestionnaire des Flags
+   ------------------------------------------------
+   naoi_flag_fifo_rd <= FPA_DIN_DVAL and naoi_in_progress;
+   
+   -- naoi fag fifo mapping      
+   Unaoi2 : fwft_sfifo_w32_d256
+   port map (
+      clk         => CLK,
+      srst        => naoi_flag_fifo_rst,
+      din         => naoi_flag_fifo_din,
+      wr_en       => naoi_flag_fifo_wr,
+      rd_en       => naoi_flag_fifo_rd,
+      dout        => naoi_flag_fifo_dout,
+      full        => open,
+      almost_full => open,
+      overflow    => naoi_flag_fifo_ovfl,
+      empty       => open,
+      valid       => naoi_flag_fifo_dval
+      );
+   
+   -- naoi flag fifo write
+   Unaoi3 : process(CLK)
+   begin
+      if rising_edge(CLK) then         
+         naoi_flag_fifo_din(17 downto 0) <= READOUT_INFO.NAOI.SPARE & READOUT_INFO.NAOI.DVAL & READOUT_INFO.NAOI.STOP & READOUT_INFO.NAOI.START;
+         naoi_flag_fifo_wr <= READOUT_INFO.NAOI.SAMP_PULSE and READOUT_INFO.NAOI.DVAL;    
+      end if;
+   end process; 
+   
+   ---------------------------------------------------------------------
+   -- FLAG FIFO OUT                                                
+   ---------------------------------------------------------------------
+   readout_info_o.aoi.spare      <= aoi_flag_fifo_dout(21 downto 7);
+   readout_info_o.aoi.sof        <= aoi_flag_fifo_dout(6);
+   readout_info_o.aoi.eof        <= aoi_flag_fifo_dout(5);
+   readout_info_o.aoi.sol        <= aoi_flag_fifo_dout(4);
+   readout_info_o.aoi.eol        <= aoi_flag_fifo_dout(3);
+   readout_info_o.aoi.fval       <= aoi_flag_fifo_dout(2);
+   readout_info_o.aoi.lval       <= aoi_flag_fifo_dout(1);
+   readout_info_o.aoi.dval       <= aoi_flag_fifo_dout(0);
+   
+   -- non_aoi flag fifo out 
+   readout_info_o.naoi.spare     <= naoi_flag_fifo_dout(17 downto 3); 
+   readout_info_o.naoi.dval      <= naoi_flag_fifo_dout(2);
+   readout_info_o.naoi.stop      <= naoi_flag_fifo_dout(1);
+   readout_info_o.naoi.start     <= naoi_flag_fifo_dout(0);
    
    --------------------------------------------------
    -- synchronisateur des données sortantes
@@ -297,7 +455,7 @@ begin
          else      
             
             -- ecriture des données en aval
-            dout_wr_en_o <= init_done and (FPA_DIN_DVAL or img_start or img_end); -- les données sortent tout le temps. les flags permettront de distinguer le AOI du non_AOI 
+            dout_wr_en_o <= aoi_init_done and naoi_init_done and FPA_DIN_DVAL; -- les données sortent tout le temps. les flags permettront de distinguer le AOI du NAOI 
             
             -- données écrite en aval
             if DEFINE_FPA_VIDEO_DATA_INVERTED = '1' then 
@@ -307,65 +465,26 @@ begin
             end if;            
             
             -- zone AOI
-            dout_o(56)           <= readout_info_o.lval and fpa_line_in_progress;
-            dout_o(57)           <= readout_info_o.sol and fpa_line_in_progress;                       -- aoi_sol
-            dout_o(58)           <= readout_info_o.eol and fpa_line_in_progress;                       -- aoi_eol
-            dout_o(59)           <= readout_info_o.fval;                                               -- aoi_fval 
-            dout_o(60)           <= readout_info_o.sof and fpa_line_in_progress;                       -- aoi_sof
-            dout_o(61)           <= readout_info_o.eof and fpa_line_in_progress;                       -- aoi_eof            
-            dout_o(62)           <= readout_info_o.dval and fpa_line_in_progress and FPA_DIN_DVAL;     -- aoi_dval  (nouvel ajout)
-            dout_o(78 downto 63) <= readout_info_o.misc;                                               -- aoi_misc  (nouvel ajout)
-            dout_o(79)           <= img_start;                                                         -- img_start (nouvel ajout) À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
-            dout_o(80)           <= img_end;                                                           -- img_end   (nouvel ajout) À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
+            dout_o(56)           <= readout_info_o.aoi.sol and aoi_in_progress;                       -- aoi_sol
+            dout_o(57)           <= readout_info_o.aoi.eol and aoi_in_progress;                       -- aoi_eol
+            dout_o(58)           <= readout_info_o.aoi.fval and aoi_flag_fifo_dval;                   -- aoi_fval 
+            dout_o(59)           <= readout_info_o.aoi.sof and aoi_in_progress;                       -- aoi_sof
+            dout_o(60)           <= readout_info_o.aoi.eof and aoi_in_progress;                       -- aoi_eof            
+            dout_o(61)           <= readout_info_o.aoi.dval and aoi_in_progress and FPA_DIN_DVAL;     -- aoi_dval    (nouvel ajout)
+            dout_o(76 downto 62) <= readout_info_o.aoi.spare;                                         -- aoi_spares  (nouvel ajout)
             
             -- Zone NON AOI
-            dout_o(81)           <= not (fpa_line_in_progress and FPA_DIN_DVAL) and FPA_DIN_DVAL;      -- outside_aoi_dval    (ie non aoi data dval)      
-            dout_o(95 downto 82) <= FPA_DIN(71 downto 58);                                             -- outside_aoi_misc
-                                                               
+            dout_o(77)           <= readout_info_o.aoi.dval and naoi_in_progress and FPA_DIN_DVAL;    -- naoi_dval    
+            dout_o(78)           <= readout_info_o.naoi.start and naoi_in_progress;                   -- naoi_start 
+            dout_o(79)           <= readout_info_o.naoi.stop and naoi_in_progress;                    -- naoi_stop            
+            dout_o(94 downto 80) <= readout_info_o.naoi.spare;                                        -- naoi_spares
+            
+            -- non utilisé                                                                            -- non utilisé
+            dout_o(95)          <= '0'; 
+            
          end if;
       end if;
    end process;
-  
-   ------------------------------------------------
-   -- Gestionnaires des Flags
-   ------------------------------------------------
-   flag_fifo_rd <= (fpa_line_in_progress and FPA_DIN_DVAL) or (readout_info_o.read_end and flag_fifo_dval);
-   
-   -- fag fifo mapping      
-   U5A : fwft_sfifo_w32_d256
-   port map (
-      clk         => CLK,
-      srst        => flag_fifo_rst,
-      din         => flag_fifo_din,
-      wr_en       => flag_fifo_wr,
-      rd_en       => flag_fifo_rd,
-      dout        => flag_fifo_dout,
-      full        => open,
-      almost_full => open,
-      overflow    => flag_fifo_ovfl,
-      empty       => open,
-      valid       => flag_fifo_dval
-      );
-   
-   -- flag fifo write
-   U5B : process(CLK)
-   begin
-      if rising_edge(CLK) then         
-         flag_fifo_din <= x"00" & READOUT_INFO.MISC & READOUT_INFO.SOF & READOUT_INFO.EOF & READOUT_INFO.SOL & READOUT_INFO.EOL & READOUT_INFO.FVAL & READOUT_INFO.LVAL & READOUT_INFO.DVAL & READOUT_INFO.READ_END;
-         flag_fifo_wr <= (READOUT_INFO.SAMP_PULSE and READOUT_INFO.DVAL) or  READOUT_INFO.READ_END; -- remarquer qu'on n'ecrit pas les samples d'interligne! on écrit juste les données AOI !!!!!       
-      end if;
-   end process;        
-   
-   -- flag fifo out
-   readout_info_o.misc <= flag_fifo_dout(23 downto 8);
-   readout_info_o.sof  <= flag_fifo_dout(7);
-   readout_info_o.eof  <= flag_fifo_dout(6);
-   readout_info_o.sol  <= flag_fifo_dout(5);
-   readout_info_o.eol  <= flag_fifo_dout(4);
-   readout_info_o.fval <= flag_fifo_dout(3);
-   readout_info_o.lval <= flag_fifo_dout(2);
-   readout_info_o.dval <= flag_fifo_dout(1);
-   readout_info_o.read_end <= flag_fifo_dout(0);
    
 end rtl;
 

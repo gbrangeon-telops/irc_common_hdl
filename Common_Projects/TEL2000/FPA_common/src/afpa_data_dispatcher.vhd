@@ -125,7 +125,7 @@ architecture rtl of afpa_data_dispatcher is
    end component;
    
    type acq_fringe_fsm_type is (idle, wait_fval_st);
-   type fast_hder_sm_type is (idle, exp_info_dval_st, send_hder_st);                    
+   type fast_hder_sm_type is (idle, exp_info_dval_st, send_hder_st, wait_acq_fringe_st);                    
    type exp_time_pipe_type is array (0 to 3) of unsigned(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_27 downto 0);
    
    signal exp_time_pipe                : exp_time_pipe_type;
@@ -141,10 +141,8 @@ architecture rtl of afpa_data_dispatcher is
    signal aoi_eol                      : std_logic;
    signal aoi_sof                      : std_logic;
    signal aoi_eof                      : std_logic;
-   signal aoi_misc                     : std_logic_vector(15 downto 0);
-   signal aoi_dval                     : std_logic;
-   signal img_start                    : std_logic;
-   signal img_end                      : std_logic;     
+   signal aoi_spare                     : std_logic_vector(14 downto 0);
+   signal aoi_dval                     : std_logic;    
    signal quad_fifo_dout               : std_logic_vector(QUAD_FIFO_DIN'LENGTH-1 downto 0);
    signal acq_fringe_last              : std_logic;    
    --signal quad_fifo_rd                : std_logic;
@@ -173,17 +171,19 @@ architecture rtl of afpa_data_dispatcher is
    signal hder_link_rdy                : std_logic;
    signal int_time_100MHz              : unsigned(31 downto 0);
    signal int_time_100MHz_dval         : std_logic;
-   signal img_misc                     : std_logic_vector(5 downto 0);
    signal dispatch_info_i              : img_info_type;
    signal hder_param                   : hder_param_type;
    signal hcnt                         : unsigned(7 downto 0);
    signal acq_finge_assump_err         : std_logic := '0';
    signal int_indx_i                   : std_logic_vector(7 downto 0);
-   --signal quad_fifo_ovfl_sync          : std_logic;
    signal pix_count                    : unsigned(31 downto 0);
    signal pause_cnt                    : unsigned(7 downto 0);
-   signal non_aoi_dval                 : std_logic := '0';
-   signal non_aoi_misc                 : std_logic_vector(13 downto 0);
+   signal naoi_dval                    : std_logic := '0';
+   signal naoi_spare                   : std_logic_vector(14 downto 0);
+   signal img_start                    : std_logic := '0';
+   signal img_end                      : std_logic;
+   signal naoi_start                   : std_logic;
+   signal naoi_stop                    : std_logic;
    
    --  attribute dont_touch                     : string; 
    --  attribute dont_touch of int_time         : signal is "true"; 
@@ -212,20 +212,22 @@ begin
          data       <= quad_fifo_dout(55 downto 0);
          
          -- AOI area flags
-         aoi_lval       <= quad_fifo_dout(56);                       -- aoi Lval  
-         aoi_sol        <= quad_fifo_dout(57);  
-         aoi_eol        <= quad_fifo_dout(58);
-         aoi_fval       <= quad_fifo_dout(59);
-         aoi_sof        <= quad_fifo_dout(60);  
-         aoi_eof        <= quad_fifo_dout(61);
-         aoi_dval       <= quad_fifo_dout(62) and quad_fifo_dval;    -- aoi dval         
-         aoi_misc       <= quad_fifo_dout(78 downto 63);             -- aoi misc 
-         img_start      <= quad_fifo_dout(79) and quad_fifo_dval;    -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
-         img_end        <= quad_fifo_dout(80) and quad_fifo_dval;    -- img_end  . À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
+         aoi_sol        <= quad_fifo_dout(56);  
+         aoi_eol        <= quad_fifo_dout(57);
+         aoi_fval       <= quad_fifo_dout(58);
+         aoi_sof        <= quad_fifo_dout(59);  
+         aoi_eof        <= quad_fifo_dout(60);
+         aoi_dval       <= quad_fifo_dout(61) and quad_fifo_dval;           
+         aoi_spare      <= quad_fifo_dout(76 downto 62);             
+         
+         img_start      <= aoi_sof and aoi_dval;    -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
+         img_end        <= aoi_eof and aoi_dval;    -- img_end  . À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
          
          -- non AOI area flags         
-         non_aoi_dval   <= quad_fifo_dout(81) and quad_fifo_dval;
-         non_aoi_misc   <= quad_fifo_dout(95 downto 82);             -- misc flags. proviennent de afpa_lsync_mode_dval_gen.vhd 
+         naoi_dval   <= quad_fifo_dout(77) and quad_fifo_dval;
+         naoi_start  <= quad_fifo_dout(78);
+         naoi_stop   <= quad_fifo_dout(79);
+         naoi_spare  <= quad_fifo_dout(94 downto 80);            
       end if;
    end process;   
    
@@ -359,10 +361,12 @@ begin
          data_mosi_i.aoi_eof          <= aoi_eof;
          data_mosi_i.aoi_sol          <= aoi_sol;
          data_mosi_i.aoi_eol          <= aoi_eol;
-         data_mosi_i.aoi_misc         <= aoi_misc;
+         data_mosi_i.aoi_spare        <= aoi_spare;
          -- flags de données non pixels
-         data_mosi_i.non_aoi_dval     <= non_aoi_dval;
-         data_mosi_i.non_aoi_misc     <= non_aoi_misc;
+         data_mosi_i.naoi_dval        <= naoi_dval;
+         data_mosi_i.naoi_start       <= naoi_start;
+         data_mosi_i.naoi_stop        <= naoi_stop;
+         data_mosi_i.naoi_spare       <= naoi_spare;
       end if;
    end process; 
    
@@ -417,9 +421,9 @@ begin
             case fast_hder_sm is
                
                when idle =>
-                  hder_mosi_i.awvalid <= '0';
-                  hder_mosi_i.wvalid <= '0';
-                  hder_mosi_i.wstrb <= (others => '0');
+                  --                  hder_mosi_i.awvalid <= '0';
+                  --                  hder_mosi_i.wvalid <= '0';
+                  --                  hder_mosi_i.wstrb <= (others => '0');
                   hcnt <= to_unsigned(1, hcnt'length);
                   dispatch_info_i.exp_info.exp_dval <= '0';
                   pause_cnt <= (others => '0');
@@ -459,12 +463,20 @@ begin
                         hder_mosi_i.wdata <=  std_logic_vector(hder_param.exp_time);
                         hder_mosi_i.wvalid <= '1';
                         hder_mosi_i.wstrb <= ExposureTimeBWE;
-                        fast_hder_sm <= idle;
+                        fast_hder_sm <= wait_acq_fringe_st;
                      end if;                     
                      hcnt <= hcnt + 1;
                      --                  else
                      --                     hder_mosi_i.awvalid <= '0';
                      --                     hder_mosi_i.wvalid <= '0';
+                  end if;
+               
+               when wait_acq_fringe_st =>
+                  hder_mosi_i.awvalid <= '0';
+                  hder_mosi_i.wvalid <= '0';
+                  hder_mosi_i.wstrb <= (others => '0');
+                  if acq_fringe = '0' then
+                     fast_hder_sm <= idle;
                   end if;
                
                when others =>

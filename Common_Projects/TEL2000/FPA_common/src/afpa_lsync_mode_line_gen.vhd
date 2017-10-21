@@ -275,7 +275,7 @@ begin
          else      
             
             -- ecriture des données en aval
-            dout_wr_en_o <= fifo_rd_en or ; -- readout_info_o.read_end permet de faire tomber fval en aval
+            dout_wr_en_o <= fifo_rd_en or; -- readout_info_o.read_end permet de faire tomber fval en aval
             
             -- non_aoi_data flag
             dout_o(65) <= fifo_rd_en xor readout_info_o.dval; -- out_aoi_dval (ie non aoi data dval)

@@ -304,11 +304,13 @@ package fpa_common_pkg is
       aoi_sol          : std_logic;  -- start of line
       aoi_eol          : std_logic;  -- eol of line      
       aoi_dval         : std_logic;  -- à '1' dit que les données sur le bus data sont des pixels de l'image 
-      aoi_misc         : std_logic_vector(15 downto 0);  -- ENO 26 sept 2017 : regroupent différents tags pour diverses utilisation pour la zone AOI   
+      aoi_spare        : std_logic_vector(14 downto 0);   
       
       -- non AOI_area
-      non_aoi_dval     : std_logic;  -- à '1' dit que les données sur le bus data sont couplés aux flags non_aoi_misc. 
-      non_aoi_misc     : std_logic_vector(13 downto 0);
+      naoi_dval        : std_logic;  -- à '1' dit que les données sur le bus data sont couplés aux flags naoi_misc. 
+      naoi_start       : std_logic;
+      naoi_stop        : std_logic;
+      naoi_spare       : std_logic_vector(14 downto 0);
       support_busy     : std_logic;
    end record;
    

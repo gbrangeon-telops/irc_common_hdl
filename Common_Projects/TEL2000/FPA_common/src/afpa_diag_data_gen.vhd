@@ -145,21 +145,19 @@ begin
    ----------------------------------------------
    -- OUTPUTS                                    
    ----------------------------------------------
-   DIAG_DATA(95 downto 84) <= (others => '0');
-   DIAG_DATA(83)           <= elec_ofs_end_i;
-   DIAG_DATA(82)           <= elec_ofs_start_i;
-   DIAG_DATA(81)           <= elec_ofs_dval_i;      -- non aoi dval
+   DIAG_DATA(95)           <= '0';                 -- non_utilisé;
+   DIAG_DATA(94 downto 80) <= (others => '0');
+   DIAG_DATA(79)           <= elec_ofs_end_i;
+   DIAG_DATA(78)           <= elec_ofs_start_i;
+   DIAG_DATA(77)           <= elec_ofs_dval_i;      -- non aoi dval
    
-   DIAG_DATA(80)           <= aoi_eof_i;            -- aoi_aoi_img_end
-   DIAG_DATA(79)           <= aoi_sof_i;            -- aoi_aoi_img_start
-   DIAG_DATA(78 downto 63) <= (others => '0');      -- aoi misc
-   DIAG_DATA(62)           <= aoi_dval_i;           -- aoi_dval          
-   DIAG_DATA(61)           <= aoi_eof_i;            -- eof
-   DIAG_DATA(60)           <= aoi_sof_i;            -- sof
-   DIAG_DATA(59)           <= aoi_fval_i;           -- fval
-   DIAG_DATA(58)           <= aoi_eol_i;            -- eol
-   DIAG_DATA(57)           <= aoi_sol_i;            -- sol
-   DIAG_DATA(56)           <= '0';              -- lval  -- non géneré
+   DIAG_DATA(76 downto 62) <= (others => '0');      -- aoi spares
+   DIAG_DATA(61)           <= aoi_dval_i;           -- aoi_dval          
+   DIAG_DATA(60)           <= aoi_eof_i;            -- eof
+   DIAG_DATA(59)           <= aoi_sof_i;            -- sof
+   DIAG_DATA(58)           <= aoi_fval_i;           -- fval
+   DIAG_DATA(57)           <= aoi_eol_i;            -- eol
+   DIAG_DATA(56)           <= aoi_sol_i;            -- sol
    DIAG_DATA(55 downto 0)  <= data(3)(13 downto 0)  & data(2)(13 downto 0)  & data(1)(13 downto 0)  & data(0)(13 downto 0);
    DIAG_DVAL               <= aoi_dval_i or elec_ofs_dval_i;
    
