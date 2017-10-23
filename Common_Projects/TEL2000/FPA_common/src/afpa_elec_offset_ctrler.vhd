@@ -106,10 +106,10 @@ begin
          else
             
             -- definition des données
-            if FPA_INTF_CFG.ELEC_OFS_ENABLED = '1' then
-               tx_data  <= RX_MOSI.DATA;
+            if FPA_INTF_CFG.ELEC_OFS_OFFSET_NULL_FORCED = '1' then
+               tx_data  <= (others => '0');  -- l'offset electronique est forcée à 0.
             else
-               tx_data  <= (others => '0');  -- lorsque la correction est desactivée, soustrait 0 aux valeurs des pixels.
+               tx_data  <= RX_MOSI.DATA;
             end if;
             tx_dval(0) <= RX_MOSI.DVAL and lane_enabled(0);  
             tx_dval(1) <= RX_MOSI.DVAL and lane_enabled(1);         

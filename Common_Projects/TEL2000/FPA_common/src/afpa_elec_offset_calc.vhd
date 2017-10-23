@@ -35,10 +35,10 @@ end afpa_elec_offset_calc;
 
 architecture rtl of afpa_elec_offset_calc is
    
-   constant C_SYNC_POS           : natural := 1; -- le dval sort parfaitement synchro avec la donnée à la position 1 dans le pipe
-   constant C_SYNC_POS_M1        : natural := C_SYNC_POS - 1; -- calcul
-   constant C_DENOM_CONV_BIT_POS : natural := 21;
-   constant C_RESULT_MSB_POS     : natural := TX_MOSI.DATA'LENGTH/4 + C_DENOM_CONV_BIT_POS - 1;
+   constant C_DENOM_CONV_BIT_POS    : natural := 21;
+   constant C_DENOM_CONV_BIT_POS_M1 : natural := C_DENOM_CONV_BIT_POS - 1;
+   constant C_RESULT_MSB_POS        : natural := TX_MOSI.DATA'LENGTH/4 + C_DENOM_CONV_BIT_POS - 1;
+   
    
    component sync_reset
       port (
@@ -172,7 +172,7 @@ begin
          -- division
          for ii in 1 to 4 loop
             temp_result(ii) <= resize(samp_sum_data_latch(ii) * numerator, temp_result(1)'length);
-            result(ii) <= temp_result(ii)(C_RESULT_MSB_POS downto C_DENOM_CONV_BIT_POS);       -- soit une division par 2^denom_conv_bit_pos
+            result(ii) <= temp_result(ii)(C_RESULT_MSB_POS downto C_DENOM_CONV_BIT_POS) + resize("00" & temp_result(ii)(C_DENOM_CONV_BIT_POS_M1), result(ii)'length);       -- soit une division par 2^denom_conv_bit_pos avec arrondi
          end loop;
          
          -- validation de la sortie
