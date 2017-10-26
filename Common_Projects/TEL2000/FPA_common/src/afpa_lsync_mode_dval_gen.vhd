@@ -239,7 +239,7 @@ begin
                      aoi_init_done <= '1';
                      aoi_flag_fifo_rst <= '0';
                   end if;
-                  if READOUT_INFO.NAOI.STOP = '1' then  -- je vois la fin d'une readout_info.naoi =>
+                  if READOUT_INFO.NAOI.STOP = '1' and READOUT_INFO.NAOI.DVAL = '1' then  -- je vois la fin d'une readout_info.naoi =>
                      naoi_init_done <= '1';
                      naoi_flag_fifo_rst <= '0';
                   end if;
@@ -338,7 +338,7 @@ begin
    begin
       if rising_edge(CLK) then         
          aoi_flag_fifo_din(21 downto 0) <= READOUT_INFO.AOI.SPARE & READOUT_INFO.AOI.SOF & READOUT_INFO.AOI.EOF & READOUT_INFO.AOI.SOL & READOUT_INFO.AOI.EOL & READOUT_INFO.AOI.FVAL & READOUT_INFO.AOI.LVAL & READOUT_INFO.AOI.DVAL;  -- read_end n'est plus ecrit dans les fifos
-         aoi_flag_fifo_wr <= READOUT_INFO.AOI.SAMP_PULSE and READOUT_INFO.AOI.DVAL; -- remarquer qu'on n'ecrit pas les samples d'interligne! on écrit juste les données AOI !!!!!       
+         aoi_flag_fifo_wr <= READOUT_INFO.AOI.SAMP_PULSE and READOUT_INFO.AOI.DVAL and aoi_init_done; -- remarquer qu'on n'ecrit pas les samples d'interligne! on écrit juste les données AOI !!!!!       
       end if;
    end process;        
    
@@ -421,7 +421,7 @@ begin
    begin
       if rising_edge(CLK) then         
          naoi_flag_fifo_din(17 downto 0) <= READOUT_INFO.NAOI.SPARE & READOUT_INFO.NAOI.DVAL & READOUT_INFO.NAOI.STOP & READOUT_INFO.NAOI.START;
-         naoi_flag_fifo_wr <= READOUT_INFO.NAOI.SAMP_PULSE and READOUT_INFO.NAOI.DVAL;    
+         naoi_flag_fifo_wr <= READOUT_INFO.NAOI.SAMP_PULSE and READOUT_INFO.NAOI.DVAL and naoi_init_done;    
       end if;
    end process; 
    
