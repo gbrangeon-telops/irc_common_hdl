@@ -112,8 +112,13 @@ begin
       
       Usync_odd: process(Clock)
       begin 	 
-         if rising_edge(Clock) then 
-            Clk_div <= Clk_div_i;  		
+         if rising_edge(Clock) then
+            Clk_div <= Clk_div_i;
+            -- pragma translate_off
+            if reset = '1' then
+               Clk_div <= '0';
+            end if;
+            -- pragma translate_on
          end if;
       end process;
       
@@ -156,7 +161,12 @@ begin
       Usync_even: process(Clock)
       begin 	 
          if rising_edge(Clock) then 
-            Clk_div <= Clk_div_i;  		
+            Clk_div <= Clk_div_i;
+            -- pragma translate_off
+            if reset = '1' then
+               Clk_div <= '0';
+            end if;
+            -- pragma translate_on
          end if;
       end process;
       

@@ -156,7 +156,7 @@ begin
                   flush_fifo_i <= '0';
                   incr := '0'& RX_MOSI.DVAL;
                   dly_cnt <= dly_cnt + to_integer(unsigned(incr));                 
-                  if dly_cnt >= to_integer(FPA_INTF_CFG.ELEC_OFS_START_DLY) then
+                  if dly_cnt >= to_integer(FPA_INTF_CFG.ELEC_OFS_START_DLY_SAMPCLK) then
                      ofs_ctrl_fsm <= dispatch_samp_st;
                      lane_enabled <= "01";     -- pour activation du lane0
                   end if;                
