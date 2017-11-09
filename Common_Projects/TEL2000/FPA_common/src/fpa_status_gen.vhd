@@ -512,8 +512,8 @@ begin
                when  x"0088" =>   -- prog_init_done
                   stat_read_reg <=  (0 => fpa_prog_init_done, others => '0');
                   
---               -- verification
---               when x"0100" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_diag_mode              , 32));
+               ---- verification
+               --when x"0100" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_diag_mode              , 32));
 --               when x"0104" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_diag_type              , 32));
 --               when x"0108" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_pwr_on                 , 32));
 --               when x"010C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_trig_ctrl_mode         , 32));
@@ -571,10 +571,22 @@ begin
 --               when x"01DC" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.lsydel_mclk                     , 32));
 --               when x"01E0" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.boost_mode                      , 32));
 --               when x"01E4" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.speedup_lsydel                  , 32));
---               when x"01E8" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.adc_clk_pipe_sync_pos          , 32));
+--               when x"01E8" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.stretch_area.sol_posl_pclk      , 32));
+--               when x"01EC" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.stretch_area.eol_posl_pclk      , 32));
+--               
+--               when x"01F0" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_offset_null_forced     , 32));
+--               when x"01F4" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_pix_faked_value_forced , 32));
+--               when x"01F8" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_pix_faked_value        , 32));
+--               when x"01FC" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_offset_minus_pix_value , 32));
+--               when x"0200" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_add_const              , 32));
+--               when x"0204" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_start_dly              , 32));
+--               when x"0208" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_samp_num_per_ch        , 32));
+--               when x"020C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_samp_mean_numerator    , 32));
                
-               when others =>   
-                  stat_read_reg <= (others => '0');
+               
+               
+               
+               when others  => stat_read_reg <= (others => '0');
                
             end case;
             

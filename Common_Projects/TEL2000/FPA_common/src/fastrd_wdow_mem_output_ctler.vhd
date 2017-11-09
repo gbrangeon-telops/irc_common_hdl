@@ -1,5 +1,5 @@
 ------------------------------------------------------------------
---!   @file : wdow_mem_output_ctler
+--!   @file : fastrd_wdow_mem_output_ctler
 --!   @brief
 --!   @details
 --!
@@ -16,7 +16,7 @@ use IEEE.NUMERIC_STD.all;
 use work.fpa_define.all;
 use work.fpa_common_pkg.all; 
 
-entity wdow_mem_output_ctler is
+entity fastrd_wdow_mem_output_ctler is
    port(
       
       ARESET            : in std_logic;
@@ -33,10 +33,10 @@ entity wdow_mem_output_ctler is
       OUT_FIFO_RDY      : out std_logic
       
       );  
-end wdow_mem_output_ctler;
+end fastrd_wdow_mem_output_ctler;
 
 
-architecture rtl of wdow_mem_output_ctler is 
+architecture rtl of fastrd_wdow_mem_output_ctler is 
    
    constant FAST_DOUT_WEIGHT_M1 : integer := DEFINE_FPA_FAST_PCLK_RATE_FACTOR - 1;
    constant SLOW_DOUT_WEIGHT_M1 : integer := DEFINE_FPA_PCLK_RATE_FACTOR - 1;
@@ -100,7 +100,7 @@ begin
    OUT_FIFO_DATA(18 downto 9)    <= std_logic_vector(window_info.raw.line_pclk_cnt); 
    -- user area
    OUT_FIFO_DATA(8)              <= window_info.user.imminent_sol;
-   OUT_FIFO_DATA(7)              <= window_info.user.sync_flag;
+   OUT_FIFO_DATA(7)              <= window_info.user.spare_flag;
    OUT_FIFO_DATA(6)              <= window_info.user.fval;
    OUT_FIFO_DATA(5)              <= window_info.user.sof;
    OUT_FIFO_DATA(4)              <= window_info.user.eof;
@@ -132,7 +132,7 @@ begin
    in_fifo_info.raw.line_pclk_cnt    <=  unsigned(IN_FIFO_DATA(18 downto 9));
    -- user area
    in_fifo_info.user.imminent_sol    <=  IN_FIFO_DATA(8);
-   in_fifo_info.user.sync_flag       <=  IN_FIFO_DATA(7);             
+   in_fifo_info.user.spare_flag      <=  IN_FIFO_DATA(7);             
    in_fifo_info.user.fval            <=  IN_FIFO_DATA(6);             
    in_fifo_info.user.sof             <=  IN_FIFO_DATA(5);             
    in_fifo_info.user.eof             <=  IN_FIFO_DATA(4);             

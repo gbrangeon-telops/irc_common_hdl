@@ -2,7 +2,7 @@ SCHM0104
 
 HEADER
 {
- FREEID 3178
+ FREEID 3263
  VARIABLES
  {
   #ARCHITECTURE="SCH"
@@ -13,13 +13,460 @@ HEADER
   #DEFAULT_RANGE2="<range<name=\"out_fifo_dcnt\"><left=\"9\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
   #DEFAULT_RANGE3="<range<name=\"wdow_ififo_dcnt\"><left=\"9\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
   #DEFAULT_RANGE4="<range<name=\"wdow_ofifo_dcnt\"><left=\"9\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
-  #ENTITY="isc0804_window_memory"
+  #ENTITY="fastrd_wdow_mem"
   #LANGUAGE="VHDL"
   AUTHOR="Unknown"
   COMPANY="Unknown"
   CREATIONDATE="6/7/2017"
   PAGECOUNT="2"
   TITLE="isc0804_window_memory"
+ }
+ SYMBOL "#default" "fastrd_wdow_mem_input_ctler" "fastrd_wdow_mem_input_ctler"
+ {
+  HEADER
+  {
+   VARIABLES
+   {
+    #CUSTOM_NAME=""
+    #DESCRIPTION=""
+    #LANGUAGE="VHDL"
+    #MODIFIED="1510241649"
+    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="f71e4218-dd46-4aa4-925d-cbece6210f8f"
+   }
+  }
+  PAGE "" 
+  {
+   PAGEHEADER
+   {
+    RECT (-20,-20,380,240)
+    FREEID 12
+   }
+   
+   BODY
+   {
+    RECT  1, -1, 0
+    {
+     VARIABLES
+     {
+      #OUTLINE_FILLING="1"
+     }
+     AREA (0,0,360,239)
+    }
+    TEXT  3, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (5,30,85,54)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 2
+    }
+    TEXT  5, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (5,50,45,74)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 4
+    }
+    TEXT  7, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (5,110,150,134)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 6
+    }
+    TEXT  9, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (149,90,355,114)
+     ALIGN 6
+     MARGINS (1,1)
+     PARENT 8
+    }
+    TEXT  11, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (117,70,355,94)
+     ALIGN 6
+     MARGINS (1,1)
+     PARENT 10
+    }
+    PIN  2, 0, 0
+    {
+     COORD (-20,40)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="ARESET"
+      #NUMBER="0"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  4, 0, 0
+    {
+     COORD (-20,60)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="CLK"
+      #NUMBER="0"
+      #SIDE="left"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  6, 0, 0
+    {
+     COORD (-20,120)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="RECORD"
+      #NAME="WINDOW_INFO"
+      #NUMBER="0"
+      #VHDL_TYPE="WINDOW_INFO_TYPE"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  8, 0, 0
+    {
+     COORD (380,100)
+     VARIABLES
+     {
+      #DIRECTION="OUT"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="WDOW_FIFO_WR_EN"
+      #NUMBER="0"
+      #SIDE="right"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (-20,0) )
+     }
+    }
+    PIN  10, 0, 0
+    {
+     COORD (380,80)
+     VARIABLES
+     {
+      #DIRECTION="OUT"
+      #DOWNTO="1"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="WDOW_FIFO_DATA(42:0)"
+      #NUMBER="0"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (-20,0) )
+     }
+    }
+   }
+  }
+ }
+ SYMBOL "#default" "fastrd_wdow_mem_output_ctler" "fastrd_wdow_mem_output_ctler"
+ {
+  HEADER
+  {
+   VARIABLES
+   {
+    #CUSTOM_NAME=""
+    #DESCRIPTION=""
+    #LANGUAGE="VHDL"
+    #MODIFIED="1510241696"
+    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="6eb4d47f-fc1d-44dc-9fa9-191bccb83b36"
+   }
+  }
+  PAGE "" 
+  {
+   PAGEHEADER
+   {
+    RECT (-20,-20,420,240)
+    FREEID 22
+   }
+   
+   BODY
+   {
+    RECT  1, -1, 0
+    {
+     VARIABLES
+     {
+      #OUTLINE_FILLING="1"
+     }
+     AREA (0,0,400,239)
+    }
+    TEXT  3, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (5,10,85,34)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 2
+    }
+    TEXT  5, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (5,30,45,54)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 4
+    }
+    TEXT  7, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (5,90,195,114)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 6
+    }
+    TEXT  9, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (5,70,144,94)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 8
+    }
+    TEXT  11, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (5,110,158,134)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 10
+     ORIENTATION 2
+    }
+    TEXT  13, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (216,90,395,114)
+     ALIGN 6
+     MARGINS (1,1)
+     PARENT 12
+    }
+    TEXT  15, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (184,70,395,94)
+     ALIGN 6
+     MARGINS (1,1)
+     PARENT 14
+    }
+    TEXT  17, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (194,110,395,134)
+     ALIGN 6
+     MARGINS (1,1)
+     PARENT 16
+     ORIENTATION 2
+    }
+    TEXT  19, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (246,150,395,174)
+     ALIGN 6
+     MARGINS (1,1)
+     PARENT 18
+    }
+    TEXT  21, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (5,170,185,194)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 20
+    }
+    PIN  2, 0, 0
+    {
+     COORD (-20,20)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="ARESET"
+      #NUMBER="0"
+      #SIDE="left"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  4, 0, 0
+    {
+     COORD (-20,40)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="CLK"
+      #NUMBER="0"
+      #SIDE="left"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  6, 0, 0
+    {
+     COORD (-20,100)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #DOWNTO="1"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="IN_FIFO_DATA(42:0)"
+      #NUMBER="0"
+      #SIDE="left"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  8, 0, 0
+    {
+     COORD (-20,80)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="IN_FIFO_DVAL"
+      #NUMBER="0"
+      #SIDE="left"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  10, 0, 0
+    {
+     COORD (-20,120)
+     VARIABLES
+     {
+      #DIRECTION="OUT"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="IN_FIFO_RD_EN"
+      #NUMBER="0"
+      #SIDE="left"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  12, 0, 0
+    {
+     COORD (420,100)
+     VARIABLES
+     {
+      #DIRECTION="OUT"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="OUT_FIFO_WR_EN"
+      #NUMBER="0"
+      #SIDE="right"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (-20,0) )
+     }
+    }
+    PIN  14, 0, 0
+    {
+     COORD (420,80)
+     VARIABLES
+     {
+      #DIRECTION="OUT"
+      #DOWNTO="1"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="OUT_FIFO_DATA(42:0)"
+      #NUMBER="0"
+      #SIDE="right"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (-20,0) )
+     }
+    }
+    PIN  16, 0, 0
+    {
+     COORD (420,120)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #DOWNTO="1"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="OUT_FIFO_DCNT(9:0)"
+      #NUMBER="0"
+      #SIDE="right"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (-20,0) )
+     }
+    }
+    PIN  18, 0, 0
+    {
+     COORD (420,160)
+     VARIABLES
+     {
+      #DIRECTION="OUT"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="OUT_FIFO_RDY"
+      #NUMBER="0"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (-20,0) )
+     }
+    }
+    PIN  20, 0, 0
+    {
+     COORD (-20,180)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #DOWNTO="1"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="IN_FIFO_DCNT(9:0)"
+      #NUMBER="0"
+      #SIDE="left"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+   }
+  }
  }
  SYMBOL "#default" "fwft_sfifo_w43_d512" "fwft_sfifo_w43_d512"
  {
@@ -33,7 +480,7 @@ HEADER
 "library IEEE;\n"+
 "use ieee.std_logic_1164.all;"
     #LANGUAGE="VHDL"
-    #MODIFIED="1497286988"
+    #MODIFIED="1510241614"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="eb3764be-0c3d-4e49-b2b5-b328f435c5b5"
    }
   }
@@ -377,7 +824,7 @@ HEADER
 "library IEEE;\n"+
 "use ieee.std_logic_1164.all;"
     #LANGUAGE="VHDL"
-    #MODIFIED="1496844539"
+    #MODIFIED="1510241614"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="4ba671d7-317a-4afa-b508-5228fc394ce7"
    }
   }
@@ -469,451 +916,6 @@ HEADER
       #NAME="CLK"
       #NUMBER="0"
       #VHDL_TYPE="STD_LOGIC"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-   }
-  }
- }
- SYMBOL "work" "window_memory_input_ctler" "window_memory_input_ctler"
- {
-  HEADER
-  {
-   VARIABLES
-   {
-    #CUSTOM_NAME=""
-    #LANGUAGE="VHDL"
-    #MODIFIED="1497276459"
-    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="f71e4218-dd46-4aa4-925d-cbece6210f8f"
-   }
-  }
-  PAGE "" 
-  {
-   PAGEHEADER
-   {
-    RECT (-20,-20,380,240)
-    FREEID 13
-   }
-   
-   BODY
-   {
-    RECT  1, -1, 0
-    {
-     VARIABLES
-     {
-      #OUTLINE_FILLING="1"
-     }
-     AREA (0,0,360,239)
-    }
-    TEXT  3, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (5,30,85,54)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 2
-    }
-    TEXT  5, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (5,50,45,74)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 4
-    }
-    TEXT  7, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (5,110,150,134)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 6
-    }
-    TEXT  9, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (149,90,355,114)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 8
-    }
-    TEXT  11, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (117,70,355,94)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 10
-    }
-    PIN  2, 0, 0
-    {
-     COORD (-20,40)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="ARESET"
-      #NUMBER="0"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  4, 0, 0
-    {
-     COORD (-20,60)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="CLK"
-      #NUMBER="0"
-      #SIDE="left"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  6, 0, 0
-    {
-     COORD (-20,120)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="RECORD"
-      #NAME="WINDOW_INFO"
-      #NUMBER="0"
-      #VHDL_TYPE="WINDOW_INFO_TYPE"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  8, 0, 0
-    {
-     COORD (380,100)
-     VARIABLES
-     {
-      #DIRECTION="OUT"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="WDOW_FIFO_WR_EN"
-      #NUMBER="0"
-      #SIDE="right"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-    PIN  10, 0, 0
-    {
-     COORD (380,80)
-     VARIABLES
-     {
-      #DIRECTION="OUT"
-      #DOWNTO="1"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="WDOW_FIFO_DATA(42:0)"
-      #NUMBER="0"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-   }
-  }
- }
- SYMBOL "work" "window_memory_output_ctler" "window_memory_output_ctler"
- {
-  HEADER
-  {
-   VARIABLES
-   {
-    #CUSTOM_NAME=""
-    #LANGUAGE="VHDL"
-    #MODIFIED="1497289018"
-    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="6eb4d47f-fc1d-44dc-9fa9-191bccb83b36"
-   }
-  }
-  PAGE "" 
-  {
-   PAGEHEADER
-   {
-    RECT (-20,-20,420,240)
-    FREEID 23
-   }
-   
-   BODY
-   {
-    RECT  1, -1, 0
-    {
-     VARIABLES
-     {
-      #OUTLINE_FILLING="1"
-     }
-     AREA (0,0,400,239)
-    }
-    TEXT  3, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (5,10,85,34)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 2
-    }
-    TEXT  5, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (5,30,45,54)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 4
-    }
-    TEXT  7, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (5,90,195,114)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 6
-    }
-    TEXT  9, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (5,70,144,94)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 8
-    }
-    TEXT  11, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (5,110,158,134)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 10
-     ORIENTATION 2
-    }
-    TEXT  13, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (216,90,395,114)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 12
-    }
-    TEXT  15, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (184,70,395,94)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 14
-    }
-    TEXT  17, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (194,110,395,134)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 16
-     ORIENTATION 2
-    }
-    TEXT  19, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (246,150,395,174)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 18
-    }
-    TEXT  21, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (5,170,185,194)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 20
-    }
-    PIN  2, 0, 0
-    {
-     COORD (-20,20)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="ARESET"
-      #NUMBER="0"
-      #SIDE="left"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  4, 0, 0
-    {
-     COORD (-20,40)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="CLK"
-      #NUMBER="0"
-      #SIDE="left"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  6, 0, 0
-    {
-     COORD (-20,100)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #DOWNTO="1"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="IN_FIFO_DATA(42:0)"
-      #NUMBER="0"
-      #SIDE="left"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  8, 0, 0
-    {
-     COORD (-20,80)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="IN_FIFO_DVAL"
-      #NUMBER="0"
-      #SIDE="left"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  10, 0, 0
-    {
-     COORD (-20,120)
-     VARIABLES
-     {
-      #DIRECTION="OUT"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="IN_FIFO_RD_EN"
-      #NUMBER="0"
-      #SIDE="left"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  12, 0, 0
-    {
-     COORD (420,100)
-     VARIABLES
-     {
-      #DIRECTION="OUT"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="OUT_FIFO_WR_EN"
-      #NUMBER="0"
-      #SIDE="right"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-    PIN  14, 0, 0
-    {
-     COORD (420,80)
-     VARIABLES
-     {
-      #DIRECTION="OUT"
-      #DOWNTO="1"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="OUT_FIFO_DATA(42:0)"
-      #NUMBER="0"
-      #SIDE="right"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-    PIN  16, 0, 0
-    {
-     COORD (420,120)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #DOWNTO="1"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="OUT_FIFO_DCNT(9:0)"
-      #NUMBER="0"
-      #SIDE="right"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-    PIN  18, 0, 0
-    {
-     COORD (420,160)
-     VARIABLES
-     {
-      #DIRECTION="OUT"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="OUT_FIFO_RDY"
-      #NUMBER="0"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-    PIN  20, 0, 0
-    {
-     COORD (-20,180)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #DOWNTO="1"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="IN_FIFO_DCNT(9:0)"
-      #NUMBER="0"
-      #SIDE="left"
      }
      LINE  2, 0, 0
      {
@@ -1170,12 +1172,13 @@ PAGE ""
   {
    VARIABLES
    {
-    #COMPONENT="window_memory_output_ctler"
+    #COMPONENT="fastrd_wdow_mem_output_ctler"
     #CUSTOM_NAME=""
-    #LIBRARY="work"
+    #IMPL="rtl"
+    #LIBRARY="#default"
     #NO_CONF="1"
     #REFERENCE="U1"
-    #SYMBOL="window_memory_output_ctler"
+    #SYMBOL="fastrd_wdow_mem_output_ctler"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="6eb4d47f-fc1d-44dc-9fa9-191bccb83b36"
    }
    COORD (1580,780)
@@ -1184,7 +1187,7 @@ PAGE ""
   TEXT  22, 0, 0
   {
    TEXT "$#COMPONENT"
-   RECT (1560,1020,1948,1055)
+   RECT (1560,1020,1975,1055)
    MARGINS (1,1)
    PARENT 21
   }
@@ -1209,7 +1212,7 @@ PAGE ""
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="eb3764be-0c3d-4e49-b2b5-b328f435c5b5"
    }
    COORD (2260,760)
-   VERTEXES ( (2,378), (4,429), (10,385), (14,387), (16,483), (18,463), (22,466), (24,377), (20,2741), (26,2767) )
+   VERTEXES ( (2,378), (4,429), (10,385), (14,387), (16,483), (18,463), (20,2741), (22,466), (24,377), (26,2767) )
   }
   TEXT  31, 0, 0
   {
@@ -1344,12 +1347,13 @@ PAGE ""
   {
    VARIABLES
    {
-    #COMPONENT="window_memory_input_ctler"
+    #COMPONENT="fastrd_wdow_mem_input_ctler"
     #CUSTOM_NAME=""
-    #LIBRARY="work"
+    #IMPL="rtl"
+    #LIBRARY="#default"
     #NO_CONF="1"
     #REFERENCE="U5"
-    #SYMBOL="window_memory_input_ctler"
+    #SYMBOL="fastrd_wdow_mem_input_ctler"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="f71e4218-dd46-4aa4-925d-cbece6210f8f"
    }
    COORD (500,780)
@@ -1358,7 +1362,7 @@ PAGE ""
   TEXT  83, 0, 0
   {
    TEXT "$#COMPONENT"
-   RECT (500,1020,871,1055)
+   RECT (500,1020,898,1055)
    MARGINS (1,1)
    PARENT 82
   }
@@ -1910,7 +1914,7 @@ PAGE ""
 "   WDOW_FIFO_DATA.RAW.LINE_PCLK_CNT    <=  unsigned(out_fifo_data(18 downto 9));\n"+
 "   -- user area\n"+
 "   WDOW_FIFO_DATA.USER.IMMINENT_SOL    <=  out_fifo_data(8);\n"+
-"   WDOW_FIFO_DATA.USER.SYNC_FLAG       <=  out_fifo_data(7);             \n"+
+"   WDOW_FIFO_DATA.USER.SPARE_FLAG     <=  out_fifo_data(7);        \n"+
 "   WDOW_FIFO_DATA.USER.FVAL            <=  out_fifo_data(6);             \n"+
 "   WDOW_FIFO_DATA.USER.SOF             <=  out_fifo_data(5);             \n"+
 "   WDOW_FIFO_DATA.USER.EOF             <=  out_fifo_data(4);             \n"+
@@ -1918,6 +1922,8 @@ PAGE ""
 "   WDOW_FIFO_DATA.USER.EOL             <=  out_fifo_data(2);             \n"+
 "   WDOW_FIFO_DATA.USER.LVAL            <=  out_fifo_data(1);             \n"+
 "   WDOW_FIFO_DATA.USER.DVAL            <=  out_fifo_data(0); \n"+
+"\n"+
+"\n"+
 "\n"+
 "\n"+
 "\n"+
@@ -2249,7 +2255,7 @@ PAGE ""
  
  BODY
  {
-  TEXT  3161, 0, 0
+  TEXT  3246, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -2260,7 +2266,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  3162, 0, 0
+  TEXT  3247, 0, 0
   {
    PAGEALIGN 10
    TEXT "$CREATIONDATE"
@@ -2271,7 +2277,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  3163, 0, 0
+  TEXT  3248, 0, 0
   {
    PAGEALIGN 10
    TEXT "Title:"
@@ -2281,7 +2287,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  3164, 0, 0
+  TEXT  3249, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -2293,7 +2299,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  3165, 0, 0
+  TEXT  3250, 0, 0
   {
    PAGEALIGN 10
    TEXT 
@@ -2306,7 +2312,7 @@ PAGE ""
    FONT (12,0,0,700,0,0,0,"Arial")
    MULTILINE
   }
-  TEXT  3166, 0, 0
+  TEXT  3251, 0, 0
   {
    PAGEALIGN 10
    TEXT "Page:"
@@ -2316,7 +2322,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  3167, 0, 0
+  TEXT  3252, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -2328,7 +2334,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  3168, 0, 0
+  TEXT  3253, 0, 0
   {
    PAGEALIGN 10
    TEXT "Revision:"
@@ -2338,7 +2344,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  3169, 0, 0
+  TEXT  3254, 0, 0
   {
    PAGEALIGN 10
    TEXT "$Revision"
@@ -2349,7 +2355,7 @@ PAGE ""
    FONT (12,0,0,700,0,204,0,"Arial")
    UPDATE 0
   }
-  GROUP  3170, 0, 0
+  GROUP  3255, 0, 0
   {
    PAGEALIGN 10
    RECT (2320,1620,3201,2001)
@@ -2361,7 +2367,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  3171, 0, 0
+  GROUP  3256, 0, 0
   {
    PAGEALIGN 10
    RECT (2320,1820,3201,1821)
@@ -2373,7 +2379,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  3172, 0, 0
+  GROUP  3257, 0, 0
   {
    PAGEALIGN 10
    RECT (2320,1760,3201,1761)
@@ -2385,7 +2391,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  3173, 0, 0
+  GROUP  3258, 0, 0
   {
    PAGEALIGN 10
    RECT (2320,1880,3201,1881)
@@ -2397,7 +2403,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  3174, 0, 0
+  GROUP  3259, 0, 0
   {
    PAGEALIGN 10
    RECT (2320,1940,3201,1941)
@@ -2409,7 +2415,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  3175, 0, 0
+  GROUP  3260, 0, 0
   {
    PAGEALIGN 10
    RECT (2500,1620,2501,1761)
@@ -2420,7 +2426,7 @@ PAGE ""
     POINTS ( (0,0), (0,140) )
    }
   }
-  GROUP  3176, 0, 0
+  GROUP  3261, 0, 0
   {
    PAGEALIGN 10
    RECT (2500,1760,2501,2001)
@@ -2431,7 +2437,7 @@ PAGE ""
     POINTS ( (0,0), (0,240) )
    }
   }
-  BMPPICT  3177, 0, 0
+  BMPPICT  3262, 0, 0
   {
    PAGEALIGN 10
    RECT (2340,1680,2479,1725)

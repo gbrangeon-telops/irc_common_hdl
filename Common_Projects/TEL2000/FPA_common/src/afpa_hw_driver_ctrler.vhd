@@ -249,7 +249,7 @@ begin
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then
-            fpa_intf_cfg_i <= USER_CFG;   -- ENO 25 juillet 2017: fpa_intf_cfg_i <= USER_CFG implique que dans mb_intf.vhd, tant qu'aucune config n'est reçue, MB_RESET ou CTRLED_RESET soit à '1'. S'inspirer de isc0804A_mb_intf.vhd
+            fpa_intf_cfg_i <= USER_CFG;   -- ENO 25 juillet 2017: fpa_intf_cfg_i <= USER_CFG implique que dans mb_intf.vhd, tant qu'aucune config n'est reçue, MB_RESET ou CTRLED_RESET soit à '1'. S'inspirer de fastrd_mb_intf.vhd
             update_dac_part_temp <= '0';
             update_dac_part_only <= '0';
             update_fpa_part_temp <= '0';
@@ -288,12 +288,12 @@ begin
             -- ENO : 25 janv 2016: mis ici pour un fonctionnement correct. Sinon, sans reprogrammation du dtecteur, la partie common est figée
             fpa_intf_cfg_i.comn <= USER_CFG.COMN;
             
-            -- ENO : 05 avril 2016: mis ici pour que les ajustements via VIO se fassent en temps réel 
+            -- ENO : 05 avril 2016: mis ici pour que les ajustements se fassent en temps réel 
             fpa_intf_cfg_i.adc_clk_phase <= USER_CFG.ADC_CLK_PHASE;
             fpa_intf_cfg_i.real_mode_active_pixel_dly <= USER_CFG.REAL_MODE_ACTIVE_PIXEL_DLY;
             
             -- à effacer après implantation fastwindowing sur ISC0804A 
---            if readout_i = '0' then 
+            if readout_i = '0' then 
 --               fpa_intf_cfg_i.speedup_lsydel        <= USER_CFG.speedup_lsydel;      
 --               fpa_intf_cfg_i.speedup_lsync         <= USER_CFG.speedup_lsync;       
 --               fpa_intf_cfg_i.speedup_sample_row    <= USER_CFG.speedup_sample_row;  
@@ -301,7 +301,16 @@ begin
 --               fpa_intf_cfg_i.raw_area              <= USER_CFG.raw_area;            
 --               fpa_intf_cfg_i.user_area             <= USER_CFG.user_area;
 --               fpa_intf_cfg_i.adc_clk_pipe_sync_pos <= USER_CFG.adc_clk_pipe_sync_pos;
---            end if;
+               
+               fpa_intf_cfg_i.elec_ofs_offset_null_forced      <=  USER_CFG.elec_ofs_offset_null_forced;     
+               fpa_intf_cfg_i.elec_ofs_pix_faked_value_forced  <=  USER_CFG.elec_ofs_pix_faked_value_forced; 
+               fpa_intf_cfg_i.elec_ofs_pix_faked_value         <=  USER_CFG.elec_ofs_pix_faked_value;        
+               fpa_intf_cfg_i.elec_ofs_offset_minus_pix_value  <=  USER_CFG.elec_ofs_offset_minus_pix_value; 
+               fpa_intf_cfg_i.elec_ofs_add_const               <=  USER_CFG.elec_ofs_add_const;              
+               fpa_intf_cfg_i.elec_ofs_start_dly_sampclk       <=  USER_CFG.elec_ofs_start_dly_sampclk;              
+               fpa_intf_cfg_i.elec_ofs_samp_num_per_ch         <=  USER_CFG.elec_ofs_samp_num_per_ch;        
+               fpa_intf_cfg_i.elec_ofs_samp_mean_numerator     <=  USER_CFG.elec_ofs_samp_mean_numerator;    
+            end if;
             
             
          end if;

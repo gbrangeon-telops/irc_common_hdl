@@ -1,5 +1,5 @@
 ------------------------------------------------------------------
---!   @file : wdow_mem_input_ctler
+--!   @file : fastrd_wdow_mem_input_ctler
 --!   @brief
 --!   @details
 --!
@@ -17,7 +17,7 @@ use IEEE.NUMERIC_STD.all;
 use work.fpa_define.all;
 use work.fpa_common_pkg.all; 
 
-entity wdow_mem_input_ctler is
+entity fastrd_wdow_mem_input_ctler is
    port(
       
       ARESET            : in std_logic;
@@ -29,9 +29,9 @@ entity wdow_mem_input_ctler is
       WDOW_FIFO_DATA    : out std_logic_vector(42 downto 0)
       
       );   
-end wdow_mem_input_ctler;
+end fastrd_wdow_mem_input_ctler;
 
-architecture rtl of wdow_mem_input_ctler is
+architecture rtl of fastrd_wdow_mem_input_ctler is
    
    type wdow_data_pipe_type is array (0 to 1) of std_logic_vector(42 downto 0);   
    
@@ -101,7 +101,7 @@ begin
                wdow_data_pipe(0)(18 downto 9)   <= std_logic_vector(WINDOW_INFO.RAW.LINE_PCLK_CNT); 
                -- user area
                wdow_data_pipe(0)(8)             <= WINDOW_INFO.USER.IMMINENT_SOL;
-               wdow_data_pipe(0)(7)             <= WINDOW_INFO.USER.SYNC_FLAG;
+               wdow_data_pipe(0)(7)             <= WINDOW_INFO.USER.SPARE_FLAG;
                wdow_data_pipe(0)(6)             <= WINDOW_INFO.USER.FVAL;
                wdow_data_pipe(0)(5)             <= WINDOW_INFO.USER.SOF;
                wdow_data_pipe(0)(4)             <= WINDOW_INFO.USER.EOF;

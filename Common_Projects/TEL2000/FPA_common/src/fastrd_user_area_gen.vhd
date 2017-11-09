@@ -149,8 +149,8 @@ begin
             else
                active_line <= '0';
             end if;
-            -- adc_sync_flag
-            user_pipe(2).sync_flag <= user_pipe(1).sof;
+            -- spare_flag
+            user_pipe(2).spare_flag <= '0';
             
             -------------------------------------------------------
             -- pipe 3 pour generation misc signals        
