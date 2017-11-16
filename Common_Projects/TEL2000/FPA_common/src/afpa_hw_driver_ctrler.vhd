@@ -286,7 +286,9 @@ begin
             fpa_intf_cfg_i.int_signal_high_time <= USER_CFG.INT_SIGNAL_HIGH_TIME;
             
             -- ENO : 25 janv 2016: mis ici pour un fonctionnement correct. Sinon, sans reprogrammation du dtecteur, la partie common est figée
-            fpa_intf_cfg_i.comn <= USER_CFG.COMN;
+            if readout_i = '0' then 
+               fpa_intf_cfg_i.comn <= USER_CFG.COMN;
+            end if;
             
             -- ENO : 05 avril 2016: mis ici pour que les ajustements se fassent en temps réel 
             fpa_intf_cfg_i.adc_clk_phase <= USER_CFG.ADC_CLK_PHASE;
@@ -294,13 +296,13 @@ begin
             
             -- à effacer après implantation fastwindowing sur ISC0804A 
             if readout_i = '0' then 
---               fpa_intf_cfg_i.speedup_lsydel        <= USER_CFG.speedup_lsydel;      
---               fpa_intf_cfg_i.speedup_lsync         <= USER_CFG.speedup_lsync;       
---               fpa_intf_cfg_i.speedup_sample_row    <= USER_CFG.speedup_sample_row;  
---               fpa_intf_cfg_i.speedup_unused_area   <= USER_CFG.speedup_unused_area; 
---               fpa_intf_cfg_i.raw_area              <= USER_CFG.raw_area;            
---               fpa_intf_cfg_i.user_area             <= USER_CFG.user_area;
---               fpa_intf_cfg_i.adc_clk_pipe_sync_pos <= USER_CFG.adc_clk_pipe_sync_pos;
+               --               fpa_intf_cfg_i.speedup_lsydel        <= USER_CFG.speedup_lsydel;      
+               --               fpa_intf_cfg_i.speedup_lsync         <= USER_CFG.speedup_lsync;       
+               --               fpa_intf_cfg_i.speedup_sample_row    <= USER_CFG.speedup_sample_row;  
+               --               fpa_intf_cfg_i.speedup_unused_area   <= USER_CFG.speedup_unused_area; 
+               --               fpa_intf_cfg_i.raw_area              <= USER_CFG.raw_area;            
+               --               fpa_intf_cfg_i.user_area             <= USER_CFG.user_area;
+               --               fpa_intf_cfg_i.adc_clk_pipe_sync_pos <= USER_CFG.adc_clk_pipe_sync_pos;
                
                fpa_intf_cfg_i.elec_ofs_offset_null_forced      <=  USER_CFG.elec_ofs_offset_null_forced;     
                fpa_intf_cfg_i.elec_ofs_pix_faked_value_forced  <=  USER_CFG.elec_ofs_pix_faked_value_forced; 
