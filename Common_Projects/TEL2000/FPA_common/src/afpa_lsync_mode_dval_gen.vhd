@@ -171,8 +171,11 @@ architecture rtl of afpa_lsync_mode_dval_gen is
    signal fpa_din_dval_last         : std_logic;
    signal adc_flag_last_o           : std_logic_vector(adc_flag'length-1 downto 0);
    signal adc_flag_o                : std_logic_vector(adc_flag'length-1 downto 0);
-   
-   
+   signal aoi_rd_end_i              : std_logic;
+   signal aoi_rd_end_last           : std_logic;
+   signal naoi_stop_i               : std_logic;
+   signal naoi_stop_last            : std_logic;
+ 
    --attribute dont_touch     : string;
    --attribute dont_touch of dout_dval_o         : signal is "true"; 
    --attribute dont_touch of dout_o              : signal is "true";
@@ -247,11 +250,19 @@ begin
             naoi_init_done <= '0';
             aoi_flag_fifo_rst <= '1';
             naoi_flag_fifo_rst <= '1';
+            aoi_rd_end_last <= aoi_rd_end_i;
+            naoi_stop_last <= naoi_stop_i;
             -- pragma translate_off
             init_fsm <= init_done_st;
             -- pragma translate_on
             
          else              
+            
+            aoi_rd_end_i <= READOUT_INFO.AOI.READ_END;
+            aoi_rd_end_last <= aoi_rd_end_i;
+            
+            naoi_stop_i <= READOUT_INFO.NAOI.STOP;
+            naoi_stop_last <= naoi_stop_i;
             
             case init_fsm is         -- ENO: 23 juillet 2014. les etats init_st sont requis pour éviter des problèmes de synchro          
                
@@ -275,21 +286,14 @@ begin
                   end if;
                
                when init_done_st => 
-                  if READOUT_INFO.AOI.READ_END = '1' then  -- je vois la tombée du fval d'une readout_info.aoi =>
+                  if aoi_rd_end_last = '1' and aoi_rd_end_i = '0' then  -- je vois la tombée du fval d'une readout_info.aoi =>
                      aoi_init_done <= '1';
                      aoi_flag_fifo_rst <= '0';
                   end if;
-                  if READOUT_INFO.NAOI.STOP = '1' and READOUT_INFO.NAOI.DVAL = '1' then  -- je vois la fin d'une readout_info.naoi =>
+                  if naoi_stop_last = '1' and naoi_stop_i = '0' then  -- je vois la fin d'une readout_info.naoi =>
                      naoi_init_done <= '1';
                      naoi_flag_fifo_rst <= '0';
                   end if;
-                  
-                  -- pragma translate_off                
-                  aoi_init_done <= '1';
-                  aoi_flag_fifo_rst <= '0';
-                  naoi_init_done <= '1';
-                  naoi_flag_fifo_rst <= '0';                  
-                  -- pragma translate_on
                
                when others =>
                
@@ -377,7 +381,7 @@ begin
    begin
       if rising_edge(CLK) then         
          aoi_flag_fifo_din(21 downto 0) <= READOUT_INFO.AOI.SPARE & READOUT_INFO.AOI.SOF & READOUT_INFO.AOI.EOF & READOUT_INFO.AOI.SOL & READOUT_INFO.AOI.EOL & READOUT_INFO.AOI.FVAL & READOUT_INFO.AOI.LVAL & READOUT_INFO.AOI.DVAL;  -- read_end n'est plus ecrit dans les fifos
-         aoi_flag_fifo_wr <= READOUT_INFO.AOI.SAMP_PULSE and READOUT_INFO.AOI.DVAL and aoi_init_done; -- remarquer qu'on n'ecrit pas les samples d'interligne! on écrit juste les données AOI !!!!!       
+         aoi_flag_fifo_wr <= READOUT_INFO.AOI.SAMP_PULSE and READOUT_INFO.AOI.DVAL and aoi_init_done; -- remarquer qu'on n'ecrit pas les samples d'interligne! on écrit juste les données AOI !!!!! Même pas READ_END puisqu'il n'a pas de DVAL associé à READ_END     
       end if;
    end process;        
    
