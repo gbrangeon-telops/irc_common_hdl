@@ -295,7 +295,7 @@ begin
             fpa_intf_cfg_i.real_mode_active_pixel_dly <= USER_CFG.REAL_MODE_ACTIVE_PIXEL_DLY;
             
             -- à effacer après implantation fastwindowing sur ISC0804A 
-            if readout_i = '0' then 
+ --           if readout_i = '0' then 
                --               fpa_intf_cfg_i.speedup_lsydel        <= USER_CFG.speedup_lsydel;      
                --               fpa_intf_cfg_i.speedup_lsync         <= USER_CFG.speedup_lsync;       
                --               fpa_intf_cfg_i.speedup_sample_row    <= USER_CFG.speedup_sample_row;  
@@ -304,15 +304,15 @@ begin
                --               fpa_intf_cfg_i.user_area             <= USER_CFG.user_area;
                --               fpa_intf_cfg_i.adc_clk_pipe_sync_pos <= USER_CFG.adc_clk_pipe_sync_pos;
                
-               fpa_intf_cfg_i.elec_ofs_offset_null_forced      <=  USER_CFG.elec_ofs_offset_null_forced;     
-               fpa_intf_cfg_i.elec_ofs_pix_faked_value_forced  <=  USER_CFG.elec_ofs_pix_faked_value_forced; 
-               fpa_intf_cfg_i.elec_ofs_pix_faked_value         <=  USER_CFG.elec_ofs_pix_faked_value;        
-               fpa_intf_cfg_i.elec_ofs_offset_minus_pix_value  <=  USER_CFG.elec_ofs_offset_minus_pix_value; 
-               fpa_intf_cfg_i.elec_ofs_add_const               <=  USER_CFG.elec_ofs_add_const;              
-               fpa_intf_cfg_i.elec_ofs_start_dly_sampclk       <=  USER_CFG.elec_ofs_start_dly_sampclk;              
-               fpa_intf_cfg_i.elec_ofs_samp_num_per_ch         <=  USER_CFG.elec_ofs_samp_num_per_ch;        
-               fpa_intf_cfg_i.elec_ofs_samp_mean_numerator     <=  USER_CFG.elec_ofs_samp_mean_numerator;    
-            end if;
+--               fpa_intf_cfg_i.elec_ofs_offset_null_forced      <=  USER_CFG.elec_ofs_offset_null_forced;     
+--               fpa_intf_cfg_i.elec_ofs_pix_faked_value_forced  <=  USER_CFG.elec_ofs_pix_faked_value_forced; 
+--               fpa_intf_cfg_i.elec_ofs_pix_faked_value         <=  USER_CFG.elec_ofs_pix_faked_value;        
+--               fpa_intf_cfg_i.elec_ofs_offset_minus_pix_value  <=  USER_CFG.elec_ofs_offset_minus_pix_value; 
+--               fpa_intf_cfg_i.elec_ofs_add_const               <=  USER_CFG.elec_ofs_add_const;              
+--               fpa_intf_cfg_i.elec_ofs_start_dly_sampclk       <=  USER_CFG.elec_ofs_start_dly_sampclk;              
+--               fpa_intf_cfg_i.elec_ofs_samp_num_per_ch         <=  USER_CFG.elec_ofs_samp_num_per_ch;        
+--               fpa_intf_cfg_i.elec_ofs_samp_mean_numerator     <=  USER_CFG.elec_ofs_samp_mean_numerator;    
+ --           end if;
             
             
          end if;
