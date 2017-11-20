@@ -159,7 +159,7 @@ begin
                   services_ctrl_sm <= check_adc_brd_data_st2;
                
                when check_adc_brd_data_st2 =>        -- verification si la carte ADC pourra supporter le sampling rate imposé par le détecteur
-                  if DEFINE_ADC_QUAD_CLK_RATE_KHZ > ADC_BRD_INFO.ADC_OPER_FREQ_MAX_KHZ then
+                  if integer(DEFINE_ADC_QUAD_CLK_RATE_KHZ) > ADC_BRD_INFO.ADC_OPER_FREQ_MAX_KHZ then
                      adc_brd_err <= '1';                     
                   end if;
                   services_ctrl_sm <= wait_flex_brd_id_st;
