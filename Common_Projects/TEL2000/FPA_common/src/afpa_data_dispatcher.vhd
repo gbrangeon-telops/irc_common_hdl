@@ -145,7 +145,6 @@ architecture rtl of afpa_data_dispatcher is
    signal aoi_dval                     : std_logic;    
    signal quad_fifo_dout               : std_logic_vector(QUAD_FIFO_DIN'LENGTH-1 downto 0);
    signal acq_fringe_last              : std_logic;    
-   --signal quad_fifo_rd                : std_logic;
    signal quad_fifo_ovfl               : std_logic;
    signal fringe_fifo_din              : std_logic_vector(71 downto 0);
    signal fringe_fifo_wr               : std_logic;
@@ -184,10 +183,6 @@ architecture rtl of afpa_data_dispatcher is
    signal img_end                      : std_logic;
    signal naoi_start                   : std_logic;
    signal naoi_stop                    : std_logic;
-   
-   --  attribute dont_touch                     : string; 
-   --  attribute dont_touch of int_time         : signal is "true"; 
-   --  attribute dont_touch of int_time_100MHz_x_2P15  : signal is "true";
    
 begin
    
