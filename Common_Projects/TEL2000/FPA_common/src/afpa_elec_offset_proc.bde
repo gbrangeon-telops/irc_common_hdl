@@ -2,7 +2,7 @@ SCHM0104
 
 HEADER
 {
- FREEID 3451
+ FREEID 3472
  VARIABLES
  {
   #ARCHITECTURE="SCH"
@@ -1625,11 +1625,12 @@ HEADER
    {
     #CUSTOM_NAME=""
     #DESCRIPTION=""
+    #GENERIC0="FORCE_NEG_RESULT_TO_ZERO:BOOLEAN:=false"
     #HDL_ENTRIES=
 "library IEEE,WORK;\n"+
 "use ieee.std_logic_1164.all,work.TEL2000.all;"
     #LANGUAGE="VHDL"
-    #MODIFIED="1508518275"
+    #MODIFIED="1516655415"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="7c430b64-9c33-4e26-b8d7-ee18cd76cf8a"
    }
   }
@@ -1928,13 +1929,11 @@ HEADER
      VARIABLES
      {
       #DIRECTION="IN"
-      #INITIAL_VALUE=""
       #LENGTH="20"
       #MDA_RECORD_TOKEN="OTHER"
       #NAME="RXB_MINUS_RXA"
       #NUMBER="0"
       #SIDE="left"
-      #VHDL_TYPE=""
      }
      LINE  2, 0, 0
      {
@@ -2343,8 +2342,10 @@ PAGE ""
    {
     #COMPONENT="afpa_quad_subtract"
     #CUSTOM_NAME=""
-    #IMPL="RTL"
+    #GENERIC0="FORCE_NEG_RESULT_TO_ZERO : BOOLEAN := True"
     #LIBRARY="work"
+    #NO_CONF="1"
+    #PRAGMED_GENERICS=""
     #REFERENCE="U5"
     #SYMBOL="afpa_quad_subtract"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="7c430b64-9c33-4e26-b8d7-ee18cd76cf8a"
@@ -4061,6 +4062,12 @@ PAGE ""
     #NAME="ELEC_OFFSET_MINUS_PIXDATA"
    }
   }
+  TEXT  3451, 0, 0
+  {
+   TEXT "@GENERIC_ACTUAL_VALUES()"
+   RECT (3460,1380,4038,1413)
+   PARENT 274
+  }
  }
  
 }
@@ -4086,7 +4093,7 @@ PAGE ""
  
  BODY
  {
-  TEXT  3434, 0, 0
+  TEXT  3455, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -4097,7 +4104,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  3435, 0, 0
+  TEXT  3456, 0, 0
   {
    PAGEALIGN 10
    TEXT "$CREATIONDATE"
@@ -4108,7 +4115,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  3436, 0, 0
+  TEXT  3457, 0, 0
   {
    PAGEALIGN 10
    TEXT "Title:"
@@ -4118,7 +4125,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  3437, 0, 0
+  TEXT  3458, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -4130,7 +4137,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  3438, 0, 0
+  TEXT  3459, 0, 0
   {
    PAGEALIGN 10
    TEXT 
@@ -4143,7 +4150,7 @@ PAGE ""
    FONT (12,0,0,700,0,0,0,"Arial")
    MULTILINE
   }
-  TEXT  3439, 0, 0
+  TEXT  3460, 0, 0
   {
    PAGEALIGN 10
    TEXT "Page:"
@@ -4153,7 +4160,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  3440, 0, 0
+  TEXT  3461, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -4165,7 +4172,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  3441, 0, 0
+  TEXT  3462, 0, 0
   {
    PAGEALIGN 10
    TEXT "Revision:"
@@ -4175,7 +4182,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  3442, 0, 0
+  TEXT  3463, 0, 0
   {
    PAGEALIGN 10
    TEXT "$Revision"
@@ -4186,7 +4193,7 @@ PAGE ""
    FONT (12,0,0,700,0,204,0,"Arial")
    UPDATE 0
   }
-  GROUP  3443, 0, 0
+  GROUP  3464, 0, 0
   {
    PAGEALIGN 10
    RECT (3320,2820,4201,3201)
@@ -4198,7 +4205,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  3444, 0, 0
+  GROUP  3465, 0, 0
   {
    PAGEALIGN 10
    RECT (3320,3020,4201,3021)
@@ -4210,7 +4217,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  3445, 0, 0
+  GROUP  3466, 0, 0
   {
    PAGEALIGN 10
    RECT (3320,2960,4201,2961)
@@ -4222,7 +4229,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  3446, 0, 0
+  GROUP  3467, 0, 0
   {
    PAGEALIGN 10
    RECT (3320,3080,4201,3081)
@@ -4234,7 +4241,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  3447, 0, 0
+  GROUP  3468, 0, 0
   {
    PAGEALIGN 10
    RECT (3320,3140,4201,3141)
@@ -4246,7 +4253,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  3448, 0, 0
+  GROUP  3469, 0, 0
   {
    PAGEALIGN 10
    RECT (3500,2820,3501,2961)
@@ -4257,7 +4264,7 @@ PAGE ""
     POINTS ( (0,0), (0,140) )
    }
   }
-  GROUP  3449, 0, 0
+  GROUP  3470, 0, 0
   {
    PAGEALIGN 10
    RECT (3500,2960,3501,3201)
@@ -4268,7 +4275,7 @@ PAGE ""
     POINTS ( (0,0), (0,240) )
    }
   }
-  BMPPICT  3450, 0, 0
+  BMPPICT  3471, 0, 0
   {
    PAGEALIGN 10
    RECT (3340,2880,3479,2925)
