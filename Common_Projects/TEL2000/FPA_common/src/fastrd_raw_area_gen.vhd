@@ -27,7 +27,7 @@ entity fastrd_raw_area_gen is
       FPA_MCLK          : in std_logic;  -- permet une synchro sur re de MCLK. ce qui n'est pas forcément possible avec PCLK uniquement
       
       FPA_INTF_CFG      : in fpa_intf_cfg_type;      
-      READOUT_START     : in std_logic;
+      START             : in std_logic;
       
       WINDOW_INFO       : out window_info_type
       --AFULL             : in std_logic
@@ -52,7 +52,8 @@ architecture rtl of fastrd_raw_area_gen is
    
    --signal sync_flag_fsm        : sync_flag_fsm_type;
    signal readout_fsm          : readout_fsm_type;
-   signal readout_start_i      : std_logic := '0';
+   signal start_i              : std_logic := '0';
+   signal start_last           : std_logic;
    signal pclk_last            : std_logic;
    signal pclk_rise            : std_logic;
    signal frame_pclk_cnt       : unsigned(FPA_INTF_CFG.RAW_AREA.READOUT_PCLK_CNT_MAX'LENGTH-1 downto 0); 
@@ -102,20 +103,22 @@ begin
       if rising_edge(CLK) then 
          if sreset = '1' then            
             readout_fsm <= idle;
-            readout_in_progress <= '0';            
+            readout_in_progress <= '0';
+            start_last <= '1';
          else           
             
             pclk_last <= FPA_PCLK;                  
             pclk_rise <= not pclk_last and FPA_PCLK;
             
-            readout_start_i <= READOUT_START;          
+            start_i <= START;
+            start_last <= start_i;
             
             -- contrôleur
             case readout_fsm is           
                
                when idle =>   
                   readout_in_progress <= '0';
-                  if readout_start_i = '1' then 
+                  if start_last = '0' and start_i = '1' then 
                      readout_fsm <= readout_st;
                   end if;        
                
