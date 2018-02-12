@@ -205,7 +205,6 @@ begin
                dval_o <= dval_i;
                sol_o  <= sol_i;
                eol_o  <= eol_i;
-               data_o <= data_i;
                err_o  <= err_i;
                
             end if;
