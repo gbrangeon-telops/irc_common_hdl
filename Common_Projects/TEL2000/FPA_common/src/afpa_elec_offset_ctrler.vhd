@@ -161,9 +161,9 @@ begin
                      lane_enabled <= "01";     -- pour activation du lane0
                   end if;                
                
-               when dispatch_samp_st =>              -- on envoie les echantillons aux deux lanes de moyenneurs
-                  if RX_MOSI.DVAL = '1' then 
-                     lane_enabled <= not lane_enabled;
+               when dispatch_samp_st =>              -- on envoie les echantillons aux deux lanes de moyenneurs si demandé. Sinon, un seul lane prend tous les échantillons
+                  if RX_MOSI.DVAL = '1' and FPA_INTF_CFG.ELEC_OFS_SECOND_LANE_ENABLED = '1' then  
+                        lane_enabled <= not lane_enabled;              
                   end if;
                   if RX_MOSI.EOF = '1' and  RX_MOSI.DVAL = '1' then       -- fin de la zone de calcul d'offset
                      lane_enabled <= "00";
@@ -175,12 +175,12 @@ begin
                   ofs_ctrl_fsm <= send_result_st1;
                
                when send_result_st1 =>                  
-                  send_result(1) <= '1';         -- dure 1 clk à cause de la valeur par defaut en haut
+                  send_result(1) <= FPA_INTF_CFG.ELEC_OFS_SECOND_LANE_ENABLED;         -- dure 1 clk à cause de la valeur par defaut en haut
                   ofs_ctrl_fsm <= check_end_st;
                
                when check_end_st =>               
                   dcount <= dcount + 1;
-                  if dcount(2) = '1' then         -- ENO: 04 oct 2017: ecrire au moins 4 elements identiques de chaque dans le fifo de sorte que le recyckage se fasse sans bug 
+                  if dcount = 6   then         -- ENO: 04 oct 2017: ecrire au moins 6 elements identiques de chaque dans le fifo de sorte que le recyclage se fasse sans bug 
                      ofs_ctrl_fsm <= abort_calc_st;
                   else
                      ofs_ctrl_fsm <= send_result_st0;  
