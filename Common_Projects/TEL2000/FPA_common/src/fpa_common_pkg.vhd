@@ -97,9 +97,9 @@ package fpa_common_pkg is
    constant  ID_ANALOG_HAWK_INPUT_LVCMOS33_COOL_18V_TO_32V                 : freq_id_type := ( 9524, 10526);   -- 10.0 KHz, Analog HAWK RM4
    constant  ID_ANALOG_ISC0209_INPUT_LVTTL50_COOL_20V_TO_28V               : freq_id_type := ( 8282,  9153);   -- 11.5 KHz, Analog ISC0209 RICOR Kxxx/LSF
    constant  ID_ANALOG_SCORPIO_MW_INPUT_LVCMOS33_COOL_23V_TO_25V           : freq_id_type := ( 7326,  8097);   -- 13.0 KHz, Analog Scorpio MW RM3 (wo MGLK)
-   constant  ID_ANALOG_ISC0804_INPUT_LVCMOS33_COOL_20V_TO_28V              : freq_id_type := ( 6568,  7260);   -- 14.5 KHz, Analog ISC0207 RICOR K548/LSF with FleG-X
+   constant  ID_ANALOG_ISC0804_INPUT_LVCMOS33_COOL_20V_TO_28V              : freq_id_type := ( 6568,  7260);   -- 14.5 KHz, Analog ISC0804 RICOR K548/LSF with FleG-X
    constant  ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V_WITH_FLEGX    : freq_id_type := ( 5772,  6380);   -- 16.5 KHz, Analog ISC0207 RICOR K548/LSF with FleG-X
-   
+   constant  ID_ANALOG_ISC0804_INPUT_LVCMOS33_COOL_20V_TO_28V_WITH_FLEX264 : freq_id_type := ( 5148,  5690);   -- 18.5 KHz, Analog ISC0804 RICOR K548/LSF with Flex264         
    
    ----------------------------------------------------------------------------------
    -- Les frequences de reconnaissance des cartes ADC (en coups de clocks 100 MHz)   
@@ -453,7 +453,17 @@ package body fpa_common_pkg is
             flex_brd_info.cooler_volt_min_mV   := 20_000;
             flex_brd_info.cooler_volt_max_mV   := 28_000;
             flex_brd_info.flegx_brd_present    := '1';
-            flex_brd_info.chn_diversity_num    := 1;            
+            flex_brd_info.chn_diversity_num    := 1; 
+            
+            -- isc0804A with cooler 24V  (EFA-00264-XXX)
+         elsif (Tosc >= ID_ANALOG_ISC0804_INPUT_LVCMOS33_COOL_20V_TO_28V_WITH_FLEX264.freq_id_min) and (Tosc <= ID_ANALOG_ISC0804_INPUT_LVCMOS33_COOL_20V_TO_28V_WITH_FLEX264.freq_id_max) then
+            flex_brd_info.fpa_roic             := FPA_ROIC_ISC0804;
+            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input            := LVCMOS33;
+            flex_brd_info.cooler_volt_min_mV   := 20_000;
+            flex_brd_info.cooler_volt_max_mV   := 28_000;
+            flex_brd_info.flegx_brd_present    := '0';
+            flex_brd_info.chn_diversity_num    := 1;  
             
             -- flex_brd inconnu  
          else
