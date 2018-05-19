@@ -75,7 +75,7 @@ architecture RTL of fpa_trig_controller is
          );
    end component;
    
-   type fpa_trig_sm_type is (idle, int_trig_st, wait_permit_trig_st, check_trig_ctrl_mode_st, check_int_feedback_st, wait_readout_end_st, wait_int_end_st, dly_to_apply_st);
+   type fpa_trig_sm_type is (idle, int_trig_st, wait_permit_trig_st, check_trig_ctrl_mode_st, check_int_feedback_st, wait_readout_end_st, wait_int_end_st, get_dly_st, apply_dly_st);
    type trig_period_min_sm_type is (idle, period_cnt_st);
    signal fpa_trig_sm                  : fpa_trig_sm_type;
    signal trig_period_min_sm           : trig_period_min_sm_type;
@@ -100,7 +100,8 @@ architecture RTL of fpa_trig_controller is
    signal fpa_int_feedbk_i             : std_logic;
    signal acq_trig_in_i                : std_logic; 
    signal xtra_trig_in_i               : std_logic; 
-   signal prog_trig_in_i               : std_logic; 
+   signal prog_trig_in_i               : std_logic;
+   signal acq_mode_i                   : std_logic := '0';
    
    --   attribute dont_touch                : string;
    --   attribute dont_touch of acq_trig_i  : signal is "true";
@@ -209,14 +210,14 @@ begin
                      if acq_trig_in_i = '1' then 
                         acq_trig_i <= not PROG_TRIG_IN;
                         acq_trig_o <= not PROG_TRIG_IN;
-                        dly_cnt <= FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_CTRL_DLY;
+                        acq_mode_i <= '1';
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '0';
                         done <= '0';
                      elsif xtra_trig_in_i = '1' then   
                         xtra_trig_i <= not PROG_TRIG_IN;         
                         xtra_trig_o <= not PROG_TRIG_IN;
-                        dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;
+                        acq_mode_i <= '0';
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '1';
                         done <= '0';
@@ -226,7 +227,7 @@ begin
                   if prog_trig_in_i = '1' then
                      prog_trig_i <= '1';         
                      prog_trig_o <= '1';
-                     dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;
+                     acq_mode_i <= '0';
                      fpa_trig_sm <= int_trig_st;
                      acq_trig_done <= '1';
                      done <= '0';                        
@@ -268,7 +269,7 @@ begin
                -- mode_readout_end_to_trig_start : on attend la fin du readout 
                when wait_readout_end_st => 
                   if fpa_readout_last = '1' and  fpa_readout_i = '0' then --! fin du readout.
-                     fpa_trig_sm <= dly_to_apply_st; 
+                     fpa_trig_sm <= get_dly_st; 
                   end if;
                   
                -- mode_trig_start_to_trig_start : on  attend permit_trig qui marque la periode min
@@ -280,13 +281,21 @@ begin
                -- mode_int_end_to_trig_start : on attend la fin de l'intégration 
                when wait_int_end_st =>
                   if fpa_int_feedbk_i = '0' then
-                     fpa_trig_sm <= dly_to_apply_st;  
+                     fpa_trig_sm <= get_dly_st;                     
                   end if;
+               
+               when get_dly_st =>
+                  if acq_mode_i = '1' then 
+                     dly_cnt <= FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_CTRL_DLY;
+                  else
+                     dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;
+                  end if;
+                  fpa_trig_sm <= apply_dly_st;
                   
                   -- Dans le mode_int_end_to_trig_start : on observe le delai entre la fin de l'integration et le debut du prochain trig
                   -- Dans le mode_readout_end_to_trig_start : on observe le delai readout_end_to_trig_start
                -- le pilote est donc supposé calculer le delai FPA_TRIG_CTRL_DLY en tenant compte du mode du contrôleur
-               when dly_to_apply_st =>
+               when apply_dly_st =>
                   dly_cnt <= dly_cnt - 1;   -- !un compte-down est plus stable
                   if dly_cnt = 0  then  
                      fpa_trig_sm <= idle;                                 

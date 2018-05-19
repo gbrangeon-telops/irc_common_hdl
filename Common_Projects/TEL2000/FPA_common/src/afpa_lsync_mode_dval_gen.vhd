@@ -42,7 +42,7 @@ entity afpa_lsync_mode_dval_gen is
 end afpa_lsync_mode_dval_gen;
 
 
-architecture rtl of afpa_lsync_mode_dval_gen is
+  architecture rtl of afpa_lsync_mode_dval_gen is
    
    component sync_reset
       port(
