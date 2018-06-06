@@ -108,10 +108,10 @@ begin
             tx_mosi_i.sol  <= RXA_MOSI.SOL;
             tx_mosi_i.eol  <= RXA_MOSI.EOL;
             tx_mosi_i.dval <= sync_dval_i;
-            tx_mosi_i.data(71 downto 54) <= std_logic_vector(unsigned(RXA_MOSI.DATA(71 downto 54)) + unsigned(RXB_MOSI.DATA(71 downto 54)));
-            tx_mosi_i.data(53 downto 36) <= std_logic_vector(unsigned(RXA_MOSI.DATA(53 downto 36)) + unsigned(RXB_MOSI.DATA(53 downto 36)));
-            tx_mosi_i.data(35 downto 18) <= std_logic_vector(unsigned(RXA_MOSI.DATA(35 downto 18)) + unsigned(RXB_MOSI.DATA(35 downto 18)));
-            tx_mosi_i.data(17 downto 0)  <= std_logic_vector(unsigned(RXA_MOSI.DATA(17 downto 0))  + unsigned(RXB_MOSI.DATA(17 downto 0)));
+            tx_mosi_i.data(71 downto 54) <= std_logic_vector(signed(RXA_MOSI.DATA(71 downto 54)) + signed(RXB_MOSI.DATA(71 downto 54)));
+            tx_mosi_i.data(53 downto 36) <= std_logic_vector(signed(RXA_MOSI.DATA(53 downto 36)) + signed(RXB_MOSI.DATA(53 downto 36)));
+            tx_mosi_i.data(35 downto 18) <= std_logic_vector(signed(RXA_MOSI.DATA(35 downto 18)) + signed(RXB_MOSI.DATA(35 downto 18)));
+            tx_mosi_i.data(17 downto 0)  <= std_logic_vector(signed(RXA_MOSI.DATA(17 downto 0))  + signed(RXB_MOSI.DATA(17 downto 0)));
          end if;
       end if;
    end process;    

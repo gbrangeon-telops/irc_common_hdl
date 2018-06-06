@@ -20,17 +20,18 @@ entity afpa_sample_demux is
    port(
       ARESET        : in std_logic;
       CLK           : in std_logic;
-      
-      FPA_INTF_CFG  : in fpa_intf_cfg_type;
-      
+           
       RX_MOSI       : in t_ll_area_mosi72;
       RX_MISO       : out t_ll_area_miso;
       
-      AOI_MOSI      : out t_ll_ext_mosi72;
-      AOI_MISO      : in t_ll_ext_miso;
+      PIX_MOSI      : out t_ll_ext_mosi72;
+      PIX_MISO      : in t_ll_ext_miso;
       
-      NON_AOI_MOSI  : out t_ll_ext_mosi72;
-      NON_AOI_MISO  : in t_ll_ext_miso    
+      REF0_MOSI     : out t_ll_ext_mosi72;
+      REF0_MISO     : in t_ll_ext_miso;
+      
+      REF1_MOSI     : out t_ll_ext_mosi72;
+      REF1_MISO     : in t_ll_ext_miso
       );
 end afpa_sample_demux;
 
@@ -61,27 +62,39 @@ begin
    ------------------------------------------------------
    -- AOI
    ------------------------------------------------------ 
-   AOI_MOSI.DATA <= RX_MOSI.DATA;
-   AOI_MOSI.SOF  <= RX_MOSI.AOI_SOF;
-   AOI_MOSI.EOF  <= RX_MOSI.AOI_EOF;
-   AOI_MOSI.SOL  <= RX_MOSI.AOI_SOL;
-   AOI_MOSI.EOL  <= RX_MOSI.AOI_EOL;
-   AOI_MOSI.DVAL <= RX_MOSI.AOI_DVAL;
-   AOI_MOSI.MISC <= '0'&RX_MOSI.AOI_SPARE;
-   AOI_MOSI.SUPPORT_BUSY  <= RX_MOSI.SUPPORT_BUSY;
-   RX_MISO.AFULL <= AOI_MISO.AFULL;
-   RX_MISO.BUSY  <= AOI_MISO.BUSY;
+   PIX_MOSI.DATA <= RX_MOSI.DATA;
+   PIX_MOSI.SOF  <= RX_MOSI.AOI_SOF;
+   PIX_MOSI.EOF  <= RX_MOSI.AOI_EOF;
+   PIX_MOSI.SOL  <= RX_MOSI.AOI_SOL;
+   PIX_MOSI.EOL  <= RX_MOSI.AOI_EOL;
+   PIX_MOSI.DVAL <= RX_MOSI.AOI_DVAL;
+   PIX_MOSI.MISC <= '0'&RX_MOSI.AOI_SPARE;
+   PIX_MOSI.SUPPORT_BUSY  <= RX_MOSI.SUPPORT_BUSY;
+   RX_MISO.AFULL <= PIX_MISO.AFULL;
+   RX_MISO.BUSY  <= PIX_MISO.BUSY;
    
    ------------------------------------------------------
-   -- non AOI
+   -- non AOI :reference 0 
    ------------------------------------------------------
-   NON_AOI_MOSI.DATA <= RX_MOSI.DATA;
-   NON_AOI_MOSI.SOF  <= RX_MOSI.NAOI_START;
-   NON_AOI_MOSI.EOF  <= RX_MOSI.NAOI_STOP;
-   NON_AOI_MOSI.SOL  <= '0';
-   NON_AOI_MOSI.EOL  <= '0';
-   NON_AOI_MOSI.DVAL <= RX_MOSI.NAOI_DVAL;
-   NON_AOI_MOSI.MISC <= '0'&RX_MOSI.NAOI_SPARE;
-   NON_AOI_MOSI.SUPPORT_BUSY  <= RX_MOSI.SUPPORT_BUSY;  
+   REF0_MOSI.DATA <= RX_MOSI.DATA;
+   REF0_MOSI.SOF  <= RX_MOSI.NAOI_START;
+   REF0_MOSI.EOF  <= RX_MOSI.NAOI_STOP;
+   REF0_MOSI.SOL  <= '0';
+   REF0_MOSI.EOL  <= '0';
+   REF0_MOSI.DVAL <= RX_MOSI.NAOI_DVAL and RX_MOSI.NAOI_REF_VALID(0);
+   REF0_MOSI.MISC <= RX_MOSI.NAOI_SPARE & RX_MOSI.NAOI_REF_VALID(0);
+   REF0_MOSI.SUPPORT_BUSY  <= RX_MOSI.SUPPORT_BUSY;    
+   
+   ------------------------------------------------------
+   -- non AOI :reference 1 
+   ------------------------------------------------------
+   REF1_MOSI.DATA <= RX_MOSI.DATA;
+   REF1_MOSI.SOF  <= RX_MOSI.NAOI_START;
+   REF1_MOSI.EOF  <= RX_MOSI.NAOI_STOP;
+   REF1_MOSI.SOL  <= '0';
+   REF1_MOSI.EOL  <= '0';
+   REF1_MOSI.DVAL <= RX_MOSI.NAOI_DVAL and RX_MOSI.NAOI_REF_VALID(1);
+   REF1_MOSI.MISC <= RX_MOSI.NAOI_SPARE & RX_MOSI.NAOI_REF_VALID(1);
+   REF1_MOSI.SUPPORT_BUSY  <= RX_MOSI.SUPPORT_BUSY;   
    
 end rtl;

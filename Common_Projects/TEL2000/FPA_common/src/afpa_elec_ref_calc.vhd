@@ -67,7 +67,7 @@ architecture rtl of afpa_elec_ref_calc is
    signal samp_sum_data_latch : samp_sum_type;
    signal samp_sum_en         : std_logic;
    signal numerator           : unsigned(FPA_INTF_CFG.ELCORR_REF_CFG(REF_ID).SAMP_MEAN_NUMERATOR'LENGTH-1 downto 0);
-   signal result_dval         : std_logic;
+   signal result_dval         : std_logic := '0';
    signal result              : result_type;
    signal temp_result         : temp_result_type;
    

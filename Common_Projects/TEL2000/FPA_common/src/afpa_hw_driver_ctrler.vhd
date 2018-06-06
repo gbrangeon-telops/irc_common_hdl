@@ -183,8 +183,14 @@ begin
                   prog_init_done_i <= first_prog_done;    -- Par principe pour le scorpiomwA, la premiere config est celle d'initialisation.
                   if DIAG_MODE_ONLY = '1' then
                      hw_seq_fsm <= diag_mode_only_st;
-                  elsif valid_rqst_pending = '1' then 
+                  elsif valid_prog_rqst = '1' then 
                      hw_seq_fsm <= forward_rqst_st;
+                  elsif valid_dac_rqst = '1' then
+                     if prog_init_done_i = '0' then       -- on fait ceci juste pour être compatible avec l'existant. Sinon, le dac n'a pas besoin de cela. Il peut être tout le temps programmé à la volée, sans blocage des trigs d'integration
+                       hw_seq_fsm <= forward_rqst_st; 
+                     else                                 -- programmation sans interruption des trigs d'integration
+                       hw_seq_fsm <= check_rqst_st; 
+                     end if;
                   end if;
                   
                -- diag mode only
@@ -296,34 +302,34 @@ begin
             fpa_intf_cfg_i.real_mode_active_pixel_dly <= USER_CFG.REAL_MODE_ACTIVE_PIXEL_DLY;
             
             -- à effacer après implantation fastwindowing sur M3K 
---            if readout_i = '0' then 
---               fpa_intf_cfg_i.speedup_lsydel        <= USER_CFG.speedup_lsydel;      
---               fpa_intf_cfg_i.speedup_lsync         <= USER_CFG.speedup_lsync;       
---               fpa_intf_cfg_i.speedup_sample_row    <= USER_CFG.speedup_sample_row;  
---               fpa_intf_cfg_i.speedup_unused_area   <= USER_CFG.speedup_unused_area;
---               fpa_intf_cfg_i.fastrd_sync_pos       <= USER_CFG.fastrd_sync_pos;
---               fpa_intf_cfg_i.lsydel_mclk           <= USER_CFG.lsydel_mclk;
---               
---               
---               fpa_intf_cfg_i.adc_clk_source_phase  <= USER_CFG.adc_clk_source_phase;
---               fpa_intf_cfg_i.adc_clk_pipe_sel      <= USER_CFG.adc_clk_pipe_sel;
---               
---               fpa_intf_cfg_i.elec_ofs_enabled                 <=  USER_CFG.elec_ofs_enabled; 
---               fpa_intf_cfg_i.elec_ofs_offset_null_forced      <=  USER_CFG.elec_ofs_offset_null_forced;     
---               fpa_intf_cfg_i.elec_ofs_pix_faked_value_forced  <=  USER_CFG.elec_ofs_pix_faked_value_forced; 
---               fpa_intf_cfg_i.elec_ofs_pix_faked_value         <=  USER_CFG.elec_ofs_pix_faked_value;        
---               fpa_intf_cfg_i.elec_ofs_offset_minus_pix_value  <=  USER_CFG.elec_ofs_offset_minus_pix_value; 
---               fpa_intf_cfg_i.elec_ofs_add_const               <=  USER_CFG.elec_ofs_add_const;              
---               fpa_intf_cfg_i.elec_ofs_start_dly_sampclk       <=  USER_CFG.elec_ofs_start_dly_sampclk;              
---               fpa_intf_cfg_i.elec_ofs_samp_num_per_ch         <=  USER_CFG.elec_ofs_samp_num_per_ch;        
---               fpa_intf_cfg_i.elec_ofs_samp_mean_numerator     <=  USER_CFG.elec_ofs_samp_mean_numerator;
---               
---               fpa_intf_cfg_i.clamping_level         <= USER_CFG.clamping_level;
---               fpa_intf_cfg_i.sol_dly_mclk_source    <= USER_CFG.sol_dly_mclk_source;
---               fpa_intf_cfg_i.sol_dly_valid          <= USER_CFG.sol_dly_valid;
---               fpa_intf_cfg_i.fastrd_sync_pos        <= USER_CFG.fastrd_sync_pos;
---               
---            end if;
+            --            if readout_i = '0' then 
+            --               fpa_intf_cfg_i.speedup_lsydel        <= USER_CFG.speedup_lsydel;      
+            --               fpa_intf_cfg_i.speedup_lsync         <= USER_CFG.speedup_lsync;       
+            --               fpa_intf_cfg_i.speedup_sample_row    <= USER_CFG.speedup_sample_row;  
+            --               fpa_intf_cfg_i.speedup_unused_area   <= USER_CFG.speedup_unused_area;
+            --               fpa_intf_cfg_i.fastrd_sync_pos       <= USER_CFG.fastrd_sync_pos;
+            --               fpa_intf_cfg_i.lsydel_mclk           <= USER_CFG.lsydel_mclk;
+            --               
+            --               
+            --               fpa_intf_cfg_i.adc_clk_source_phase  <= USER_CFG.adc_clk_source_phase;
+            --               fpa_intf_cfg_i.adc_clk_pipe_sel      <= USER_CFG.adc_clk_pipe_sel;
+            --               
+            --               fpa_intf_cfg_i.elec_ofs_enabled                 <=  USER_CFG.elec_ofs_enabled; 
+            --               fpa_intf_cfg_i.elec_ofs_offset_null_forced      <=  USER_CFG.elec_ofs_offset_null_forced;     
+            --               fpa_intf_cfg_i.elec_ofs_pix_faked_value_forced  <=  USER_CFG.elec_ofs_pix_faked_value_forced; 
+            --               fpa_intf_cfg_i.elec_ofs_pix_faked_value         <=  USER_CFG.elec_ofs_pix_faked_value;        
+            --               fpa_intf_cfg_i.elec_ofs_offset_minus_pix_value  <=  USER_CFG.elec_ofs_offset_minus_pix_value; 
+            --               fpa_intf_cfg_i.elec_ofs_add_const               <=  USER_CFG.elec_ofs_add_const;              
+            --               fpa_intf_cfg_i.elec_ofs_start_dly_sampclk       <=  USER_CFG.elec_ofs_start_dly_sampclk;              
+            --               fpa_intf_cfg_i.elec_ofs_samp_num_per_ch         <=  USER_CFG.elec_ofs_samp_num_per_ch;        
+            --               fpa_intf_cfg_i.elec_ofs_samp_mean_numerator     <=  USER_CFG.elec_ofs_samp_mean_numerator;
+            --               
+            --               fpa_intf_cfg_i.clamping_level         <= USER_CFG.clamping_level;
+            --               fpa_intf_cfg_i.sol_dly_mclk_source    <= USER_CFG.sol_dly_mclk_source;
+            --               fpa_intf_cfg_i.sol_dly_valid          <= USER_CFG.sol_dly_valid;
+            --               fpa_intf_cfg_i.fastrd_sync_pos        <= USER_CFG.fastrd_sync_pos;
+            --               
+            --            end if;
             
             
          end if;

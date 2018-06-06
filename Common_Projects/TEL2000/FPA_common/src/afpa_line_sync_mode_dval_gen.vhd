@@ -410,7 +410,7 @@ begin
    Unaoi3 : process(CLK)
    begin
       if rising_edge(CLK) then         
-         naoi_flag_fifo_din(17 downto 0) <= READOUT_INFO.NAOI.SPARE & READOUT_INFO.NAOI.DVAL & READOUT_INFO.NAOI.STOP & READOUT_INFO.NAOI.START;
+         naoi_flag_fifo_din(17 downto 0) <= READOUT_INFO.NAOI.SPARE & READOUT_INFO.NAOI.REF_VALID & READOUT_INFO.NAOI.DVAL & READOUT_INFO.NAOI.STOP & READOUT_INFO.NAOI.START;
          naoi_flag_fifo_wr <= READOUT_INFO.NAOI.SAMP_PULSE and READOUT_INFO.NAOI.DVAL and naoi_init_done;    
       end if;
    end process; 
@@ -428,7 +428,8 @@ begin
    readout_info_o.aoi.dval       <= aoi_flag_fifo_dout(0);
    
    -- non_aoi flag fifo out 
-   readout_info_o.naoi.spare     <= naoi_flag_fifo_dout(17 downto 3); 
+   readout_info_o.naoi.spare     <= naoi_flag_fifo_dout(17 downto 5);
+   readout_info_o.naoi.ref_valid <= naoi_flag_fifo_dout(4 downto 3);
    readout_info_o.naoi.dval      <= naoi_flag_fifo_dout(2);
    readout_info_o.naoi.stop      <= naoi_flag_fifo_dout(1);
    readout_info_o.naoi.start     <= naoi_flag_fifo_dout(0);
@@ -467,7 +468,8 @@ begin
             dout_o(77)           <= readout_info_o.aoi.dval and naoi_in_progress and FPA_DIN_DVAL;    -- naoi_dval    
             dout_o(78)           <= readout_info_o.naoi.start and naoi_in_progress;                   -- naoi_start
             dout_o(79)           <= readout_info_o.naoi.stop and naoi_in_progress;                    -- naoi_stop            
-            dout_o(94 downto 80) <= readout_info_o.naoi.spare;                                        -- naoi_spares
+            dout_o(81 downto 80) <= readout_info_o.naoi.ref_valid;                                    -- naoi_ref_valid
+            dout_o(94 downto 82) <= readout_info_o.naoi.spare;                                        -- naoi_spares
             
             -- non utilisé                                                                            -- non utilisé
             dout_o(95)          <= '0'; 

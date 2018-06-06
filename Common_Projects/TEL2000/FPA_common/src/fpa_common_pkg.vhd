@@ -273,6 +273,16 @@ package fpa_common_pkg is
       support_busy : std_logic;
    end record;
    
+   type t_ll_ext_mosi18 is record
+      sof         : std_logic;
+      eof         : std_logic; 
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic_vector(17 downto 0);
+      dval        : std_logic;
+      support_busy : std_logic;
+   end record;
+   
    type t_ll_ext_mosi32 is record
       sof         : std_logic;
       eof         : std_logic; 
@@ -283,12 +293,33 @@ package fpa_common_pkg is
       support_busy : std_logic;
    end record;
    
+   type t_ll_ext_mosi36 is record
+      sof         : std_logic;
+      eof         : std_logic; 
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic_vector(35 downto 0); 
+      dval        : std_logic;
+      support_busy : std_logic;
+   end record;
+   
    type t_ll_ext_mosi72 is record
       sof         : std_logic;
       eof         : std_logic; 
       sol         : std_logic;   -- start of line
       eol         : std_logic;   -- eol of line
       data        : std_logic_vector(71 downto 0); 
+      dval        : std_logic;
+      misc        : std_logic_vector(15 downto 0);
+      support_busy : std_logic;
+   end record;
+   
+   type t_ll_ext_mosi144 is record
+      sof         : std_logic;
+      eof         : std_logic; 
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic_vector(143 downto 0); 
       dval        : std_logic;
       misc        : std_logic_vector(15 downto 0);
       support_busy : std_logic;
@@ -308,9 +339,10 @@ package fpa_common_pkg is
       
       -- non AOI_area
       naoi_dval        : std_logic;  -- à '1' dit que les données sur le bus data sont couplés aux flags naoi_misc. 
-      naoi_start       : std_logic;
-      naoi_stop        : std_logic;
-      naoi_spare       : std_logic_vector(14 downto 0);
+      naoi_start       : std_logic;  -- start global d'une zone naoi ( en general zone de voltage refrence)
+      naoi_stop        : std_logic;  -- stop global d'une zone naoi ( en general zone de voltage refrence)
+      naoi_ref_valid   : std_logic_vector(1 downto 0);  -- est à '1' pour indiquer quelle reference de tension est en progression dans la chaine. Utilisée pour la correction dynamique de l'électronique 
+      naoi_spare       : std_logic_vector(12 downto 0);
       support_busy     : std_logic;
    end record;
    

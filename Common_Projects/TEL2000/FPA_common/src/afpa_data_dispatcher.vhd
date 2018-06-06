@@ -178,11 +178,12 @@ architecture rtl of afpa_data_dispatcher is
    signal pix_count                    : unsigned(31 downto 0);
    signal pause_cnt                    : unsigned(7 downto 0);
    signal naoi_dval                    : std_logic := '0';
-   signal naoi_spare                   : std_logic_vector(14 downto 0);
+   signal naoi_spare                   : std_logic_vector(12 downto 0);
    signal img_start                    : std_logic := '0';
    signal img_end                      : std_logic;
    signal naoi_start                   : std_logic;
    signal naoi_stop                    : std_logic;
+   signal naoi_ref_valid               : std_logic_vector(1 downto 0);
    
 begin
    
@@ -219,10 +220,11 @@ begin
          img_end        <= aoi_eof and aoi_dval;    -- img_end  . À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
          
          -- non AOI area flags         
-         naoi_dval   <= quad_fifo_dout(77) and quad_fifo_dval;
-         naoi_start  <= quad_fifo_dout(78);
-         naoi_stop   <= quad_fifo_dout(79);
-         naoi_spare  <= quad_fifo_dout(94 downto 80);            
+         naoi_dval      <= quad_fifo_dout(77) and quad_fifo_dval;
+         naoi_start     <= quad_fifo_dout(78);
+         naoi_stop      <= quad_fifo_dout(79);
+         naoi_ref_valid <= quad_fifo_dout(81 downto 80);
+         naoi_spare     <= quad_fifo_dout(94 downto 82);            
       end if;
    end process;   
    

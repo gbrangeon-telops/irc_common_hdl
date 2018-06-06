@@ -50,7 +50,7 @@ architecture rtl of afpa_elec_ref_ctrler is
          );
    end component;
    
-   type ref_ctrl_fsm_type is (idle, active_dly_st, samp_valid_st, pause_st, abort_calc_st);
+   type ref_ctrl_fsm_type is (idle, global_dly_st, wait_ref_start_st, wait_ref_end_st, pause_st, abort_calc_st);
    
    signal ref_ctrl_fsm        : ref_ctrl_fsm_type;
    signal sreset			      : std_logic;
@@ -61,6 +61,8 @@ architecture rtl of afpa_elec_ref_ctrler is
    signal pause_cnt           : unsigned(7 downto 0);
    signal err_i               : std_logic;
    signal abort_calc_i        : std_logic;
+   signal ref_valid_i         : std_logic;
+   signal global_active_area_i: std_logic;
    
 begin
    
@@ -119,7 +121,19 @@ begin
             lane_enabled  <= '0';
             ref_ctrl_fsm <= idle;
             abort_calc_i <= '1';
+            ref_valid_i <= '0';
+            global_active_area_i <= '0';
+            
          else            
+            
+            ref_valid_i <= RX_MOSI.MISC(0);  -- selon la definition du module en amont
+            
+            if RX_MOSI.EOF = '1' then 
+               global_active_area_i <= '0';
+            elsif RX_MOSI.SOF = '1' then
+               global_active_area_i <= '1';
+            end if;
+            
             
             case ref_ctrl_fsm is 
                
@@ -127,40 +141,54 @@ begin
                   abort_calc_i <= '0'; 
                   dly_cnt <= (others => '0');
                   pause_cnt <= (others => '0');
-                  if RX_MOSI.SOF = '1' and  RX_MOSI.DVAL = '1' then 
-                     ref_ctrl_fsm <= active_dly_st;
+                  if RX_MOSI.SOF = '1' then          -- debut de la zone globale de définition des références
+                     ref_ctrl_fsm <= global_dly_st;
                   end if;                                    
                
-               when active_dly_st =>                 -- delai en nombre de samples avant d'aller chercher les pixels d'une ligne
+               when global_dly_st =>                 -- delai en nombre de samples avant d'aller chercher les pixels d'une ligne
                   incr := '0'& RX_MOSI.DVAL;
                   dly_cnt <= dly_cnt + to_integer(unsigned(incr));                 
                   if dly_cnt >= to_integer(FPA_INTF_CFG.ELCORR_REF_CFG(REF_ID).START_DLY_SAMPCLK) then
-                     ref_ctrl_fsm <= samp_valid_st;
-                     lane_enabled <= '1';     
+                     ref_ctrl_fsm <= wait_ref_start_st;
+                  end if;
+
+               when wait_ref_start_st =>
+                  if ref_valid_i = '1' then
+                     ref_ctrl_fsm <= wait_ref_end_st;
+                  end if;                  
+               
+               when wait_ref_end_st =>
+                  lane_enabled <= ref_valid_i;                  
+                  if ref_valid_i = '0' then         -- fin de la zone retreinte de definition de la reference
+                     ref_ctrl_fsm <= pause_st;
                   end if;                
                
-               when samp_valid_st =>                -- on envoie les echantillons au moyenneur
-                  if RX_MOSI.EOF = '1' and  RX_MOSI.DVAL = '1' then       -- fin de la zone de definition de la reference
-                     lane_enabled <= '0';
-                     ref_ctrl_fsm <= pause_st;
-                  end if;
-               
-               when pause_st =>                     -- on attend que le dernier echantillon se circule dans le pipe du moyenneur
+               when pause_st =>                      -- on attend que le dernier echantillon se circule dans le pipe du moyenneur
                   pause_cnt <= pause_cnt + 1;
+                  lane_enabled <= '0';
                   if pause_cnt(3) = '1' then        
                      ref_ctrl_fsm <= abort_calc_st; 
                   end if;                  
                
-               when abort_calc_st =>                -- on fait un reset sur le moyenneur afin qu'il reinitialise son pipe
+               when abort_calc_st =>                 -- on fait un reset sur le moyenneur afin qu'il reinitialise son pipe
                   abort_calc_i <= '1';
                   pause_cnt <= pause_cnt + 1;
                   if pause_cnt(4) = '1' then
-                     ref_ctrl_fsm <= idle;
+                     if global_active_area_i = '0' then   -- on va en idle car la zone des references est terminée
+                        ref_ctrl_fsm <= idle;
+                     else                                 -- la zone de prise des references n'est pas finie.  
+                        ref_ctrl_fsm <= wait_ref_start_st;
+                     end if;
                   end if;
                
                when others =>
                
-            end case; 	
+            end case;
+            
+            -- priorité absolue: à la fin de la zone globale des references, abandonner tout
+            if RX_MOSI.EOF = '1' and ref_ctrl_fsm /= idle  then                      -- fin de la zone globale de definition de la reference
+               ref_ctrl_fsm <= pause_st;
+            end if;
             
          end if;
       end if;
