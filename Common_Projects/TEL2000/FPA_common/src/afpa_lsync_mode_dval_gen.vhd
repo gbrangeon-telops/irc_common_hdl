@@ -1,5 +1,5 @@
 ------------------------------------------------------------------
---!   @file : afpa_lsync_mode_dval_gen
+--!   @file : afpa_line_sync_mode_dval_gen
 --!   @brief
 --!   @details
 --!
@@ -19,7 +19,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.NUMERIC_STD.all;
 use work.fpa_define.all;
 
-entity afpa_lsync_mode_dval_gen is
+entity afpa_line_sync_mode_dval_gen is
    port(
       
       ARESET        : in std_logic;
@@ -39,10 +39,10 @@ entity afpa_lsync_mode_dval_gen is
       
       ERR           : out std_logic_vector(1 downto 0)
       );
-end afpa_lsync_mode_dval_gen;
+end afpa_line_sync_mode_dval_gen;
 
 
-  architecture rtl of afpa_lsync_mode_dval_gen is
+  architecture rtl of afpa_line_sync_mode_dval_gen is
    
    component sync_reset
       port(
@@ -162,8 +162,8 @@ end afpa_lsync_mode_dval_gen;
    signal dout_o                    : std_logic_vector(FPA_DOUT'LENGTH-1 downto 0);
    signal dout_wr_en_o              : std_logic;
    
-   signal aoi_lsync_last            : std_logic;
-   signal aoi_lsync_edge_detected   : std_logic;
+   signal aoi_line_sync_last            : std_logic;
+   signal aoi_line_sync_edge_detected   : std_logic;
    signal err_i                     : std_logic_vector(ERR'LENGTH-1 downto 0);
    signal readout_info_o            : readout_info_type;
    signal naoi_start_last           : std_logic;
@@ -216,20 +216,20 @@ begin
          
          -- sync_flag 
          frame_sync_last <= FPA_DIN(C_AOI_FSYNC_POS);
-         aoi_lsync_last  <= FPA_DIN(C_AOI_LSYNC_POS); 
+         aoi_line_sync_last  <= FPA_DIN(C_AOI_LSYNC_POS); 
          naoi_start_last <= FPA_DIN(C_NAOI_START_POS); 
          
          -- les flags adc considérés dans le shifregister
-         adc_flag(0)   <= FPA_DIN(C_AOI_LSYNC_POS) and not aoi_lsync_last;   -- on considere uniqument les RE
+         adc_flag(0)   <= FPA_DIN(C_AOI_LSYNC_POS) and not aoi_line_sync_last;   -- on considere uniqument les RE
          adc_flag(1)   <= FPA_DIN(C_NAOI_START_POS) and not naoi_start_last; -- on considere uniqument les RE
          adc_flag_dval <= (not fpa_din_dval_last and FPA_DIN_DVAL) and aoi_init_done and naoi_init_done;  --  on considere uniqument les RE 
          
          -- front montant ou descendant
          if DEFINE_FPA_SYNC_FLAG_VALID_ON_FE then 
-            aoi_lsync_edge_detected <= aoi_lsync_last and not FPA_DIN(C_AOI_LSYNC_POS); 
+            aoi_line_sync_edge_detected <= aoi_line_sync_last and not FPA_DIN(C_AOI_LSYNC_POS); 
             naoi_start_edge_detected <= naoi_start_last and not FPA_DIN(C_NAOI_START_POS); 
          else
-            aoi_lsync_edge_detected <= not aoi_lsync_last and FPA_DIN(C_AOI_LSYNC_POS);
+            aoi_line_sync_edge_detected <= not aoi_line_sync_last and FPA_DIN(C_AOI_LSYNC_POS);
             naoi_start_edge_detected <= not naoi_start_last and FPA_DIN(C_NAOI_START_POS); 
          end if;    
          
