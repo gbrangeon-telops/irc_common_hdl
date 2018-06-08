@@ -49,7 +49,7 @@ architecture rtl of afpa_sample_sum is
    end component;
    
    type samp_sum_fsm_type is (passthru_st, sum_st);
-   type pixel_samp_sum_type is array (1 to 4) of unsigned(17 downto 0);
+   type pixel_samp_sum_type is array (1 to 4) of signed(17 downto 0);
    signal samp_sum_fsm        : samp_sum_fsm_type;
    signal samp_pixel          : pixel_samp_sum_type;
    signal sreset			      : std_logic;
@@ -92,10 +92,10 @@ begin
    ------------------------------------------------------
    -- input map
    ------------------------------------------------------	
-   samp_pixel(4) <= unsigned(RX_MOSI.DATA(71 downto 54));
-   samp_pixel(3) <= unsigned(RX_MOSI.DATA(53 downto 36));
-   samp_pixel(2) <= unsigned(RX_MOSI.DATA(35 downto 18));
-   samp_pixel(1) <= unsigned(RX_MOSI.DATA(17 downto 0));	
+   samp_pixel(4) <= signed(RX_MOSI.DATA(71 downto 54));
+   samp_pixel(3) <= signed(RX_MOSI.DATA(53 downto 36));
+   samp_pixel(2) <= signed(RX_MOSI.DATA(35 downto 18));
+   samp_pixel(1) <= signed(RX_MOSI.DATA(17 downto 0));	
    
    ------------------------------------------------------
    --process de calcul des sommes

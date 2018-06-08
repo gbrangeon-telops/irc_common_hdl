@@ -54,8 +54,8 @@ architecture rtl of afpa_sample_mean is
          );
    end component;
    
-   type result_type is array (1 to 4) of unsigned(17 downto 0); 
-   type temp_result_type is array (1 to 4) of unsigned(C_RESULT_MSB_POS downto 0); 
+   type result_type is array (1 to 4) of signed(17 downto 0); 
+   type temp_result_type is array (1 to 4) of signed(C_RESULT_MSB_POS + 1 downto 0); 
    
    signal result, samp_sum_pix      : result_type;
    signal sreset			            : std_logic;
@@ -65,7 +65,7 @@ architecture rtl of afpa_sample_mean is
    signal result_sol_pipe           : std_logic_vector(C_SYNC_POS downto 0);
    signal result_eol_pipe           : std_logic_vector(C_SYNC_POS downto 0);
    signal result_dval_pipe          : std_logic_vector(C_SYNC_POS downto 0);
-   signal numerator                 : unsigned(SAMP_MEAN_NUMERATOR'LENGTH-1 downto 0);
+   signal numerator                 : signed(SAMP_MEAN_NUMERATOR'LENGTH downto 0);
    --signal denom_conv_bit_pos        : unsigned(FPA_INTF_CFG.GOOD_SAMP_MEAN_DIV_BIT_POS'LENGTH-1 downto 0);  
    signal temp_result               : temp_result_type;
    
@@ -98,10 +98,10 @@ begin
    ------------------------------------------------------
    -- input map
    ------------------------------------------------------	
-   samp_sum_pix(4) <= unsigned(RX_MOSI.DATA(71 downto 54));
-   samp_sum_pix(3) <= unsigned(RX_MOSI.DATA(53 downto 36));
-   samp_sum_pix(2) <= unsigned(RX_MOSI.DATA(35 downto 18));
-   samp_sum_pix(1) <= unsigned(RX_MOSI.DATA(17 downto 0));	
+   samp_sum_pix(4) <= signed(RX_MOSI.DATA(71 downto 54));
+   samp_sum_pix(3) <= signed(RX_MOSI.DATA(53 downto 36));
+   samp_sum_pix(2) <= signed(RX_MOSI.DATA(35 downto 18));
+   samp_sum_pix(1) <= signed(RX_MOSI.DATA(17 downto 0));	
    
    ------------------------------------------------------
    --process de calcul des moyennes
@@ -115,7 +115,7 @@ begin
          else
             
             -- passage dans des registres 
-            numerator <= unsigned(SAMP_MEAN_NUMERATOR);
+            numerator <= signed('0'& SAMP_MEAN_NUMERATOR);
             
             -- division
             for ii in 1 to 4 loop

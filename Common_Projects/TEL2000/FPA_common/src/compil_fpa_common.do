@@ -52,7 +52,11 @@ acom -nowarn DAGGEN_0523 -incr \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_quad_subtract.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_quad_mult.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_single_div_ip_wrapper.vhd \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_low_saturation.vhd \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_high_saturation.vhd \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_data_ctrl_16chn.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_quad_div.bde \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_elec_ref_proc.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_analog_chain_corr.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_real_data_gen.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_dval_gen.bde \

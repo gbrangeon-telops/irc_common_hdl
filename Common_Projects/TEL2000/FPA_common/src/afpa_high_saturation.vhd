@@ -1,5 +1,5 @@
 ------------------------------------------------------------------
---!   @file : afpa_data_ctrl_map
+--!   @file : afpa_high_saturation
 --!   @brief
 --!   @details
 --!
@@ -12,31 +12,31 @@
 
 
 library IEEE;
-use IEEE.std_logic_1164.all;
+use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
-use work.Fpa_Common_Pkg.all;
-use work.fpa_define.all;
+use work.fpa_common_pkg.all;
 use work.tel2000.all;
 
-entity afpa_data_ctrl_map is
-   port(		 
-      ARESET        : in std_logic;
-      CLK           : in std_logic;
+entity afpa_high_saturation is
+   port(
+      ARESET     : in std_logic;
+      CLK        : in std_logic;   
       
-      QUAD_MOSI    : in t_ll_ext_mosi72;
-      QUAD_MISO    : out t_ll_ext_miso;
+      ENABLE     : in std_logic;     
       
-      DOUT_MOSI     : out t_axi4_stream_mosi64; 
-      DOUT_MISO     : in t_axi4_stream_miso;
+      RX_MOSI    : in t_axi4_stream_mosi64;
+      RX_MISO    : out t_axi4_stream_miso;
+      TX_MISO    : in t_axi4_stream_miso;      
+      TX_MOSI    : out t_axi4_stream_mosi64;
       
-      ERR           : out std_logic   
-      
+      ERR        : out std_logic
       );
-end afpa_data_ctrl_map;
+end afpa_high_saturation;
 
 
-architecture rtl of afpa_data_ctrl_map is
-     
+
+architecture rtl of afpa_high_saturation is
+   
    component sync_reset
       port (
          ARESET : in std_logic;
@@ -48,22 +48,15 @@ architecture rtl of afpa_data_ctrl_map is
    --signal reorder_sm       : reorder_sm_type;
    signal sreset           : std_logic;
    signal err_i            : std_logic;
+   signal tx_mosi_i        : t_axi4_stream_mosi64;
    
 begin    
    
    --------------------------------------------------
    -- outputs maps
    -------------------------------------------------- 
-   DOUT_MOSI.TDATA <= QUAD_MOSI.DATA(69 downto 54) & QUAD_MOSI.DATA(51 downto 36) & QUAD_MOSI.DATA(33 downto 18) & QUAD_MOSI.DATA(15 downto 0); -- 
-   DOUT_MOSI.TVALID<= QUAD_MOSI.DVAL;
-   DOUT_MOSI.TSTRB <= (others => '1');
-   DOUT_MOSI.TKEEP <= (others => '1');
-   DOUT_MOSI.TLAST <= QUAD_MOSI.EOF;
-   DOUT_MOSI.TUSER <= (others => '0');
-   DOUT_MOSI.TID   <= (others => '0');
-   DOUT_MOSI.TDEST <= (others => '0');    
-   QUAD_MISO.BUSY  <=  not DOUT_MISO.TREADY;     -- on repartit les fifo_full.
-   QUAD_MISO.AFULL <=  '0';
+   TX_MOSI <= tx_mosi_i;
+   RX_MISO <= TX_MISO;
    
    ERR <= err_i;                                          
    
@@ -78,16 +71,29 @@ begin
       );
    
    --------------------------------------------------
-   -- multiplexage
+   -- saturation
    -------------------------------------------------- 
    U3 : process(CLK)
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then 
-            err_i <= '0';            
-         else            
-            err_i <= QUAD_MOSI.DVAL and not DOUT_MISO.TREADY;   -- le module fpa a horreur du busy. Erreur grave de vitesse                   
+            err_i <= '0';
+            tx_mosi_i.tvalid <= '0';
+         else
+            
+            tx_mosi_i <= RX_MOSI;
+            if ENABLE = '1' then
+               for kk in 1 to 4 loop
+                  if signed(RX_MOSI.TDATA((16*kk-1) downto 16*(kk-1))) > 16383 then   -- soit 2^14 - 1
+                     tx_mosi_i.tdata((16*kk-1) downto 16*(kk-1)) <= std_logic_vector(to_unsigned(16383, 16)); 
+                  end if;
+               end loop;
+            end if;
+            
+            err_i <= tx_mosi_i.tvalid and not TX_MISO.TREADY;   -- le module fpa a horreur du busy. Erreur grave de vitesse                   
+            
          end if;                             
       end if;
-   end process; 
+   end process;
+   
 end rtl;

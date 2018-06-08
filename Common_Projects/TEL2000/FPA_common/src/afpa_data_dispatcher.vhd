@@ -364,6 +364,7 @@ begin
          data_mosi_i.naoi_start       <= naoi_start;
          data_mosi_i.naoi_stop        <= naoi_stop;
          data_mosi_i.naoi_spare       <= naoi_spare;
+         data_mosi_i.naoi_ref_valid   <= naoi_ref_valid;
       end if;
    end process; 
    

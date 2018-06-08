@@ -187,9 +187,9 @@ begin
                      hw_seq_fsm <= forward_rqst_st;
                   elsif valid_dac_rqst = '1' then
                      if prog_init_done_i = '0' then       -- on fait ceci juste pour être compatible avec l'existant. Sinon, le dac n'a pas besoin de cela. Il peut être tout le temps programmé à la volée, sans blocage des trigs d'integration
-                       hw_seq_fsm <= forward_rqst_st; 
+                        hw_seq_fsm <= forward_rqst_st; 
                      else                                 -- programmation sans interruption des trigs d'integration
-                       hw_seq_fsm <= check_rqst_st; 
+                        hw_seq_fsm <= check_rqst_st; 
                      end if;
                   end if;
                   
@@ -244,9 +244,13 @@ begin
                
             end case;
             
+            -- pragma translate_off
+            --prog_init_done_i <= '1';
+            -- pragma translate_on
+            
          end if;
       end if;   
-   end process; 
+   end process;
    
    --------------------------------------------------
    --  mise à jour de la config

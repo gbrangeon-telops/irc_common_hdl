@@ -83,7 +83,7 @@ begin
    TX_MOSI.SOL  <= sol_i;
    TX_MOSI.EOL  <= eol_i;
    TX_MOSI.SUPPORT_BUSY <= '1';
-   TX_MOSI.DATA <= data_i(3)(17 downto 0) & data_i(2)(17 downto 0) & data_i(1)(17 downto 0) & data_i(0)(17 downto 0);
+   TX_MOSI.DATA <= data_i(3)(35 downto 0) & data_i(2)(35 downto 0) & data_i(1)(35 downto 0) & data_i(0)(35 downto 0);
    
    ERR <= err_i;
    
