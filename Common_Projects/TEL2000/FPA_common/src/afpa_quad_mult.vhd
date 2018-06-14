@@ -18,19 +18,23 @@ use work.fpa_define.all;
 use work.tel2000.all;
 
 entity afpa_quad_mult is
-   
+   generic(
+      G_SYNC_OPERAND : boolean := false
+      );      
    port(
       ARESET         : in std_logic;
       CLK            : in std_logic;
       
-      RXA_MOSI       : in t_ll_ext_mosi72; 
-      RXA_MISO       : out t_ll_ext_miso;
+      RX1_MOSI       : in t_ll_ext_mosi72; 
+      RX1_MISO       : out t_ll_ext_miso;
       
-      RXB_MOSI       : in t_ll_ext_mosi72;
-      RXB_MISO       : out t_ll_ext_miso;
+      RX2_MOSI       : in t_ll_ext_mosi72;
+      RX2_MISO       : out t_ll_ext_miso;
       
       TX_MISO        : in t_ll_ext_miso;
       TX_MOSI        : out t_ll_ext_mosi144;
+      
+      OP_SEL         : in std_logic_vector(1 downto 0);
       
       ERR            : out std_logic
       );
@@ -100,19 +104,31 @@ begin
    --------------------------------------------------
    -- synchro des entrées
    --------------------------------------------------   
-   U2 : LL_ext_sync_flow
-   port map(
-      RX0_DVAL  => RXA_MOSI.DVAL,
-      RX0_BUSY  => RXA_MISO.BUSY,
-      
-      RX1_DVAL  => RXB_MOSI.DVAL,
-      RX1_BUSY  => RXB_MISO.BUSY,
-      
-      SYNC_BUSY => TX_MISO.BUSY,
-      SYNC_DVAL => sync_dval_i      
-      );
-   RXA_MISO.AFULL <= '0';
-   RXB_MISO.AFULL <= '0';
+   gen1 : if G_SYNC_OPERAND generate
+      begin                  
+      U2 : LL_ext_sync_flow
+      port map(
+         RX0_DVAL  => RX2_MOSI.DVAL,
+         RX0_BUSY  => RX2_MISO.BUSY,
+         
+         RX1_DVAL  => RX2_MOSI.DVAL,
+         RX1_BUSY  => RX2_MISO.BUSY,
+         
+         SYNC_BUSY => TX_MISO.BUSY,
+         SYNC_DVAL => sync_dval_i    
+         );
+      RX1_MISO.AFULL <= '0';
+      RX2_MISO.AFULL <= '0';
+   end generate;
+   
+   --------------------------------------------------
+   -- pas de synchro des entrées
+   -------------------------------------------------- 
+   gen2 : if not G_SYNC_OPERAND generate
+      begin                  
+      RX1_MISO <= TX_MISO;
+      RX2_MISO <= TX_MISO;
+   end generate;           
    
    --------------------------------------------------    
    -- operateur de multiplication                          
@@ -125,15 +141,27 @@ begin
             err_i <= '0';
             
          else                        
-            sof_i  <= RXA_MOSI.SOF;
-            eof_i  <= RXA_MOSI.EOF;
-            sol_i  <= RXA_MOSI.SOL;
-            eol_i  <= RXA_MOSI.EOL;
-            dval_i <= sync_dval_i;
-            data_i(3) <= std_logic_vector(signed(RXA_MOSI.DATA(71 downto 54)) * signed(RXB_MOSI.DATA(71 downto 54)));
-            data_i(2) <= std_logic_vector(signed(RXA_MOSI.DATA(53 downto 36)) * signed(RXB_MOSI.DATA(53 downto 36)));
-            data_i(1) <= std_logic_vector(signed(RXA_MOSI.DATA(35 downto 18)) * signed(RXB_MOSI.DATA(35 downto 18)));
-            data_i(0) <= std_logic_vector(signed(RXA_MOSI.DATA(17 downto 0))  * signed(RXB_MOSI.DATA(17 downto 0)));                    
+            sof_i  <= RX1_MOSI.SOF;
+            eof_i  <= RX1_MOSI.EOF;
+            sol_i  <= RX1_MOSI.SOL;
+            eol_i  <= RX1_MOSI.EOL; 
+            dval_i <= RX1_MOSI.DVAL;           
+            if OP_SEL = "11" then  
+               data_i(3) <= std_logic_vector(signed(RX1_MOSI.DATA(71 downto 54)) * signed(RX2_MOSI.DATA(71 downto 54)));
+               data_i(2) <= std_logic_vector(signed(RX1_MOSI.DATA(53 downto 36)) * signed(RX2_MOSI.DATA(53 downto 36)));
+               data_i(1) <= std_logic_vector(signed(RX1_MOSI.DATA(35 downto 18)) * signed(RX2_MOSI.DATA(35 downto 18)));
+               data_i(0) <= std_logic_vector(signed(RX1_MOSI.DATA(17 downto 0))  * signed(RX2_MOSI.DATA(17 downto 0)));               
+            elsif OP_SEL = "01" then                             -- bypass RX1 vers sortie
+               data_i(3) <= std_logic_vector(resize(signed(RX1_MOSI.DATA(71 downto 54)), 36));
+               data_i(2) <= std_logic_vector(resize(signed(RX1_MOSI.DATA(53 downto 36)), 36));
+               data_i(1) <= std_logic_vector(resize(signed(RX1_MOSI.DATA(35 downto 18)), 36));
+               data_i(0) <= std_logic_vector(resize(signed(RX1_MOSI.DATA(17 downto 0)), 36));
+            elsif OP_SEL = "10" then
+               data_i(3) <= std_logic_vector(resize(signed(RX2_MOSI.DATA(71 downto 54)), 36));
+               data_i(2) <= std_logic_vector(resize(signed(RX2_MOSI.DATA(53 downto 36)), 36));
+               data_i(1) <= std_logic_vector(resize(signed(RX2_MOSI.DATA(35 downto 18)), 36));
+               data_i(0) <= std_logic_vector(resize(signed(RX2_MOSI.DATA(17 downto 0)), 36));
+            end if;   
          end if;
       end if;
    end process;               

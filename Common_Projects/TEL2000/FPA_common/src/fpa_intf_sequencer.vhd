@@ -394,7 +394,7 @@ begin
                   trig_ctler_en_i <= '1';
                   fpa_sequencer_sm <= idle; 
                
-               when others =>
+               when others =>                                    
                
             end case;      
             

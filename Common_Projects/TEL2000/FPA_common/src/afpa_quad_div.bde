@@ -2,13 +2,13 @@ SCHM0104
 
 HEADER
 {
- FREEID 1993
+ FREEID 2153
  VARIABLES
  {
   #ARCHITECTURE="sch"
   #BLOCKTABLE_FILE="#table.bde"
   #BLOCKTABLE_INCLUDED="1"
-  #DEFAULT_RANGE0="<range<name=\"bypass\"><left=\"1\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
+  #DEFAULT_RANGE0="<range<name=\"op_sel\"><left=\"1\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
   #ENTITY="afpa_quad_div"
   #LANGUAGE="VHDL"
   AUTHOR="Unknown"
@@ -343,7 +343,7 @@ PAGE ""
     #IS_UNCONSTRAINED_PORT="1"
     #LIBRARY="#terminals"
     #MDA_RECORD_TOKEN="RECORD"
-    #REFERENCE="DIVDEND_MOSI"
+    #REFERENCE="RX1_MOSI"
     #SYMBOL="BusInput"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER=""
     #VHDL_TYPE="t_ll_ext_mosi144"
@@ -353,7 +353,7 @@ PAGE ""
   TEXT  3, 0, 0
   {
    TEXT "$#REFERENCE"
-   RECT (206,584,425,619)
+   RECT (279,584,425,619)
    ALIGN 2
    MARGINS (1,1)
    COLOR (0,0,192)
@@ -365,9 +365,10 @@ PAGE ""
    {
     #COMPONENT="BusInput"
     #CUSTOM_NAME=""
+    #IS_UNCONSTRAINED_PORT="1"
     #LIBRARY="#terminals"
     #MDA_RECORD_TOKEN="RECORD"
-    #REFERENCE="DIVSOR_MOSI"
+    #REFERENCE="RX2_MOSI"
     #SYMBOL="BusInput"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER=""
     #VHDL_TYPE="t_ll_ext_mosi72"
@@ -377,7 +378,7 @@ PAGE ""
   TEXT  5, 0, 0
   {
    TEXT "$#REFERENCE"
-   RECT (225,744,425,779)
+   RECT (279,744,425,779)
    ALIGN 2
    MARGINS (1,1)
    COLOR (0,0,192)
@@ -392,7 +393,7 @@ PAGE ""
     #IS_UNCONSTRAINED_PORT="1"
     #LIBRARY="#terminals"
     #MDA_RECORD_TOKEN="RECORD"
-    #REFERENCE="DIVDEND_MISO"
+    #REFERENCE="RX1_MISO"
     #SYMBOL="BusOutput"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER=""
     #VHDL_TYPE="t_ll_ext_miso"
@@ -403,7 +404,7 @@ PAGE ""
   TEXT  9, 0, 0
   {
    TEXT "$#REFERENCE"
-   RECT (206,604,425,639)
+   RECT (279,604,425,639)
    ALIGN 2
    MARGINS (1,1)
    COLOR (0,0,192)
@@ -416,9 +417,10 @@ PAGE ""
    {
     #COMPONENT="BusOutput"
     #CUSTOM_NAME=""
+    #IS_UNCONSTRAINED_PORT="1"
     #LIBRARY="#terminals"
     #MDA_RECORD_TOKEN="RECORD"
-    #REFERENCE="DIVSOR_MISO"
+    #REFERENCE="RX2_MISO"
     #SYMBOL="BusOutput"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER=""
     #VHDL_TYPE="t_ll_ext_miso"
@@ -429,7 +431,7 @@ PAGE ""
   TEXT  11, 0, 0
   {
    TEXT "$#REFERENCE"
-   RECT (225,764,425,799)
+   RECT (279,764,425,799)
    ALIGN 2
    MARGINS (1,1)
    COLOR (0,0,192)
@@ -654,32 +656,32 @@ PAGE ""
 "------------------------------------------------------------\n"+
 "-- Repartition des dividendes et diviseurs \n"+
 "------------------------------------------------------------\n"+
-"DVDEND_MOSI_3.DATA <= DIVDEND_MOSI.DATA(143 downto 108);\n"+
-"DVDEND_MOSI_2.DATA <= DIVDEND_MOSI.DATA(107 downto 72);\n"+
-"DVDEND_MOSI_1.DATA <= DIVDEND_MOSI.DATA(71 downto 36);\n"+
-"DVDEND_MOSI_0.DATA <= DIVDEND_MOSI.DATA(35 downto 0);\n"+
+"DVDEND_MOSI_3.DATA <= RX1_MOSI.DATA(143 downto 108);\n"+
+"DVDEND_MOSI_2.DATA <= RX1_MOSI.DATA(107 downto 72);\n"+
+"DVDEND_MOSI_1.DATA <= RX1_MOSI.DATA(71 downto 36);\n"+
+"DVDEND_MOSI_0.DATA <= RX1_MOSI.DATA(35 downto 0);\n"+
 "\n"+
-"DVDEND_MOSI_3.DVAL <= DIVDEND_MOSI.DVAL;\n"+
-"DVDEND_MOSI_2.DVAL <= DIVDEND_MOSI.DVAL;\n"+
-"DVDEND_MOSI_1.DVAL <= DIVDEND_MOSI.DVAL;\n"+
-"DVDEND_MOSI_0.DVAL <= DIVDEND_MOSI.DVAL;\n"+
+"DVDEND_MOSI_3.DVAL <= RX1_MOSI.DVAL;\n"+
+"DVDEND_MOSI_2.DVAL <= RX1_MOSI.DVAL;\n"+
+"DVDEND_MOSI_1.DVAL <= RX1_MOSI.DVAL;\n"+
+"DVDEND_MOSI_0.DVAL <= RX1_MOSI.DVAL;\n"+
 "\n"+
-"DVDEND_MOSI_0.SOF <= DIVDEND_MOSI.SOF;\n"+
-"DVDEND_MOSI_0.SOL <= DIVDEND_MOSI.SOL;\n"+
-"DVDEND_MOSI_3.EOF <= DIVDEND_MOSI.EOF;\n"+
-"DVDEND_MOSI_3.EOL <= DIVDEND_MOSI.EOL;\n"+
+"DVDEND_MOSI_0.SOF <= RX1_MOSI.SOF;\n"+
+"DVDEND_MOSI_0.SOL <= RX1_MOSI.SOL;\n"+
+"DVDEND_MOSI_3.EOF <= RX1_MOSI.EOF;\n"+
+"DVDEND_MOSI_3.EOL <= RX1_MOSI.EOL;\n"+
 "\n"+
-"DVSOR_MOSI_3.DATA  <= DIVSOR_MOSI.DATA(71 downto 54);\n"+
-"DVSOR_MOSI_2.DATA  <= DIVSOR_MOSI.DATA(53 downto 36);\n"+
-"DVSOR_MOSI_1.DATA  <= DIVSOR_MOSI.DATA(35 downto 18);\n"+
-"DVSOR_MOSI_0.DATA  <= DIVSOR_MOSI.DATA(17 downto 0);\n"+
-"DVSOR_MOSI_3.DVAL  <= DIVSOR_MOSI.DVAL;\n"+
-"DVSOR_MOSI_2.DVAL  <= DIVSOR_MOSI.DVAL;\n"+
-"DVSOR_MOSI_1.DVAL  <= DIVSOR_MOSI.DVAL;\n"+
-"DVSOR_MOSI_0.DVAL  <= DIVSOR_MOSI.DVAL;\n"+
+"DVSOR_MOSI_3.DATA  <= RX2_MOSI.DATA(71 downto 54);\n"+
+"DVSOR_MOSI_2.DATA  <= RX2_MOSI.DATA(53 downto 36);\n"+
+"DVSOR_MOSI_1.DATA  <= RX2_MOSI.DATA(35 downto 18);\n"+
+"DVSOR_MOSI_0.DATA  <= RX2_MOSI.DATA(17 downto 0);\n"+
+"DVSOR_MOSI_3.DVAL  <= RX2_MOSI.DVAL;\n"+
+"DVSOR_MOSI_2.DVAL  <= RX2_MOSI.DVAL;\n"+
+"DVSOR_MOSI_1.DVAL  <= RX2_MOSI.DVAL;\n"+
+"DVSOR_MOSI_0.DVAL  <= RX2_MOSI.DVAL;\n"+
 "\n"+
-"DIVDEND_MISO <= DVDEND_MISO_0;\n"+
-"DIVSOR_MISO <= DVSOR_MISO_0;\n"+
+"RX1_MISO <= DVDEND_MISO_0;\n"+
+"RX2_MISO <= DVSOR_MISO_0;\n"+
 "\n"+
 "\n"+
 "\n"+
@@ -893,7 +895,7 @@ PAGE ""
 "Uo : process(CLK)\n"+
 "begin\n"+
 "   if rising_edge(CLK) then\n"+
-"      if BYPASS = \"00\" then \n"+
+"      if OP_SEL = \"11\" then \n"+
 "         tx_mosi_i.data(71 downto 54) <= QTIENT_MOSI_3.DATA;\n"+
 "         tx_mosi_i.data(53 downto 36) <= QTIENT_MOSI_2.DATA;\n"+
 "         tx_mosi_i.data(35 downto 18) <= QTIENT_MOSI_1.DATA;\n"+
@@ -903,18 +905,23 @@ PAGE ""
 "         tx_mosi_i.sol  <= QTIENT_MOSI_0.SOL;\n"+
 "         tx_mosi_i.eof  <= QTIENT_MOSI_3.EOF;\n"+
 "         tx_mosi_i.eol  <= QTIENT_MOSI_3.EOL;\n"+
-"      elsif BYPASS = \"01\" then\n"+
-"         tx_mosi_i.data(71 downto 54) <= DIVDEND_MOSI.DATA(71 downto 54);\n"+
-"         tx_mosi_i.data(53 downto 36) <= DIVDEND_MOSI.DATA(53 downto 36);\n"+
-"         tx_mosi_i.data(35 downto 18) <= DIVDEND_MOSI.DATA(35 downto 18);\n"+
-"         tx_mosi_i.data(17 downto 0)  <= DIVDEND_MOSI.DATA(17 downto 0);\n"+
-"         tx_mosi_i.dval <= DIVDEND_MOSI.DVAL;\n"+
-"         tx_mosi_i.sof  <= DIVDEND_MOSI.SOF;\n"+
-"         tx_mosi_i.sol  <= DIVDEND_MOSI.SOL;\n"+
-"         tx_mosi_i.eof  <= DIVDEND_MOSI.EOF;\n"+
-"         tx_mosi_i.eol  <= DIVDEND_MOSI.EOL;\n"+
-"      elsif BYPASS = \"10\" then\n"+
-"         tx_mosi_i <= DIVSOR_MOSI;         \n"+
+"      elsif OP_SEL = \"01\" then\n"+
+"         tx_mosi_i.data(71 downto 54) <= RX1_MOSI.DATA(125 downto 108);\n"+
+"         tx_mosi_i.data(53 downto 36) <= RX1_MOSI.DATA(89 downto 72);  \n"+
+"         tx_mosi_i.data(35 downto 18) <= RX1_MOSI.DATA(53 downto 36);  \n"+
+"         tx_mosi_i.data(17 downto 0)  <= RX1_MOSI.DATA(17 downto 0);   \n"+
+"         tx_mosi_i.dval <= RX1_MOSI.DVAL;\n"+
+"         tx_mosi_i.sof  <= RX1_MOSI.SOF;\n"+
+"         tx_mosi_i.sol  <= RX1_MOSI.SOL;\n"+
+"         tx_mosi_i.eof  <= RX1_MOSI.EOF;\n"+
+"         tx_mosi_i.eol  <= RX1_MOSI.EOL;  \n"+
+"      elsif OP_SEL = \"10\" then\n"+
+"         tx_mosi_i.data <= RX2_MOSI.DATA;\n"+
+"         tx_mosi_i.dval <= RX1_MOSI.DVAL;   -- les flags proviennent du dividend\n"+
+"         tx_mosi_i.sof  <= RX1_MOSI.SOF;\n"+
+"         tx_mosi_i.sol  <= RX1_MOSI.SOL;\n"+
+"         tx_mosi_i.eof  <= RX1_MOSI.EOF;\n"+
+"         tx_mosi_i.eol  <= RX1_MOSI.EOL;       \n"+
 "      end if;\n"+
 "   end if;\n"+
 "end process;\n"+
@@ -922,6 +929,9 @@ PAGE ""
 "QTIENT_MISO_2  <=  TX_MISO;\n"+
 "QTIENT_MISO_1  <=  TX_MISO;\n"+
 "QTIENT_MISO_0  <=  TX_MISO;\n"+
+"\n"+
+"\n"+
+"\n"+
 "\n"+
 "\n"+
 "\n"+
@@ -2090,7 +2100,7 @@ PAGE ""
     #COMPONENT="BusInput"
     #CUSTOM_NAME=""
     #LIBRARY="#terminals"
-    #REFERENCE="BYPASS(1:0)"
+    #REFERENCE="OP_SEL(1:0)"
     #SYMBOL="BusInput"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER=""
    }
@@ -2099,7 +2109,7 @@ PAGE ""
   TEXT  1921, 0, 0
   {
    TEXT "$#REFERENCE"
-   RECT (253,843,429,878)
+   RECT (255,843,429,878)
    ALIGN 6
    MARGINS (1,1)
    PARENT 1920
@@ -2129,7 +2139,7 @@ PAGE ""
  
  BODY
  {
-  TEXT  1976, 0, 0
+  TEXT  2136, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -2140,7 +2150,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  1977, 0, 0
+  TEXT  2137, 0, 0
   {
    PAGEALIGN 10
    TEXT "$CREATIONDATE"
@@ -2151,7 +2161,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  1978, 0, 0
+  TEXT  2138, 0, 0
   {
    PAGEALIGN 10
    TEXT "Title:"
@@ -2161,7 +2171,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  1979, 0, 0
+  TEXT  2139, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -2173,7 +2183,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  1980, 0, 0
+  TEXT  2140, 0, 0
   {
    PAGEALIGN 10
    TEXT 
@@ -2186,7 +2196,7 @@ PAGE ""
    FONT (12,0,0,700,0,0,0,"Arial")
    MULTILINE
   }
-  TEXT  1981, 0, 0
+  TEXT  2141, 0, 0
   {
    PAGEALIGN 10
    TEXT "Page:"
@@ -2196,7 +2206,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  1982, 0, 0
+  TEXT  2142, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -2208,7 +2218,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  1983, 0, 0
+  TEXT  2143, 0, 0
   {
    PAGEALIGN 10
    TEXT "Revision:"
@@ -2218,7 +2228,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  1984, 0, 0
+  TEXT  2144, 0, 0
   {
    PAGEALIGN 10
    TEXT "$Revision"
@@ -2229,7 +2239,7 @@ PAGE ""
    FONT (12,0,0,700,0,204,0,"Arial")
    UPDATE 0
   }
-  GROUP  1985, 0, 0
+  GROUP  2145, 0, 0
   {
    PAGEALIGN 10
    RECT (2320,1620,3201,2001)
@@ -2241,7 +2251,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  1986, 0, 0
+  GROUP  2146, 0, 0
   {
    PAGEALIGN 10
    RECT (2320,1820,3201,1821)
@@ -2253,7 +2263,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  1987, 0, 0
+  GROUP  2147, 0, 0
   {
    PAGEALIGN 10
    RECT (2320,1760,3201,1761)
@@ -2265,7 +2275,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  1988, 0, 0
+  GROUP  2148, 0, 0
   {
    PAGEALIGN 10
    RECT (2320,1880,3201,1881)
@@ -2277,7 +2287,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  1989, 0, 0
+  GROUP  2149, 0, 0
   {
    PAGEALIGN 10
    RECT (2320,1940,3201,1941)
@@ -2289,7 +2299,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  1990, 0, 0
+  GROUP  2150, 0, 0
   {
    PAGEALIGN 10
    RECT (2500,1620,2501,1761)
@@ -2300,7 +2310,7 @@ PAGE ""
     POINTS ( (0,0), (0,140) )
    }
   }
-  GROUP  1991, 0, 0
+  GROUP  2151, 0, 0
   {
    PAGEALIGN 10
    RECT (2500,1760,2501,2001)
@@ -2311,7 +2321,7 @@ PAGE ""
     POINTS ( (0,0), (0,240) )
    }
   }
-  BMPPICT  1992, 0, 0
+  BMPPICT  2152, 0, 0
   {
    PAGEALIGN 10
    RECT (2340,1680,2479,1725)
