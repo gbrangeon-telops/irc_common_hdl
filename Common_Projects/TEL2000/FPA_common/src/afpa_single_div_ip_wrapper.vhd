@@ -51,7 +51,7 @@ architecture rtl of afpa_single_div_ip_wrapper is
          s_axis_dividend_tlast   : in std_logic;
          s_axis_dividend_tdata   : in std_logic_vector(39 downto 0);
          m_axis_dout_tvalid      : out std_logic;
-         m_axis_dout_tuser       : out std_logic_vector(4 downto 0);
+         m_axis_dout_tuser       : out std_logic_vector(3 downto 0);
          m_axis_dout_tlast       : out std_logic;
          m_axis_dout_tdata       : out std_logic_vector(39 downto 0)
          );
@@ -82,7 +82,7 @@ architecture rtl of afpa_single_div_ip_wrapper is
    signal divisor_tvalid  : std_logic;
    
    signal dout_tvalid     : std_logic;
-   signal dout_tuser      : std_logic_vector(4 downto 0);
+   signal dout_tuser      : std_logic_vector(3 downto 0);
    signal dout_tlast      : std_logic;
    signal dout_tdata      : std_logic_vector(39 downto 0);
    
@@ -94,10 +94,10 @@ begin
    ----------------------------------------------------
    -- output map
    ----------------------------------------------------
-   QTIENT_MOSI.SOF   <= dout_tuser(4);
+   QTIENT_MOSI.SOF   <= dout_tuser(3);
    QTIENT_MOSI.EOF   <= dout_tlast;
-   QTIENT_MOSI.SOL   <= dout_tuser(2);
-   QTIENT_MOSI.EOL   <= dout_tuser(1);
+   QTIENT_MOSI.SOL   <= dout_tuser(1);
+   QTIENT_MOSI.EOL   <= dout_tuser(0);
    QTIENT_MOSI.DATA  <= dout_tdata(QTIENT_MOSI.DATA'LENGTH-1 downto 0);
    QTIENT_MOSI.DVAL  <= dout_tvalid; 
    
@@ -108,7 +108,7 @@ begin
    DVSOR_MISO.AFULL <= '0';
    
    
-   ERR <= dout_tuser(0);  -- division par zero
+   ERR <= '0'; --dout_tuser(0);  -- division par zero
    
    ---------------------------------------------------
    -- input map
