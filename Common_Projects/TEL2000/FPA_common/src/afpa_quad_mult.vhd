@@ -15,7 +15,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.Fpa_Common_Pkg.all;
 use work.fpa_define.all;
-use work.tel2000.all;
+--use work.tel2000.all;
 
 entity afpa_quad_mult is
    generic(

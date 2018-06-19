@@ -33,6 +33,9 @@ entity afpa_elec_ref_calc is
       
       TX_MISO        : in t_ll_ext_miso;    
       TX_MOSI        : out t_ll_ext_mosi72;
+      
+      NEW_DATA       : out std_logic;
+      
       ERR            : out std_logic
       );
 end afpa_elec_ref_calc;
@@ -70,8 +73,9 @@ architecture rtl of afpa_elec_ref_calc is
    signal result_dval         : std_logic := '0';
    signal result              : result_type;
    signal temp_result         : temp_result_type;
-   
-   
+   signal new_data_i          : std_logic := '0';
+   signal result_dval_pipe    : std_logic_vector(7 downto 0) := (others => '0');
+     
 begin
    
    ------------------------------------------------------
@@ -79,6 +83,7 @@ begin
    ------------------------------------------------------
    TX_MOSI.DVAL <= result_dval;
    TX_MOSI.DATA <= std_logic_vector(result(4)) & std_logic_vector(result(3)) & std_logic_vector(result(2)) & std_logic_vector(result(1));
+   NEW_DATA     <= new_data_i;
    
    ERR <= err_i;	
    RX_MISO <= TX_MISO;
@@ -166,15 +171,27 @@ begin
          if samp_sum_dval = '1' then 
             for ii in 1 to 4 loop               
                samp_sum_data_latch(ii) <= samp_sum_data(ii);
-            end loop;
-            result_dval <= '1'; -- dès que ce calcul se fait, on peut dire que la sortie est valide meme si cela prend qques coups supplémentaires
-         end if; 
+            end loop;            
+         end if;
+         result_dval_pipe(0) <= samp_sum_dval;
          
          -- division
          for ii in 1 to 4 loop
             temp_result(ii) <= resize(samp_sum_data_latch(ii) * numerator, temp_result(1)'length);
             result(ii) <= temp_result(ii)(C_RESULT_MSB_POS downto C_DENOM_CONV_BIT_POS) + resize("00" & temp_result(ii)(C_DENOM_CONV_BIT_POS_M1), result(ii)'length);       -- soit une division par 2^denom_conv_bit_pos avec arrondi
          end loop;
+         result_dval_pipe(7 downto 1) <= result_dval_pipe(6 downto 0);
+         
+         -- feedbacks
+         if unsigned(result_dval_pipe) /= 0 then
+            new_data_i <= '1';
+         else
+            new_data_i <= '0';  
+         end if;
+         
+         if result_dval_pipe(7) = '1' then 
+            result_dval <= '1';
+         end if;
          
       end if;      
       

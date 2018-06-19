@@ -133,9 +133,9 @@ architecture rtl of afpa_diag_data_gen is
    signal diag_eol_last     : std_logic;
    signal aoi_img_end       : std_logic;
    signal aoi_img_start     : std_logic;
-   signal elec_ofs_end_i    : std_logic;
-   signal elec_ofs_dval_i   : std_logic;
-   signal elec_ofs_start_i  : std_logic;
+   --signal elec_ofs_end_i    : std_logic;
+   --signal elec_ofs_dval_i   : std_logic;
+   --signal elec_ofs_start_i  : std_logic;
    
    --attribute dont_touch     : string;
    --attribute dont_touch of diag_fsm : signal is "true";
@@ -147,9 +147,9 @@ begin
    ----------------------------------------------
    DIAG_DATA(95)           <= '0';                 -- non_utilisé;
    DIAG_DATA(94 downto 80) <= (others => '0');
-   DIAG_DATA(79)           <= elec_ofs_end_i;
-   DIAG_DATA(78)           <= elec_ofs_start_i;
-   DIAG_DATA(77)           <= elec_ofs_dval_i;      -- non aoi dval
+   DIAG_DATA(79)           <= '0';
+   DIAG_DATA(78)           <= '0';
+   DIAG_DATA(77)           <= '0';                 -- non aoi dval = '0' pour que le patron de tests ne bousille pas le contenu des regitres de stockage des refrences de calculs de gain et offset deja existances
    
    DIAG_DATA(76 downto 62) <= (others => '0');      -- aoi spares
    DIAG_DATA(61)           <= aoi_dval_i;           -- aoi_dval          
@@ -159,7 +159,7 @@ begin
    DIAG_DATA(57)           <= aoi_eol_i;            -- eol
    DIAG_DATA(56)           <= aoi_sol_i;            -- sol
    DIAG_DATA(55 downto 0)  <= data(3)(13 downto 0)  & data(2)(13 downto 0)  & data(1)(13 downto 0)  & data(0)(13 downto 0);
-   DIAG_DVAL               <= aoi_dval_i or elec_ofs_dval_i;
+   DIAG_DVAL               <= aoi_dval_i;
    
    --------------------------------------------------
    -- synchro reset 
@@ -255,9 +255,9 @@ begin
             diag_eol_last <= '0';
             aoi_img_end <= '0';
             aoi_img_start <= '0';
-            elec_ofs_start_i <= '0';
-            elec_ofs_dval_i <= '0';
-            elec_ofs_end_i <= '1';
+            --elec_ofs_start_i <= '0';
+            --elec_ofs_dval_i <= '0';
+            --elec_ofs_end_i <= '1';
             
          else   
             
@@ -293,10 +293,10 @@ begin
             case diag_fsm is 
                
                when idle =>
-                  elec_ofs_start_i <= '1';
-                  elec_ofs_end_i <= '0';
+                  --elec_ofs_start_i <= '1';
+                  --elec_ofs_end_i <= '0';
                   aoi_img_end <= '0';
-                  elec_ofs_dval_i <= pixel_samp_trig;  -- on continue d'envoyer des données pour l'offset electrique
+                  --elec_ofs_dval_i <= pixel_samp_trig;  -- on continue d'envoyer des données pour l'offset electrique
                   for ii in 0 to C_DIAG_TAP_NUMBER_M1 loop
                      data(ii) <= (others => '0');                  -- offset electronique vaut 0 en mode diag
                   end loop;
@@ -317,18 +317,18 @@ begin
                   end if;
                
                when tir_dly_st =>
-                  elec_ofs_start_i <= '0';
-                  elec_ofs_end_i <= '1';
+                  --elec_ofs_start_i <= '0';
+                  --elec_ofs_end_i <= '1';
                   diag_frame_done <= '0';   
                   dly_cnt <= dly_cnt + 1;
-                  elec_ofs_dval_i <= pixel_samp_trig;  -- on continue d'envoyer des données pour l'offset electrique
+                  --elec_ofs_dval_i <= pixel_samp_trig;  -- on continue d'envoyer des données pour l'offset electrique
                   if dly_cnt >= to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then 
                      diag_fsm <=  cfg_line_gen_st;
                      aoi_img_start <= '1';
                   end if;                         
                
                when cfg_line_gen_st =>
-                  elec_ofs_dval_i <= '0'; 
+                  --elec_ofs_dval_i <= '0'; 
                   aoi_img_start <= '0';
                   diag_line_gen_en <= '1';                              -- on active le module généateur des données diag
                   aoi_fval_i <= '1';

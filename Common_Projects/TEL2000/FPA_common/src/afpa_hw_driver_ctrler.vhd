@@ -332,7 +332,8 @@ begin
                fpa_intf_cfg_i.elcorr_div_op_sel     <=  USER_CFG.elcorr_div_op_sel;
                fpa_intf_cfg_i.elcorr_add_op_sel     <=  USER_CFG.elcorr_add_op_sel;          
                        
-               fpa_intf_cfg_i.sat_ctrl_en                     <=  USER_CFG.sat_ctrl_en;            
+               fpa_intf_cfg_i.sat_ctrl_en                     <=  USER_CFG.sat_ctrl_en;
+               fpa_intf_cfg_i.ROIC_DBG_REG                    <=  USER_CFG.ROIC_DBG_REG;
                
              --  fpa_intf_cfg_i.sol_dly_mclk_source    <= USER_CFG.sol_dly_mclk_source;
              --  fpa_intf_cfg_i.sol_dly_valid          <= USER_CFG.sol_dly_valid;

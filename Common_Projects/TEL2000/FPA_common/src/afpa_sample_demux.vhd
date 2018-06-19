@@ -70,8 +70,8 @@ begin
    PIX_MOSI.DVAL <= RX_MOSI.AOI_DVAL;
    PIX_MOSI.MISC <= '0'&RX_MOSI.AOI_SPARE;
    PIX_MOSI.SUPPORT_BUSY  <= RX_MOSI.SUPPORT_BUSY;
-   RX_MISO.AFULL <= PIX_MISO.AFULL;
-   RX_MISO.BUSY  <= PIX_MISO.BUSY;
+   RX_MISO.AFULL <= '0'; --PIX_MISO.AFULL;
+   RX_MISO.BUSY  <= '0'; --PIX_MISO.BUSY;
    
    ------------------------------------------------------
    -- non AOI :reference 0 
