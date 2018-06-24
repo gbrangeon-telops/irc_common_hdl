@@ -51,6 +51,7 @@ architecture rtl of afpa_single_div_ip_wrapper is
          s_axis_dividend_tlast   : in std_logic;
          s_axis_dividend_tdata   : in std_logic_vector(39 downto 0);
          m_axis_dout_tvalid      : out std_logic;
+         m_axis_dout_tready      : in std_logic;
          m_axis_dout_tuser       : out std_logic_vector(3 downto 0);
          m_axis_dout_tlast       : out std_logic;
          m_axis_dout_tdata       : out std_logic_vector(39 downto 0)
@@ -148,7 +149,8 @@ begin
       
       m_axis_dout_tvalid      => dout_tvalid,      
       m_axis_dout_tuser       => dout_tuser,       
-      m_axis_dout_tlast       => dout_tlast,       
+      m_axis_dout_tlast       => dout_tlast,
+      m_axis_dout_tready      => '1',
       m_axis_dout_tdata       => dout_tdata       
       );
    

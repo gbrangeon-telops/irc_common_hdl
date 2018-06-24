@@ -34,7 +34,7 @@ entity afpa_elec_ref_calc is
       TX_MISO        : in t_ll_ext_miso;    
       TX_MOSI        : out t_ll_ext_mosi72;
       
-      NEW_DATA       : out std_logic;
+      REF_FEEDBK     : out std_logic;
       
       ERR            : out std_logic
       );
@@ -73,7 +73,7 @@ architecture rtl of afpa_elec_ref_calc is
    signal result_dval         : std_logic := '0';
    signal result              : result_type;
    signal temp_result         : temp_result_type;
-   signal new_data_i          : std_logic := '0';
+   signal ref_feedbk_i        : std_logic := '0';
    signal result_dval_pipe    : std_logic_vector(7 downto 0) := (others => '0');
      
 begin
@@ -83,7 +83,7 @@ begin
    ------------------------------------------------------
    TX_MOSI.DVAL <= result_dval;
    TX_MOSI.DATA <= std_logic_vector(result(4)) & std_logic_vector(result(3)) & std_logic_vector(result(2)) & std_logic_vector(result(1));
-   NEW_DATA     <= new_data_i;
+   REF_FEEDBK   <= ref_feedbk_i;
    
    ERR <= err_i;	
    RX_MISO <= TX_MISO;
@@ -184,9 +184,9 @@ begin
          
          -- feedbacks
          if unsigned(result_dval_pipe) /= 0 then
-            new_data_i <= '1';
+            ref_feedbk_i <= '1';
          else
-            new_data_i <= '0';  
+            ref_feedbk_i <= '0';  
          end if;
          
          if result_dval_pipe(7) = '1' then 
