@@ -306,40 +306,41 @@ begin
             fpa_intf_cfg_i.real_mode_active_pixel_dly <= USER_CFG.REAL_MODE_ACTIVE_PIXEL_DLY;
             
             -- à effacer après implantation fastwindowing sur M3K 
-            if readout_i = '0' then 
-               fpa_intf_cfg_i.speedup_lsydel        <= USER_CFG.speedup_lsydel;      
-               fpa_intf_cfg_i.speedup_lsync         <= USER_CFG.speedup_lsync;       
-               fpa_intf_cfg_i.speedup_sample_row    <= USER_CFG.speedup_sample_row;  
-               fpa_intf_cfg_i.speedup_unused_area   <= USER_CFG.speedup_unused_area;
---               fpa_intf_cfg_i.fastrd_sync_pos       <= USER_CFG.fastrd_sync_pos;
---               fpa_intf_cfg_i.lsydel_mclk           <= USER_CFG.lsydel_mclk;
-               
-               
-               fpa_intf_cfg_i.adc_clk_source_phase  <= USER_CFG.adc_clk_source_phase;
-               fpa_intf_cfg_i.adc_clk_pipe_sel      <= USER_CFG.adc_clk_pipe_sel;
-               
-               fpa_intf_cfg_i.elcorr_enabled                  <=  USER_CFG.elcorr_enabled;                
-               fpa_intf_cfg_i.elcorr_pix_faked_value_forced   <=  USER_CFG.elcorr_pix_faked_value_forced;  
-               fpa_intf_cfg_i.elcorr_pix_faked_value          <=  USER_CFG.elcorr_pix_faked_value;         
-               fpa_intf_cfg_i.elcorr_ref_cfg                  <=  USER_CFG.elcorr_ref_cfg;         
-               fpa_intf_cfg_i.elcorr_ref_dac_id               <=  USER_CFG.elcorr_ref_dac_id;                
-               fpa_intf_cfg_i.elcorr_atemp_gain               <=  USER_CFG.elcorr_atemp_gain;                    
-               fpa_intf_cfg_i.elcorr_atemp_ofs                <=  USER_CFG.elcorr_atemp_ofs;
-               
-               fpa_intf_cfg_i.elcorr_ref0_op_sel    <=  USER_CFG.elcorr_ref0_op_sel;
-               fpa_intf_cfg_i.elcorr_ref1_op_sel    <=  USER_CFG.elcorr_ref1_op_sel;
-               fpa_intf_cfg_i.elcorr_mult_op_sel    <=  USER_CFG.elcorr_mult_op_sel;
-               fpa_intf_cfg_i.elcorr_div_op_sel     <=  USER_CFG.elcorr_div_op_sel;
-               fpa_intf_cfg_i.elcorr_add_op_sel     <=  USER_CFG.elcorr_add_op_sel;          
-                       
-               fpa_intf_cfg_i.sat_ctrl_en                     <=  USER_CFG.sat_ctrl_en;
-               fpa_intf_cfg_i.ROIC_DBG_REG                    <=  USER_CFG.ROIC_DBG_REG;
-               
-             --  fpa_intf_cfg_i.sol_dly_mclk_source    <= USER_CFG.sol_dly_mclk_source;
-             --  fpa_intf_cfg_i.sol_dly_valid          <= USER_CFG.sol_dly_valid;
-               fpa_intf_cfg_i.fastrd_sync_pos        <= USER_CFG.fastrd_sync_pos;
-               
-            end if;
+--            if readout_i = '0' then 
+--               fpa_intf_cfg_i.speedup_lsydel        <= USER_CFG.speedup_lsydel;      
+--               fpa_intf_cfg_i.speedup_lsync         <= USER_CFG.speedup_lsync;       
+--               fpa_intf_cfg_i.speedup_sample_row    <= USER_CFG.speedup_sample_row;  
+--               fpa_intf_cfg_i.speedup_unused_area   <= USER_CFG.speedup_unused_area;
+----               fpa_intf_cfg_i.fastrd_sync_pos       <= USER_CFG.fastrd_sync_pos;
+----               fpa_intf_cfg_i.lsydel_mclk           <= USER_CFG.lsydel_mclk;
+--               
+--               
+--               fpa_intf_cfg_i.adc_clk_source_phase  <= USER_CFG.adc_clk_source_phase;
+--               fpa_intf_cfg_i.adc_clk_pipe_sel      <= USER_CFG.adc_clk_pipe_sel;
+--               
+--               fpa_intf_cfg_i.elcorr_enabled                  <=  USER_CFG.elcorr_enabled;                
+--               fpa_intf_cfg_i.elcorr_pix_faked_value_forced   <=  USER_CFG.elcorr_pix_faked_value_forced;  
+--               fpa_intf_cfg_i.elcorr_pix_faked_value          <=  USER_CFG.elcorr_pix_faked_value;         
+--               fpa_intf_cfg_i.elcorr_ref_cfg                  <=  USER_CFG.elcorr_ref_cfg;         
+--               fpa_intf_cfg_i.elcorr_ref_dac_id               <=  USER_CFG.elcorr_ref_dac_id;                
+--               fpa_intf_cfg_i.elcorr_atemp_gain               <=  USER_CFG.elcorr_atemp_gain;                    
+--               fpa_intf_cfg_i.elcorr_atemp_ofs                <=  USER_CFG.elcorr_atemp_ofs;
+--               
+--               fpa_intf_cfg_i.elcorr_ref0_op_sel    <=  USER_CFG.elcorr_ref0_op_sel;
+--               fpa_intf_cfg_i.elcorr_ref1_op_sel    <=  USER_CFG.elcorr_ref1_op_sel;
+--               fpa_intf_cfg_i.elcorr_mult_op_sel    <=  USER_CFG.elcorr_mult_op_sel;
+--               fpa_intf_cfg_i.elcorr_div_op_sel     <=  USER_CFG.elcorr_div_op_sel;
+--               fpa_intf_cfg_i.elcorr_add_op_sel     <=  USER_CFG.elcorr_add_op_sel;          
+--                       
+--               fpa_intf_cfg_i.sat_ctrl_en                     <=  USER_CFG.sat_ctrl_en;
+--               fpa_intf_cfg_i.ROIC_DBG_REG                    <=  USER_CFG.ROIC_DBG_REG;
+--               fpa_intf_cfg_i.roic_cst_output_mode            <=  USER_CFG.roic_cst_output_mode;
+--               
+--             --  fpa_intf_cfg_i.sol_dly_mclk_source    <= USER_CFG.sol_dly_mclk_source;
+--             --  fpa_intf_cfg_i.sol_dly_valid          <= USER_CFG.sol_dly_valid;
+--               fpa_intf_cfg_i.fastrd_sync_pos        <= USER_CFG.fastrd_sync_pos;
+--               
+--            end if;
             
             
          end if;
