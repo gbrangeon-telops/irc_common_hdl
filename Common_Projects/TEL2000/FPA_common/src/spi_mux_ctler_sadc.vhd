@@ -1,5 +1,5 @@
 ------------------------------------------------------------------
---!   @file : spi_mux_ctler
+--!   @file : spi_mux_ctler_sadc
 --!   @brief
 --!   @details
 --!
@@ -15,7 +15,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
 use work.tel2000.all;
 
-entity spi_mux_ctler is
+entity spi_mux_ctler_sadc is
    port(  		 
       
       -- signaux generaux
@@ -36,17 +36,16 @@ entity spi_mux_ctler is
       -- SPI signals (slave side) 
       SPI_SDO  : in std_logic;
       SPI_CS1_N: out std_logic;
-      SPI_CS2_N: out std_logic;
+      SPI_CS0_N: out std_logic;
       SPI_SCLK : out std_logic;
       SPI_SDI  : out std_logic
       
       );
-end spi_mux_ctler;
+end spi_mux_ctler_sadc;
 
-architecture rtl of spi_mux_ctler is
+architecture rtl of spi_mux_ctler_sadc is
    
-   constant C_MUX_STABILIZATION_TIME_FACTOR : natural :=  10_000; --Valeur empirique. Soit 100 usec. 
-   type rqst_fsm_type is (idle, cfg_brd_mux_st, wait_mux_stab_st, client_en_st, wait_end_st);
+   type rqst_fsm_type is (idle, client_en_st, wait_end_st);
    
    -- sync_reset
    component sync_reset
@@ -63,13 +62,10 @@ architecture rtl of spi_mux_ctler is
    signal spi_sdi_iob      : std_logic;
    signal spi_sclk_iob     : std_logic;
    signal spi_cs1n_iob     : std_logic;
-   signal spi_cs2n_iob     : std_logic;
-   signal client_id        : natural range 1 to 2;
-   signal pause_cnt        : unsigned(log2(C_MUX_STABILIZATION_TIME_FACTOR)+1 downto 0);
+   signal spi_cs0n_iob     : std_logic;
+   signal client_id        : natural range 0 to 1;
    
    signal rqst_fsm         : rqst_fsm_type;
-   signal mux_iob          : std_logic_vector(1 downto 0);
-   signal mux_i            : std_logic_vector(1 downto 0);
    
    --   attribute equivalent_register_removal : string;      
    --   attribute equivalent_register_removal of spi_sdo_iob  : signal is "NO"; 
@@ -82,11 +78,10 @@ architecture rtl of spi_mux_ctler is
    attribute IOB of spi_sdi_iob          : signal is "TRUE";
    attribute IOB of spi_sclk_iob         : signal is "TRUE";
    attribute IOB of spi_cs1n_iob         : signal is "TRUE";
-   attribute IOB of spi_cs2n_iob         : signal is "TRUE";
+   attribute IOB of spi_cs0n_iob         : signal is "TRUE";
    
    --attribute dont_touch : string;
    --attribute dont_touch of client_id     : signal is "TRUE"; 
-   --attribute keep of mux_iob            : signal is "TRUE"; 
    --attribute dont_touch of rqst_fsm      : signal is "TRUE"; 
    --attribute dont_touch of DONE          : signal is "TRUE"; 
    --attribute dont_touch of EN            : signal is "TRUE";
@@ -101,7 +96,7 @@ begin
    -- ATTENTION : contrôle des signaux SPI sortants et MUX sortants sur '0' et '1'  
    SPI_SDI  <= spi_sdi_iob;
    SPI_CS1_N <= spi_cs1n_iob;--'0' when spi_csn_iob  = '0' else 'Z';
-   SPI_CS2_N <= spi_cs2n_iob;--'0' when spi_csn_iob  = '0' else 'Z';
+   SPI_CS0_N <= spi_cs0n_iob;--'0' when spi_csn_iob  = '0' else 'Z';
    SPI_SCLK <= spi_sclk_iob;
    
    --------------------------------------------------
@@ -113,19 +108,13 @@ begin
    --------------------------------------------------
    -- requests manager
    -------------------------------------------------- 
-   -- [MUX1, MUX0] = "00" --> quad_adc_ctrl en communication 
-   -- [MUX1, MUX0] = "01" --> switch en communication
-   -- [MUX1, MUX0] = "10" --> monitoring_adc en communication 
-   -- [MUX1, MUX0] = "11" --> adc_freq_id_reader en communication
-   
    U2: process(CLK)   
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then 
             rqst_fsm <=  idle;
             EN <= (others => '0');
-            client_id <= 1;
-            mux_i <= "11";
+            client_id <= 0;
          else                   
             
             --fsm de contrôle
@@ -134,30 +123,14 @@ begin
                
                -- attente d'une demande de transaction SPI
                when idle =>
-                  pause_cnt <= (others => '0');
                   EN <= (others => '0');                     
-                  if RQST(1) = '1' then            -- priorité 1: switch
-                     client_id <= 1;
-                     rqst_fsm <= cfg_brd_mux_st;
-                  elsif RQST(2) = '1' then            -- priorité 2: monitoring ADC
-                     client_id <= 2;
-                     rqst_fsm <= cfg_brd_mux_st; 
-                  end if;
-                  
-               -- activation du mux sur la carte
-               when cfg_brd_mux_st =>  
-                  mux_i <= std_logic_vector(to_unsigned(client_id, 2));
-                  rqst_fsm <= wait_mux_stab_st;
-                  
-               -- attente pour la propagation vers le mux sur la carte et sa stabilisation
-               when wait_mux_stab_st => 
-                  pause_cnt <= pause_cnt + 1;
-                  if pause_cnt = C_MUX_STABILIZATION_TIME_FACTOR then 
+                  if RQST(0) = '1' then            -- priorité 1: switch
+                     client_id <= 0;
                      rqst_fsm <= client_en_st;
+                  elsif RQST(1) = '1' then            -- priorité 2: monitoring ADC
+                     client_id <= 1;
+                     rqst_fsm <= client_en_st; 
                   end if;
-                  -- pragma translate_off
-                  rqst_fsm <= client_en_st;
-                  -- pragma translate_on
                   
                -- accès accordé au client demandeur 
                when client_en_st =>     
@@ -187,9 +160,9 @@ begin
    U3: process(CLK)   
    begin
       if rising_edge(CLK) then
-         mux_iob <= mux_i;
          spi_sdi_iob  <= MOSI(client_id);
-         spi_csn_iob  <= CSN(client_id);
+         spi_cs1n_iob  <= CSN(1);
+         spi_cs0n_iob  <= CSN(0);
          spi_sclk_iob <= SCLK(client_id);
          spi_sdo_iob  <= SPI_SDO;        
       end if;   
