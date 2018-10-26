@@ -32,6 +32,7 @@ entity fpa_intf_sequencer is
       FPA_INTF_CFG       : in fpa_intf_cfg_type; --! configuration           
       TRIG_CTLER_STAT    : in std_logic_vector(7 downto 0); --! statuts du gestionnaire des trigs du FPA          
       FPA_DRIVER_STAT    : in std_logic_vector(31 downto 0); --! statuts du pilote Hardware du FPA     
+      DATA_PATH_STAT     : in std_logic_vector(15 downto 0); --! statuts du lien des donnees
       FPA_COOLER_STAT    : in fpa_cooler_stat_type; --! statut du refroidisseur     
       FPA_HARDW_STAT     : in fpa_hardw_stat_type; --! statut (type + mise-à-jour) de toutes les cartes de proximité (proxy, flex, DDC, ADC, harnais etc...)   
       FPA_SOFTW_STAT     : in fpa_firmw_stat_type;--
@@ -67,7 +68,7 @@ architecture RTL of fpa_intf_sequencer is
    end component;
    
    type status_type is (not_available, success, failure);
-   type fpa_sequencer_sm_type is (init_st1, init_st2, idle, trig_ctrl_st, active_prog_st, wait_trig_done_st, wait_prog_end_st, trig_en_st);
+   type fpa_sequencer_sm_type is (init_st1, init_st2, idle, trig_ctrl_st, active_prog_st, wait_trig_done_st, wait_dpath_done_st, wait_prog_end_st, trig_en_st);
    signal fpa_hardw_up2date   : status_type;
    signal fpa_hardw_type      : status_type;
    signal fpa_vhd_stat_i      : status_type;
@@ -91,6 +92,7 @@ architecture RTL of fpa_intf_sequencer is
    signal fpa_softw_err       : std_logic;
    signal fpa_vhd_err         : std_logic;
    signal fpa_init_cfg_rdy    : std_logic;
+   signal frm_in_progress     : std_logic := '0';
    
    
    
@@ -120,7 +122,9 @@ begin
    -------------------------------------------------- 
    fpa_driver_rqst <= FPA_DRIVER_STAT(1);
    trig_ctler_done <= TRIG_CTLER_STAT(0);
-   fpa_driver_done <= FPA_DRIVER_STAT(0);   
+   fpa_driver_done <= FPA_DRIVER_STAT(0);
+   
+   frm_in_progress <= DATA_PATH_STAT(9);
    
    --------------------------------------------------
    -- Sync reset
@@ -375,6 +379,11 @@ begin
                
                when wait_trig_done_st =>    
                   if trig_ctler_done = '1' then 
+                     fpa_sequencer_sm <= wait_dpath_done_st;
+                  end if;
+               
+               when wait_dpath_done_st =>
+                  if frm_in_progress = '0' then 
                      fpa_sequencer_sm <= active_prog_st;
                   end if;
                

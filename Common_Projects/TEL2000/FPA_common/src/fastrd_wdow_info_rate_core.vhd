@@ -48,7 +48,7 @@ constant OFIFO_DEPTH          : natural := 512; -- taille du fifo de sortie qui 
 constant PIPE_DLY             : natural := 30;  -- estimation de la taille du pipe avant d'atteindre le in_fifo
 constant SECUR_MARGIN         : natural := 50;  -- marge de scurité
 
-constant FIFO_HIGH_THRESHOLD  : natural := OFIFO_DEPTH - PIPE_DLY*DEFINE_FPA_PCLK_RATE_FACTOR - SECUR_MARGIN;
+constant FIFO_HIGH_THRESHOLD  : natural := MAX(OFIFO_DEPTH - PIPE_DLY*DEFINE_FPA_PCLK_RATE_FACTOR - SECUR_MARGIN, 128);
 constant FIFO_LOW_THRESHOLD   : natural := FIFO_HIGH_THRESHOLD/2;
 
    component sync_reset

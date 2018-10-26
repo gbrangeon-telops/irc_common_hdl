@@ -74,6 +74,8 @@ architecture rtl of afpa_data_dispatcher is
    constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_27  : natural := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 27; --pour un total de 27 bits pour le temps d'integration
    constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_M_1   : natural := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS - 1; 
    
+   constant C_AOI_EOF_PIPE_LEN : integer := integer(real(DEFINE_FPA_100M_CLK_RATE_KHZ)/DEFINE_FPA_PCLK_RATE_KHZ);
+   
    component sync_reset
       port(
          ARESET : in std_logic;
@@ -184,6 +186,8 @@ architecture rtl of afpa_data_dispatcher is
    signal naoi_start                   : std_logic;
    signal naoi_stop                    : std_logic;
    signal naoi_ref_valid               : std_logic_vector(1 downto 0);
+   signal aoi_eof_pipe                 : std_logic_vector(C_AOI_EOF_PIPE_LEN downto 0);
+   
    
 begin
    
@@ -216,15 +220,23 @@ begin
          aoi_dval       <= quad_fifo_dout(61) and quad_fifo_dval;           
          aoi_spare      <= quad_fifo_dout(76 downto 62);             
          
-         img_start      <= aoi_sof and aoi_dval;    -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
-         img_end        <= aoi_eof and aoi_dval;    -- img_end  . À '1' dit que le AOI est terminée. Tous les pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.
-         
          -- non AOI area flags         
          naoi_dval      <= quad_fifo_dout(77) and quad_fifo_dval;
          naoi_start     <= quad_fifo_dout(78);
          naoi_stop      <= quad_fifo_dout(79);
          naoi_ref_valid <= quad_fifo_dout(81 downto 80);
-         naoi_spare     <= quad_fifo_dout(94 downto 82);            
+         naoi_spare     <= quad_fifo_dout(94 downto 82);
+         
+         -- quelques flags
+         img_start      <= aoi_sof and aoi_dval;               -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
+         if img_start = '1' then                               -- ENO: 25 septembre 2018: la regeneration de img_end pour regler un bug lorsqu'on a du suréchnatillonnage temporel d'un meme pixel (par exemple N echantillons par pixel sur un même canal analogique)
+            aoi_eof_pipe <= (others => '0');
+         else
+            aoi_eof_pipe(C_AOI_EOF_PIPE_LEN downto 0) <= aoi_eof_pipe(C_AOI_EOF_PIPE_LEN-1 downto 0) & (aoi_eof and aoi_dval);   
+         end if;
+         img_end        <= aoi_eof_pipe(C_AOI_EOF_PIPE_LEN);   -- ENO: 25 septembre 2018:  img_end retardé pour ne pas tronquer les echantillons de aoi_eof. À '1' dit que le AOI est terminée. Tous les SAMPLES de pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.  
+         
+         
       end if;
    end process;   
    
@@ -412,7 +424,6 @@ begin
             end if;
             -- pragma translate_on
             
-            -- sortie des pixels
             
             
             -- sortie de la partie header fast provenant du module
@@ -435,8 +446,8 @@ begin
                      dispatch_info_i.exp_info.exp_dval <= '1';  -- sortira après dispatch_info_i.exp_info afin de reduire les risques d'aleas de séquences sur les regitres
                   end if;
                   if pause_cnt = 12 then                         -- ainsi dispatch_info_i.exp_info.exp_dval durera au moins 12-4 = 8 CLK
-                     dispatch_info_i.exp_info.exp_dval <= '0';
-                     fast_hder_sm <= send_hder_st;           
+                     dispatch_info_i.exp_info.exp_dval <= '0';                            
+                     fast_hder_sm <= send_hder_st;
                   end if;
                
                when send_hder_st =>                  

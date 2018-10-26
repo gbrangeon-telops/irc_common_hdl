@@ -583,9 +583,6 @@ begin
 --               when x"0208" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_samp_num_per_ch        , 32));
 --               when x"020C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_samp_mean_numerator    , 32));
                
-               
-               
-               
                when others  => stat_read_reg <= (others => '0');
                
             end case;

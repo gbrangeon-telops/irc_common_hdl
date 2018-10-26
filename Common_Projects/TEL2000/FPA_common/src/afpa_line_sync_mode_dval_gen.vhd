@@ -220,9 +220,9 @@ begin
          naoi_start_last <= FPA_DIN(C_NAOI_START_POS); 
          
          -- les flags adc considérés dans le shifregister
-         adc_flag(0)   <= FPA_DIN(C_AOI_LSYNC_POS) and not aoi_line_sync_last;   -- on considere uniqument les RE
-         adc_flag(1)   <= FPA_DIN(C_NAOI_START_POS) and not naoi_start_last; -- on considere uniqument les RE
-         adc_flag_dval <= (not fpa_din_dval_last and FPA_DIN_DVAL) and aoi_init_done and naoi_init_done;  --  on considere uniqument les RE 
+         adc_flag(0)   <= FPA_DIN(C_AOI_LSYNC_POS); --FPA_DIN(C_AOI_LSYNC_POS) and not aoi_line_sync_last;   -- aoi_lsync :  on considere uniqument les RE
+         adc_flag(1)   <= FPA_DIN(C_NAOI_START_POS);--FPA_DIN(C_NAOI_START_POS) and not naoi_start_last;     -- naoi_start:  on considere uniqument les RE
+         adc_flag_dval <= FPA_DIN_DVAL and aoi_init_done and naoi_init_done;--(not fpa_din_dval_last and FPA_DIN_DVAL) and aoi_init_done and naoi_init_done;  --  on considere uniqument les RE 
          
          -- front montant ou descendant
          if DEFINE_FPA_SYNC_FLAG_VALID_ON_FE then 
@@ -329,7 +329,7 @@ begin
          else
             adc_flag_fifo_din <= adc_flag_o;
             adc_flag_last_o   <= adc_flag_o;
-            adc_flag_fifo_wr  <= (not adc_flag_last_o(1) and adc_flag_o(1)) or (not adc_flag_last_o(0) and adc_flag_o(0)); -- juste les transitions des flags. Ainsi on est certain d'avoir un flag par information.    
+            adc_flag_fifo_wr  <=(adc_flag_o(1) or adc_flag_o(0)) and READOUT_INFO.SAMP_PULSE; --(not adc_flag_last_o(1) and adc_flag_o(1)) or (not adc_flag_last_o(0) and adc_flag_o(0)); -- juste les transitions des flags. Ainsi on est certain d'avoir un flag par information.    
          end if;
       end if;
    end process;           
@@ -472,7 +472,7 @@ begin
             dout_o(94 downto 82) <= readout_info_o.naoi.spare;                                        -- naoi_spares
             
             -- non utilisé                                                                            -- non utilisé
-            dout_o(95)          <= '0'; 
+            dout_o(95)           <= '0'; 
             
          end if;
       end if;
