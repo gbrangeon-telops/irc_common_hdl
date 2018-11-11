@@ -103,6 +103,7 @@ begin
             wr_fifo_fsm <= pause_st;
             wr_dval_i <= '0';
             fifo_rdy_i <= '0';
+            re_count <= (others => '0');
             
          else 
             
