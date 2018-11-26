@@ -28,14 +28,19 @@ end double_sync_vector;
 
 
 architecture RTL of double_sync_vector is
+	signal DQ : std_logic_vector(D'LENGTH-1 downto 0);
+	
+    attribute ASYNC_REG : string;   
+    attribute ASYNC_REG of DQ: signal is "TRUE";
+    attribute ASYNC_REG of Q: signal is "TRUE";
+
 begin
 	
 	process (CLK)
-		variable DQ : std_logic_vector(D'LENGTH-1 downto 0);
 	begin		   
 		if rising_edge(CLK) then
 			Q <= DQ;
-			DQ := D;
+			DQ <= D;
 		end if;
 	end process;
 	

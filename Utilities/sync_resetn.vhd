@@ -29,6 +29,11 @@ end sync_resetn;
 architecture RTL of sync_resetn is
    signal temp : std_logic := '0';     
    
+   attribute ASYNC_REG : string;   
+   attribute ASYNC_REG of SRESETN: signal is "TRUE";
+   attribute ASYNC_REG of temp: signal is "TRUE";
+  
+   
 --   component FDCP
 --      -- synthesis translate_off
 --      generic (INIT : bit := '0');

@@ -27,7 +27,11 @@ entity sync_reset is
 end sync_reset;
 
 architecture RTL of sync_reset is
-   signal temp : std_logic := '1';     
+   signal temp : std_logic := '1';
+   
+   attribute ASYNC_REG : string;   
+   attribute ASYNC_REG of SRESET: signal is "TRUE";
+   attribute ASYNC_REG of temp: signal is "TRUE";
    
 --   component FDCP
 --      -- synthesis translate_off

@@ -43,6 +43,11 @@ architecture RTL of double_sync is
 	-- pragma translate_off
 	for all: fd use entity unisim.fd;
 	-- pragma translate_on
+	
+   attribute ASYNC_REG : string;
+   attribute ASYNC_REG of flop1: label is "TRUE";	
+   attribute ASYNC_REG of flop2: label is "TRUE";
+   
 begin
 	
 	flop1: FD generic map(INIT => INIT_VALUE) port map (D => D, C => CLK, Q => temp);
