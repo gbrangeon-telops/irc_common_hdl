@@ -74,7 +74,7 @@ architecture rtl of afpa_data_dispatcher is
    constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_27  : natural := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 27; --pour un total de 27 bits pour le temps d'integration
    constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_M_1   : natural := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS - 1; 
    
-   constant C_AOI_EOF_PIPE_LEN : integer := integer(real(DEFINE_FPA_100M_CLK_RATE_KHZ)/DEFINE_FPA_PCLK_RATE_KHZ);
+   constant C_AOI_EOF_PIPE_LEN : integer := integer(real(DEFINE_FPA_100M_CLK_RATE_KHZ)/real(DEFINE_FPA_PCLK_RATE_KHZ));
    
    component sync_reset
       port(
