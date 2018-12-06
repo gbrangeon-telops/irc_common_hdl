@@ -155,7 +155,31 @@ begin
       D   => FPA_INT_FEEDBK,
       Q   => fpa_int_feedbk_i,
       RESET => sreset
-      );   
+      );
+   
+   U1D : double_sync
+   port map(
+      CLK => CLK_100M,
+      D   => ACQ_TRIG_IN,
+      Q   => acq_trig_in_i,
+      RESET => sreset
+      ); 
+   
+   U1E : double_sync
+   port map(
+      CLK => CLK_100M,
+      D   => XTRA_TRIG_IN,
+      Q   => xtra_trig_in_i,
+      RESET => sreset
+      ); 
+   
+   U1F : double_sync
+   port map(
+      CLK => CLK_100M,
+      D   => PROG_TRIG_IN,
+      Q   => prog_trig_in_i,
+      RESET => sreset
+      );
    
    --------------------------------------------------
    -- fsm de contrôle/filtrage des trigs 
@@ -186,11 +210,7 @@ begin
             --fpa_readout_i <= FPA_READOUT;
             fpa_readout_last <= fpa_readout_i;
             
-            --fpa_int_feedbk_i <= FPA_INT_FEEDBK;
-            
-            acq_trig_in_i  <= ACQ_TRIG_IN;
-            xtra_trig_in_i <= XTRA_TRIG_IN;
-            prog_trig_in_i <= PROG_TRIG_IN;
+            --fpa_int_feedbk_i <= FPA_INT_FEEDBK
             
             -- séquenceur
             case fpa_trig_sm is 
@@ -209,15 +229,15 @@ begin
                   acq_trig_done <= '1';
                   if TRIG_CTLER_EN = '1' then  --! TRIG_CTLER_EN = '1' ssi le détecteur/proxy est allumé ou si on est en mode diag
                      if acq_trig_in_i = '1' then 
-                        acq_trig_i <= not PROG_TRIG_IN;
-                        acq_trig_o <= not PROG_TRIG_IN;
+                        acq_trig_i <= not prog_trig_in_i;
+                        acq_trig_o <= not prog_trig_in_i;
                         dly_cnt <= FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_CTRL_DLY;
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '0';
                         done <= '0';
                      elsif xtra_trig_in_i = '1' then   
-                        xtra_trig_i <= not PROG_TRIG_IN;         
-                        xtra_trig_o <= not PROG_TRIG_IN;
+                        xtra_trig_i <= not prog_trig_in_i;         
+                        xtra_trig_o <= not prog_trig_in_i;
                         dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '1';
