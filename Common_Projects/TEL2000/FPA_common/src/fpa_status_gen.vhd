@@ -88,11 +88,13 @@ architecture rtl of fpa_status_gen is
    signal fpa_temperature_raw          : std_logic_vector(31 downto 0);
    signal cooler_volt_min_mV_in        : std_logic_vector(15 downto 0);
    signal cooler_volt_max_mV_in        : std_logic_vector(15 downto 0);
-   signal cooler_curr_min_mA_in        : std_logic_vector(15 downto 0);
+   signal cooler_on_curr_min_mA_in     : std_logic_vector(15 downto 0);
+   signal cooler_off_curr_max_mA_in    : std_logic_vector(15 downto 0);
    
    signal cooler_volt_min_mV_out       : std_logic_vector(15 downto 0);
    signal cooler_volt_max_mV_out       : std_logic_vector(15 downto 0);
-   signal cooler_curr_min_mA_out       : std_logic_vector(15 downto 0);
+   signal cooler_on_curr_min_mA_out    : std_logic_vector(15 downto 0);
+   signal cooler_off_curr_max_mA_out   : std_logic_vector(15 downto 0);
    
    signal cooler_powered               : std_logic;
    signal global_done                  : std_logic;
@@ -224,9 +226,10 @@ begin
    -----------------------------------------------
    -- aussitôt qu'il y a une erreur de type hardware ou firmware, le voltage de reference du cooler renvoyé au µblaze est nulle.
    -- Avec une un voltage de reference nulle, impossible d'allumer le cooler
-   cooler_volt_min_mV_in  <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.IDDCA_INFO.COOLER_VOLT_MIN_mV,cooler_volt_min_mV_in'length));
-   cooler_volt_max_mV_in  <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.IDDCA_INFO.COOLER_VOLT_MAX_mV,cooler_volt_max_mV_in'length));
-   cooler_curr_min_mA_in  <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.IDDCA_INFO.COOLER_CURR_MIN_mA,cooler_curr_min_mA_in'length));
+   cooler_volt_min_mV_in      <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.IDDCA_INFO.COOLER_VOLT_MIN_mV,cooler_volt_min_mV_in'length));
+   cooler_volt_max_mV_in      <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.IDDCA_INFO.COOLER_VOLT_MAX_mV,cooler_volt_max_mV_in'length));
+   cooler_on_curr_min_mA_in   <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.IDDCA_INFO.COOLER_ON_CURR_MIN_mA,cooler_on_curr_min_mA_in'length));
+   cooler_off_curr_max_mA_in  <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.IDDCA_INFO.COOLER_OFF_CURR_MAX_mA,cooler_off_curr_max_mA_in'length));
    
    U2 : process(FPA_INTF_CLK) 
    begin
@@ -235,13 +238,16 @@ begin
          cooler_param_valid <= not fpa_seq_hardw_err and not fpa_seq_vhd_err and not fpa_seq_softw_err and FPA_HARDW_STAT.DVAL;
          
          if cooler_param_valid = '1' then   
-            cooler_volt_min_mV_out <= cooler_volt_min_mV_in; 
-            cooler_volt_max_mV_out <= cooler_volt_max_mV_in;
-            cooler_curr_min_mA_out <= cooler_curr_min_mA_in;
+            cooler_volt_min_mV_out     <= cooler_volt_min_mV_in; 
+            cooler_volt_max_mV_out     <= cooler_volt_max_mV_in;
+            cooler_on_curr_min_mA_out  <= cooler_on_curr_min_mA_in;
+            cooler_off_curr_max_mA_out <= cooler_off_curr_max_mA_in;
+            
          else
             cooler_volt_min_mV_out <= std_logic_vector(to_unsigned(1, cooler_volt_min_mV_out'length)); -- le min est superieur au max, cas absurde, on ne peut donc allumer le cooler 
             cooler_volt_max_mV_out <= std_logic_vector(to_unsigned(0, cooler_volt_min_mV_out'length)); --
-            cooler_curr_min_mA_out <= std_logic_vector(to_unsigned(65_000, cooler_curr_min_mA_out'length)); 
+            cooler_on_curr_min_mA_out <= std_logic_vector(to_unsigned(8000, cooler_on_curr_min_mA_out'length));
+            cooler_off_curr_max_mA_out <= std_logic_vector(to_unsigned(8000, cooler_off_curr_max_mA_out'length));
          end if;
          
          cooler_powered <= FPA_COOLER_STAT.COOLER_ON;
@@ -525,79 +531,11 @@ begin
                when  x"0088" =>   -- prog_init_done
                   stat_read_reg <=  (0 => fpa_prog_init_done, others => '0');
                
-               when  x"008C" =>   -- cooler current min
-                  stat_read_reg <= resize(cooler_curr_min_mA_out, 32);
-                  
-                  ---- verification
-                  --when x"0100" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_diag_mode              , 32));
-                  --               when x"0104" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_diag_type              , 32));
-                  --               when x"0108" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_pwr_on                 , 32));
-                  --               when x"010C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_trig_ctrl_mode         , 32));
-                  --               when x"0110" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_acq_trig_ctrl_dly      , 32));
-                  --               when x"0114" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_acq_trig_period_min    , 32));
-                  --               when x"0118" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_xtra_trig_ctrl_dly     , 32));
-                  --               when x"011C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_xtra_trig_period_min   , 32));
-                  --               when x"0120" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.comn.fpa_stretch_acq_trig       , 32));             
-                  --               when x"0124" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.diag.ysize                      , 32));
-                  --               when x"0128" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.diag.xsize_div_tapnum           , 32));                
-                  --               when x"012C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.roic.ystart                     , 32));
-                  --               when x"0130" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.roic.ysize_div4_m1              , 32));                 
-                  --               when x"0134" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vdet_code                       , 32));
-                  --               when x"0138" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.ref_mode_en                     , 32));
-                  --               when x"013C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.ref_chn_en                      , 32));
-                  --               when x"0140" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.itr                             , 32));
-                  --               when x"0144" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.real_mode_active_pixel_dly      , 32));              
-                  --               when x"0148" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.speedup_lsync                   , 32));
-                  --               when x"014C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.speedup_sample_row              , 32));
-                  --               when x"0150" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.speedup_unused_area             , 32));        
-                  --               when x"0154" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.raw_area.line_start_num         , 32));
-                  --               when x"0158" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.raw_area.line_end_num           , 32));
-                  --               when x"015C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.raw_area.sof_posf_pclk          , 32));
-                  --               when x"0160" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.raw_area.eof_posf_pclk          , 32));
-                  --               when x"0164" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.raw_area.sol_posl_pclk          , 32));
-                  --               when x"0168" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.raw_area.eol_posl_pclk          , 32));
-                  --               when x"016C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.raw_area.eol_posl_pclk_p1       , 32));
-                  --               when x"0170" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.raw_area.window_lsync_num       , 32));
-                  --               when x"0174" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.raw_area.line_period_pclk       , 32));
-                  --               when x"0178" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.raw_area.readout_pclk_cnt_max   , 32));   
-                  --               when x"017C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.user_area.line_start_num        , 32));
-                  --               when x"0180" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.user_area.line_end_num          , 32));
-                  --               when x"0184" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.user_area.sol_posl_pclk         , 32));
-                  --               when x"0188" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.user_area.eol_posl_pclk         , 32));
-                  --               when x"018C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.user_area.eol_posl_pclk_p1      , 32));      
-                  --               when x"0190" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.pix_samp_num_per_ch             , 32));
-                  --               when x"0194" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.hgood_samp_sum_num              , 32));
-                  --               when x"0198" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.hgood_samp_mean_numerator       , 32));
-                  --               when x"019C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vgood_samp_sum_num              , 32));
-                  --               when x"01A0" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vgood_samp_mean_numerator       , 32));
-                  --               when x"01A4" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.good_samp_first_pos_per_ch      , 32));
-                  --               when x"01A8" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.good_samp_last_pos_per_ch       , 32));            
-                  --               when x"01AC" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vdac_value(1)                   , 32));
-                  --               when x"01B0" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vdac_value(2)                   , 32));
-                  --               when x"01B4" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vdac_value(3)                   , 32));
-                  --               when x"01B8" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vdac_value(4)                   , 32));
-                  --               when x"01BC" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vdac_value(5)                   , 32));
-                  --               when x"01C0" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vdac_value(6)                   , 32));
-                  --               when x"01C4" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vdac_value(7)                   , 32));
-                  --               when x"01C8" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.vdac_value(8)                   , 32));
-                  --               when x"01CC" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.adc_clk_phase(1)                , 32));
-                  --               when x"01D0" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.adc_clk_phase(2)                , 32));
-                  --               when x"01D4" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.adc_clk_phase(3)                , 32));
-                  --               when x"01D8" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.adc_clk_phase(4)                , 32));             
-                  --               when x"01DC" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.lsydel_mclk                     , 32));
-                  --               when x"01E0" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.boost_mode                      , 32));
-                  --               when x"01E4" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.speedup_lsydel                  , 32));
-                  --               when x"01E8" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.stretch_area.sol_posl_pclk      , 32));
-                  --               when x"01EC" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.stretch_area.eol_posl_pclk      , 32));
-                  --               
-                  --               when x"01F0" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_offset_null_forced     , 32));
-                  --               when x"01F4" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_pix_faked_value_forced , 32));
-                  --               when x"01F8" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_pix_faked_value        , 32));
-                  --               when x"01FC" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_offset_minus_pix_value , 32));
-                  --               when x"0200" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_add_const              , 32));
-                  --               when x"0204" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_start_dly              , 32));
-                  --               when x"0208" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_samp_num_per_ch        , 32));
-                  --               when x"020C" => stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.elec_ofs_samp_mean_numerator    , 32));
+               when  x"008C" =>   -- cooler_on_curr_min_mA_out
+                  stat_read_reg <= resize(cooler_on_curr_min_mA_out, 32);
+               
+               when  x"0090" =>   -- cooler_off_curr_max_mA_out
+                  stat_read_reg <= resize(cooler_off_curr_max_mA_out, 32);                  
                
                when others  => stat_read_reg <= (others => '0');
                

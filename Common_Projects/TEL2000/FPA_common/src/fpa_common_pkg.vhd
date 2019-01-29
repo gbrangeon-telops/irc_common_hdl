@@ -145,15 +145,16 @@ package fpa_common_pkg is
    --------------------------------------------------------------------------------
    type flex_brd_info_type is 
    record
-      fpa_roic             : std_logic_vector(FPA_ROIC_UNKNOWN'range);
-      fpa_output           : std_logic_vector(OUTPUT_UNKNOWN'range);
-      fpa_input            : std_logic_vector(INPUT_UNKNOWN'range);  -- type de signal de contrôle du détecteur (LVDS25, LVCMOS_25, LVCMOS33 etc...). Cette info priovient des cartes d'interface (via Freq_ID ou Code_ID) 
-      chn_diversity_num    : natural range 0 to 15;                  -- nombre de canaux de flex par tap de détecteur pour la diversité de canaux
-      cooler_volt_min_mV   : natural range 0 to 65_000;              -- valeur en mV au-dessus duquel allumer le cooler
-      cooler_volt_max_mV   : natural range 0 to 65_000;              -- valeur en mV en dessous duquel allumer le cooler
-      cooler_curr_min_mA   : natural range 0 to 65_000;              -- valeur en mA au dessus duquel considérer que le cooler est allumé
-      flegx_brd_present    : std_logic;                              -- à '1' ssi l'électronique de proximité en est une bâtie avec un FleG
-      dval                 : std_logic; 
+      fpa_roic                : std_logic_vector(FPA_ROIC_UNKNOWN'range);
+      fpa_output              : std_logic_vector(OUTPUT_UNKNOWN'range);
+      fpa_input               : std_logic_vector(INPUT_UNKNOWN'range);  -- type de signal de contrôle du détecteur (LVDS25, LVCMOS_25, LVCMOS33 etc...). Cette info priovient des cartes d'interface (via Freq_ID ou Code_ID) 
+      chn_diversity_num       : natural range 0 to 15;                  -- nombre de canaux de flex par tap de détecteur pour la diversité de canaux
+      cooler_volt_min_mV      : natural range 0 to 65_000;              -- valeur en mV au-dessus duquel allumer le cooler
+      cooler_volt_max_mV      : natural range 0 to 65_000;              -- valeur en mV en dessous duquel allumer le cooler
+      cooler_on_curr_min_mA   : natural range 0 to 8191;                -- valeur en mA au dessus duquel considérer que le cooler est allumé
+      cooler_off_curr_max_mA  : natural range 0 to 8191;                -- valeur en mA en dessous duquel considérer que le cooler est éteint
+      flegx_brd_present       : std_logic;                              -- à '1' ssi l'électronique de proximité en est une bâtie avec un FleG
+      dval                    : std_logic; 
    end record flex_brd_info_type;
    
    --------------------------------------------------------------------------------
@@ -161,13 +162,14 @@ package fpa_common_pkg is
    --------------------------------------------------------------------------------
    type ddc_brd_info_type is 
    record
-      fpa_roic             : std_logic_vector(FPA_ROIC_UNKNOWN'range);
-      fpa_output           : std_logic_vector(OUTPUT_UNKNOWN'range);
-      fpa_input            : std_logic_vector(INPUT_UNKNOWN'range);  -- type de signal de contrôle du détecteur (LVDS25, LVCMOS_25, LVCMOS33 etc...). Cette info priovient des cartes d'interface (via Freq_ID ou Code_ID) 
-      cooler_volt_min_mV   : natural range 0 to 65_000;    -- valeur en mV au-dessus duquel allumer le cooler
-      cooler_volt_max_mV   : natural range 0 to 65_000;    -- valeur en mV en dessous duquel allumer le cooler
-      cooler_curr_min_mA   : natural range 0 to 65_000;    -- valeur en mA au dessus duquel considérer que le cooler est allumé
-      dval                 : std_logic; 
+      fpa_roic                : std_logic_vector(FPA_ROIC_UNKNOWN'range);
+      fpa_output              : std_logic_vector(OUTPUT_UNKNOWN'range);
+      fpa_input               : std_logic_vector(INPUT_UNKNOWN'range);  -- type de signal de contrôle du détecteur (LVDS25, LVCMOS_25, LVCMOS33 etc...). Cette info priovient des cartes d'interface (via Freq_ID ou Code_ID) 
+      cooler_volt_min_mV      : natural range 0 to 65_000;    -- valeur en mV au-dessus duquel allumer le cooler
+      cooler_volt_max_mV      : natural range 0 to 65_000;    -- valeur en mV en dessous duquel allumer le cooler
+      cooler_on_curr_min_mA   : natural range 0 to 8191;      -- valeur en mA au dessus duquel considérer que le cooler est allumé
+      cooler_off_curr_max_mA  : natural range 0 to 8191;      -- valeur en mA en dessous duquel considérer que le cooler est éteint     
+      dval                    : std_logic; 
    end record ddc_brd_info_type;
    
    --------------------------------------------------------------------------------
@@ -175,13 +177,14 @@ package fpa_common_pkg is
    --------------------------------------------------------------------------------
    type iddca_info_type is      -- extraite adc_brd_info_type, ddc_brd_info_type, flex_brd_info_type pour le sequenceur principal. 
    record
-      fpa_roic             : std_logic_vector(FPA_ROIC_UNKNOWN'range);
-      fpa_output           : std_logic_vector(OUTPUT_UNKNOWN'range);
-      fpa_input            : std_logic_vector(INPUT_UNKNOWN'range);  -- type de signal de contrôle du détecteur (LVDS25, LVCMOS_25, LVCMOS33 etc...). Cette info priovient des cartes d'interface (via Freq_ID ou Code_ID) 
-      cooler_volt_min_mV   : natural range 0 to 65_000;    -- valeur en mV au-dessus duquel allumer le cooler
-      cooler_volt_max_mV   : natural range 0 to 65_000;    -- valeur en mV en dessous duquel allumer le cooler
-      cooler_curr_min_mA   : natural range 0 to 65_000;    -- valeur en mA au dessus duquel considérer que le cooler est allumé
-      dval                 : std_logic; 
+      fpa_roic                : std_logic_vector(FPA_ROIC_UNKNOWN'range);
+      fpa_output              : std_logic_vector(OUTPUT_UNKNOWN'range);
+      fpa_input               : std_logic_vector(INPUT_UNKNOWN'range);  -- type de signal de contrôle du détecteur (LVDS25, LVCMOS_25, LVCMOS33 etc...). Cette info priovient des cartes d'interface (via Freq_ID ou Code_ID) 
+      cooler_volt_min_mV      : natural range 0 to 65_000;    -- valeur en mV au-dessus duquel allumer le cooler
+      cooler_volt_max_mV      : natural range 0 to 65_000;    -- valeur en mV en dessous duquel allumer le cooler
+      cooler_on_curr_min_mA   : natural range 0 to 8191;      -- valeur en mA au dessus duquel considérer que le cooler est allumé
+      cooler_off_curr_max_mA  : natural range 0 to 8191;      -- valeur en mA en dessous duquel considérer que le cooler est éteint
+      dval                    : std_logic; 
    end record iddca_info_type;
    
    --------------------------------------------------------------------------------
@@ -364,10 +367,10 @@ package fpa_common_pkg is
    --------------------------------------------------------------------------------
    -- constantes decoulant des types précédants                                    
    --------------------------------------------------------------------------------
-   constant DDC_BRD_INFO_UNKNOWN  : ddc_brd_info_type      := (FPA_ROIC_UNKNOWN, OUTPUT_UNKNOWN, INPUT_UNKNOWN, 0, 1, 65000, '0');
-   constant FLEX_BRD_INFO_UNKNOWN : flex_brd_info_type     := (FPA_ROIC_UNKNOWN, OUTPUT_UNKNOWN, INPUT_UNKNOWN, 0, 1, 0, 65000, '0', '0'); -- remarquer que le voltage min est superieur au voltga max. Une absurdité qui fera que le cooler ne sera pas allumé par le PPC
+   constant DDC_BRD_INFO_UNKNOWN  : ddc_brd_info_type      := (FPA_ROIC_UNKNOWN, OUTPUT_UNKNOWN, INPUT_UNKNOWN, 0, 1, 8000, 8000, '0');
+   constant FLEX_BRD_INFO_UNKNOWN : flex_brd_info_type     := (FPA_ROIC_UNKNOWN, OUTPUT_UNKNOWN, INPUT_UNKNOWN, 0, 1, 0, 8000, 8000, '0', '0'); -- remarquer que le voltage min est superieur au voltga max. Une absurdité qui fera que le cooler ne sera pas allumé par le PPC
    constant ADC_BRD_INFO_UNKNOWN  : adc_brd_info_type      := (0, 0, 0, '0');
-   constant IDDCA_INFO_UNKNOWN    : iddca_info_type        := (FPA_ROIC_UNKNOWN, OUTPUT_UNKNOWN, INPUT_UNKNOWN, 0, 1, 65000, '0');
+   constant IDDCA_INFO_UNKNOWN    : iddca_info_type        := (FPA_ROIC_UNKNOWN, OUTPUT_UNKNOWN, INPUT_UNKNOWN, 0, 1, 8000, 8000, '0');
    constant HARDW_STAT_UNKNOWN    : fpa_hardw_stat_type    := (ADC_BRD_INFO_UNKNOWN, DDC_BRD_INFO_UNKNOWN, FLEX_BRD_INFO_UNKNOWN, IDDCA_INFO_UNKNOWN, '0');
    
    ------------------------------------------
@@ -413,125 +416,136 @@ package body fpa_common_pkg is
       variable flex_brd_info : flex_brd_info_type;
    begin
       if MEAS_CLK_RATE /= 100_000_000 then       -- CLK_RATE est la clock de mesure de la periode. Il doit valoir 100_000_000 Hz
-         flex_brd_info.fpa_roic             := FPA_ROIC_UNKNOWN;
-         flex_brd_info.fpa_output           := OUTPUT_UNKNOWN;
-         flex_brd_info.fpa_input            := INPUT_UNKNOWN;
-         flex_brd_info.cooler_volt_min_mV   := 1;  -- remarquer que le min
-         flex_brd_info.cooler_volt_max_mV   := 0;  -- est superieur au max. Une absurdité provioquée mais qui fera en sorte qu'on ne puisse allumer le cooler
-         flex_brd_info.cooler_curr_min_mA   := 65_000;
-         flex_brd_info.chn_diversity_num    := 0;
+         flex_brd_info.fpa_roic                 := FPA_ROIC_UNKNOWN;
+         flex_brd_info.fpa_output               := OUTPUT_UNKNOWN;
+         flex_brd_info.fpa_input                := INPUT_UNKNOWN;
+         flex_brd_info.cooler_volt_min_mV       := 1;  -- remarquer que le min
+         flex_brd_info.cooler_volt_max_mV       := 0;  -- est superieur au max. Une absurdité provioquée mais qui fera en sorte qu'on ne puisse allumer le cooler
+         flex_brd_info.cooler_on_curr_min_mA    := 8000;
+         flex_brd_info.cooler_off_curr_max_mA   := 8000;
+         flex_brd_info.chn_diversity_num        := 0;
          
       else                                     
          
          -- -- marsA linear cooler (flegX non encore conçu)
          if (Tosc > ID_ANALOG_MARS_INPUT_LVTTL50_COOL_18V_TO_32V.freq_id_min) and (Tosc < ID_ANALOG_MARS_INPUT_LVTTL50_COOL_18V_TO_32V.freq_id_max) then 
-            flex_brd_info.fpa_roic             := FPA_ROIC_MARS;
-            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
-            flex_brd_info.fpa_input            := LVTTL50;
-            flex_brd_info.cooler_volt_min_mV   := 18_000;
-            flex_brd_info.cooler_volt_max_mV   := 32_000;
-            flex_brd_info.cooler_curr_min_mA   := 100;
-            flex_brd_info.flegx_brd_present    := '1';
-            flex_brd_info.chn_diversity_num    := 2;
+            flex_brd_info.fpa_roic                 := FPA_ROIC_MARS;
+            flex_brd_info.fpa_output               := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input                := LVTTL50;
+            flex_brd_info.cooler_volt_min_mV       := 18_000;
+            flex_brd_info.cooler_volt_max_mV       := 32_000;
+            flex_brd_info.cooler_on_curr_min_mA    := 100;
+            flex_brd_info.cooler_off_curr_max_mA   := 100;
+            flex_brd_info.flegx_brd_present        := '1';
+            flex_brd_info.chn_diversity_num        := 2;
             
             -- hawkA RM4                  (EFA-00267-XXX)
          elsif (Tosc >= ID_ANALOG_HAWK_INPUT_LVCMOS33_COOL_18V_TO_32V.freq_id_min) and (Tosc <= ID_ANALOG_HAWK_INPUT_LVCMOS33_COOL_18V_TO_32V.freq_id_max) then
-            flex_brd_info.fpa_roic             := FPA_ROIC_HAWK;
-            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
-            flex_brd_info.fpa_input            := LVCMOS33;
-            flex_brd_info.cooler_volt_min_mV   := 18_000;
-            flex_brd_info.cooler_volt_max_mV   := 32_000;
-            flex_brd_info.cooler_curr_min_mA   := 100;
-            flex_brd_info.flegx_brd_present    := '1';
-            flex_brd_info.chn_diversity_num    := 2;
+            flex_brd_info.fpa_roic                 := FPA_ROIC_HAWK;
+            flex_brd_info.fpa_output               := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input                := LVCMOS33;
+            flex_brd_info.cooler_volt_min_mV       := 18_000;
+            flex_brd_info.cooler_volt_max_mV       := 32_000;
+            flex_brd_info.cooler_on_curr_min_mA    := 100;
+            flex_brd_info.cooler_off_curr_max_mA   := 100;
+            flex_brd_info.flegx_brd_present        := '1';
+            flex_brd_info.chn_diversity_num        := 2;
             
             -- isc0207A with cooler 24V  (EFA-00264-XXX)
          elsif (Tosc >= ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V.freq_id_min) and (Tosc <= ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V.freq_id_max) then
-            flex_brd_info.fpa_roic             := FPA_ROIC_ISC0207;
-            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
-            flex_brd_info.fpa_input            := LVTTL50;
-            flex_brd_info.cooler_volt_min_mV   := 20_000;
-            flex_brd_info.cooler_volt_max_mV   := 28_000;
-            flex_brd_info.cooler_curr_min_mA   := 100;
-            flex_brd_info.flegx_brd_present    := '0';
-            flex_brd_info.chn_diversity_num    := 1;  
+            flex_brd_info.fpa_roic                 := FPA_ROIC_ISC0207;
+            flex_brd_info.fpa_output               := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input                := LVTTL50;
+            flex_brd_info.cooler_volt_min_mV       := 20_000;
+            flex_brd_info.cooler_volt_max_mV       := 28_000;
+            flex_brd_info.cooler_on_curr_min_mA    := 100;
+            flex_brd_info.cooler_off_curr_max_mA   := 100;
+            flex_brd_info.flegx_brd_present        := '0';
+            flex_brd_info.chn_diversity_num        := 1;  
             
             -- isc0209A with cooler 24V  (EFA-00268-XXX)
          elsif (Tosc >= ID_ANALOG_ISC0209_INPUT_LVTTL50_COOL_20V_TO_28V.freq_id_min) and (Tosc <= ID_ANALOG_ISC0209_INPUT_LVTTL50_COOL_20V_TO_28V.freq_id_max) then
-            flex_brd_info.fpa_roic             := FPA_ROIC_ISC0209;
-            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
-            flex_brd_info.fpa_input            := LVTTL50;
-            flex_brd_info.cooler_volt_min_mV   := 10_500;--20_000;   -- 12V pour accommoder non conformité du Ricor AIRS SLS320 de IRC1505
-            flex_brd_info.cooler_volt_max_mV   := 28_000;--28_000;   -- ENO: 19 janv 2016: on accommode le 12V (IRC1505 et son problème de stator qui ne peut être remplacé à cause de la cassure du tournevis) et le 24V mais attention le 12V n'est plus protegé.
-            flex_brd_info.cooler_curr_min_mA   := 100;
-            flex_brd_info.flegx_brd_present    := '1';
-            flex_brd_info.chn_diversity_num    := 2;
+            flex_brd_info.fpa_roic                 := FPA_ROIC_ISC0209;
+            flex_brd_info.fpa_output               := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input                := LVTTL50;
+            flex_brd_info.cooler_volt_min_mV       := 10_500;--20_000;   -- 12V pour accommoder non conformité du Ricor AIRS SLS320 de IRC1505
+            flex_brd_info.cooler_volt_max_mV       := 28_000;--28_000;   -- ENO: 19 janv 2016: on accommode le 12V (IRC1505 et son problème de stator qui ne peut être remplacé à cause de la cassure du tournevis) et le 24V mais attention le 12V n'est plus protegé.
+            flex_brd_info.cooler_on_curr_min_mA    := 100;
+            flex_brd_info.cooler_off_curr_max_mA   := 100;
+            flex_brd_info.flegx_brd_present        := '1';
+            flex_brd_info.chn_diversity_num        := 2;
             
             -- scorpioMW with cooler 24V  (EFA-00270-XXX) 
          elsif (Tosc >= ID_ANALOG_SCORPIO_MW_INPUT_LVCMOS33_COOL_23V_TO_25V.freq_id_min) and (Tosc <= ID_ANALOG_SCORPIO_MW_INPUT_LVCMOS33_COOL_23V_TO_25V.freq_id_max) then
-            flex_brd_info.fpa_roic             := FPA_ROIC_SCORPIO_MW;
-            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
-            flex_brd_info.fpa_input            := LVCMOS33;
-            flex_brd_info.cooler_volt_min_mV   := 23_000;  
-            flex_brd_info.cooler_volt_max_mV   := 25_000;
-            flex_brd_info.cooler_curr_min_mA   := 100;
-            flex_brd_info.flegx_brd_present    := '1';
-            flex_brd_info.chn_diversity_num    := 2;
+            flex_brd_info.fpa_roic                 := FPA_ROIC_SCORPIO_MW;
+            flex_brd_info.fpa_output               := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input                := LVCMOS33;
+            flex_brd_info.cooler_volt_min_mV       := 23_000;  
+            flex_brd_info.cooler_volt_max_mV       := 25_000;
+            flex_brd_info.cooler_on_curr_min_mA    := 100;
+            flex_brd_info.cooler_off_curr_max_mA   := 100;
+            flex_brd_info.flegx_brd_present        := '1';
+            flex_brd_info.chn_diversity_num        := 2;
             
             -- isc0207A with cooler 24V  (EFA-00272-XXX & EFA-00271-001)
          elsif (Tosc >= ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V_WITH_FLEGX.freq_id_min) and (Tosc <= ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V_WITH_FLEGX.freq_id_max) then
-            flex_brd_info.fpa_roic             := FPA_ROIC_ISC0207;
-            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
-            flex_brd_info.fpa_input            := LVTTL50;
-            flex_brd_info.cooler_volt_min_mV   := 20_000;
-            flex_brd_info.cooler_volt_max_mV   := 28_000;
-            flex_brd_info.cooler_curr_min_mA   := 100;
-            flex_brd_info.flegx_brd_present    := '1';
-            flex_brd_info.chn_diversity_num    := 1;
+            flex_brd_info.fpa_roic                 := FPA_ROIC_ISC0207;
+            flex_brd_info.fpa_output               := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input                := LVTTL50;
+            flex_brd_info.cooler_volt_min_mV       := 20_000;
+            flex_brd_info.cooler_volt_max_mV       := 28_000;
+            flex_brd_info.cooler_on_curr_min_mA    := 100;
+            flex_brd_info.cooler_off_curr_max_mA   := 100;
+            flex_brd_info.flegx_brd_present        := '1';
+            flex_brd_info.chn_diversity_num        := 1;
             
             -- isc0804A with cooler 24V  (EFA-00272-XXX & EFA-00271-002)
          elsif (Tosc >= ID_ANALOG_ISC0804_INPUT_LVCMOS33_COOL_20V_TO_28V.freq_id_min) and (Tosc <= ID_ANALOG_ISC0804_INPUT_LVCMOS33_COOL_20V_TO_28V.freq_id_max) then
-            flex_brd_info.fpa_roic             := FPA_ROIC_ISC0804;
-            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
-            flex_brd_info.fpa_input            := LVCMOS33;
-            flex_brd_info.cooler_volt_min_mV   := 20_000;
-            flex_brd_info.cooler_volt_max_mV   := 28_000;
-            flex_brd_info.cooler_curr_min_mA   := 100;
-            flex_brd_info.flegx_brd_present    := '1';
-            flex_brd_info.chn_diversity_num    := 1; 
+            flex_brd_info.fpa_roic                 := FPA_ROIC_ISC0804;
+            flex_brd_info.fpa_output               := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input                := LVCMOS33;
+            flex_brd_info.cooler_volt_min_mV       := 20_000;
+            flex_brd_info.cooler_volt_max_mV       := 28_000;
+            flex_brd_info.cooler_on_curr_min_mA    := 100;
+            flex_brd_info.cooler_off_curr_max_mA   := 100;
+            flex_brd_info.flegx_brd_present        := '1';
+            flex_brd_info.chn_diversity_num        := 1; 
             
             -- superhawkA RM2                  (EFA-00295-XXX)
          elsif (Tosc >= ID_ANALOG_SUPHAWK_INPUT_LVCMOS33_COOL_11V_TO_27V.freq_id_min) and (Tosc <= ID_ANALOG_SUPHAWK_INPUT_LVCMOS33_COOL_11V_TO_27V.freq_id_max) then
-            flex_brd_info.fpa_roic             := FPA_ROIC_SUPHAWK;
-            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
-            flex_brd_info.fpa_input            := LVCMOS33;
-            flex_brd_info.cooler_volt_min_mV   := 11_000;
-            flex_brd_info.cooler_volt_max_mV   := 27_000;
-            flex_brd_info.cooler_curr_min_mA   := 100;
-            flex_brd_info.flegx_brd_present    := '1';
-            flex_brd_info.chn_diversity_num    := 2;
+            flex_brd_info.fpa_roic                 := FPA_ROIC_SUPHAWK;
+            flex_brd_info.fpa_output               := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input                := LVCMOS33;
+            flex_brd_info.cooler_volt_min_mV       := 11_000;
+            flex_brd_info.cooler_volt_max_mV       := 27_000;
+            flex_brd_info.cooler_on_curr_min_mA    := 100;
+            flex_brd_info.cooler_off_curr_max_mA   := 100;
+            flex_brd_info.flegx_brd_present        := '1';
+            flex_brd_info.chn_diversity_num        := 2;
             
             -- isc0804A LN2 (Flex EFA-00291-001)
          elsif (Tosc >= ID_ANALOG_ISC0804_LN2_INPUT_LVCMOS33_COOL_0V_TO_28V.freq_id_min) and (Tosc <= ID_ANALOG_ISC0804_LN2_INPUT_LVCMOS33_COOL_0V_TO_28V.freq_id_max) then
-            flex_brd_info.fpa_roic             := FPA_ROIC_ISC0804;
-            flex_brd_info.fpa_output           := OUTPUT_ANALOG;
-            flex_brd_info.fpa_input            := LVCMOS33;
-            flex_brd_info.cooler_volt_min_mV   := 0;
-            flex_brd_info.cooler_volt_max_mV   := 28_000;
-            flex_brd_info.cooler_curr_min_mA   := 0;
-            flex_brd_info.flegx_brd_present    := '1';
-            flex_brd_info.chn_diversity_num    := 1;           
+            flex_brd_info.fpa_roic                 := FPA_ROIC_ISC0804;
+            flex_brd_info.fpa_output               := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input                := LVCMOS33;
+            flex_brd_info.cooler_volt_min_mV       := 0;
+            flex_brd_info.cooler_volt_max_mV       := 28_000;
+            flex_brd_info.cooler_on_curr_min_mA    := 0;       -- pour accommoder l'absence de refroidisseur à moteur
+            flex_brd_info.cooler_off_curr_max_mA   := 100;     -- pour accommoder l'absence de refroidisseur à moteur
+            flex_brd_info.flegx_brd_present        := '0';     -- flex 291 utilisé
+            flex_brd_info.chn_diversity_num        := 1;           
             
             -- flex_brd inconnu  
-            else
-            flex_brd_info.fpa_roic             := FPA_ROIC_UNKNOWN;
-            flex_brd_info.fpa_output           := OUTPUT_UNKNOWN;
-            flex_brd_info.fpa_input            := INPUT_UNKNOWN;
-            flex_brd_info.cooler_volt_min_mV   := 1;  -- remarquer que le min est superieur au max. Une absurdité voulue et qui fera en sorte qu'on ne puisse allumer le cooler
-            flex_brd_info.cooler_volt_max_mV   := 0;  --
-            flex_brd_info.cooler_curr_min_mA   := 65_000;
-            flex_brd_info.flegx_brd_present    := '0';
-            flex_brd_info.chn_diversity_num    := 0;
+         else
+            flex_brd_info.fpa_roic                 := FPA_ROIC_UNKNOWN;
+            flex_brd_info.fpa_output               := OUTPUT_UNKNOWN;
+            flex_brd_info.fpa_input                := INPUT_UNKNOWN;
+            flex_brd_info.cooler_volt_min_mV       := 1;       -- remarquer que le min est superieur au max. Une absurdité voulue et qui fera en sorte qu'on ne puisse allumer le cooler
+            flex_brd_info.cooler_volt_max_mV       := 0;       --
+            flex_brd_info.cooler_on_curr_min_mA    := 8000;
+            flex_brd_info.cooler_off_curr_max_mA   := 8000;
+            flex_brd_info.flegx_brd_present        := '0';
+            flex_brd_info.chn_diversity_num        := 0;
             
          end if;		 
       end if; 
@@ -642,67 +656,74 @@ package body fpa_common_pkg is
       variable ddc_brd_info  : ddc_brd_info_type;
    begin
       if MEAS_CLK_RATE /= 100_000_000 then       -- CLK_RATE est la clock de mesure de la periode. Il doit valoir 100_000_000 Hz
-         ddc_brd_info.fpa_roic             := FPA_ROIC_UNKNOWN;
-         ddc_brd_info.fpa_output           := OUTPUT_UNKNOWN;
-         ddc_brd_info.fpa_input            := INPUT_UNKNOWN;
-         ddc_brd_info.cooler_volt_min_mV   := 1;  -- remarquer que le min
-         ddc_brd_info.cooler_volt_max_mV   := 0;  -- est superieur au max. Une absurdité provioquée mais qui fera en sorte qu'on ne puisse allumer le cooler
-         ddc_brd_info.cooler_curr_min_mA   := 65_000;
+         ddc_brd_info.fpa_roic                  := FPA_ROIC_UNKNOWN;
+         ddc_brd_info.fpa_output                := OUTPUT_UNKNOWN;
+         ddc_brd_info.fpa_input                 := INPUT_UNKNOWN;
+         ddc_brd_info.cooler_volt_min_mV        := 1;  -- remarquer que le min
+         ddc_brd_info.cooler_volt_max_mV        := 0;  -- est superieur au max. Une absurdité provioquée mais qui fera en sorte qu'on ne puisse allumer le cooler
+         ddc_brd_info.cooler_on_curr_min_mA     := 8000;
+         ddc_brd_info.cooler_off_curr_max_mA    := 8000; 
          
       else                                     
          -- pelicanD or scd_proxy1
          if (Tosc > ID_DIGITAL_PELICAND_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_min) and (Tosc < ID_DIGITAL_PELICAND_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_max) then 
-            ddc_brd_info.fpa_roic             := FPA_ROIC_SCD_PROXY1;
-            ddc_brd_info.fpa_output           := OUTPUT_DIGITAL;
-            ddc_brd_info.fpa_input            := LVDS25;
-            ddc_brd_info.cooler_volt_min_mV   := 20_000;
-            ddc_brd_info.cooler_volt_max_mV   := 28_000; 
-            ddc_brd_info.cooler_curr_min_mA   := 100;
+            ddc_brd_info.fpa_roic                  := FPA_ROIC_SCD_PROXY1;
+            ddc_brd_info.fpa_output                := OUTPUT_DIGITAL;
+            ddc_brd_info.fpa_input                 := LVDS25;
+            ddc_brd_info.cooler_volt_min_mV        := 20_000;
+            ddc_brd_info.cooler_volt_max_mV        := 28_000; 
+            ddc_brd_info.cooler_on_curr_min_mA     := 100;
+            ddc_brd_info.cooler_off_curr_max_mA    := 100;
             
             -- herculesD
          elsif (Tosc > ID_DIGITAL_HERCULES_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_min) and (Tosc < ID_DIGITAL_HERCULES_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_max) then 
-            ddc_brd_info.fpa_roic             := FPA_ROIC_HERCULES;
-            ddc_brd_info.fpa_output           := OUTPUT_DIGITAL;
-            ddc_brd_info.fpa_input            := LVDS25;
-            ddc_brd_info.cooler_volt_min_mV   := 20_000;
-            ddc_brd_info.cooler_volt_max_mV   := 28_000;
-            ddc_brd_info.cooler_curr_min_mA   := 100;
+            ddc_brd_info.fpa_roic                  := FPA_ROIC_HERCULES;
+            ddc_brd_info.fpa_output                := OUTPUT_DIGITAL;
+            ddc_brd_info.fpa_input                 := LVDS25;
+            ddc_brd_info.cooler_volt_min_mV        := 20_000;
+            ddc_brd_info.cooler_volt_max_mV        := 28_000;
+            ddc_brd_info.cooler_on_curr_min_mA     := 100;
+            ddc_brd_info.cooler_off_curr_max_mA    := 100;
             
             -- scorpiolwD RM3 (avec MGLK)
          elsif (Tosc > ID_DIGITAL_SCORPIO_LW_INPUT_LVDS25_COOL_23V_TO_25V.freq_id_min) and (Tosc < ID_DIGITAL_SCORPIO_LW_INPUT_LVDS25_COOL_23V_TO_25V.freq_id_max) then 
-            ddc_brd_info.fpa_roic             := FPA_ROIC_SCORPIO_LW;
-            ddc_brd_info.fpa_output           := OUTPUT_DIGITAL;
-            ddc_brd_info.fpa_input            := LVDS25;
-            ddc_brd_info.cooler_volt_min_mV   := 23_000;
-            ddc_brd_info.cooler_volt_max_mV   := 25_000;
-            ddc_brd_info.cooler_curr_min_mA   := 100;
+            ddc_brd_info.fpa_roic                  := FPA_ROIC_SCORPIO_LW;
+            ddc_brd_info.fpa_output                := OUTPUT_DIGITAL;
+            ddc_brd_info.fpa_input                 := LVDS25;
+            ddc_brd_info.cooler_volt_min_mV        := 23_000;
+            ddc_brd_info.cooler_volt_max_mV        := 25_000;
+            ddc_brd_info.cooler_on_curr_min_mA     := 100;
+            ddc_brd_info.cooler_off_curr_max_mA    := 100;
             
             -- marsD RM4
          elsif (Tosc >= ID_DIGITAL_MARS_INPUT_LVTTL50_COOL_9V_TO_15V.freq_id_min) and (Tosc <= ID_DIGITAL_MARS_INPUT_LVTTL50_COOL_9V_TO_15V.freq_id_max) then
-            ddc_brd_info.fpa_roic             := FPA_ROIC_MARS;
-            ddc_brd_info.fpa_output           := OUTPUT_DIGITAL;
-            ddc_brd_info.fpa_input            := LVDS25;
-            ddc_brd_info.cooler_volt_min_mV   := 10_000;
-            ddc_brd_info.cooler_volt_max_mV   := 15_000;
-            ddc_brd_info.cooler_curr_min_mA   := 100;
+            ddc_brd_info.fpa_roic                  := FPA_ROIC_MARS;
+            ddc_brd_info.fpa_output                := OUTPUT_DIGITAL;
+            ddc_brd_info.fpa_input                 := LVDS25;
+            ddc_brd_info.cooler_volt_min_mV        := 10_000;
+            ddc_brd_info.cooler_volt_max_mV        := 15_000;
+            ddc_brd_info.cooler_on_curr_min_mA     := 100;
+            ddc_brd_info.cooler_off_curr_max_mA    := 100;
             
             -- scorpiomwD RM3
          elsif (Tosc >= ID_DIGITAL_SCORPIO_MW_INPUT_LVDS25_COOL_23V_TO_25V.freq_id_min) and (Tosc <= ID_DIGITAL_SCORPIO_MW_INPUT_LVDS25_COOL_23V_TO_25V.freq_id_max) then
-            ddc_brd_info.fpa_roic             := FPA_ROIC_SCORPIO_MW;
-            ddc_brd_info.fpa_output           := OUTPUT_DIGITAL;
-            ddc_brd_info.fpa_input            := LVDS25;
-            ddc_brd_info.cooler_volt_min_mV   := 23_000;
-            ddc_brd_info.cooler_volt_max_mV   := 25_000;
-            ddc_brd_info.cooler_curr_min_mA   := 100;
+            ddc_brd_info.fpa_roic                  := FPA_ROIC_SCORPIO_MW;
+            ddc_brd_info.fpa_output                := OUTPUT_DIGITAL;
+            ddc_brd_info.fpa_input                 := LVDS25;
+            ddc_brd_info.cooler_volt_min_mV        := 23_000;
+            ddc_brd_info.cooler_volt_max_mV        := 25_000;
+            ddc_brd_info.cooler_on_curr_min_mA     := 100;
+            ddc_brd_info.cooler_off_curr_max_mA    := 100;
             
             -- ddc_brd inconnu 
          else
-            ddc_brd_info.fpa_roic             := FPA_ROIC_UNKNOWN;
-            ddc_brd_info.fpa_output           := OUTPUT_UNKNOWN;
-            ddc_brd_info.fpa_input            := INPUT_UNKNOWN;
-            ddc_brd_info.cooler_volt_min_mV   := 1;  -- remarquer que le min est superieur au max. Une absurdité voulue et qui fera en sorte qu'on ne puisse allumer le cooler
-            ddc_brd_info.cooler_volt_max_mV   := 0;  -- 
-            ddc_brd_info.cooler_curr_min_mA   := 65_000;
+            ddc_brd_info.fpa_roic                  := FPA_ROIC_UNKNOWN;
+            ddc_brd_info.fpa_output                := OUTPUT_UNKNOWN;
+            ddc_brd_info.fpa_input                 := INPUT_UNKNOWN;
+            ddc_brd_info.cooler_volt_min_mV        := 1;  -- remarquer que le min est superieur au max. Une absurdité voulue et qui fera en sorte qu'on ne puisse allumer le cooler
+            ddc_brd_info.cooler_volt_max_mV        := 0;  -- 
+            ddc_brd_info.cooler_on_curr_min_mA     := 8000;
+            ddc_brd_info.cooler_off_curr_max_mA    := 8000;
             
          end if;		 
       end if; 
@@ -716,12 +737,14 @@ package body fpa_common_pkg is
    function flex_brd_info_to_iddca_info (flex_brd_info: flex_brd_info_type) return iddca_info_type is
       variable iddca_info  : iddca_info_type;   
    begin
-      iddca_info.fpa_roic   := flex_brd_info.fpa_roic;
-      iddca_info.fpa_output := flex_brd_info.fpa_output;
-      iddca_info.fpa_input  := flex_brd_info.fpa_input;
-      iddca_info.cooler_volt_min_mV := flex_brd_info.cooler_volt_min_mV;
-      iddca_info.cooler_volt_max_mV := flex_brd_info.cooler_volt_max_mV;
-      iddca_info.dval       := flex_brd_info.dval;
+      iddca_info.fpa_roic                 := flex_brd_info.fpa_roic;
+      iddca_info.fpa_output               := flex_brd_info.fpa_output;
+      iddca_info.fpa_input                := flex_brd_info.fpa_input;
+      iddca_info.cooler_volt_min_mV       := flex_brd_info.cooler_volt_min_mV;
+      iddca_info.cooler_volt_max_mV       := flex_brd_info.cooler_volt_max_mV;
+      iddca_info.cooler_on_curr_min_mA    := flex_brd_info.cooler_on_curr_min_mA;
+      iddca_info.cooler_off_curr_max_mA   := flex_brd_info.cooler_off_curr_max_mA;
+      iddca_info.dval                     := flex_brd_info.dval;
       return iddca_info;
    end flex_brd_info_to_iddca_info; 
    
@@ -729,12 +752,14 @@ package body fpa_common_pkg is
    function ddc_brd_info_to_iddca_info (ddc_brd_info: ddc_brd_info_type) return iddca_info_type is
       variable iddca_info  : iddca_info_type;   
    begin
-      iddca_info.fpa_roic   := ddc_brd_info.fpa_roic;
-      iddca_info.fpa_output := ddc_brd_info.fpa_output;
-      iddca_info.fpa_input  := ddc_brd_info.fpa_input;
-      iddca_info.cooler_volt_min_mV := ddc_brd_info.cooler_volt_min_mV;
-      iddca_info.cooler_volt_max_mV := ddc_brd_info.cooler_volt_max_mV;
-      iddca_info.dval       := ddc_brd_info.dval;
+      iddca_info.fpa_roic                 := ddc_brd_info.fpa_roic;
+      iddca_info.fpa_output               := ddc_brd_info.fpa_output;
+      iddca_info.fpa_input                := ddc_brd_info.fpa_input;
+      iddca_info.cooler_volt_min_mV       := ddc_brd_info.cooler_volt_min_mV;
+      iddca_info.cooler_volt_max_mV       := ddc_brd_info.cooler_volt_max_mV;
+      iddca_info.cooler_on_curr_min_mA    := ddc_brd_info.cooler_on_curr_min_mA; 
+      iddca_info.cooler_off_curr_max_mA   := ddc_brd_info.cooler_off_curr_max_mA;
+      iddca_info.dval                     := ddc_brd_info.dval;
       return iddca_info;
    end ddc_brd_info_to_iddca_info;
    
