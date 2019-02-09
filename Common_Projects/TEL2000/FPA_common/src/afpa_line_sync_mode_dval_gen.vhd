@@ -176,11 +176,11 @@ end afpa_line_sync_mode_dval_gen;
    signal naoi_stop_i               : std_logic;
    signal naoi_stop_last            : std_logic;
  
-   --attribute dont_touch     : string;
-   --attribute dont_touch of dout_dval_o         : signal is "true"; 
-   --attribute dont_touch of dout_o              : signal is "true";
-   --attribute dont_touch of samp_fifo_ovfl      : signal is "true";
-   --attribute dont_touch of aoi_flag_fifo_ovfl      : signal is "true";
+   ---- attribute dont_touch     : string;
+   ---- attribute dont_touch of dout_dval_o         : signal is "true"; 
+   ---- attribute dont_touch of dout_o              : signal is "true";
+   ---- attribute dont_touch of samp_fifo_ovfl      : signal is "true";
+   ---- attribute dont_touch of aoi_flag_fifo_ovfl      : signal is "true";
    
 begin
    

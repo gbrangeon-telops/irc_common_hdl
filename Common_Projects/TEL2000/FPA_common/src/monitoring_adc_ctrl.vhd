@@ -122,13 +122,13 @@ architecture rtl of monitoring_adc_ctrl is
    signal sample_done           : std_logic;
    signal clean_miso            : std_logic;
    
-   --   attribute dont_touch              : string;
-   --   attribute dont_touch of dout                       : signal is "true";
-   --   attribute dont_touch of fpa_temp_dval              : signal is "true";
-   --   attribute dont_touch of fpa_digiov_dval            : signal is "true";
-   --   attribute dont_touch of flex_psp_dval              : signal is "true";
-   --   attribute dont_touch of meas_tp_dval               : signal is "true";
-   --   attribute dont_touch of pcb_temp_dval              : signal is "true";
+   --   -- attribute dont_touch              : string;
+   --   -- attribute dont_touch of dout                       : signal is "true";
+   --   -- attribute dont_touch of fpa_temp_dval              : signal is "true";
+   --   -- attribute dont_touch of fpa_digiov_dval            : signal is "true";
+   --   -- attribute dont_touch of flex_psp_dval              : signal is "true";
+   --   -- attribute dont_touch of meas_tp_dval               : signal is "true";
+   --   -- attribute dont_touch of pcb_temp_dval              : signal is "true";
    
 begin
    

@@ -50,9 +50,9 @@ architecture rtl of signal_filter is
    signal pipe_one_num                : integer range 0 to RAW_SIG_WINDOW_LEN := 0;
    signal sig_out_i                   : std_logic := '0';
    
---   attribute dont_touch              : string;
---   attribute dont_touch of sig_out_i         : signal is "true";
---   attribute dont_touch of raw_sig_pipe      : signal is "true";
+--   -- attribute dont_touch              : string;
+--   -- attribute dont_touch of sig_out_i         : signal is "true";
+--   -- attribute dont_touch of raw_sig_pipe      : signal is "true";
    
 begin
    

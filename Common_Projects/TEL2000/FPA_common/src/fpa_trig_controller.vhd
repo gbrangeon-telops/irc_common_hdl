@@ -103,15 +103,15 @@ architecture RTL of fpa_trig_controller is
    signal prog_trig_in_i               : std_logic;
    signal apply_dly_then_check_readout : std_logic;
    
-   --   attribute dont_touch                : string;
-   --   attribute dont_touch of acq_trig_i  : signal is "true";
-   --   attribute dont_touch of acq_trig_o  : signal is "true";
-   --   attribute dont_touch of xtra_trig_i : signal is "true";
-   --   attribute dont_touch of xtra_trig_o : signal is "true";
-   --   attribute dont_touch of permit_trig       : signal is "true";
-   --   attribute dont_touch of fpa_readout_last  : signal is "true";
-   --   attribute dont_touch of period_count : signal is "true"; 
-   --   attribute dont_touch of dly_cnt     : signal is "true"; 
+   --   -- attribute dont_touch                : string;
+   --   -- attribute dont_touch of acq_trig_i  : signal is "true";
+   --   -- attribute dont_touch of acq_trig_o  : signal is "true";
+   --   -- attribute dont_touch of xtra_trig_i : signal is "true";
+   --   -- attribute dont_touch of xtra_trig_o : signal is "true";
+   --   -- attribute dont_touch of permit_trig       : signal is "true";
+   --   -- attribute dont_touch of fpa_readout_last  : signal is "true";
+   --   -- attribute dont_touch of period_count : signal is "true"; 
+   --   -- attribute dont_touch of dly_cnt     : signal is "true"; 
    
    
 begin

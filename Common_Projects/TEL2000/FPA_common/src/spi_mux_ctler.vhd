@@ -85,13 +85,13 @@ architecture rtl of spi_mux_ctler is
    attribute IOB of spi_sclk_iob         : signal is "TRUE";
    attribute IOB of spi_csn_iob          : signal is "TRUE";
    
-   --attribute dont_touch : string;
-   --attribute dont_touch of client_id     : signal is "TRUE"; 
+   ---- attribute dont_touch : string;
+   ---- attribute dont_touch of client_id     : signal is "TRUE"; 
    --attribute keep of mux_iob            : signal is "TRUE"; 
-   --attribute dont_touch of rqst_fsm      : signal is "TRUE"; 
-   --attribute dont_touch of DONE          : signal is "TRUE"; 
-   --attribute dont_touch of EN            : signal is "TRUE";
-   --attribute dont_touch of RQST          : signal is "TRUE";
+   ---- attribute dont_touch of rqst_fsm      : signal is "TRUE"; 
+   ---- attribute dont_touch of DONE          : signal is "TRUE"; 
+   ---- attribute dont_touch of EN            : signal is "TRUE";
+   ---- attribute dont_touch of RQST          : signal is "TRUE";
 begin
    
    MISO <= spi_sdo_iob;

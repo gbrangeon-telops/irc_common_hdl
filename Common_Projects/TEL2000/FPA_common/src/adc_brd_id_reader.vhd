@@ -80,9 +80,9 @@ architecture rtl of adc_brd_id_reader is
    signal clean_miso     : std_logic;
    signal rqst_i         : std_logic;
    
-   --attribute dont_touch : string;
-   --attribute dont_touch of ADC_BRD_INFO     : signal is "TRUE";
-   --attribute dont_touch of rqst_i            : signal is "TRUE";
+   ---- attribute dont_touch : string;
+   ---- attribute dont_touch of ADC_BRD_INFO     : signal is "TRUE";
+   ---- attribute dont_touch of rqst_i            : signal is "TRUE";
    
    
 begin

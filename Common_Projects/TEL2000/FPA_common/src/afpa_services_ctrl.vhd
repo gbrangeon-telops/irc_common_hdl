@@ -93,14 +93,14 @@ architecture rtl of afpa_services_ctrl is
    signal adc_alive_sm               : adc_alive_sm_type;
    signal temp_reached               : std_logic;
    
-   --attribute dont_touch              : string;
-   --attribute dont_touch of adc_brd_err                   : signal is "true";
-   --attribute dont_touch of flex_brd_err                  : signal is "true";
-   --attribute dont_touch of decision_maker                : signal is "true";
-   --attribute dont_touch of chn_diversity_possible_i      : signal is "true";
-   --attribute dont_touch of disable_quad_default_clk_i    : signal is "true";
-   --attribute dont_touch of fpa_input_type_meas           : signal is "true"; 
-   --attribute dont_touch of flex_psp_meas                 : signal is "true";
+   ---- attribute dont_touch              : string;
+   ---- attribute dont_touch of adc_brd_err                   : signal is "true";
+   ---- attribute dont_touch of flex_brd_err                  : signal is "true";
+   ---- attribute dont_touch of decision_maker                : signal is "true";
+   ---- attribute dont_touch of chn_diversity_possible_i      : signal is "true";
+   ---- attribute dont_touch of disable_quad_default_clk_i    : signal is "true";
+   ---- attribute dont_touch of fpa_input_type_meas           : signal is "true"; 
+   ---- attribute dont_touch of flex_psp_meas                 : signal is "true";
    
 begin 
    

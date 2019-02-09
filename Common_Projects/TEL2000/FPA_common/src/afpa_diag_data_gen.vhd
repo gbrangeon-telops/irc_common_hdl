@@ -137,8 +137,8 @@ architecture rtl of afpa_diag_data_gen is
    --signal elec_ofs_dval_i   : std_logic;
    --signal elec_ofs_start_i  : std_logic;
    
-   --attribute dont_touch     : string;
-   --attribute dont_touch of diag_fsm : signal is "true";
+   ---- attribute dont_touch     : string;
+   ---- attribute dont_touch of diag_fsm : signal is "true";
    
 begin
    
