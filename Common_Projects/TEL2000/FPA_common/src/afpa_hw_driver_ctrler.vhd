@@ -311,7 +311,7 @@ begin
             -- la mise à jour temps reel de certains champs de fpa_intf_cfg_i n'est plus recommandee 
             -- car cela peut conduire à des bugs comme ce qui est vu sur ISC0804 qui ne semble pas se programmer correctement au demarrage.
             -- On peut introduire cfg_num pour que cette mise à jour se fasse via un stop/start comme ce fut le cas de ISC0804 
-            -- certes le detecteur se programmera à chaque nouvelle config reçur du MB mais il a été conçu pour cela.
+            -- certes le detecteur se programmera à chaque nouvelle config reçue du MB mais il a été conçu pour cela.
             
          end if;
       end if;   
