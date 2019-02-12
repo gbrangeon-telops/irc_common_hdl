@@ -164,7 +164,13 @@ begin
    -- Genereteur de l'horloge SPI de l'ADC
    -------------------------------------------------- 
    UcA: Clk_Divider
-   Generic map(Factor=> DEFINE_ADC_SPI_CLK_FACTOR)
+   Generic map(Factor=> DEFINE_ADC_SPI_CLK_FACTOR
+         
+      -- pragma translate_off
+      /(DEFINE_ADC_SPI_CLK_FACTOR/100)
+      -- pragma translate_on
+      
+   )
    Port map( Clock => CLK, Reset => sreset, Clk_div => adc_sclk);
    
    
