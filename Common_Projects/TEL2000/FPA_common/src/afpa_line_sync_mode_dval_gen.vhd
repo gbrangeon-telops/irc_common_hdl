@@ -42,7 +42,7 @@ entity afpa_line_sync_mode_dval_gen is
 end afpa_line_sync_mode_dval_gen;
 
 
-  architecture rtl of afpa_line_sync_mode_dval_gen is
+architecture rtl of afpa_line_sync_mode_dval_gen is
    
    component sync_reset
       port(
@@ -175,7 +175,7 @@ end afpa_line_sync_mode_dval_gen;
    signal aoi_rd_end_last           : std_logic;
    signal naoi_stop_i               : std_logic;
    signal naoi_stop_last            : std_logic;
- 
+   
    ---- attribute dont_touch     : string;
    ---- attribute dont_touch of dout_dval_o         : signal is "true"; 
    ---- attribute dont_touch of dout_o              : signal is "true";
@@ -294,6 +294,13 @@ begin
                      naoi_init_done <= '1';
                      naoi_flag_fifo_rst <= '0';
                   end if;
+                  
+                  -- pragma translate_off
+                  aoi_init_done <= '1';
+                  naoi_init_done <= '1';
+                  naoi_flag_fifo_rst <= '0';
+                  aoi_flag_fifo_rst <= '0';
+                  -- pragma translate_on
                
                when others =>
                
