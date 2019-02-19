@@ -290,7 +290,10 @@ begin
                      aoi_init_done <= '1';
                      aoi_flag_fifo_rst <= '0';
                   end if;
-                  if naoi_stop_last = '1' and naoi_stop_i = '0' then  -- je vois la fin d'une readout_info.naoi =>
+                  if DEFINE_GENERATE_ELCORR_CHAIN = '0' then
+                     naoi_init_done <= '1';           -- permet le passage des données même si les naoi ne sont pas générées
+                     naoi_flag_fifo_rst <= '1';
+                  elsif naoi_stop_last = '1' and naoi_stop_i = '0' then  -- je vois la fin d'une readout_info.naoi =>
                      naoi_init_done <= '1';
                      naoi_flag_fifo_rst <= '0';
                   end if;
