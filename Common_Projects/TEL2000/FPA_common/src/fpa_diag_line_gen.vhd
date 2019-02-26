@@ -131,19 +131,23 @@ begin
                      end if;
                   
                   when samp_on_st  =>                  
-                     diag_data_i <= diag_data_i + incr_value_i;
-                     pix_cnt <=  pix_cnt + 1;
-                     diag_sol_i <= '0';
-                     diag_eol_i <= '0';
-                     diag_dval_i <= '1';
-                     if pix_cnt = 1 then
-                        diag_sol_i <= '1';
-                     elsif pix_cnt = line_size_i then
-                        diag_eol_i <= '1';                        
-                     elsif pix_cnt > line_size_i then
-                        diag_gen_sm <= idle;
-                        diag_dval_i <= '0';
-                     end if;          
+                     if PIX_SAMP_TRIG = '1' then
+                        diag_data_i <= diag_data_i + incr_value_i; 
+                        pix_cnt <=  pix_cnt + 1;                     
+                        diag_sol_i <= '0';
+                        diag_eol_i <= '0';
+                        diag_dval_i <= '1';
+                        if pix_cnt = 1 then
+                           diag_sol_i <= '1';
+                        elsif pix_cnt = line_size_i then
+                           diag_eol_i <= '1';                        
+                        elsif pix_cnt > line_size_i then
+                           diag_gen_sm <= idle;
+                           diag_dval_i <= '0';
+                        end if;          
+                     else
+                        diag_dval_i <= '0';                    
+                     end if;               
                   
                   when others =>
                   
