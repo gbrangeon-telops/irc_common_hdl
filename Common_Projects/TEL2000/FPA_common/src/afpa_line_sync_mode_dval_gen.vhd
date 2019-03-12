@@ -32,7 +32,7 @@ entity afpa_line_sync_mode_dval_gen is
       FPA_DIN_DVAL  : in std_logic;
       READOUT_INFO  : in readout_info_type;
       
-      DIAG_MODE_EN  : in std_logic;
+      ENABLE        : in std_logic;
       
       FPA_DOUT      : out std_logic_vector(95 downto 0);
       FPA_DOUT_DVAL : out std_logic;
@@ -199,7 +199,7 @@ begin
       CLK    => CLK,
       SRESET => sreset
       ); 
-   global_areset <= ARESET or DIAG_MODE_EN;   -- tout le module sera en reset tant qu'on est en mode diag    
+   global_areset <= ARESET or not ENABLE;   -- tout le module sera en reset tant qu'on est en mode diag    
    
    --------------------------------------------------
    -- quelques definitions

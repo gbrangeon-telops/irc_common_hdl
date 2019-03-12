@@ -32,16 +32,16 @@ entity afpa_diag_data_gen is
       G_DIAG_TAP_NUMBER  : integer range 1 to 64 := DEFINE_FPA_TAP_NUMBER
       );
    port(      
-      ARESET            : in std_logic;
-      MCLK_SOURCE       : in std_logic;
+      ARESET             : in std_logic;
+      MCLK_SOURCE        : in std_logic;
       
-      FPA_INTF_CFG      : fpa_intf_cfg_type;
-      DIAG_MODE_EN      : in std_logic;
+      FPA_INTF_CFG       : fpa_intf_cfg_type;
+      ENABLE             : in std_logic;
       
-      FPA_INT           : in std_logic;
-      
-      DIAG_DATA         : out std_logic_vector(95 downto 0); --! sortie des données 
-      DIAG_DVAL         : out std_logic
+      FPA_INT            : in std_logic;
+                         
+      DIAG_DATA          : out std_logic_vector(95 downto 0); --! sortie des données 
+      DIAG_DVAL          : out std_logic
       );
 end afpa_diag_data_gen;
 
@@ -310,7 +310,7 @@ begin
                   diag_line_gen_en <= '0';
                   aoi_sof_i <= '0';
                   aoi_eof_i <= '0';
-                  if DIAG_MODE_EN = '1' then 
+                  if ENABLE = '1' then 
                      if fpa_int_last = '1' and fpa_int_i = '0' then  -- fin de l'integration
                         diag_fsm <=  tir_dly_st;
                      end if;

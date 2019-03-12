@@ -57,6 +57,7 @@ package fpa_common_pkg is
    constant MODE_TRIG_START_TO_TRIG_START       : std_logic_vector(7 downto 0) := x"01";       -- delai pris en compte = periode entre le trig actuel et le prochain
    constant MODE_INT_END_TO_TRIG_START          : std_logic_vector(7 downto 0) := x"02";       -- delai pris en compte = fin de l'integration jusqu'au prochain trig d'integration 
    constant MODE_ITR_TRIG_START_TO_TRIG_START   : std_logic_vector(7 downto 0) := x"03";       -- delai pris en compte = periode entre le trig actuel et le prochain. Une fois ce delai observé, on s'assure que le readout est terminé avant de considerer le prochain trig.
+   
    -------------------------------------------------------------------------- 
    -- les types de sortie de l,iDDCA FPA
    --------------------------------------------------------------------------
@@ -75,6 +76,12 @@ package fpa_common_pkg is
    constant LVTTL50          : std_logic_vector(7 downto 0) := x"03";    -- single ended LVTTL 5.0V  
    constant LVCMOS33         : std_logic_vector(7 downto 0) := x"04";    -- single ended LVCMOS 3.3V
    constant LVCMOS25         : std_logic_vector(7 downto 0) := x"06";    -- single ended LVCMOS 2.5V
+   
+   --------------------------------------------------------------------------
+   -- les sources de données  
+   --------------------------------------------------------------------------
+   constant DATA_SOURCE_INSIDE_FPGA  : std_logic := '0';                 -- dit que la source de données est interne au FPGA (mode patron de tests Telops)
+   constant DATA_SOURCE_OUTSIDE_FPGA : std_logic := '1';                 -- dit que la source de données est externe au FPGA (ADc par exemple))
    
    --------------------------------------------------------------------------
    -- Les frequences de reconnaissance des IDDCAs (en coups de clocks 100 MHz)   
@@ -123,6 +130,7 @@ package fpa_common_pkg is
    --------------------------------------------------------------------------------
    -- Configuration partie commune du Bloc FPA_interface
    --------------------------------------------------------------------------------
+   
    type fpa_comn_cfg_type is
    record     
       fpa_diag_mode            : std_logic;  --! à '1' si on est en mode diag telops
@@ -138,6 +146,10 @@ package fpa_common_pkg is
       fpa_xtra_trig_ctrl_dly   : unsigned(31 downto 0);         -- delai pour le contrôleur des trigs (depend des modes. Voir le trig_controller.vhd) 
       fpa_xtra_trig_period_min : unsigned(31 downto 0);         -- periode minimale pour les xtra_trigs (peut être identique à celle des acq_trig si necessaire) 
       fpa_stretch_acq_trig     : std_logic;                     -- permet d'utiliser une version étirée du trig pour supporter les instabilités de la roue à filtre
+      
+      -- fpas analogiques principalement
+      fpa_intf_data_source     : std_logic;                     -- permet de dire si la source de données est dans le FPGA (patron de tests telops) ou à l'extérieur du FPGA (ADC) 
+                                                                -- fpa_intf_data_source n'est utilisé/regardé par le vhd que lorsque fpa_diag_mode = 1
    end record;    
    
    --------------------------------------------------------------------------------

@@ -113,7 +113,11 @@ begin
                when diag_st => 
                   if readout_i = '0' then 
                      real_data_mode <= '0';
-                     diag_mode_en_i <= '1';
+                     if FPA_INTF_CFG.COMN.FPA_INTF_DATA_SOURCE = DATA_SOURCE_INSIDE_FPGA then 
+                        diag_mode_en_i <= '1';
+                     else           --  DATA_SOURCE_OUTSIDE_FPGA alors que FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '1'. Les données de l'ADC sortent de la carte en mode diag. Celapermet de tester plein de cartes analogiques en contournant les protections inherentes à ces dernieres
+                        diag_mode_en_i <= '0';
+                     end if;
                      mode_fsm <= idle;
                   end if;
                
