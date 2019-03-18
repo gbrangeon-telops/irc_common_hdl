@@ -148,7 +148,7 @@ begin
                
                when idle =>             -- on demande à lire i'ID et on lance l'id)_reader dès que la demande est accordée
                   rqst_i <= '1';
-                  if EN = '1' and clean_miso = '1' then 
+                  if EN = '1' then 
                      flex_id_sm <= end_rqst_st;
                      reader_run <= '1';
                   end if;
