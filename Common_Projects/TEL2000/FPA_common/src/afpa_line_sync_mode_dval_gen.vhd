@@ -252,6 +252,7 @@ begin
             naoi_flag_fifo_rst <= '1';
             aoi_rd_end_last <= aoi_rd_end_i;
             naoi_stop_last <= naoi_stop_i;
+            naoi_stop_i <= '0';
             -- pragma translate_off
             init_fsm <= init_done_st;
             -- pragma translate_on
