@@ -307,8 +307,8 @@ begin
             global_done <= acq_trig_done;-- fpa_seq_done, fpa_driver_done, trig_ctler_done ne comptent pas parmi le global_done
             
             -- FPA init status: pour l'instant seulement le résultat de l'init des serdes est utilisé
-            fpa_init_done <= and_reduce(fpa_serdes_done);
-            fpa_init_success <= and_reduce(fpa_serdes_success);
+            fpa_init_done <= and_reduce(fpa_serdes_done) and fpa_powered;
+            fpa_init_success <= and_reduce(fpa_serdes_success) and fpa_powered;
             
             -- les erreurs à latcher (connecter les signaux des erreurs ici)
             error(31 downto 18) <= (others => '0');  -- non utilisés 
