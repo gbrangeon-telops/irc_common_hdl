@@ -208,7 +208,7 @@ begin
             
             -- pour detection front de FPA_readout
             fpa_readout_last <= fpa_readout_i;
-                       
+            
             -- séquenceur
             case fpa_trig_sm is 
                
@@ -286,6 +286,9 @@ begin
                   elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ITR_TRIG_START_TO_TRIG_START then 
                      fpa_trig_sm <= apply_dly_st;
                      apply_dly_then_check_readout <= '1';
+                  elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ITR_INT_END_TO_TRIG_START then
+                     fpa_trig_sm <= wait_int_end_st;
+                     apply_dly_then_check_readout <= '1';                    
                   end if;
                   
                -- mode_readout_end_to_trig_start : on attend la fin du readout 
