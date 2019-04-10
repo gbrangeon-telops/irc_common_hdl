@@ -37,7 +37,7 @@ entity afpa_line_sync_mode_dval_gen is
       FPA_DOUT      : out std_logic_vector(95 downto 0);
       FPA_DOUT_DVAL : out std_logic;
       
-      ERR           : out std_logic_vector(1 downto 0)
+      STAT           : out std_logic_vector(7 downto 0)
       );
 end afpa_line_sync_mode_dval_gen;
 
@@ -164,7 +164,7 @@ architecture rtl of afpa_line_sync_mode_dval_gen is
    
    signal aoi_line_sync_last            : std_logic;
    signal aoi_line_sync_edge_detected   : std_logic;
-   signal err_i                     : std_logic_vector(ERR'LENGTH-1 downto 0);
+   signal err_i                     : std_logic_vector(1 downto 0);
    signal readout_info_o            : readout_info_type;
    signal naoi_start_last           : std_logic;
    signal naoi_start_edge_detected  : std_logic;
@@ -175,6 +175,7 @@ architecture rtl of afpa_line_sync_mode_dval_gen is
    signal aoi_rd_end_last           : std_logic;
    signal naoi_stop_i               : std_logic;
    signal naoi_stop_last            : std_logic;
+   signal global_init_done          : std_logic;
    
    ---- attribute dont_touch     : string;
    ---- attribute dont_touch of dout_dval_o         : signal is "true"; 
@@ -189,7 +190,9 @@ begin
    -------------------------------------------------- 
    FPA_DOUT_DVAL <= dout_wr_en_o; 
    FPA_DOUT <= dout_o; --
-   ERR <= err_i;
+   STAT(2) <= err_i(1);
+   STAT(1) <= err_i(0);
+   STAT(0) <= global_init_done;
    --------------------------------------------------
    -- synchro reset 
    --------------------------------------------------
@@ -253,6 +256,7 @@ begin
             aoi_rd_end_last <= aoi_rd_end_i;
             naoi_stop_last <= naoi_stop_i;
             naoi_stop_i <= '0';
+            global_init_done <= '0';
             -- pragma translate_off
             init_fsm <= init_done_st;
             -- pragma translate_on
@@ -298,6 +302,7 @@ begin
                      naoi_init_done <= '1';
                      naoi_flag_fifo_rst <= '0';
                   end if;
+                  global_init_done <= aoi_init_done and naoi_init_done;
                   
                   -- pragma translate_off
                   aoi_init_done <= '1';

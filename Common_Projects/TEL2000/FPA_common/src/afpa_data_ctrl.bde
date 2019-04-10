@@ -2,18 +2,19 @@ SCHM0104
 
 HEADER
 {
- FREEID 42642
+ FREEID 42737
  VARIABLES
  {
   #ARCHITECTURE="sch"
   #BLOCKTABLE_FILE="#table.bde"
   #BLOCKTABLE_INCLUDED="1"
-  #DEFAULT_RANGE0="<range<name=\"frame_id\"><left=\"31\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
-  #DEFAULT_RANGE1="<range<name=\"int_indx\"><left=\"7\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
-  #DEFAULT_RANGE2="<range<name=\"int_time\"><left=\"31\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
-  #DEFAULT_RANGE3="<range<name=\"quad1_data\"><left=\"71\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
-  #DEFAULT_RANGE4="<range<name=\"quad2_data\"><left=\"71\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
-  #DEFAULT_RANGE5="<range<name=\"ref_feedbk\"><left=\"1\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
+  #DEFAULT_RANGE0="<range<name=\"dval_gen_stat\"><left=\"7\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
+  #DEFAULT_RANGE1="<range<name=\"frame_id\"><left=\"31\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
+  #DEFAULT_RANGE2="<range<name=\"int_indx\"><left=\"7\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
+  #DEFAULT_RANGE3="<range<name=\"int_time\"><left=\"31\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
+  #DEFAULT_RANGE4="<range<name=\"quad1_data\"><left=\"71\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
+  #DEFAULT_RANGE5="<range<name=\"quad2_data\"><left=\"71\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
+  #DEFAULT_RANGE6="<range<name=\"ref_feedbk\"><left=\"1\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
   #ENTITY="afpa_data_ctrl"
   #LANGUAGE="VHDL"
   AUTHOR="Unknown"
@@ -1438,7 +1439,7 @@ HEADER
 "library IEEE,WORK;\n"+
 "use ieee.std_logic_1164.all,work.FPA_define.all;"
     #LANGUAGE="VHDL"
-    #MODIFIED="1507225977"
+    #MODIFIED="1554928991"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="96ffbaae-a551-47c7-9bdd-6fb30dfd88c5"
    }
   }
@@ -1447,7 +1448,7 @@ HEADER
    PAGEHEADER
    {
     RECT (0,20,480,380)
-    FREEID 27
+    FREEID 28
    }
    
    BODY
@@ -1458,7 +1459,7 @@ HEADER
      {
       #OUTLINE_FILLING="1"
      }
-     AREA (20,35,460,362)
+     AREA (20,30,460,362)
     }
     TEXT  3, 0, 0
     {
@@ -1549,13 +1550,13 @@ HEADER
      MARGINS (1,1)
      PARENT 22
     }
-    TEXT  25, 0, 0
+    TEXT  27, 0, 0
     {
      TEXT "$#NAME"
-     RECT (373,130,455,154)
+     RECT (364,130,455,154)
      ALIGN 6
      MARGINS (1,1)
-     PARENT 24
+     PARENT 26
     }
     PIN  2, 0, 0
     {
@@ -1748,7 +1749,7 @@ HEADER
       POINTS ( (0,0), (20,0) )
      }
     }
-    PIN  24, 0, 0
+    PIN  26, 0, 0
     {
      COORD (480,140)
      VARIABLES
@@ -1757,7 +1758,7 @@ HEADER
       #DOWNTO="1"
       #LENGTH="20"
       #MDA_RECORD_TOKEN="OTHER"
-      #NAME="ERR(1:0)"
+      #NAME="STAT(7:0)"
       #NUMBER="0"
       #SIDE="right"
      }
@@ -3306,7 +3307,7 @@ PAGE ""
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="96ffbaae-a551-47c7-9bdd-6fb30dfd88c5"
    }
    COORD (820,1380)
-   VERTEXES ( (4,40691), (8,40693), (12,40695), (16,40697), (18,40699), (2,41785), (14,41783), (22,41779), (20,41775), (10,41777), (6,41781) )
+   VERTEXES ( (2,41785), (4,40691), (6,41781), (8,40693), (10,41777), (12,40695), (14,41783), (16,40697), (18,40699), (20,41775), (22,41779), (26,42659) )
   }
   TEXT  34093, 0, 0
   {
@@ -3362,7 +3363,7 @@ PAGE ""
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="96ffbaae-a551-47c7-9bdd-6fb30dfd88c5"
    }
    COORD (820,2180)
-   VERTEXES ( (2,40729), (4,40713), (6,40732), (8,40715), (12,40717), (14,40727), (16,40719), (18,40725), (22,40731), (20,41793), (10,41796) )
+   VERTEXES ( (2,40729), (4,40713), (6,40732), (8,40715), (10,41796), (12,40717), (14,40727), (16,40719), (18,40725), (20,41793), (22,40731) )
   }
   TEXT  34291, 0, 0
   {
@@ -5698,12 +5699,16 @@ PAGE ""
 "DISPATCH_INFO.frame_id     <= dispatch_info_i.frame_id;    \n"+
 "DISPATCH_INFO.exp_info     <= dispatch_info_i.exp_info;    \n"+
 "DISPATCH_INFO.ref_feedbk   <= ref_feedbk;\n"+
+"DISPATCH_INFO.dval_gen_stat <= dval_gen_stat;\n"+
 "\n"+
 "\n"+
 "\n"+
 ""
-   RECT (2520,1200,3260,1380)
+   RECT (2520,1160,3260,1380)
+   OUTLINE 5,1, (0,0,0)
+   FILL (0,(255,255,156),0)
    MARGINS (20,20)
+   FONT (12,0,0,400,0,0,0,"Arial")
    MULTILINE
    SYNTAXCOLORED
    SHOWLABEL
@@ -6203,6 +6208,40 @@ PAGE ""
    RECT (3300,2660,4085,2693)
    PARENT 40270
   }
+  VTX  42659, 0, 0
+  {
+   COORD (1300,1520)
+  }
+  VTX  42660, 0, 0
+  {
+   COORD (1500,1520)
+  }
+  BUS  42662, 0, 0
+  {
+   NET 42664
+   VTX 42659, 42660
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  NET BUS  42664, 0, 0
+  {
+   VARIABLES
+   {
+    #DOWNTO="1"
+    #MDA_RECORD_TOKEN="OTHER"
+    #NAME="dval_gen_stat(7:0)"
+   }
+  }
+  TEXT  42665, 0, 0
+  {
+   TEXT "$#NAME"
+   RECT (1300,1490,1501,1519)
+   ALIGN 9
+   MARGINS (1,1)
+   PARENT 42662
+  }
  }
  
 }
@@ -6228,7 +6267,7 @@ PAGE ""
  
  BODY
  {
-  TEXT  42625, 0, 0
+  TEXT  42720, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -6239,7 +6278,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  42626, 0, 0
+  TEXT  42721, 0, 0
   {
    PAGEALIGN 10
    TEXT "$CREATIONDATE"
@@ -6250,7 +6289,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  42627, 0, 0
+  TEXT  42722, 0, 0
   {
    PAGEALIGN 10
    TEXT "Title:"
@@ -6260,7 +6299,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  42628, 0, 0
+  TEXT  42723, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -6272,7 +6311,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  42629, 0, 0
+  TEXT  42724, 0, 0
   {
    PAGEALIGN 10
    TEXT 
@@ -6285,7 +6324,7 @@ PAGE ""
    FONT (12,0,0,700,0,0,0,"Arial")
    MULTILINE
   }
-  TEXT  42630, 0, 0
+  TEXT  42725, 0, 0
   {
    PAGEALIGN 10
    TEXT "Page:"
@@ -6295,7 +6334,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  42631, 0, 0
+  TEXT  42726, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -6307,7 +6346,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  42632, 0, 0
+  TEXT  42727, 0, 0
   {
    PAGEALIGN 10
    TEXT "Revision:"
@@ -6317,7 +6356,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  42633, 0, 0
+  TEXT  42728, 0, 0
   {
    PAGEALIGN 10
    TEXT "$Revision"
@@ -6328,7 +6367,7 @@ PAGE ""
    FONT (12,0,0,700,0,204,0,"Arial")
    UPDATE 0
   }
-  GROUP  42634, 0, 0
+  GROUP  42729, 0, 0
   {
    PAGEALIGN 10
    RECT (5720,3420,6601,3801)
@@ -6340,7 +6379,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  42635, 0, 0
+  GROUP  42730, 0, 0
   {
    PAGEALIGN 10
    RECT (5720,3620,6601,3621)
@@ -6352,7 +6391,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  42636, 0, 0
+  GROUP  42731, 0, 0
   {
    PAGEALIGN 10
    RECT (5720,3560,6601,3561)
@@ -6364,7 +6403,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  42637, 0, 0
+  GROUP  42732, 0, 0
   {
    PAGEALIGN 10
    RECT (5720,3680,6601,3681)
@@ -6376,7 +6415,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  42638, 0, 0
+  GROUP  42733, 0, 0
   {
    PAGEALIGN 10
    RECT (5720,3740,6601,3741)
@@ -6388,7 +6427,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  42639, 0, 0
+  GROUP  42734, 0, 0
   {
    PAGEALIGN 10
    RECT (5900,3420,5901,3561)
@@ -6399,7 +6438,7 @@ PAGE ""
     POINTS ( (0,0), (0,140) )
    }
   }
-  GROUP  42640, 0, 0
+  GROUP  42735, 0, 0
   {
    PAGEALIGN 10
    RECT (5900,3560,5901,3801)
@@ -6410,7 +6449,7 @@ PAGE ""
     POINTS ( (0,0), (0,240) )
    }
   }
-  BMPPICT  42641, 0, 0
+  BMPPICT  42736, 0, 0
   {
    PAGEALIGN 10
    RECT (5740,3480,5879,3525)
