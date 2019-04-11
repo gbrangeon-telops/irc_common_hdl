@@ -277,7 +277,7 @@ begin
                -- verif du mode du contrôleur de trig
                when check_trig_ctrl_mode_st =>
                   apply_dly_then_check_readout <= '0';
-                  if FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE     = MODE_READOUT_END_TO_TRIG_START then
+                  if FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE     = MODE_READOUT_END_TO_TRIG_START then  -- ENO: 10 avril 2019: ne plus utiliser le mode MODE_READOUT_END_TO_TRIG_START pour les détecteurs analogiques puisqu'il n'y a pas de permit_trig 
                      fpa_trig_sm <= wait_readout_end_st;
                   elsif  FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE = MODE_TRIG_START_TO_TRIG_START then
                      fpa_trig_sm <= apply_dly_st;
