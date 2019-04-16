@@ -63,7 +63,7 @@ architecture rtl of fpa_status_gen is
    signal fpa_seq_softw_err            : std_logic;
    signal fpa_seq_vhd_err              : std_logic;
    signal fpa_seq_hardw_err            : std_logic;
-   signal fpa_seq_done                 : std_logic;
+   signal fpa_seq_init_done            : std_logic;
    signal dpath_proxy_err              : std_logic;
    signal dpath_dout_fifo_err          : std_logic;
    signal dpath_dval_gen_err           : std_logic;
@@ -98,8 +98,8 @@ architecture rtl of fpa_status_gen is
    
    signal cooler_powered               : std_logic;
    signal global_done                  : std_logic;
-   signal fpa_init_done                : std_logic;
-   signal fpa_init_success             : std_logic;
+   signal hw_init_done                : std_logic;
+   signal hw_init_sucess             : std_logic;
    signal error_found                  : std_logic;
    signal stat_read_add                : std_logic_vector(15 downto 0);
    signal stat_read_reg                : std_logic_vector(31 downto 0);
@@ -170,7 +170,7 @@ begin
    fpa_seq_softw_err   <= INTF_SEQ_STAT(3);
    fpa_seq_vhd_err     <= INTF_SEQ_STAT(2);
    fpa_seq_hardw_err   <= INTF_SEQ_STAT(1);
-   fpa_seq_done        <= INTF_SEQ_STAT(0);
+   fpa_seq_init_done   <= INTF_SEQ_STAT(0);
    
    -----------------------------------------------
    -- Inputs maps:  DATA_PATH_STAT
@@ -293,8 +293,8 @@ begin
       if rising_edge(FPA_INTF_CLK) then
          if sreset_fpa_intf_clk = '1' then
             global_done <= '0';
-            fpa_init_done <= '0';
-            fpa_init_success <= '0';
+            hw_init_done <= '0';
+            hw_init_sucess <= '0';
             error_latch <= (others => '0');
             error <= (others => '0');
             error_found <= '0';
@@ -307,8 +307,8 @@ begin
             global_done <= acq_trig_done;-- fpa_seq_done, fpa_driver_done, trig_ctler_done ne comptent pas parmi le global_done
             
             -- FPA init status: pour l'instant seulement le résultat de l'init des serdes est utilisé
-            fpa_init_done <= and_reduce(fpa_serdes_done) and fpa_powered;
-            fpa_init_success <= and_reduce(fpa_serdes_success) and fpa_powered;
+            hw_init_done <= and_reduce(fpa_serdes_done) and fpa_seq_init_done;
+            hw_init_sucess <= and_reduce(fpa_serdes_success) and fpa_powered;
             
             -- les erreurs à latcher (connecter les signaux des erreurs ici)
             error(31 downto 18) <= (others => '0');  -- non utilisés 
@@ -523,10 +523,10 @@ begin
                   
                -- FPA init status
                when  x"0080" =>   -- fpa init done
-                  stat_read_reg <=  (0 => fpa_init_done, others => '0');
+                  stat_read_reg <=  (0 => hw_init_done, others => '0');
                
                when  x"0084" =>   -- fpa init success
-                  stat_read_reg <=  (0 => fpa_init_success, others => '0');
+                  stat_read_reg <=  (0 => hw_init_sucess, others => '0');
                
                when  x"0088" =>   -- prog_init_done
                   stat_read_reg <=  (0 => fpa_prog_init_done, others => '0');
