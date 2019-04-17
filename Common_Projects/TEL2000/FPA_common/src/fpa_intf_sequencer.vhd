@@ -382,7 +382,7 @@ begin
                   end if;
                
                when wait_dpath_done_st =>
-                  if data_path_done = '0' then 
+                  if data_path_done = '1' then 
                      fpa_sequencer_sm <= active_prog_st;
                   end if;
                
