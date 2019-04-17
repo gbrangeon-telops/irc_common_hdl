@@ -92,7 +92,7 @@ architecture RTL of fpa_intf_sequencer is
    signal fpa_softw_err       : std_logic;
    signal fpa_vhd_err         : std_logic;
    signal fpa_init_cfg_rdy    : std_logic;
-   signal frm_in_progress     : std_logic := '0';
+   signal data_path_done      : std_logic := '0';
    
    
    
@@ -122,9 +122,8 @@ begin
    -------------------------------------------------- 
    fpa_driver_rqst <= FPA_DRIVER_STAT(1);
    trig_ctler_done <= TRIG_CTLER_STAT(0);
-   fpa_driver_done <= FPA_DRIVER_STAT(0);
-   
-   frm_in_progress <= DATA_PATH_STAT(9);
+   fpa_driver_done <= FPA_DRIVER_STAT(0);   
+   data_path_done  <= DATA_PATH_STAT(0);
    
    --------------------------------------------------
    -- Sync reset
@@ -383,7 +382,7 @@ begin
                   end if;
                
                when wait_dpath_done_st =>
-                  if frm_in_progress = '0' then 
+                  if data_path_done = '0' then 
                      fpa_sequencer_sm <= active_prog_st;
                   end if;
                
