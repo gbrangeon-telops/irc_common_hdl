@@ -86,7 +86,7 @@ architecture RTL of fpa_intf_sequencer is
    signal fpa_driver_done     : std_logic;
    signal fpa_driver_rqst     : std_logic; -- permet de saboir si le pilote hw requiert de reprogrammer le FPA
    signal fpa_cooler_on       : std_logic;
-   signal done                : std_logic; 
+   signal fpa_seq_init_done   : std_logic; 
    signal fpa_hardw_err       : std_logic;
    signal diag_mode_only_i    : std_logic;
    signal fpa_softw_err       : std_logic;
@@ -115,7 +115,7 @@ begin
    INTF_SEQ_STAT(3) <= fpa_softw_err; 
    INTF_SEQ_STAT(2) <= fpa_vhd_err; 
    INTF_SEQ_STAT(1) <= fpa_hardw_err;           
-   INTF_SEQ_STAT(0) <= done; 
+   INTF_SEQ_STAT(0) <= fpa_seq_init_done; 
    
    --------------------------------------------------
    -- mapping des entrees
@@ -327,15 +327,15 @@ begin
             fpa_sequencer_sm <= init_st1;
             trig_ctler_en_i <= '0';
             fpa_driver_en_i <= '0';
-            done <= '0';
+            fpa_seq_init_done <= '0';
             diag_mode_only_i <= '0'; 
-            
+			
          else             
             
             case fpa_sequencer_sm is 
                
                when init_st1 => 
-                  done <= '0';
+                  fpa_seq_init_done <= '0';
                   trig_ctler_en_i <= '0';
                   fpa_driver_en_i <= '0';
                   diag_mode_only_i <= '0'; 
@@ -343,7 +343,7 @@ begin
                      fpa_sequencer_sm <= init_st2; 
                   else     -- statut non encore disponible ou failure, rien à faire sauf attendre
                   end if;
-               
+ 
                when init_st2 =>
                   diag_mode_only_i <= '1'; -- si le firmware est correct, au moins le mode diag est possible. 
                   if hardw_global_status = success then                        
@@ -353,9 +353,9 @@ begin
                   else  -- statut non encore disponible, on attend
                      trig_ctler_en_i <= FPA_INTF_CFG.COMN.FPA_DIAG_MODE; -- le contrôleur de trig est activé si le mode diag est demandé. Sinon , rien ne se passe
                   end if;                  
-               
+				  
                when idle =>      -- on ne vient ici que lorsqu'au moins le firmware est correct                    
-                  done <= '1';
+                  fpa_seq_init_done <= '1';
                   if diag_mode_only_i = '1' then   
                      trig_ctler_en_i <= FPA_INTF_CFG.COMN.FPA_DIAG_MODE; -- en mode diag_only le contrôleur de trigs est en fonction ssi le mode diag est demandé.
                   end if;                  
@@ -366,7 +366,7 @@ begin
                      end if;
                   else                         
                      diag_mode_only_i <= '1';   -- le mode diag uniquement si le détecteur n'est pas encore allumé (cooldown ou pas d'ordre d'allumage)
-                  end if;                    
+                  end if;
                
                when trig_ctrl_st =>  -- si on vient ici, c'est que le détecteur est allumé et qu'on veuille le programmer
                   if PROG_FREE_RUNNING_TRIG = '1' then   -- en mode free_running_trig, il n'est pas necessaire d'arrêter le contrôleur de trig avant programmation
@@ -392,16 +392,16 @@ begin
                   if fpa_driver_done = '0' then 
                      fpa_sequencer_sm <= wait_prog_end_st;
                   end if;    
-               
+				   
                when wait_prog_end_st =>        -- on attend la fin de la programmation                
                   fpa_driver_en_i <= '0';    
                   if fpa_driver_done = '1' then 
                      fpa_sequencer_sm <= trig_en_st;
-                  end if; 
+                  end if;
                
                when trig_en_st =>            -- on permet les integrations 
                   trig_ctler_en_i <= '1';
-                  fpa_sequencer_sm <= idle; 
+                  fpa_sequencer_sm <= idle;
                
                when others =>                                    
                
