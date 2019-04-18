@@ -304,11 +304,11 @@ begin
                   end if;
                   global_init_done <= aoi_init_done and naoi_init_done;
                   
-                  -- pragma translate_off
-                  aoi_init_done <= '1';
-                  naoi_init_done <= '1';
-                  naoi_flag_fifo_rst <= '0';
-                  aoi_flag_fifo_rst <= '0';
+                  -- pragma translate_off           -- ENO 18 avril 2019: ne plus utiliser car crée bcp de probleme en simulation
+--                  aoi_init_done <= '1';
+--                  naoi_init_done <= '1';
+--                  naoi_flag_fifo_rst <= '0';
+--                  aoi_flag_fifo_rst <= '0';
                   -- pragma translate_on
                
                when others =>
@@ -345,7 +345,7 @@ begin
          else
             adc_flag_fifo_din <= adc_flag_o;
             adc_flag_last_o   <= adc_flag_o;
-            adc_flag_fifo_wr  <=(adc_flag_o(1) or adc_flag_o(0)) and READOUT_INFO.SAMP_PULSE; --(not adc_flag_last_o(1) and adc_flag_o(1)) or (not adc_flag_last_o(0) and adc_flag_o(0)); -- juste les transitions des flags. Ainsi on est certain d'avoir un flag par information.    
+            adc_flag_fifo_wr  <=(adc_flag_o(1) or adc_flag_o(0)) and READOUT_INFO.SAMP_PULSE; -- adc_flag_o(1)) et adc_flag_o(0) ne doivent jamais se chevaucher et c'est theoriquement vrai; -- juste les transitions des flags. Ainsi on est certain d'avoir un flag par information.    
          end if;
       end if;
    end process;           
@@ -464,7 +464,7 @@ begin
             -- ecriture des données en aval
             dout_wr_en_o <= aoi_init_done and naoi_init_done and FPA_DIN_DVAL; -- les données sortent tout le temps. les flags permettront de distinguer le AOI du NAOI 
             
-            -- données écrite en aval
+            -- données écrites en aval
             if DEFINE_FPA_VIDEO_DATA_INVERTED = '1' then 
                dout_o(55 downto 0) <= not FPA_DIN(55 downto 0);
             else
@@ -481,7 +481,7 @@ begin
             dout_o(76 downto 62) <= readout_info_o.aoi.spare;                                         -- aoi_spares  (nouvel ajout)
             
             -- Zone NON AOI
-            dout_o(77)           <= readout_info_o.aoi.dval and naoi_in_progress and FPA_DIN_DVAL;    -- naoi_dval    
+            dout_o(77)           <= readout_info_o.naoi.dval and naoi_in_progress and FPA_DIN_DVAL;   -- naoi_dval    
             dout_o(78)           <= readout_info_o.naoi.start and naoi_in_progress;                   -- naoi_start
             dout_o(79)           <= readout_info_o.naoi.stop and naoi_in_progress;                    -- naoi_stop            
             dout_o(81 downto 80) <= readout_info_o.naoi.ref_valid;                                    -- naoi_ref_valid
