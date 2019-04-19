@@ -107,7 +107,9 @@ architecture rtl of afpa_data_dispatcher is
          valid    : out std_logic;
          full     : out std_logic;
          overflow : out std_logic;
-         empty    : out std_logic
+         empty    : out std_logic;
+         wr_rst_busy : out std_logic;   
+         rd_rst_busy : out std_logic
          );
    end component;
    
@@ -273,7 +275,9 @@ begin
       valid  => quad_fifo_dval,
       full => open,
       overflow => quad_fifo_ovfl,
-      empty => open
+      empty => open,
+      wr_rst_busy => open,  
+      rd_rst_busy => open
       );
    
    --------------------------------------------------
