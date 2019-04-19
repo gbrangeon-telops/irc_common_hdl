@@ -121,7 +121,7 @@ architecture rtl of afpa_line_sync_mode_dval_gen is
    --signal naoi_sync_fsm             : sync_fsm_type;  
    signal aoi_dly_cnt               : unsigned(7 downto 0);
    signal naoi_dly_cnt              : unsigned(7 downto 0); 
-   signal sync_err_i                : std_logic;
+   signal sync_err_i                : std_logic := '0';
    
    signal global_areset             : std_logic;
    signal sreset                    : std_logic;
@@ -214,7 +214,7 @@ begin
          fpa_din_dval_last <= FPA_DIN_DVAL;
          
          -- erreurs
-         err_i(0) <= sync_err_i or sync_err_i; 
+         err_i(0) <= sync_err_i; 
          err_i(1) <= aoi_flag_fifo_ovfl or adc_flag_fifo_ovfl or naoi_flag_fifo_ovfl;         
          
          -- sync_flag 
@@ -223,8 +223,8 @@ begin
          naoi_start_last <= FPA_DIN(C_NAOI_START_POS); 
          
          -- les flags adc considérés dans le shifregister
-         adc_flag(0)   <= FPA_DIN(C_AOI_LSYNC_POS); --FPA_DIN(C_AOI_LSYNC_POS) and not aoi_line_sync_last;   -- aoi_lsync :  on considere uniqument les RE
-         adc_flag(1)   <= FPA_DIN(C_NAOI_START_POS);--FPA_DIN(C_NAOI_START_POS) and not naoi_start_last;     -- naoi_start:  on considere uniqument les RE
+         adc_flag(0)   <= FPA_DIN(C_AOI_LSYNC_POS); -- FPA_DIN(C_AOI_LSYNC_POS) and not aoi_line_sync_last;   -- aoi_lsync :  on considere uniqument les RE
+         adc_flag(1)   <= FPA_DIN(C_NAOI_START_POS);-- FPA_DIN(C_NAOI_START_POS) and not naoi_start_last;     -- naoi_start:  on considere uniqument les RE
          adc_flag_dval <= FPA_DIN_DVAL and aoi_init_done and naoi_init_done;--(not fpa_din_dval_last and FPA_DIN_DVAL) and aoi_init_done and naoi_init_done;  --  on considere uniqument les RE 
          
          -- front montant ou descendant
@@ -441,12 +441,12 @@ begin
    readout_info_o.aoi.eol        <= aoi_flag_fifo_dout(3);
    readout_info_o.aoi.fval       <= aoi_flag_fifo_dout(2);
    readout_info_o.aoi.lval       <= aoi_flag_fifo_dout(1);
-   readout_info_o.aoi.dval       <= aoi_flag_fifo_dout(0);
+   readout_info_o.aoi.dval       <= aoi_flag_fifo_dout(0) and aoi_flag_fifo_dval;
    
    -- non_aoi flag fifo out 
    readout_info_o.naoi.spare     <= naoi_flag_fifo_dout(17 downto 5);
    readout_info_o.naoi.ref_valid <= naoi_flag_fifo_dout(4 downto 3);
-   readout_info_o.naoi.dval      <= naoi_flag_fifo_dout(2);
+   readout_info_o.naoi.dval      <= naoi_flag_fifo_dout(2) and naoi_flag_fifo_dval;
    readout_info_o.naoi.stop      <= naoi_flag_fifo_dout(1);
    readout_info_o.naoi.start     <= naoi_flag_fifo_dout(0);
    
