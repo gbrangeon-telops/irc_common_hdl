@@ -93,6 +93,7 @@ architecture RTL of fpa_intf_sequencer is
    signal fpa_vhd_err         : std_logic;
    signal fpa_init_cfg_rdy    : std_logic;
    signal data_path_done      : std_logic := '0';
+   signal fpa_seq_success     : std_logic;
    
    
    
@@ -111,7 +112,8 @@ begin
    DIAG_MODE_ONLY <= diag_mode_only_i;
    
    --stat                     
-   INTF_SEQ_STAT(7 downto 4) <= (others => '0');   
+   INTF_SEQ_STAT(7 downto 5) <= (others => '0');
+   INTF_SEQ_STAT(4) <= fpa_seq_success;
    INTF_SEQ_STAT(3) <= fpa_softw_err; 
    INTF_SEQ_STAT(2) <= fpa_vhd_err; 
    INTF_SEQ_STAT(1) <= fpa_hardw_err;           
@@ -328,7 +330,8 @@ begin
             fpa_driver_en_i <= '0';
             fpa_seq_init_done <= '0';
             diag_mode_only_i <= '0'; 
-			
+            fpa_seq_success <= '0';
+            
          else             
             
             case fpa_sequencer_sm is 
@@ -342,17 +345,18 @@ begin
                      fpa_sequencer_sm <= init_st2; 
                   else     -- statut non encore disponible ou failure, rien à faire sauf attendre
                   end if;
- 
+               
                when init_st2 =>
                   diag_mode_only_i <= '1'; -- si le firmware est correct, au moins le mode diag est possible. 
                   if hardw_global_status = success then                        
                      fpa_sequencer_sm <= idle;
+                     fpa_seq_success <= '1';
                   elsif hardw_global_status = failure then     
                      fpa_sequencer_sm <= idle;
                   else  -- statut non encore disponible, on attend
                      trig_ctler_en_i <= FPA_INTF_CFG.COMN.FPA_DIAG_MODE; -- le contrôleur de trig est activé si le mode diag est demandé. Sinon , rien ne se passe
                   end if;                  
-				  
+               
                when idle =>      -- on ne vient ici que lorsqu'au moins le firmware est correct                    
                   fpa_seq_init_done <= '1';
                   if diag_mode_only_i = '1' then   
@@ -391,7 +395,7 @@ begin
                   if fpa_driver_done = '0' then 
                      fpa_sequencer_sm <= wait_prog_end_st;
                   end if;    
-				   
+               
                when wait_prog_end_st =>        -- on attend la fin de la programmation                
                   fpa_driver_en_i <= '0';    
                   if fpa_driver_done = '1' then 

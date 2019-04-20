@@ -98,8 +98,8 @@ architecture rtl of fpa_status_gen is
    
    signal cooler_powered               : std_logic;
    signal global_done                  : std_logic;
-   signal hw_init_done                : std_logic;
-   signal hw_init_sucess             : std_logic;
+   signal hw_init_done                 : std_logic;
+   signal hw_init_sucess               : std_logic;
    signal error_found                  : std_logic;
    signal stat_read_add                : std_logic_vector(15 downto 0);
    signal stat_read_reg                : std_logic_vector(31 downto 0);
@@ -118,6 +118,7 @@ architecture rtl of fpa_status_gen is
    signal flegx_present                  : std_logic;
    signal fpa_readout_err                : std_logic_vector(1 downto 0); 
    signal cooler_param_valid             : std_logic;
+   signal fpa_seq_success                : std_logic;
    
    
    component sync_reset
@@ -167,6 +168,7 @@ begin
    -----------------------------------------------
    -- Inputs maps: INTF_SEQ_STAT 
    -----------------------------------------------
+   fpa_seq_success     <= INTF_SEQ_STAT(4);
    fpa_seq_softw_err   <= INTF_SEQ_STAT(3);
    fpa_seq_vhd_err     <= INTF_SEQ_STAT(2);
    fpa_seq_hardw_err   <= INTF_SEQ_STAT(1);
@@ -278,9 +280,7 @@ begin
          else                   
             flex_flegx_present <= '0';
             flegx_present <= '0';
-         end if;  
-         
-         
+         end if;      
          
       end if;
    end process;
@@ -306,9 +306,9 @@ begin
             -- statut : signal done  
             global_done <= acq_trig_done;-- fpa_seq_done, fpa_driver_done, trig_ctler_done ne comptent pas parmi le global_done
             
-            -- FPA init status: pour l'instant seulement le résultat de l'init des serdes est utilisé
+            -- hw init status: 
             hw_init_done <= and_reduce(fpa_serdes_done) and fpa_seq_init_done;
-            hw_init_sucess <= and_reduce(fpa_serdes_success) and fpa_powered;
+            hw_init_sucess <= and_reduce(fpa_serdes_success) and fpa_seq_success;
             
             -- les erreurs à latcher (connecter les signaux des erreurs ici)
             error(31 downto 18) <= (others => '0');  -- non utilisés 
