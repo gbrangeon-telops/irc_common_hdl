@@ -74,7 +74,7 @@ architecture rtl of LL8_ext_to_spi_tx is
    component fwft_sfifo_w3_d16
       port (
          clk : in std_logic;
-         rst : in std_logic;
+         srst : in std_logic;
          din : in std_logic_vector(2 DOWNTO 0);
          wr_en : in std_logic;
          rd_en : in std_logic;
@@ -178,7 +178,7 @@ begin
    -------------------------------------------------- 
    U2 : fwft_sfifo_w3_d16  
    port map (
-      rst => ARESET,
+      srst => sreset,
       clk => CLK,
       din => fifo_din,
       wr_en => fifo_wr_en,
