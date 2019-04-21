@@ -70,7 +70,7 @@ architecture rtl of afpa_line_sync_mode_dval_gen is
    component fwft_sfifo_w16_d256 is
       Port ( 
          clk : in std_logic;
-         rst : in std_logic;
+         srst : in std_logic;
          din : in std_logic_vector(15 downto 0);
          wr_en : in std_logic;
          rd_en : in std_logic;
@@ -353,7 +353,7 @@ begin
    uff: fwft_sfifo_w16_d256
    Port map( 
       clk         => CLK,
-      rst         => sreset,
+      srst         => sreset,
       din         => adc_flag_fifo_din,
       wr_en       => adc_flag_fifo_wr,
       rd_en       => adc_flag_fifo_rd,

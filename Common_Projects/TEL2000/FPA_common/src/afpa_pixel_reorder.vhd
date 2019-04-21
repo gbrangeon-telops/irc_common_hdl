@@ -42,7 +42,7 @@ architecture rtl of afpa_pixel_reorder is
    component fwft_sfifo_w33_d16
       port (
          clk   : in std_logic;
-         rst   : in std_logic;
+         srst   : in std_logic;
          din   : in std_logic_vector(32 downto 0);
          wr_en : in std_logic;
          rd_en : in std_logic;
@@ -133,7 +133,7 @@ begin
       dfifo_ii : fwft_sfifo_w33_d16 
       port map(
          clk      =>  CLK,
-         rst      =>  ARESET,
+         srst     =>  sreset,
          din      =>  fifo_din(ii),
          wr_en    =>  fifo_wr_en(ii), 
          rd_en    =>  fifo_rd_en(ii),

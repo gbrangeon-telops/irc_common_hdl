@@ -116,7 +116,7 @@ architecture rtl of afpa_data_dispatcher is
    component fwft_sfifo_w72_d16
       port (
          clk       : in std_logic;
-         rst       : in std_logic;
+         srst       : in std_logic;
          din       : in std_logic_vector(71 downto 0);
          wr_en     : in std_logic;
          rd_en     : in std_logic;
@@ -285,7 +285,7 @@ begin
    --------------------------------------------------
    U2 : fwft_sfifo_w72_d16  
    port map (
-      rst => ARESET,
+      srst => sreset,
       clk => CLK,
       din => fringe_fifo_din,
       wr_en => fringe_fifo_wr,

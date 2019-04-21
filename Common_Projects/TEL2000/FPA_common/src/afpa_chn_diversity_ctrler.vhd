@@ -54,7 +54,7 @@ architecture rtl of afpa_chn_diversity_ctrler is
    component fwft_sfifo_w76_d16
       port (
          clk : in std_logic;
-         rst : in std_logic;
+         srst : in std_logic;
          din : in std_logic_vector(75 downto 0);
          wr_en : in std_logic;
          rd_en : in std_logic;
@@ -137,7 +137,7 @@ begin
    -------------------------------------------------- 
    U2A : fwft_sfifo_w76_d16
    port map (
-      rst => ARESET,
+      srst => sreset,
       clk => CLK,
       din => quad1_fifo_din,
       wr_en => quad1_fifo_wr_en,
@@ -155,7 +155,7 @@ begin
    -------------------------------------------------- 
    U2B : fwft_sfifo_w76_d16
    port map (
-      rst => ARESET,
+      srst => sreset,
       clk => CLK,
       din => quad2_fifo_din,
       wr_en => quad2_fifo_wr_en,
