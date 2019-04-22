@@ -184,6 +184,12 @@ architecture rtl of afpa_line_sync_mode_dval_gen is
    ---- attribute dont_touch of aoi_flag_fifo_ovfl      : signal is "true";
    
 begin
+   --------------------------------------------------
+   -- notes importantes
+   --------------------------------------------------   
+   -- note 1: ENO: 22 avril 2019
+   --    en clair ne jamais generer les signaux naoi si DEFINE_GENERATE_ELCORR_CHAIN = 0 pour eviter des bugs de non sortie d'images.
+   
    
    --------------------------------------------------
    -- Outputs map
@@ -305,10 +311,10 @@ begin
                   global_init_done <= aoi_init_done and naoi_init_done;
                   
                   -- pragma translate_off           -- ENO 18 avril 2019: ne plus utiliser car crée bcp de probleme en simulation
---                  aoi_init_done <= '1';
---                  naoi_init_done <= '1';
---                  naoi_flag_fifo_rst <= '0';
---                  aoi_flag_fifo_rst <= '0';
+                  --                  aoi_init_done <= '1';
+                  --                  naoi_init_done <= '1';
+                  --                  naoi_flag_fifo_rst <= '0';
+                  --                  aoi_flag_fifo_rst <= '0';
                   -- pragma translate_on
                
                when others =>
