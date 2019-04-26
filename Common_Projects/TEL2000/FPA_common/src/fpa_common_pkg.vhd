@@ -255,10 +255,14 @@ package fpa_common_pkg is
    --------------------------------------------------------------------------------
    -- record pour acheminer les statuts divers vers microBlaze                           
    --------------------------------------------------------------------------------
-   type array32_type is array (0 to 5) of std_logic_vector(31 downto 0);
    type misc_stat_type is
    record      
-      reg                  :  array32_type;
+      acq_trig_cnt     :  std_logic_vector(15 downto 0);  -- compteur de acq_trig
+      acq_int_cnt      :  std_logic_vector(15 downto 0);
+      fpa_readout_cnt  :  std_logic_vector(15 downto 0);
+      acq_readout_cnt  :  std_logic_vector(15 downto 0);
+      out_pix_cnt_min  :  std_logic_vector(23 downto 0);
+      out_pix_cnt_max  :  std_logic_vector(23 downto 0);
    end record misc_stat_type; 
    
    --------------------------------------------------------------------------------

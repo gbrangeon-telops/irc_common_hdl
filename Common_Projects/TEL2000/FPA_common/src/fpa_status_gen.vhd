@@ -40,6 +40,8 @@ entity fpa_status_gen is
       
       FPA_HARDW_STAT   : in fpa_hardw_stat_type;
       
+      MISC_STAT        : in misc_stat_type;
+      
       MISC_STAT_MOSI   : in t_axi4_lite_mosi;               -- statut divers envoyés en dual port ram 
       MISC_STAT_MISO   : out t_axi4_lite_miso;              -- statut divers envoyés en dual port ram 	  
       
@@ -98,8 +100,8 @@ architecture rtl of fpa_status_gen is
    
    signal cooler_powered               : std_logic;
    signal global_done                  : std_logic;
-   signal hw_init_done                 : std_logic;
-   signal hw_init_sucess               : std_logic;
+   signal fpa_hw_init_done             : std_logic;
+   signal fpa_hw_init_success          : std_logic;
    signal error_found                  : std_logic;
    signal stat_read_add                : std_logic_vector(15 downto 0);
    signal stat_read_reg                : std_logic_vector(31 downto 0);
@@ -237,7 +239,7 @@ begin
    begin
       if rising_edge(FPA_INTF_CLK) then
          
-         cooler_param_valid <= not fpa_seq_hardw_err and not fpa_seq_vhd_err and not fpa_seq_softw_err and FPA_HARDW_STAT.DVAL;
+         cooler_param_valid <= not fpa_seq_hardw_err and not fpa_seq_vhd_err and not fpa_seq_softw_err and fpa_hw_init_done;
          
          if cooler_param_valid = '1' then   
             cooler_volt_min_mV_out     <= cooler_volt_min_mV_in; 
@@ -265,16 +267,16 @@ begin
    begin
       if rising_edge(FPA_INTF_CLK) then
          -- adc_ddc
-         adc_ddc_detect_process_done <= FPA_HARDW_STAT.DVAL;
-         if FPA_HARDW_STAT.DVAL ='1'and FPA_HARDW_STAT.IDDCA_INFO /= IDDCA_INFO_UNKNOWN then 
+         adc_ddc_detect_process_done <= fpa_hw_init_done;
+         if fpa_hw_init_done ='1'and FPA_HARDW_STAT.IDDCA_INFO /= IDDCA_INFO_UNKNOWN then 
             adc_ddc_present <= '1';
          else                   
             adc_ddc_present <= '0';
          end if;
          
          -- flex ou flegx
-         flex_flegx_detect_process_done <= FPA_HARDW_STAT.DVAL;
-         if FPA_HARDW_STAT.DVAL = '1'and FPA_HARDW_STAT.FLEX_BRD_INFO /= FLEX_BRD_INFO_UNKNOWN then 
+         flex_flegx_detect_process_done <= fpa_hw_init_done;
+         if fpa_hw_init_done = '1'and FPA_HARDW_STAT.FLEX_BRD_INFO /= FLEX_BRD_INFO_UNKNOWN then 
             flex_flegx_present <= '1';
             flegx_present <= FPA_HARDW_STAT.FLEX_BRD_INFO.FLEGX_BRD_PRESENT;
          else                   
@@ -293,8 +295,8 @@ begin
       if rising_edge(FPA_INTF_CLK) then
          if sreset_fpa_intf_clk = '1' then
             global_done <= '0';
-            hw_init_done <= '0';
-            hw_init_sucess <= '0';
+            fpa_hw_init_done <= '0';
+            fpa_hw_init_success <= '0';
             error_latch <= (others => '0');
             error <= (others => '0');
             error_found <= '0';
@@ -307,8 +309,8 @@ begin
             global_done <= acq_trig_done;-- fpa_seq_done, fpa_driver_done, trig_ctler_done ne comptent pas parmi le global_done
             
             -- hw init status: 
-            hw_init_done <= and_reduce(fpa_serdes_done) and fpa_seq_init_done;
-            hw_init_sucess <= and_reduce(fpa_serdes_success) and fpa_seq_success;
+            fpa_hw_init_done <= and_reduce(fpa_serdes_done) and fpa_seq_init_done;
+            fpa_hw_init_success <= and_reduce(fpa_serdes_success) and fpa_seq_success;
             
             -- les erreurs à latcher (connecter les signaux des erreurs ici)
             error(31 downto 18) <= (others => '0');  -- non utilisés 
@@ -523,10 +525,10 @@ begin
                   
                -- FPA init status
                when  x"0080" =>   -- fpa init done
-                  stat_read_reg <=  (0 => hw_init_done, others => '0');
+                  stat_read_reg <=  (0 => fpa_hw_init_done, others => '0');
                
                when  x"0084" =>   -- fpa init success
-                  stat_read_reg <=  (0 => hw_init_sucess, others => '0');
+                  stat_read_reg <=  (0 => fpa_hw_init_success, others => '0');
                
                when  x"0088" =>   -- prog_init_done
                   stat_read_reg <=  (0 => fpa_prog_init_done, others => '0');
@@ -536,6 +538,25 @@ begin
                
                when  x"0090" =>   -- cooler_off_curr_max_mA_out
                   stat_read_reg <= resize(cooler_off_curr_max_mA_out, 32);                  
+                  
+                ---- watchdog data
+               when  x"0094" =>   -- 
+                  stat_read_reg <= resize(MISC_STAT.acq_trig_cnt, 32);  
+               
+               when  x"0098" =>   -- 
+                  stat_read_reg <= resize(MISC_STAT.acq_int_cnt, 32);                        
+               
+               when  x"009C" =>   --                                                           
+                  stat_read_reg <= resize(MISC_STAT.fpa_readout_cnt, 32);                     
+               
+               when  x"00A0" =>   --                                                           
+                  stat_read_reg <= resize(MISC_STAT.acq_readout_cnt, 32);
+               
+               when  x"00A4" =>   -- 
+                  stat_read_reg <= resize(MISC_STAT.out_pix_cnt_min, 32);
+               
+               when  x"00A8" =>   -- 
+                  stat_read_reg <= resize(MISC_STAT.out_pix_cnt_max, 32);
                
                when others  => stat_read_reg <= (others => '0');
                
