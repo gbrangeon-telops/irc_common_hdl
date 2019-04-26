@@ -52,6 +52,9 @@ entity afpa_hw_driver_ctrler is
       DAC_EN           : out std_logic;
       DAC_DONE         : in std_logic;
       
+      -- statut
+      HW_CFG_IN_PROGRESS : out std_logic;
+      
       -- configs
       USER_CFG         : in fpa_intf_cfg_type;
       FPA_INTF_CFG     : out fpa_intf_cfg_type
@@ -107,7 +110,8 @@ architecture rtl of afpa_hw_driver_ctrler is
    signal update_dac_cfg            : std_logic;
    signal update_fpa_cfg            : std_logic;
    signal prog_init_done_i          : std_logic;
-   signal first_prog_done: std_logic;
+   signal first_prog_done           : std_logic;
+   signal hw_cfg_in_progress_i      : std_logic;
    
 begin
    
@@ -118,6 +122,7 @@ begin
    HW_RQST <= hw_rqst_i;
    HW_DONE <= hw_done_i;
    PROG_INIT_DONE <= prog_init_done_i;
+   HW_CFG_IN_PROGRESS <= hw_cfg_in_progress_i;
    
    --------------------------------------------------
    -- synchro reset 
@@ -159,6 +164,7 @@ begin
             run_fpa_prog_client <= '0';
             first_prog_done <= '0';
             prog_init_done_i <= '0';
+            hw_cfg_in_progress_i <= '0';
             
          else                   
             
@@ -178,6 +184,7 @@ begin
                when idle =>      
                   hw_done_i <= '1';                    
                   hw_rqst_i <= '0';
+                  hw_cfg_in_progress_i <= '0';
                   post_update_img <= '0';
                   update_whole_cfg <= '0';
                   prog_init_done_i <= first_prog_done;    -- Par principe pour le scorpiomwA, la premiere config est celle d'initialisation.
@@ -202,7 +209,8 @@ begin
                   
                -- demande envoyée au contrôleur principal
                when forward_rqst_st =>
-                  hw_rqst_i <= '1';                                 -- fpa_rqst est le signal de demande d'autorisation au contrôleur principal. 
+                  hw_rqst_i <= '1';                                 -- fpa_rqst est le signal de demande d'autorisation au contrôleur principal.
+                  hw_cfg_in_progress_i <= '1';
                   if HW_DRIVER_EN = '1' then                        -- suppose que le trig_controller est arrêté par le contrôleur principal
                      hw_seq_fsm <= check_rqst_st;
                   end if;
