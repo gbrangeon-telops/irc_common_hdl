@@ -81,7 +81,7 @@ architecture RTL of brd_id_reader is
    signal one_sec_clk            : std_logic;
    signal clk_div                : std_logic;
    signal clk_div_last           : std_logic;
-   
+   signal wait_cnt               : unsigned(3 downto 0);   
    
 begin
    --------------------------------------------------
@@ -159,8 +159,8 @@ begin
             
             case freq_id_sm is 
                
-               when init_st =>                              -- on attend au moins 1 seconde avant de commencer les mesures (le temps que les signaux soient stables)     
-                  if pause_cnter = 2 then
+               when init_st =>                              -- on attend au moins 5 seconde avant de commencer les mesures (le temps que les signaux soient stables)     
+                  if pause_cnter = 6 then
                      freq_id_sm <= idle;
                   end if;
                   if pause_clk_en = '1' then             
@@ -189,7 +189,7 @@ begin
                      previous_meas_number <= meas_number;   
                      meas_number <= meas_number + 1;                     
                   end if;
-                  if pause_cnter = 2 then                   -- S'il ne venait pas après 2 secondes environ, on statue que la nmesure a echoué
+                  if pause_cnter = 4 then                   -- S'il ne venait pas après 3 secondes environ, on statue que la nmesure a echoué
                      adc_detection_err  <= '1';
                      ddc_detection_err  <= '1';
                      flex_detection_err <= '1';
@@ -214,16 +214,20 @@ begin
                   if pause_clk_en = '1' then             
                      pause_cnter <= pause_cnter + 1;
                   end if;
+                  wait_cnt <= (others => '0');
                
                when fetch_intf_st =>                        -- on cherche le type de board auquel cela correspond
                   detected_adc(meas_number)  <= freq_to_adc_brd_info(count, CLK_100M_RATE);   -- carte ADC
                   detected_ddc(meas_number)  <= freq_to_ddc_brd_info(count, CLK_100M_RATE);   -- carte DDC
                   detected_flex(meas_number) <= freq_to_flex_brd_info(count, CLK_100M_RATE);  -- carte FLEX
-                  if meas_number = 1 then 
-                     freq_id_sm <= wait_signal_st; 
-                  else                                     -- ie meas_number > 1 dans ce cas car meas_number /= 0 dans cet etat
-                     freq_id_sm <= check_result_adc_st;
-                  end if;                 
+                  wait_cnt <= wait_cnt + 1;                  -- on se donne du temps pour freq_to_adc_brd_info 
+                  if wait_cnt(3) = '1' then
+                     if meas_number = 1 then 
+                        freq_id_sm <= wait_signal_st; 
+                     else                                     -- ie meas_number > 1 dans ce cas car meas_number /= 0 dans cet etat
+                        freq_id_sm <= check_result_adc_st;
+                     end if;
+                  end if;
                
                when check_result_adc_st =>                   -- fonction de reconnaissance assy pour carte ADC
                   if  detected_adc(meas_number) /= detected_adc(previous_meas_number) then    
