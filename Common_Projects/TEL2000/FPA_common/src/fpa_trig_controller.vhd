@@ -315,7 +315,7 @@ begin
                   
                -- mode_trig_start_to_trig_start/ mode_itr_trig_start_to_trig_start: on observe les delais prescrits
                when apply_dly_st =>
-                  dly_cnt <= dly_cnt - 1;   -- !un compte-down est plus stable
+                  dly_cnt <= dly_cnt - 1;   -- !un compte-down est plus fiable
                   if dly_cnt = 0  then
                      if apply_dly_then_check_readout = '0' then 
                         fpa_trig_sm <= idle;                   

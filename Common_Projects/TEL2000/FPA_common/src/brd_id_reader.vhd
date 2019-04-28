@@ -159,8 +159,8 @@ begin
             
             case freq_id_sm is 
                
-               when init_st =>                              -- on attend au moins 5 seconde avant de commencer les mesures (le temps que les signaux soient stables)     
-                  if pause_cnter = 6 then
+               when init_st =>                              -- on attend au moins 4 sec avant de commencer les mesures (le temps que les signaux soient stables)     
+                  if pause_cnter = 5 then
                      freq_id_sm <= idle;
                   end if;
                   if pause_clk_en = '1' then             
@@ -189,7 +189,7 @@ begin
                      previous_meas_number <= meas_number;   
                      meas_number <= meas_number + 1;                     
                   end if;
-                  if pause_cnter = 4 then                   -- S'il ne venait pas après 3 secondes environ, on statue que la nmesure a echoué
+                  if pause_cnter = 3 then                   -- S'il ne venait pas après 2 secondes environ, on statue que la nmesure a echoué
                      adc_detection_err  <= '1';
                      ddc_detection_err  <= '1';
                      flex_detection_err <= '1';
