@@ -21,14 +21,16 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
---library COMMON_HDL;
---use COMMON_HDL.Telops.all;
 
-entity fpa_data_cnt is
+
+entity fpa_data_cnt is 
+   
+   generic(
+       G_INCR      : integer range 1 to 8 := 4
+      );   
    port(
       ARESET      : in STD_LOGIC;
       CLK         : in STD_LOGIC;
-      --ENABLE      : in STD_LOGIC;
       DVAL        : in STD_LOGIC;
       TLAST       : in STD_LOGIC;
       HIGH_LENGTH : out STD_LOGIC_VECTOR(31 downto 0);
@@ -50,7 +52,7 @@ architecture RTL of fpa_data_cnt is
    signal meas_count : unsigned(31 downto 0);
    signal tlast_pipe : std_logic_vector(2 downto 0); 
    signal sreset     : std_logic;
-
+   
    
 begin
    
@@ -85,7 +87,7 @@ begin
             tlast_pipe(2) <= tlast_pipe(1);
             --
             if DVAL = '1' then 
-               meas_count <= meas_count + 1;
+               meas_count <= meas_count + G_INCR;
             end if;                  
             
             --
