@@ -143,9 +143,9 @@ package fpa_common_pkg is
       -- config pour le contrôleur des trigs
       fpa_trig_ctrl_mode       : std_logic_vector(7 downto 0);  -- mode d'operation du contrôleur des trigs (voir fichier fpa_common_pkg)
       fpa_acq_trig_ctrl_dly    : unsigned(31 downto 0);         -- delai pour le contrôleur des trigs (depend des modes. Voir le trig_controller.vhd) 
-      fpa_acq_trig_period_min  : unsigned(31 downto 0);         -- periode minimale pour les acq_trigs    
+      fpa_spare                : unsigned(31 downto 0);         -- spare 
       fpa_xtra_trig_ctrl_dly   : unsigned(31 downto 0);         -- delai pour le contrôleur des trigs (depend des modes. Voir le trig_controller.vhd) 
-      fpa_xtra_trig_period_min : unsigned(31 downto 0);         -- periode minimale pour les xtra_trigs (peut être identique à celle des acq_trig si necessaire) 
+      fpa_trig_ctrl_timeout_dly: unsigned(31 downto 0);         -- delay pour le timeout de fpa_trig_controller
       fpa_stretch_acq_trig     : std_logic;                     -- permet d'utiliser une version étirée du trig pour supporter les instabilités de la roue à filtre
       
       -- fpas analogiques principalement

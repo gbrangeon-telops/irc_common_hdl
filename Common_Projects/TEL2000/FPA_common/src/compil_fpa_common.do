@@ -45,7 +45,6 @@ acom -nowarn DAGGEN_0523 -incr \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_data_ctrl_map.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_line_sync_mode_dval_gen.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_sample_demux.vhd \
- d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_faked_data_gen.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_elec_ref_ctrler.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_elec_ref_calc.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\LL_ext_sync_flow.vhd \

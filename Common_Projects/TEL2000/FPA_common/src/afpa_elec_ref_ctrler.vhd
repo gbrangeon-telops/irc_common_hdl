@@ -97,11 +97,7 @@ begin
          else
             
             -- definition des données
-            if FPA_INTF_CFG.ELCORR_REF_CFG(REF_ID).NULL_FORCED = '1' then
-               tx_data  <= (others => '0');  -- l'offset electronique est forcée à 0.
-            else
-               tx_data  <= RX_MOSI.DATA;
-            end if;
+            tx_data <= RX_MOSI.DATA;
             tx_dval <= RX_MOSI.DVAL and lane_enabled;     
             
          end if;
@@ -151,7 +147,7 @@ begin
                   if dly_cnt >= to_integer(FPA_INTF_CFG.ELCORR_REF_CFG(REF_ID).START_DLY_SAMPCLK) then
                      ref_ctrl_fsm <= wait_ref_start_st;
                   end if;
-
+               
                when wait_ref_start_st =>
                   if ref_valid_i = '1' then
                      ref_ctrl_fsm <= wait_ref_end_st;
