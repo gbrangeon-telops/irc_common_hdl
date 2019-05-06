@@ -115,6 +115,7 @@ package fpa_common_pkg is
    -- Les frequences de reconnaissance des cartes ADC (en coups de clocks 100 MHz)   
    ----------------------------------------------------------------------------------
    -- se referer au fichier F:\Bibliotheque\Détecteurs\Informations controlees\MISC\Detector_Freq_ID\Frequence_de_reconnaissance_des_cartes_ADC.xlsx
+   -- ADC EFA-00253
    constant  ID_ADC_BRD_04CHN_FREQMAX_25MHZ                     : freq_id_type := (31746, 35088);   -- 1 quad  LTC2170 soudé  sur le board
    constant  ID_ADC_BRD_08CHN_FREQMAX_25MHZ                     : freq_id_type := (27211, 30075);   -- 2 quads LTC2170 soudés sur le board
    constant  ID_ADC_BRD_12CHN_FREQMAX_25MHZ                     : freq_id_type := (23810, 26316);   -- 3 quads LTC2170 soudés sur le board
@@ -127,6 +128,10 @@ package fpa_common_pkg is
    constant  ID_ADC_BRD_08CHN_FREQMAX_65MHZ                     : freq_id_type := ( 7326,  8097);   -- 2 quads LTC2172 soudés sur le board
    constant  ID_ADC_BRD_12CHN_FREQMAX_65MHZ                     : freq_id_type := ( 6568,  7260);   -- 3 quads LTC2172 soudés sur le board
    constant  ID_ADC_BRD_16CHN_FREQMAX_65MHZ                     : freq_id_type := ( 5772,  6380);   -- 4 quads LTC2172 soudés sur le board
+   
+   -- SADC EFA-00276
+   constant  ID_SADC_BRD_8CHN_FREQMAX_25MHZ                     : freq_id_type := ( 4782,  4978);   -- 1 octal LTM9006 soudé sur le board          
+   
    
    --------------------------------------------------------------------------------
    -- Configuration partie commune du Bloc FPA_interface
@@ -150,7 +155,7 @@ package fpa_common_pkg is
       
       -- fpas analogiques principalement
       fpa_intf_data_source     : std_logic;                     -- permet de dire si la source de données est dans le FPGA (patron de tests telops) ou à l'extérieur du FPGA (ADC) 
-                                                                -- fpa_intf_data_source n'est utilisé/regardé par le vhd que lorsque fpa_diag_mode = 1
+      -- fpa_intf_data_source n'est utilisé/regardé par le vhd que lorsque fpa_diag_mode = 1
    end record;    
    
    --------------------------------------------------------------------------------
@@ -205,6 +210,7 @@ package fpa_common_pkg is
    --------------------------------------------------------------------------------
    type adc_brd_info_type is 
    record                                                                                    
+      brd_assy_number      : natural range 0 to 511; 
       adc_oper_freq_max_khz: natural range 0 to 125_000 ; -- frequence maximale d'operation des adcs soudées sur la carte EFA-00253-XXX  (lié à l'ID)
       analog_channel_num   : natural range 0 to 16;  -- nombre de canaux total disponible sur la carte (lié à l'ID)
       adc_resolution       : natural range 0 to 16;  -- résoltuion des ADC soudés sur la carte (provient du mode diagnostic des adcs)
@@ -386,7 +392,7 @@ package fpa_common_pkg is
    --------------------------------------------------------------------------------
    constant DDC_BRD_INFO_UNKNOWN  : ddc_brd_info_type      := (FPA_ROIC_UNKNOWN, OUTPUT_UNKNOWN, INPUT_UNKNOWN, 0, 1, 8000, 8000, '0');
    constant FLEX_BRD_INFO_UNKNOWN : flex_brd_info_type     := (FPA_ROIC_UNKNOWN, OUTPUT_UNKNOWN, INPUT_UNKNOWN, 0, 1, 0, 8000, 8000, '0', '0'); -- remarquer que le voltage min est superieur au voltga max. Une absurdité qui fera que le cooler ne sera pas allumé par le PPC
-   constant ADC_BRD_INFO_UNKNOWN  : adc_brd_info_type      := (0, 0, 0, '0');
+   constant ADC_BRD_INFO_UNKNOWN  : adc_brd_info_type      := (0, 0, 0, 0, '0');
    constant IDDCA_INFO_UNKNOWN    : iddca_info_type        := (FPA_ROIC_UNKNOWN, OUTPUT_UNKNOWN, INPUT_UNKNOWN, 0, 1, 8000, 8000, '0');
    constant HARDW_STAT_UNKNOWN    : fpa_hardw_stat_type    := (ADC_BRD_INFO_UNKNOWN, DDC_BRD_INFO_UNKNOWN, FLEX_BRD_INFO_UNKNOWN, IDDCA_INFO_UNKNOWN, '0');
    
@@ -578,37 +584,48 @@ package body fpa_common_pkg is
       variable adc_brd_info : adc_brd_info_type;
    begin
       if MEAS_CLK_RATE /= 100_000_000 then       -- CLK_RATE est la clock de mesure de la periode. Il doit valoir 100_000_000 Hz
+         adc_brd_info.brd_assy_number               :=  0;
          adc_brd_info.adc_oper_freq_max_khz  :=  25_000; -- quel que soit l'ADC,  il peut s'opérer à 25MHz au moins
          adc_brd_info.analog_channel_num     :=  0;  
          adc_brd_info.adc_resolution         :=  0;
          
-      else                                     
+      else                                                       
+         
+         --------------------------------------------------------
+         --  EFA-00253-XYZ
+         --------------------------------------------------------         
          -- 4 canaux 25MHz max (1 quad LTC2170) détecté 
-         if (Tosc > ID_ADC_BRD_04CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_04CHN_FREQMAX_25MHZ.freq_id_max) then 
+         if (Tosc > ID_ADC_BRD_04CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_04CHN_FREQMAX_25MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 25_000; 
             adc_brd_info.analog_channel_num     := 4;            
             adc_brd_info.adc_resolution         := 14;        
             
             -- 8 canaux 25MHz max (2 quads LTC2170) détectés 
-         elsif (Tosc > ID_ADC_BRD_08CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_08CHN_FREQMAX_25MHZ.freq_id_max) then 
+         elsif (Tosc > ID_ADC_BRD_08CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_08CHN_FREQMAX_25MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 25_000; 
             adc_brd_info.analog_channel_num     := 8;            
             adc_brd_info.adc_resolution         := 14;  
             
             -- 12 canaux 25MHz max (3 quads LTC2170) détectés 
-         elsif (Tosc > ID_ADC_BRD_12CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_12CHN_FREQMAX_25MHZ.freq_id_max) then 
+         elsif (Tosc > ID_ADC_BRD_12CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_12CHN_FREQMAX_25MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 25_000; 
             adc_brd_info.analog_channel_num     := 12;            
             adc_brd_info.adc_resolution         := 14; 
             
             -- 16 canaux 25MHz max (4 quads LTC2170) détectés 
-         elsif (Tosc > ID_ADC_BRD_16CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_16CHN_FREQMAX_25MHZ.freq_id_max) then 
+         elsif (Tosc > ID_ADC_BRD_16CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_16CHN_FREQMAX_25MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 25_000; 
             adc_brd_info.analog_channel_num     := 16;            
             adc_brd_info.adc_resolution         := 14; 
             
             -- 4 canaux 40MHz max (1 quad LTC2171) détecté 
-         elsif (Tosc > ID_ADC_BRD_04CHN_FREQMAX_40MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_04CHN_FREQMAX_40MHZ.freq_id_max) then 
+         elsif (Tosc > ID_ADC_BRD_04CHN_FREQMAX_40MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_04CHN_FREQMAX_40MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 40_000; 
             adc_brd_info.analog_channel_num     := 4;            
             adc_brd_info.adc_resolution         := 14;        
@@ -620,42 +637,60 @@ package body fpa_common_pkg is
             adc_brd_info.adc_resolution         := 14;  
             
             -- 12 canaux 40MHz max (3 quads LTC2171) détectés 
-         elsif (Tosc > ID_ADC_BRD_12CHN_FREQMAX_40MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_12CHN_FREQMAX_40MHZ.freq_id_max) then 
+         elsif (Tosc > ID_ADC_BRD_12CHN_FREQMAX_40MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_12CHN_FREQMAX_40MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 40_000; 
             adc_brd_info.analog_channel_num     := 12;            
             adc_brd_info.adc_resolution         := 14; 
             
             -- 16 canaux 40MHz max (4 quads LTC2171) détectés 
-         elsif (Tosc > ID_ADC_BRD_16CHN_FREQMAX_40MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_16CHN_FREQMAX_40MHZ.freq_id_max) then 
+         elsif (Tosc > ID_ADC_BRD_16CHN_FREQMAX_40MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_16CHN_FREQMAX_40MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 40_000; 
             adc_brd_info.analog_channel_num     := 16;            
             adc_brd_info.adc_resolution         := 14; 
             
             -- 4 canaux 65MHz max (1 quad LTC2172) détecté 
-         elsif (Tosc > ID_ADC_BRD_04CHN_FREQMAX_65MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_04CHN_FREQMAX_65MHZ.freq_id_max) then 
+         elsif (Tosc > ID_ADC_BRD_04CHN_FREQMAX_65MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_04CHN_FREQMAX_65MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 65_000; 
             adc_brd_info.analog_channel_num     := 4;            
             adc_brd_info.adc_resolution         := 14;        
             
             -- 8 canaux 65MHz max (2 quads LTC2172) détectés 
-         elsif (Tosc > ID_ADC_BRD_08CHN_FREQMAX_65MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_08CHN_FREQMAX_65MHZ.freq_id_max) then 
+         elsif (Tosc > ID_ADC_BRD_08CHN_FREQMAX_65MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_08CHN_FREQMAX_65MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 65_000; 
             adc_brd_info.analog_channel_num     := 8;            
             adc_brd_info.adc_resolution         := 14;  
             
             -- 12 canaux 65MHz max (3 quads LTC2172) détectés 
-         elsif (Tosc > ID_ADC_BRD_12CHN_FREQMAX_65MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_12CHN_FREQMAX_65MHZ.freq_id_max) then 
+         elsif (Tosc > ID_ADC_BRD_12CHN_FREQMAX_65MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_12CHN_FREQMAX_65MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 65_000; 
             adc_brd_info.analog_channel_num     := 12;            
             adc_brd_info.adc_resolution         := 14; 
             
             -- 16 canaux 65MHz max (4 quads LTC2172) détectés 
-         elsif (Tosc > ID_ADC_BRD_16CHN_FREQMAX_65MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_16CHN_FREQMAX_65MHZ.freq_id_max) then 
+         elsif (Tosc > ID_ADC_BRD_16CHN_FREQMAX_65MHZ.freq_id_min) and (Tosc < ID_ADC_BRD_16CHN_FREQMAX_65MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        :=  253;
             adc_brd_info.adc_oper_freq_max_khz  := 65_000; 
             adc_brd_info.analog_channel_num     := 16;            
             adc_brd_info.adc_resolution         := 14; 
             
+            
+            --------------------------------------------------------
+            --  EFA-00276-XYZ
+            --------------------------------------------------------     
+            -- 8 canaux 25MHz max (1 octal LTM9006 ) détectés 
+         elsif (Tosc > ID_SADC_BRD_8CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_SADC_BRD_8CHN_FREQMAX_25MHZ.freq_id_max) then
+            adc_brd_info.brd_assy_number        := 276;
+            adc_brd_info.adc_oper_freq_max_khz  := 25_000; 
+            adc_brd_info.analog_channel_num     := 8;            
+            adc_brd_info.adc_resolution         := 14;           
+            
          else
+            adc_brd_info.brd_assy_number        :=  0;
             adc_brd_info.adc_oper_freq_max_khz  := 25_000; -- quel que soit l'ADC,  il peut s'opérer à 25MHz au moins
             adc_brd_info.analog_channel_num     := 0;  
             adc_brd_info.adc_resolution         := 0;           
