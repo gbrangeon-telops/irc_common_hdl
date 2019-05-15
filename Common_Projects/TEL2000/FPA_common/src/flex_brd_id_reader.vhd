@@ -62,6 +62,7 @@ architecture rtl of flex_brd_id_reader is
          SCAN_WINDOW_LEN : natural range 3 to 127 := 64
          );
       port (
+         ARESET   : in STD_LOGIC;
          CLK : in STD_LOGIC;
          SIG_IN : in STD_LOGIC;
          SIG_OUT : out STD_LOGIC
@@ -105,6 +106,7 @@ begin
       SCAN_WINDOW_LEN => 64
       )
    port map(
+      ARESET => ARESET,
       CLK => CLK_100M,
       SIG_IN => FREQ_ID,
       SIG_OUT => clean_miso

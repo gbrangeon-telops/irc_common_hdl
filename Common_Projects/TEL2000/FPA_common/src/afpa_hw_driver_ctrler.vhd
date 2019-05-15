@@ -287,7 +287,7 @@ begin
             end if;
             
             -- mise à jour de la partie fpa
-            if update_fpa_part_only = '1' then 
+            if update_fpa_part_only = '1' and readout_i = '0' then    -- ENO 14 mai 2019: necessaire pour eviter qu'une cfg sortante ne fourre tout le readout en cours
                fpa_intf_cfg_i <= USER_CFG;
                fpa_intf_cfg_i.vdac_value <= vdac_value; -- restitution de la partie Dac
             end if;
@@ -457,10 +457,10 @@ begin
                   end if;                  
                   
                -- fin d'une image prog_trig
-               when prog_img_end_st =>     
-                  update_fpa_cfg <= '0';
+               when prog_img_end_st =>                 
                   fpa_first_cfg_done <= '1';
                   if readout_i = '0' then
+                     update_fpa_cfg <= '0';              -- ENO 14 mai 2019: absolument necessaire ici pour être certain que la cfg est mise à jour.
                      img_cnt <= img_cnt + 1;
                      prog_ctrl_fsm <= check_prog_mode_end_st;
                   end if;

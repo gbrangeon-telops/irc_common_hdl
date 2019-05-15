@@ -54,7 +54,7 @@ architecture RTL of brd_id_reader is
          Clk_div   : out std_logic);
    end component;
    
-   type freq_id_sm_type is (init_st, idle, wait_signal_st, meas_period_st, fetch_intf_st, check_result_adc_st, check_result_ddc_st, check_result_flex_st, check_meas_number_st, meas_result_st1, meas_result_st2);
+   type freq_id_sm_type is (init_st, idle, wait_signal_st1, wait_signal_st2, meas_period_st, fetch_intf_st, check_result_adc_st, check_result_ddc_st, check_result_flex_st, check_meas_number_st, meas_result_st1, meas_result_st2);
    type detected_adc_type is array  (0 to MEAS_NUMBER_MAX) of adc_brd_info_type;
    type detected_ddc_type is array  (0 to MEAS_NUMBER_MAX) of ddc_brd_info_type;
    type detected_flex_type is array (0 to MEAS_NUMBER_MAX) of flex_brd_info_type;
@@ -179,10 +179,15 @@ begin
                      ddc_brd_info_i.dval <= '0';
                      flex_brd_info_i.dval <= '0';
                      done_i <= '0';
-                     freq_id_sm <= wait_signal_st;
-                  end if;  
+                     freq_id_sm <= wait_signal_st1;
+                  end if;          
                
-               when wait_signal_st =>                       -- on attend le front montant pour commencer les mesures. 
+               when wait_signal_st1 =>                       -- on attend le front descendant pour être certain d'être bien synchrone et ainsi eviter des bugs  
+                  if freq_id_reg_last = '1'  and freq_id_reg = '0' then
+                     freq_id_sm <= wait_signal_st2;
+                  end if;
+               
+               when wait_signal_st2 =>                       -- on attend le front montant pour commencer les mesures. 
                   count <= 0;           
                   if freq_id_reg_last = '0'  and freq_id_reg = '1' then
                      freq_id_sm <= meas_period_st;
@@ -223,7 +228,7 @@ begin
                   wait_cnt <= wait_cnt + 1;                  -- on se donne du temps pour freq_to_adc_brd_info 
                   if wait_cnt(3) = '1' then
                      if meas_number = 1 then 
-                        freq_id_sm <= wait_signal_st; 
+                        freq_id_sm <= wait_signal_st2; 
                      else                                     -- ie meas_number > 1 dans ce cas car meas_number /= 0 dans cet etat
                         freq_id_sm <= check_result_adc_st;
                      end if;
@@ -251,7 +256,7 @@ begin
                   if meas_number = MEAS_NUMBER_MAX then                     
                      freq_id_sm <= meas_result_st1;
                   else
-                     freq_id_sm <= wait_signal_st; 
+                     freq_id_sm <= wait_signal_st2; 
                   end if;
                
                when meas_result_st1 =>                       -- si mesures faites avec succès alors on considère les données de la fonction de conversion. On ne sort plus de cet état                
