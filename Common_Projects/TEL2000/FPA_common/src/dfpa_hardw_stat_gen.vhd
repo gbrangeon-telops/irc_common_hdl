@@ -52,7 +52,6 @@ architecture RTL of dfpa_hardw_stat_gen is
          SCAN_WINDOW_LEN : natural range 3 to 127 := 64
          );
       port (
-         ARESET   : in STD_LOGIC;
          CLK : in STD_LOGIC;
          SIG_IN : in STD_LOGIC;
          SIG_OUT : out STD_LOGIC
@@ -65,7 +64,7 @@ architecture RTL of dfpa_hardw_stat_gen is
    signal reader_run      : std_logic;
    signal reader_done     : std_logic;
    signal ddc_id_sm       : ddc_id_sm_type;
-   signal clean_miso      : std_logic;
+   signal clean_freq_id   : std_logic;
    signal ddc_brd_info_i : ddc_brd_info_type;
    
    
@@ -86,10 +85,9 @@ begin
       SCAN_WINDOW_LEN => 64
       )
    port map(
-      ARESET => ARESET,
       CLK => CLK_100M,
       SIG_IN => DET_FREQ_ID,
-      SIG_OUT => clean_miso
+      SIG_OUT => clean_freq_id
       );
    
    
@@ -102,7 +100,7 @@ begin
       CLK_100M      => CLK_100M,      
       RUN           => reader_run,
       DONE          => reader_done, 
-      FREQ_ID       => clean_miso,        
+      FREQ_ID       => clean_freq_id,        
       ADC_BRD_INFO  => open,
       FLEX_BRD_INFO => open,
       DDC_BRD_INFO  => ddc_brd_info_i,

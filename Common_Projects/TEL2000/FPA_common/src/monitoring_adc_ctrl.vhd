@@ -82,7 +82,6 @@ architecture rtl of monitoring_adc_ctrl is
          SCAN_WINDOW_LEN : natural range 3 to 127 := 64
          );      
       port (
-         ARESET   : in STD_LOGIC;
          CLK : in STD_LOGIC;
          SIG_IN : in STD_LOGIC;
          SIG_OUT : out STD_LOGIC
@@ -166,12 +165,12 @@ begin
    -------------------------------------------------- 
    UcA: Clk_Divider
    Generic map(Factor=> DEFINE_ADC_SPI_CLK_FACTOR
-      
+         
       -- pragma translate_off
       /(DEFINE_ADC_SPI_CLK_FACTOR/100)
       -- pragma translate_on
       
-      )
+   )
    Port map( Clock => CLK, Reset => sreset, Clk_div => adc_sclk);
    
    
@@ -197,7 +196,6 @@ begin
       SCAN_WINDOW_LEN => 64
       )
    port map(
-      ARESET => ARESET,
       CLK => CLK,
       SIG_IN => MISO,
       SIG_OUT => clean_miso

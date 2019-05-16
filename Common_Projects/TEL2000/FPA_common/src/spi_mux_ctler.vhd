@@ -21,7 +21,6 @@ entity spi_mux_ctler is
       -- signaux generaux
       CLK      : in std_logic;
       ARESET   : in std_logic;
-      DEVICE_EN: in std_logic;
       
       -- contrôle des clients SPI
       RQST     : in std_logic_vector(3 downto 0);
@@ -50,7 +49,7 @@ end spi_mux_ctler;
 architecture rtl of spi_mux_ctler is
    
    constant C_MUX_STABILIZATION_TIME_FACTOR : natural :=  10_000; --Valeur empirique. Soit 100 usec. 
-   type rqst_fsm_type is (idle, init_st, cfg_brd_mux_st, wait_mux_stab_st, client_en_st, wait_end_st);
+   type rqst_fsm_type is (idle, cfg_brd_mux_st, wait_mux_stab_st, client_en_st, wait_end_st);
    
    -- sync_reset
    component sync_reset
@@ -125,21 +124,16 @@ begin
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then 
-            rqst_fsm <=  init_st;
+            rqst_fsm <=  idle;
             EN <= (others => '0');
             client_id <= 3;
             mux_i <= "11";
          else                   
             
-            --fsm de contrôle         
-            case  rqst_fsm is
+            --fsm de contrôle
+            
+            case  rqst_fsm is 
                
-               -- attente de l'activation 
-               when init_st =>
-                  if DEVICE_EN = '1' then 
-                     rqst_fsm <=  idle;  
-                  end if;
-                  
                -- attente d'une demande de transaction SPI
                when idle =>
                   pause_cnt <= (others => '0');
