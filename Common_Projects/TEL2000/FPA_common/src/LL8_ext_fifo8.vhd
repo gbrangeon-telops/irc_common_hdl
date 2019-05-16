@@ -76,7 +76,7 @@ architecture RTL of LL8_ext_fifo8 is
          clk : in std_logic;
          din : in std_logic_vector(9 downto 0);
          rd_en : in std_logic;
-         rst : in std_logic;
+         srst : in std_logic;
          wr_en : in std_logic;
          data_count : out std_logic_vector(7 downto 0);
          dout : out std_logic_vector(9 downto 0);
@@ -127,7 +127,7 @@ begin
          clk => CLK_RX,
          din => fifo_din,
          rd_en => fifo_rd_en,
-         rst => RESET_TX,
+         srst => RESET_TX,
          wr_en => fifo_wr_en,
          data_count => fifo_count_256,
          dout => fifo_dout,
