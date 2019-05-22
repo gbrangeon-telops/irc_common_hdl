@@ -201,6 +201,7 @@ begin
             xtra_trig_last <= '0';
             acq_trig_done <= '0';
             apply_dly_then_check_readout <= '0';
+            prog_trig_i <= '0';
             
          else
             

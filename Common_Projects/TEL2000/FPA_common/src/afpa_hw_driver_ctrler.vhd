@@ -112,6 +112,8 @@ architecture rtl of afpa_hw_driver_ctrler is
    signal prog_init_done_i          : std_logic;
    signal first_prog_done           : std_logic;
    signal hw_cfg_in_progress_i      : std_logic;
+   signal wait_cnt                  : unsigned(7 downto 0);
+   signal fpa_intf_cfg_up2date      : std_logic;
    
 begin
    
@@ -188,6 +190,7 @@ begin
                   post_update_img <= '0';
                   update_whole_cfg <= '0';
                   prog_init_done_i <= first_prog_done;    -- Par principe pour le scorpiomwA, la premiere config est celle d'initialisation.
+                  wait_cnt <= (others => '0');
                   if DIAG_MODE_ONLY = '1' then
                      hw_seq_fsm <= diag_mode_only_st;
                   elsif valid_prog_rqst = '1' then 
@@ -240,13 +243,16 @@ begin
                   
                -- attendre que le client ait terminé 
                when wait_client_done_st =>    
-                  if client_done = '1' then          
+                  if client_done = '1' and fpa_intf_cfg_up2date = '1' then          
                      hw_seq_fsm <= pause_st; 
                   end if;
                   
                -- pause 
                when pause_st =>
-                  hw_seq_fsm <= idle; -- pour donner le temps que le signal valid_rqst_pending tombe après mise à jour de la config
+                  wait_cnt <= wait_cnt + 1;
+                  if wait_cnt(4) = '1' then 
+                     hw_seq_fsm <= idle; -- pour donner le temps que le signal valid_rqst_pending tombe après mise à jour de la config
+                  end if;
                
                when others =>
                
@@ -272,6 +278,7 @@ begin
             update_dac_part_only <= '0';
             update_fpa_part_temp <= '0';
             update_fpa_part_only <= '0';
+            fpa_intf_cfg_up2date <= '0';
             
          else 
             
@@ -284,18 +291,31 @@ begin
             -- sauvegarde de la partie dac 
             if update_fpa_part_temp = '1' then  
                vdac_value <= fpa_intf_cfg_i.vdac_value;
+            end if;            
+            
+            if run_dac_prog_client = '1' or run_fpa_prog_client = '1' then 
+               fpa_intf_cfg_up2date <= '0';
             end if;
             
-            -- mise à jour de la partie fpa
+            ----------------------------------------------------------------
+            -- mise à jour de la partie fpa suite à une reprog
+            ----------------------------------------------------------------
             if update_fpa_part_only = '1' and readout_i = '0' then    -- ENO 14 mai 2019: necessaire pour eviter qu'une cfg sortante ne fourre tout le readout en cours
                fpa_intf_cfg_i <= USER_CFG;
                fpa_intf_cfg_i.vdac_value <= vdac_value; -- restitution de la partie Dac
+               fpa_intf_cfg_up2date <= '1';
             end if;
             
-            -- mise à jour de la partie dac
+            ---------------------------------------------------------------
+            -- mise à jour de la partie dac suite à une reprog             
+            ---------------------------------------------------------------
             if update_dac_part_only = '1' then 
                fpa_intf_cfg_i.vdac_value <= USER_CFG.VDAC_VALUE;
+               fpa_intf_cfg_up2date <= '1';
             end if;
+            -----------------------------------------------------------------
+            --
+            -----------------------------------------------------------------
             
             -- ENO : 24 janv 2016: mis ici pour une simulation correcte
             -- mise à jour de la partie int_time de la cfg : le module du temps d'integration a un latch qui est synchrone avec le frame, donc pas de pb.
