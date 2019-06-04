@@ -67,23 +67,23 @@ begin
    U3 :  process(CLK) 
    begin
       if rising_edge(CLK) then
-         if sreset = '1' then 
-            tx_mosi_i.dval <= '0'; 
-            tx_mosi_i.support_busy <= '1';
+         -- if sreset = '1' then 
+            -- tx_mosi_i.dval <= '0'; 
+            -- tx_mosi_i.support_busy <= '1';
             
-         else
+         -- else
             
-            tx_mosi_i <= RX_MOSI;
-            if FPA_INTF_CFG.ELCORR_PIX_FAKED_VALUE_FORCED = '1' then
-               tx_mosi_i.data(71 downto 54) <= std_logic_vector(resize(FPA_INTF_CFG.ELCORR_PIX_FAKED_VALUE, 18));
-               tx_mosi_i.data(53 downto 36) <= std_logic_vector(resize(FPA_INTF_CFG.ELCORR_PIX_FAKED_VALUE, 18));
-               tx_mosi_i.data(35 downto 18) <= std_logic_vector(resize(FPA_INTF_CFG.ELCORR_PIX_FAKED_VALUE, 18));
-               tx_mosi_i.data(17 downto 0)  <= std_logic_vector(resize(FPA_INTF_CFG.ELCORR_PIX_FAKED_VALUE, 18));
-            else
-               tx_mosi_i.data <= RX_MOSI.DATA;
-            end if;
+            -- tx_mosi_i <= RX_MOSI;
+            -- if FPA_INTF_CFG.ELCORR_PIX_FAKED_VALUE_FORCED = '1' then
+               -- tx_mosi_i.data(71 downto 54) <= std_logic_vector(resize(FPA_INTF_CFG.ELCORR_PIX_FAKED_VALUE, 18));
+               -- tx_mosi_i.data(53 downto 36) <= std_logic_vector(resize(FPA_INTF_CFG.ELCORR_PIX_FAKED_VALUE, 18));
+               -- tx_mosi_i.data(35 downto 18) <= std_logic_vector(resize(FPA_INTF_CFG.ELCORR_PIX_FAKED_VALUE, 18));
+               -- tx_mosi_i.data(17 downto 0)  <= std_logic_vector(resize(FPA_INTF_CFG.ELCORR_PIX_FAKED_VALUE, 18));
+            -- else
+               -- tx_mosi_i.data <= RX_MOSI.DATA;
+            -- end if;
             
-         end if;
+         -- end if;
       end if;
    end process;    
 end rtl;
