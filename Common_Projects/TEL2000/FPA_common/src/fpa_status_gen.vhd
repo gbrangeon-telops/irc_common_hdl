@@ -239,7 +239,7 @@ begin
    begin
       if rising_edge(FPA_INTF_CLK) then
          
-         cooler_param_valid <= not fpa_seq_hardw_err and not fpa_seq_vhd_err and not fpa_seq_softw_err and fpa_hw_init_done;
+         cooler_param_valid <= not fpa_seq_hardw_err and not fpa_seq_vhd_err and not fpa_seq_softw_err and FPA_HARDW_STAT.DVAL;
          
          if cooler_param_valid = '1' then   
             cooler_volt_min_mV_out     <= cooler_volt_min_mV_in; 
