@@ -136,6 +136,7 @@ begin
                when hw_status_st =>
                   if reader_done = '1' then  
                      FPA_HARDW_STAT.IDDCA_INFO <= ddc_brd_info_to_iddca_info(ddc_brd_info_i);
+                     FPA_HARDW_STAT.DDC_BRD_INFO <= ddc_brd_info_i;
                      FPA_HARDW_STAT.DVAL <= '1';
                   end if;
                
