@@ -7,40 +7,117 @@
 ---------------------------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.all; 
-use ieee.numeric_std.all;
+use ieee.numeric_std.all; 
+use ieee.MATH_REAL.all;
 
 package fastrd2_define is
    
    
-   constant FPA_MCLK_NUM_MAX : integer:= 3;  --- Le max des nombres de domaines MCLK utilisés dans tous les designs 
+   constant FPA_MCLK_NUM_MAX : integer:= 8;  --- Le max des nombres de domaines MCLK utilisés dans tous les designs 
    
-   type array_type is array (0 to FPA_MCLK_NUM_MAX - 1) of natural;
+   type fastrd2_integer_array_type is array (FPA_MCLK_NUM_MAX-1 downto 0) of natural;
    
    ------------------------------------------------------------
-   -- type pour grouper toutes les horloges detecteur
+   -- type de base pour caractériser l'horloge detecteur
    ------------------------------------------------------------
-   type fpa_mclk_grp_type is 
+   type fpa_clk_base_info_type is 
    record
-      mclk : std_logic_vector(FPA_MCLK_NUM_MAX-1  downto 0);
-      pclk : std_logic_vector(FPA_MCLK_NUM_MAX-1  downto 0);      
+      sof : std_logic;
+      eof : std_logic;
+      clk : std_logic;   
+   end record;
+   
+   type fastrd2_clk_array_type is array (FPA_MCLK_NUM_MAX-1 downto 0) of fpa_clk_base_info_type;
+   
+   ------------------------------------------------------------
+   -- type pour grouper toutes les infos des horloges detecteur
+   ------------------------------------------------------------
+   type fpa_clk_info_type is 
+   record
+      mclk_source_rate_khz : natural;
+      
+      -- master clock part
+      mclk                 : fastrd2_clk_array_type;             -- horloge avec sof et eof 
+      mclk_rate_khz        : fastrd2_integer_array_type;
+      mclk_rate_factor     : fastrd2_integer_array_type; 
+      
+      -- pixel clock part
+      pclk                 : fastrd2_clk_array_type;             -- horloge avec sof et eof 
+      pclk_rate_khz        : fastrd2_integer_array_type;     
+      pclk_rate_factor     : fastrd2_integer_array_type;      
+   end record;
+   
+   ------------------------------------------------------------
+   -- area  cfg                                                   
+   ------------------------------------------------------------
+   type area_cfg_type is
+   record
+      -- parametres de window
+      xstart                         : unsigned(12 downto 0); 
+      ystart                         : unsigned(12 downto 0);
+      xsize                          : unsigned(12 downto 0);
+      ysize                          : unsigned(12 downto 0);      
+      
+      -- delimiteurs de trames et de lignes
+      sof_posf_pclk                  : unsigned(8 downto 0);     -- 
+      eof_posf_pclk                  : unsigned(16 downto 0);    --
+      sol_posl_pclk                  : unsigned(7 downto 0);     --
+      eol_posl_pclk                  : unsigned(7 downto 0);     --
+      eol_posl_pclk_p1               : unsigned(7 downto 0);     -- eol_posl_pclk + 1      
+      
+      -- lignes de debut et fin des zones    
+      line_start_num                 : unsigned(9 downto 0);    -- 
+      line_end_num                   : unsigned(9 downto 0);    -- 
+      
+      -- parametres divers
+      readout_pclk_cnt_max           : unsigned(16 downto 0);   -- readout_pclk_cnt_max = taille en pclk de l'image incluant les pauses, les lignes non valides etc.. = (XSIZE/TAP_NUM + LOVH)* (YSIZE + FOVH) + 1  (un dernier PCLK pur finir)
+      line_period_pclk               : unsigned(9 downto 0);    -- nombre de pclk =  XSIZE/TAP_NUM + LOVH)
+      window_lsync_num               : unsigned(9 downto 0);    -- le nombre de pulse Lsync à envoyer. Il vaut active_line_end_num puisqu'il n'y a pas de ligne non active après les lignes actives.
+      
+   end record;
+     
+   ----------------------------------------------								
+   -- Type raw_area and user_area
+   ----------------------------------------------
+   type area_type is
+   record
+      sof               : std_logic;        
+      eof               : std_logic;
+      sol               : std_logic;
+      eol               : std_logic;
+      fval              : std_logic;
+      lval              : std_logic;
+      dval              : std_logic;
+      lsync             : std_logic;
+      line_cnt          : unsigned(9 downto 0);    -- numero de ligne
+      line_pclk_cnt     : unsigned(9 downto 0);    -- compteur de coups d'horloge PCLK sur une ligne
+      sample_valid      : std_logic;
+      aoi_inside        : std_logic;               -- passe à '1' pour une ligne raw qui comporte une ligne user (AOI). Même si la ligne raw comprte aussi des pixels en dehors de la zone user 
+      imm_mclk_change   : std_logic;               -- permet de signaler 1CLK à l'avance un changement d'horloge
+      imm_user_aoi      : std_logic;
    end record;   
-   
-   ------------------------------------------------------------
-   -- type pour grouper les param des horloges detecteur
-   ------------------------------------------------------------
-   type fpa_mclk_info_type is 
+      
+   ----------------------------------------------								
+   -- Type window_area_type
+   ----------------------------------------------
+   type window_info_type is
    record
-      mclk_source_rate_khz : natural; 
-      mclk_rate_khz        : array_type; 
-      pclk_rate_khz        : array_type;
-      mclk_rate_factor     : array_type;
-      pclk_rate_factor     : array_type;
+      -- raw_area info
+      raw                  : area_type;                     
+      
+      -- user_area info
+      user                 : area_type;
+      
+      -- horloges associées
+      mclk_id              : unsigned(3 downto 0);
+      
+
    end record;
    
    ------------------------------------------
    -- functions --
    --------------------------------------------  
-   function gen_fpa_mclk_info_func(mclk_source_rate_khz: integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_khz: array_type) return fpa_mclk_info_type;
+   function gen_fpa_mclk_info_func(mclk_source_rate_khz: integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_khz: fastrd2_integer_array_type) return fpa_clk_info_type;
    
    
 end fastrd2_define;
@@ -50,8 +127,8 @@ package body fastrd2_define is
    ---------------------------------------------------------------------------------------------
    -- function de generation des infos relatives aux mclk
    --------------------------------------------------------------------------------------------- 
-   function gen_fpa_mclk_info_func(mclk_source_rate_khz: integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_khz: array_type) return fpa_mclk_info_type is
-      variable yy : fpa_mclk_info_type;
+   function gen_fpa_mclk_info_func(mclk_source_rate_khz: integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_khz: fastrd2_integer_array_type) return fpa_clk_info_type is
+      variable yy : fpa_clk_info_type;
    begin
       
       -- reconduction des données

@@ -22,8 +22,7 @@ entity fastrd2_raw_area_gen is
    port (
       ARESET            : in std_logic;
       CLK               : in std_logic; 
-      
-      FPA_CLK_INFO      : in fpa_clk_info_type;
+      CLK_EN            : in std_logic;      
       
       FPA_INTF_CFG      : in fpa_intf_cfg_type;      
       START             : in std_logic;
@@ -53,8 +52,6 @@ architecture rtl of fastrd2_raw_area_gen is
    signal readout_fsm          : readout_fsm_type;
    signal start_i              : std_logic := '0';
    signal start_last           : std_logic;
-   signal pclk_last            : std_logic;
-   signal pclk_rise            : std_logic;
    signal frame_pclk_cnt       : unsigned(FPA_INTF_CFG.RAW_AREA.READOUT_PCLK_CNT_MAX'LENGTH-1 downto 0); 
    signal line_pclk_cnt        : unsigned(FPA_INTF_CFG.RAW_AREA.LINE_PERIOD_PCLK'LENGTH-1 downto 0);
    signal quad_clk_copy_i      : std_logic;
@@ -70,7 +67,7 @@ architecture rtl of fastrd2_raw_area_gen is
    signal lsync_i              : std_logic;
    signal lsync_cnt            : unsigned(FPA_INTF_CFG.RAW_AREA.WINDOW_LSYNC_NUM'LENGTH-1 downto 0);
    signal pclk_cnt_edge        : std_logic;
-   signal pclk_watchdog        : std_logic := '0';
+   signal sample_valid         : std_logic := '0';
    signal pclk_sample_last     : std_logic := '0';
    signal active_window_en     : std_logic;
    
@@ -106,9 +103,6 @@ begin
             start_last <= '1';
          else           
             
-            pclk_last <= FPA_PCLK;                  
-            pclk_rise <= not pclk_last and FPA_PCLK;
-            
             start_i <= START;
             start_last <= start_i;
             
@@ -122,7 +116,7 @@ begin
                   end if;        
                
                when readout_st => 
-                  if pclk_rise = '1' then 
+                  if CLK_EN = '1' then 
                      readout_in_progress <= '1';               
                      readout_fsm <= wait_readout_end_st;
                   end if;
@@ -146,7 +140,7 @@ begin
    U4: process(CLK)
    begin
       if rising_edge(CLK) then 
-         if pclk_rise = '1' then 
+         if CLK_EN = '1' then 
             if readout_in_progress = '1' then            
                frame_pclk_cnt <= frame_pclk_cnt + 1;  -- referentiel trame  : compteur temporel sur toute l'image
                line_pclk_cnt <= line_pclk_cnt + 1;   -- referentiel ligne  : compteur temporel sur ligne synchronisé sur celui de trame. 
@@ -158,8 +152,10 @@ begin
             if line_pclk_cnt = FPA_INTF_CFG.RAW_AREA.LINE_PERIOD_PCLK then       -- periode du referentiel ligne
                line_pclk_cnt <= to_unsigned(1, line_pclk_cnt'length);   
             end if;
-            pclk_watchdog <= not pclk_watchdog; 
-         end if;   
+            sample_valid <= '1';
+         else
+            sample_valid <= '0';
+         end if;       
          
       end if;
    end process;   
@@ -171,7 +167,7 @@ begin
    begin
       if rising_edge(CLK) then  
          
-         if pclk_rise = '1' then 
+         if CLK_EN = '1' then 
             
             ----------------------------------------------
             -- pipe 0 pour generation identificateurs 
@@ -213,7 +209,8 @@ begin
             end if;            
             rd_end_pipe(0) <= raw_pipe(1).fval and not raw_pipe(0).fval; -- read_end se trouve en dehors de fval. C'est voulu. le suivre pour comprendre ce qu'il fait.
             raw_pipe(0).line_pclk_cnt <= line_pclk_cnt;                  
-            raw_pipe(0).pclk_sample <= pclk_watchdog;
+            raw_pipe(0).sample_valid <= sample_valid;
+            
             -----------------------------------------------
             -- pipe 1 : génération de line_cnt
             ---------------------------------------------           
@@ -241,7 +238,7 @@ begin
             else
                active_window_en <= '0';
             end if;
-          
+            
             ----------------------------------
             -- pipe 3 pour generation dval         
             ----------------------------------
@@ -260,9 +257,7 @@ begin
             raw_pipe(3).lsync <= (raw_pipe(0).sol or raw_pipe(1).sol) and raw_pipe(0).fval;
             
          end if;
-         pclk_sample_last <= raw_pipe(2).pclk_sample;
-         raw_pipe(3).pclk_sample <=  pclk_sample_last xor raw_pipe(2).pclk_sample;
-         
+        
          global_reset <= sreset or rd_end_pipe(2);
          
          -------------------------
