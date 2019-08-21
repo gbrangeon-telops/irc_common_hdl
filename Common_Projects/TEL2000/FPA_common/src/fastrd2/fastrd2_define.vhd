@@ -59,44 +59,44 @@ package fastrd2_define is
       ysize                          : unsigned(12 downto 0);      
       
       -- delimiteurs de trames et de lignes
-      sof_posf_pclk                  : unsigned(8 downto 0);     -- 
-      eof_posf_pclk                  : unsigned(16 downto 0);    --
-      sol_posl_pclk                  : unsigned(7 downto 0);     --
-      eol_posl_pclk                  : unsigned(7 downto 0);     --
-      eol_posl_pclk_p1               : unsigned(7 downto 0);     -- eol_posl_pclk + 1      
+      sof_posf_pclk                  : unsigned(9 downto 0);     -- 
+      eof_posf_pclk                  : unsigned(23 downto 0);    --
+      sol_posl_pclk                  : unsigned(9 downto 0);     --
+      eol_posl_pclk                  : unsigned(12 downto 0);    --
+      eol_posl_pclk_p1               : unsigned(12 downto 0);    -- eol_posl_pclk + 1      
       
       -- lignes de debut et fin des zones    
       line_start_num                 : unsigned(9 downto 0);    -- 
-      line_end_num                   : unsigned(9 downto 0);    -- 
+      line_end_num                   : unsigned(12 downto 0);    -- 
       
       -- parametres divers
-      readout_pclk_cnt_max           : unsigned(16 downto 0);   -- readout_pclk_cnt_max = taille en pclk de l'image incluant les pauses, les lignes non valides etc.. = (XSIZE/TAP_NUM + LOVH)* (YSIZE + FOVH) + 1  (un dernier PCLK pur finir)
-      line_period_pclk               : unsigned(9 downto 0);    -- nombre de pclk =  XSIZE/TAP_NUM + LOVH)
-      window_lsync_num               : unsigned(9 downto 0);    -- le nombre de pulse Lsync à envoyer. Il vaut active_line_end_num puisqu'il n'y a pas de ligne non active après les lignes actives.
-      
+      readout_pclk_cnt_max           : unsigned(23 downto 0);   -- readout_pclk_cnt_max = taille en pclk de l'image incluant les pauses, les lignes non valides etc.. = (XSIZE/TAP_NUM + LOVH)* (YSIZE + FOVH) + 1  (un dernier PCLK pur finir)
+      line_period_pclk               : unsigned(12 downto 0);    -- nombre de pclk =  XSIZE/TAP_NUM + LOVH)
+      window_lsync_num               : unsigned(12 downto 0);    -- le nombre de pulse Lsync à envoyer. Il vaut active_line_end_num puisqu'il n'y a pas de ligne non active après les lignes actives.   
    end record;
-     
+   
    ----------------------------------------------								
    -- Type raw_area and user_area
    ----------------------------------------------
    type area_type is
    record
-      sof               : std_logic;        
-      eof               : std_logic;
-      sol               : std_logic;
-      eol               : std_logic;
-      fval              : std_logic;
-      lval              : std_logic;
-      dval              : std_logic;
-      lsync             : std_logic;
-      line_cnt          : unsigned(9 downto 0);    -- numero de ligne
-      line_pclk_cnt     : unsigned(9 downto 0);    -- compteur de coups d'horloge PCLK sur une ligne
-      sample_valid      : std_logic;
-      aoi_inside        : std_logic;               -- passe à '1' pour une ligne raw qui comporte une ligne user (AOI). Même si la ligne raw comprte aussi des pixels en dehors de la zone user 
-      imm_mclk_change   : std_logic;               -- permet de signaler 1CLK à l'avance un changement d'horloge
-      imm_user_aoi      : std_logic;
-   end record;   
+      sof                  : std_logic;        
+      eof                  : std_logic;
+      sol                  : std_logic;
+      eol                  : std_logic;
+      fval                 : std_logic;
+      lval                 : std_logic;
+      dval                 : std_logic;
+      lsync                : std_logic;
+      line_cnt             : unsigned(12 downto 0);   -- numero de ligne
+      line_pclk_cnt        : unsigned(12 downto 0);   -- compteur de coups d'horloge PCLK sur une ligne
+      record_valid         : std_logic;               -- dit tout l'enregistrement (tout le regroupement de champs de données) est valide
       
+      imminent_clk_change  : std_logic;               -- permet de signaler 1 CLK à l'avance un changement d'horloge
+      imminent_aoi         : std_logic;               -- permet de signaler 1 CLK à l'avance une entrée en zone AOI.
+      spare                : std_logic_vector(7 downto 0);
+   end record;   
+   
    ----------------------------------------------								
    -- Type window_area_type
    ----------------------------------------------
@@ -109,9 +109,8 @@ package fastrd2_define is
       user                 : area_type;
       
       -- horloges associées
-      mclk_id              : unsigned(3 downto 0);
+      clk_id               : unsigned(3 downto 0);  -- ID de l'horloge à utiliser pour le pixel associé      
       
-
    end record;
    
    ------------------------------------------
