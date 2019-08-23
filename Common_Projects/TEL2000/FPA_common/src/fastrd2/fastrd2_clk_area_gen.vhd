@@ -19,7 +19,7 @@ use work.fastrd2_define.all;
 
 entity fastrd2_clk_area_gen is
    generic(
-      CLK_ID_TO_STAMP : integer range 0 to FPA_MCLK_NUM_MAX-1 := 0
+      AREA_CLK_ID       : integer range 0 to FPA_MCLK_NUM_MAX-1 := 0
       );   
    port (
       ARESET            : in std_logic;
@@ -118,9 +118,9 @@ begin
             --------------------------------------------------------
             window_info_pipe(3) <= window_info_pipe(2);
             if clk_stamp_en(2) = '1' then
-               window_info_pipe(3).clk_id <= to_unsigned(CLK_ID_TO_STAMP, window_info_pipe(3).clk_id'length);
+               window_info_pipe(3).clk_id <= to_unsigned(AREA_CLK_ID, window_info_pipe(3).clk_id'length);
             end if; 
-                     
+            
          end if;
       end if;
    end process; 

@@ -15,7 +15,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
-use work.fpa_define.all;
+-- use work.fpa_define.all;
 use work.fastrd2_define.all; 
 
 entity fastrd2_user_area_gen is

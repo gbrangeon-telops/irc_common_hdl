@@ -52,11 +52,11 @@ package fastrd2_define is
    ------------------------------------------------------------
    type area_cfg_type is
    record
-      -- parametres de window
-      xstart                         : unsigned(12 downto 0); 
-      ystart                         : unsigned(12 downto 0);
-      xsize                          : unsigned(12 downto 0);
-      ysize                          : unsigned(12 downto 0);      
+      --      -- parametres de window
+      --      xstart                         : unsigned(12 downto 0); 
+      --      ystart                         : unsigned(12 downto 0);
+      --      xsize                          : unsigned(12 downto 0);
+      --      ysize                          : unsigned(12 downto 0);      
       
       -- delimiteurs de trames et de lignes
       sof_posf_pclk                  : unsigned(9 downto 0);     -- 
@@ -80,6 +80,11 @@ package fastrd2_define is
    ----------------------------------------------
    type area_type is
    record
+      
+      spare                : std_logic_vector(7 downto 0);
+      imminent_clk_change  : std_logic;               -- permet de signaler 1 CLK à l'avance un changement d'horloge. Ce qui donne le temps d'arreter l'horloge courante et activer la prochaine. 
+      imminent_aoi         : std_logic;               -- permet de signaler 1 CLK à l'avance une entrée en zone AOI. Ce qui donne le temps de se synchroniser sur l'horloge des ADCs
+      
       sof                  : std_logic;        
       eof                  : std_logic;
       sol                  : std_logic;
@@ -92,9 +97,6 @@ package fastrd2_define is
       line_pclk_cnt        : unsigned(12 downto 0);   -- compteur de coups d'horloge PCLK sur une ligne
       record_valid         : std_logic;               -- dit tout l'enregistrement (tout le regroupement de champs de données) est valide
       
-      imminent_clk_change  : std_logic;               -- permet de signaler 1 CLK à l'avance un changement d'horloge
-      imminent_aoi         : std_logic;               -- permet de signaler 1 CLK à l'avance une entrée en zone AOI.
-      spare                : std_logic_vector(7 downto 0);
    end record;   
    
    ----------------------------------------------								
@@ -102,11 +104,12 @@ package fastrd2_define is
    ----------------------------------------------
    type window_info_type is
    record
-      -- raw_area info
-      raw                  : area_type;                     
       
       -- user_area info
       user                 : area_type;
+      
+      -- raw_area info
+      raw                  : area_type;
       
       -- horloges associées
       clk_id               : unsigned(3 downto 0);  -- ID de l'horloge à utiliser pour le pixel associé      
