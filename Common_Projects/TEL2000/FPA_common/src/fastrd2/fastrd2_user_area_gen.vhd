@@ -25,8 +25,8 @@ entity fastrd2_user_area_gen is
       
       USER_AREA_CFG     : in area_cfg_type;
       
-      WINDOW_INFO_I     : in window_info_type;      
-      WINDOW_INFO_O     : out window_info_type    
+      AREA_INFO_I     : in area_info_type;      
+      AREA_INFO_O     : out area_info_type    
       );  
 end fastrd2_user_area_gen;
 
@@ -53,9 +53,9 @@ begin
    --------------------------------------------------
    -- Outputs map
    --------------------------------------------------                       
-   WINDOW_INFO_O.RAW <= raw_pipe(3);   -- pour fins de synchro
-   WINDOW_INFO_O.USER <= user_pipe(3);
-   --WINDOW_INFO_O.PCLK_SAMPLE <= WINDOW_INFO_I.PCLK_SAMPLE;  -- pas besoin de pipe
+   AREA_INFO_O.RAW <= raw_pipe(3);   -- pour fins de synchro
+   AREA_INFO_O.USER <= user_pipe(3);
+   --AREA_INFO_O.PCLK_SAMPLE <= AREA_INFO_I.PCLK_SAMPLE;  -- pas besoin de pipe
    
    --------------------------------------------------
    -- synchro reset 
@@ -76,8 +76,8 @@ begin
          if sreset ='1' then 
             -- pragma translate_off
             for ii in 0 to 3 loop
-               raw_pipe(ii) <= ('0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0', '0', '0', (others => '0'));
-               user_pipe(ii) <= ('0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0', '0', '0', (others => '0'));
+               raw_pipe(ii) <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');
+               user_pipe(ii) <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');
             end loop;
             -- pragma translate_on
             
@@ -86,28 +86,28 @@ begin
             -------------------------
             -- pipe 0 pour generation identificateurs 
             -------------------------
-            raw_pipe(0) <= WINDOW_INFO_I.RAW;
-            if WINDOW_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.SOL_POSL_PCLK then          -- lval
+            raw_pipe(0) <= AREA_INFO_I.RAW;
+            if AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.SOL_POSL_PCLK then          -- lval
                user_pipe(0).lval <= '1';
-            elsif WINDOW_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.EOL_POSL_PCLK_P1 then
+            elsif AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.EOL_POSL_PCLK_P1 then
                user_pipe(0).lval <= '0';
             end if;    
             
-            if WINDOW_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.SOL_POSL_PCLK then          -- sol
+            if AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.SOL_POSL_PCLK then          -- sol
                user_pipe(0).sol <= '1';                                  
             else
                user_pipe(0).sol <= '0';
             end if;
             
-            if WINDOW_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.EOL_POSL_PCLK then         -- eol
+            if AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.EOL_POSL_PCLK then         -- eol
                user_pipe(0).eol <= '1';
             else
                user_pipe(0).eol <= '0';
             end if;
             
             -- user_fval            
-            if WINDOW_INFO_I.RAW.LINE_CNT >= USER_AREA_CFG.LINE_START_NUM then
-               user_pipe(0).fval <= WINDOW_INFO_I.RAW.FVAL;
+            if AREA_INFO_I.RAW.LINE_CNT >= USER_AREA_CFG.LINE_START_NUM then
+               user_pipe(0).fval <= AREA_INFO_I.RAW.FVAL;
             else
                user_pipe(0).fval <= '0';
             end if;

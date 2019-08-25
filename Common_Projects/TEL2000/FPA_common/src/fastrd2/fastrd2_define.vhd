@@ -14,6 +14,8 @@ package fastrd2_define is
    
    
    constant FPA_MCLK_NUM_MAX : integer:= 8;  --- Le max des nombres de domaines MCLK utilisés dans tous les designs 
+   constant DEFINE_IMMINENT_AOI_POS : integer := 39;
+   constant DEFINE_IMMINENT_CLK_CHANGE_POS : integer := 40;
    
    type fastrd2_integer_array_type is array (FPA_MCLK_NUM_MAX-1 downto 0) of natural;
    
@@ -44,7 +46,8 @@ package fastrd2_define is
       -- pixel clock part
       pclk                 : fastrd2_clk_array_type;             -- horloge avec sof et eof 
       pclk_rate_khz        : fastrd2_integer_array_type;     
-      pclk_rate_factor     : fastrd2_integer_array_type;      
+      pclk_rate_factor     : fastrd2_integer_array_type;
+      pclk_rate_factor_m1  : fastrd2_integer_array_type;
    end record;
    
    ------------------------------------------------------------
@@ -93,6 +96,7 @@ package fastrd2_define is
       lval                 : std_logic;
       dval                 : std_logic;
       lsync                : std_logic;
+      rd_end               : std_logic;
       line_cnt             : unsigned(12 downto 0);   -- numero de ligne
       line_pclk_cnt        : unsigned(12 downto 0);   -- compteur de coups d'horloge PCLK sur une ligne
       record_valid         : std_logic;               -- dit tout l'enregistrement (tout le regroupement de champs de données) est valide
@@ -100,9 +104,9 @@ package fastrd2_define is
    end record;   
    
    ----------------------------------------------								
-   -- Type window_area_type
+   -- Type area_info_type
    ----------------------------------------------
-   type window_info_type is
+   type area_info_type is
    record
       
       -- user_area info
@@ -119,8 +123,9 @@ package fastrd2_define is
    ------------------------------------------
    -- functions --
    --------------------------------------------  
-   function gen_fpa_mclk_info_func(mclk_source_rate_khz: integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_khz: fastrd2_integer_array_type) return fpa_clk_info_type;
-   
+   function gen_fpa_clk_info_func(mclk_source_rate_khz: integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_khz: fastrd2_integer_array_type) return fpa_clk_info_type;
+   function area_info_to_vector_func(area_info: area_info_type) return std_logic_vector;
+   function vector_to_area_info_func(yy: std_logic_vector) return area_info_type;
    
 end fastrd2_define;
 
@@ -129,7 +134,7 @@ package body fastrd2_define is
    ---------------------------------------------------------------------------------------------
    -- function de generation des infos relatives aux mclk
    --------------------------------------------------------------------------------------------- 
-   function gen_fpa_mclk_info_func(mclk_source_rate_khz: integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_khz: fastrd2_integer_array_type) return fpa_clk_info_type is
+   function gen_fpa_clk_info_func(mclk_source_rate_khz: integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_khz: fastrd2_integer_array_type) return fpa_clk_info_type is
       variable yy : fpa_clk_info_type;
    begin
       
@@ -140,17 +145,91 @@ package body fastrd2_define is
       -- calculs
       for ii in 0 to FPA_MCLK_NUM_MAX - 1 loop
          if  yy.mclk_rate_khz(ii) /= 0 then 
-            yy.pclk_rate_khz(ii)    := pixnum_per_mclk_and_per_tap * yy.mclk_rate_khz(ii);
-            yy.mclk_rate_factor(ii) := integer(yy.mclk_source_rate_khz / yy.mclk_rate_khz(ii));
-            yy.pclk_rate_factor(ii) := integer(yy.mclk_source_rate_khz / yy.pclk_rate_khz(ii));
+            yy.pclk_rate_khz(ii)       := pixnum_per_mclk_and_per_tap * yy.mclk_rate_khz(ii);
+            yy.mclk_rate_factor(ii)    := integer(yy.mclk_source_rate_khz / yy.mclk_rate_khz(ii));
+            yy.pclk_rate_factor(ii)    := integer(yy.mclk_source_rate_khz / yy.pclk_rate_khz(ii));
+            yy.pclk_rate_factor_m1(ii) := integer(yy.mclk_source_rate_khz / yy.pclk_rate_khz(ii)) - 1;
          else
-            yy.pclk_rate_khz(ii)    := 0;
-            yy.mclk_rate_factor(ii) := 0;
-            yy.pclk_rate_factor(ii) := 0;
+            yy.pclk_rate_khz(ii)       := 0;
+            yy.mclk_rate_factor(ii)    := 0;
+            yy.pclk_rate_factor(ii)    := 0;
+            yy.pclk_rate_factor_m1(ii) := 0;
          end if;
       end loop;      
       return yy;
       
-   end gen_fpa_mclk_info_func;   
+   end gen_fpa_clk_info_func;
+   
+   ---------------------------------------------------------------------------------------------
+   -- area_info_to_vector_func
+   --------------------------------------------------------------------------------------------- 
+   function area_info_to_vector_func(area_info: area_info_type) return std_logic_vector is
+      variable yy : std_logic_vector(63 downto 0);
+   begin
+      yy := 
+      
+      area_info.user.spare                           
+      & area_info.user.sof                  
+      & area_info.user.eof                  
+      & area_info.user.sol                  
+      & area_info.user.eol                  
+      & area_info.user.fval                 
+      & area_info.user.lval                 
+      
+      & area_info.raw.spare                 
+      & area_info.raw.imminent_clk_change  
+      & area_info.raw.imminent_aoi            
+      & area_info.raw.sof                  
+      & area_info.raw.eof                  
+      & area_info.raw.sol                  
+      & area_info.raw.eol                  
+      & area_info.raw.fval                 
+      & area_info.raw.lval                 
+      & area_info.raw.dval                 
+      & area_info.raw.lsync 
+      & area_info.raw.rd_end                
+      & std_logic_vector(area_info.raw.line_cnt)             
+      & std_logic_vector(area_info.raw.line_pclk_cnt)
+      
+      & std_logic_vector(area_info.clk_id);
+      
+      return yy;
+      
+   end area_info_to_vector_func;
+   
+   ---------------------------------------------------------------------------------------------
+   -- vector_to_area_info_func
+   --------------------------------------------------------------------------------------------- 
+   function vector_to_area_info_func(yy: std_logic_vector) return area_info_type is
+      variable area_info : area_info_type;
+   begin      
+      
+      area_info.user.spare                          :=  yy(62 downto 55);
+      area_info.user.sof                            :=  yy(54);
+      area_info.user.eof                            :=  yy(53);
+      area_info.user.sol                            :=  yy(52);
+      area_info.user.eol                            :=  yy(51);
+      area_info.user.fval                           :=  yy(50);
+      area_info.user.lval                           :=  yy(49);
+      
+      area_info.raw.spare                           :=  yy(48 downto 41);
+      area_info.raw.imminent_clk_change             :=  yy(40);
+      area_info.raw.imminent_aoi                    :=  yy(39);
+      area_info.raw.sof                             :=  yy(38);
+      area_info.raw.eof                             :=  yy(37);
+      area_info.raw.sol                             :=  yy(36);
+      area_info.raw.eol                             :=  yy(35);
+      area_info.raw.fval                            :=  yy(34);
+      area_info.raw.lval                            :=  yy(33);
+      area_info.raw.dval                            :=  yy(32);
+      area_info.raw.lsync                           :=  yy(31);
+      area_info.raw.rd_end                          :=  yy(30);
+      area_info.raw.line_cnt                        :=  unsigned(yy(29 downto 17));    
+      area_info.raw.line_pclk_cnt                   :=  unsigned(yy(16 downto 4));      
+      area_info.clk_id                              :=  unsigned(yy(3 downto 0));
+      
+      return area_info;
+      
+   end vector_to_area_info_func;
    
 end package body fastrd2_define;

@@ -27,15 +27,15 @@ entity fastrd2_clk_area_gen is
       
       CLK_AREA_CFG      : in area_cfg_type;
       
-      WINDOW_INFO_I     : in window_info_type;      
-      WINDOW_INFO_O     : out window_info_type    
+      AREA_INFO_I       : in area_info_type;      
+      AREA_INFO_O       : out area_info_type    
       );  
 end fastrd2_clk_area_gen;
 
 
 architecture rtl of fastrd2_clk_area_gen is   
    
-   type window_info_pipe_type is array (0 to 3) of window_info_type;
+   type area_info_pipe_type is array (0 to 3) of area_info_type;
    
    component sync_reset
       port(
@@ -45,7 +45,7 @@ architecture rtl of fastrd2_clk_area_gen is
    end component; 
    
    signal sreset               : std_logic;
-   signal window_info_pipe     : window_info_pipe_type;
+   signal area_info_pipe       : area_info_pipe_type;
    signal clk_stamp_en         : std_logic_vector(3 downto 0);
    
 begin
@@ -53,7 +53,7 @@ begin
    --------------------------------------------------
    -- Outputs map
    --------------------------------------------------                       
-   WINDOW_INFO_O <= window_info_pipe(3);   -- pour fins de synchro
+   AREA_INFO_O <= area_info_pipe(3);   -- pour fins de synchro
    
    --------------------------------------------------
    -- synchro reset 
@@ -74,8 +74,8 @@ begin
          if sreset ='1' then 
             -- pragma translate_off
             for ii in 0 to 3 loop
-               window_info_pipe(ii).raw <= ('0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0', '0', '0', (others => '0'));
-               window_info_pipe(ii).user <= ('0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0', '0', '0', (others => '0'));
+               area_info_pipe(ii).raw <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');
+               area_info_pipe(ii).user <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');
                clk_stamp_en <= (others => '0');
             end loop;
             -- pragma translate_on
@@ -85,8 +85,8 @@ begin
             --------------------------------------------------------
             -- pipe 0 : reperage premiere ligne à marquer
             ------------------------------------------------
-            window_info_pipe(0) <= WINDOW_INFO_I;
-            if  WINDOW_INFO_I.RAW.LINE_CNT >= CLK_AREA_CFG.LINE_START_NUM then 
+            area_info_pipe(0) <= AREA_INFO_I;
+            if  AREA_INFO_I.RAW.LINE_CNT >= CLK_AREA_CFG.LINE_START_NUM then 
                clk_stamp_en(0) <= '1';            
             else                       
                clk_stamp_en(0) <= '0';
@@ -95,8 +95,8 @@ begin
             --------------------------------------------------------
             -- pipe 1 : reperage derniere ligne à marquer (fin)
             --------------------------------------------------------      
-            window_info_pipe(1) <= window_info_pipe(0);        
-            if  window_info_pipe(0).raw.line_cnt <= CLK_AREA_CFG.LINE_END_NUM then 
+            area_info_pipe(1) <= area_info_pipe(0);        
+            if  area_info_pipe(0).raw.line_cnt <= CLK_AREA_CFG.LINE_END_NUM then 
                clk_stamp_en(1) <= clk_stamp_en(0);
             else
                clk_stamp_en(1) <= '0';
@@ -104,21 +104,21 @@ begin
             end if;         
             
             --------------------------------------------------------
-            -- pipe 2 : reperage des pixels à marquer
+            -- pipe 2 : reperage des colonnes à marquer
             --------------------------------------------------------
-            window_info_pipe(2) <= window_info_pipe(1);
-            if window_info_pipe(1).raw.line_pclk_cnt = CLK_AREA_CFG.SOL_POSL_PCLK then
+            area_info_pipe(2) <= area_info_pipe(1);
+            if area_info_pipe(1).raw.line_pclk_cnt = CLK_AREA_CFG.SOL_POSL_PCLK then
                clk_stamp_en(2) <= clk_stamp_en(1);
-            elsif window_info_pipe(1).raw.line_pclk_cnt = CLK_AREA_CFG.EOL_POSL_PCLK_P1 then
+            elsif area_info_pipe(1).raw.line_pclk_cnt = CLK_AREA_CFG.EOL_POSL_PCLK_P1 then
                clk_stamp_en(2) <= '0';
             end if;  
             
             --------------------------------------------------------
-            -- pipe 3 : marquage des pixels
+            -- pipe 3 : marquage des zones
             --------------------------------------------------------
-            window_info_pipe(3) <= window_info_pipe(2);
+            area_info_pipe(3) <= area_info_pipe(2);
             if clk_stamp_en(2) = '1' then
-               window_info_pipe(3).clk_id <= to_unsigned(AREA_CLK_ID, window_info_pipe(3).clk_id'length);
+               area_info_pipe(3).clk_id <= to_unsigned(AREA_CLK_ID, area_info_pipe(3).clk_id'length);
             end if; 
             
          end if;

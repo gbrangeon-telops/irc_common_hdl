@@ -30,7 +30,7 @@ entity fastrd2_raw_area_gen is
       RAW_AREA_CFG      : in area_cfg_type;      
       START             : in std_logic;
       
-      WINDOW_INFO       : out window_info_type
+      AREA_INFO       : out area_info_type
       --AFULL             : in std_logic
       );  
 end fastrd2_raw_area_gen;
@@ -61,7 +61,6 @@ architecture rtl of fastrd2_raw_area_gen is
    signal quad_clk_copy_last   : std_logic;
    signal adc_sync_flag_i      : std_logic;
    signal raw_pipe             : area_pipe_type;
-   signal rd_end_pipe          : std_logic_vector(3 downto 0) := (others => '0');
    signal readout_in_progress  : std_logic;
    signal raw_line_en          : std_logic;
    signal global_reset         : std_logic;
@@ -80,8 +79,8 @@ begin
    --------------------------------------------------
    -- Outputs map
    --------------------------------------------------  
-   WINDOW_INFO.RAW <= raw_pipe(3);
-   WINDOW_INFO.CLK_ID <= to_unsigned(G_DEFAULT_CLK_ID, WINDOW_INFO.CLK_ID'LENGTH);
+   AREA_INFO.RAW <= raw_pipe(3);   
+   AREA_INFO.CLK_ID <= to_unsigned(G_DEFAULT_CLK_ID, AREA_INFO.CLK_ID'LENGTH);
    
    --------------------------------------------------
    -- synchro reset 
@@ -125,7 +124,7 @@ begin
                   end if;
                
                when wait_readout_end_st =>                  
-                  if rd_end_pipe(0) = '1' then 
+                  if raw_pipe(0).rd_end = '1' then 
                      readout_fsm <= idle;
                   end if;         
                
@@ -155,9 +154,6 @@ begin
             if line_pclk_cnt = RAW_AREA_CFG.LINE_PERIOD_PCLK then       -- periode du referentiel ligne
                line_pclk_cnt <= to_unsigned(1, line_pclk_cnt'length);   
             end if;
-            record_valid <= '1';
-         else
-            record_valid <= '0';
          end if;       
          
       end if;
@@ -210,7 +206,7 @@ begin
          else
             raw_pipe(0).eof <= '0';        
          end if;            
-         rd_end_pipe(0) <= raw_pipe(1).fval and not raw_pipe(0).fval; -- read_end se trouve en dehors de fval. C'est voulu. le suivre pour comprendre ce qu'il fait.
+         raw_pipe(0).rd_end <= raw_pipe(1).fval and not raw_pipe(0).fval; -- read_end se trouve en dehors de fval. C'est voulu. le suivre pour comprendre ce qu'il fait.
          raw_pipe(0).line_pclk_cnt <= line_pclk_cnt;
          raw_pipe(0).record_valid <= record_valid;
          
@@ -218,19 +214,18 @@ begin
          -- pipe 1 : génération de line_cnt
          ---------------------------------------------           
          raw_pipe(1) <= raw_pipe(0);
-         rd_end_pipe(1) <= rd_end_pipe(0);
          if raw_pipe(1).sol = '0' and raw_pipe(0).sol = '1' then 
             line_cnt <= line_cnt + 1;
          end if;                    
          raw_pipe(1).sol <= raw_pipe(0).sol and raw_pipe(0).fval; 
          raw_pipe(1).lval <= raw_pipe(0).lval and raw_pipe(0).fval;        
+         raw_pipe(1).record_valid <= raw_pipe(0).fval and CLK_EN; 
          
          ----------------------------------------------
          -- pipe 2 
          ----------------------------------------------
          raw_pipe(2) <= raw_pipe(1);
          raw_pipe(2).line_cnt <= line_cnt;
-         rd_end_pipe(2) <= rd_end_pipe(1);
          if  line_cnt >= RAW_AREA_CFG.LINE_START_NUM then 
             raw_line_en <= '1';
          else
@@ -241,28 +236,26 @@ begin
          -- pipe 3 pour generation dval         
          ----------------------------------
          raw_pipe(3) <= raw_pipe(2);
-         rd_end_pipe(3) <= rd_end_pipe(2);
          if raw_pipe(2).line_cnt <= RAW_AREA_CFG.LINE_END_NUM then  
             raw_pipe(3).dval   <= raw_line_en and raw_pipe(2).lval; 
          else
             raw_pipe(3).dval   <= '0';
          end if;
          raw_pipe(3).lsync <= (raw_pipe(0).sol or raw_pipe(1).sol) and raw_pipe(0).fval;
-         
+                
          -- end if;
          
-         global_reset <= sreset or rd_end_pipe(2);
+         global_reset <= sreset or raw_pipe(2).rd_end;
          
          -------------------------
          -- reset des identificateurs
          -------------------------
          if global_reset = '1' then
             raw_line_en <= '0';
-            rd_end_pipe <= (others => '0');
             raw_pipe(1).sol <= '0';
             line_cnt <= (others => '0');
             for ii in 0 to 3 loop
-               raw_pipe(ii) <= ('0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0', '0', '0', (others => '0'));     
+               raw_pipe(ii) <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');     
             end loop;
          end if;
          
