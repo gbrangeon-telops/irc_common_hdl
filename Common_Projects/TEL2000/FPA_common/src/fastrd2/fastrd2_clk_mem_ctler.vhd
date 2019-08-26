@@ -1,5 +1,5 @@
 ------------------------------------------------------------------
---!   @file : fastrd2_clk_mem_ctrler
+--!   @file : fastrd2_clk_mem_ctler
 --!   @brief
 --!   @details
 --!
@@ -16,7 +16,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity fastrd2_clk_mem_ctrler is
+entity fastrd2_clk_mem_ctler is
    port( 
       
       ARESET         : in std_logic;
@@ -32,9 +32,9 @@ entity fastrd2_clk_mem_ctrler is
       
       FPA_CLK_RDY    : out std_logic
       );
-end fastrd2_clk_mem_ctrler;
+end fastrd2_clk_mem_ctler;
 
-architecture rtl of fastrd2_clk_mem_ctrler is
+architecture rtl of fastrd2_clk_mem_ctler is
    
    component sync_reset
       port(

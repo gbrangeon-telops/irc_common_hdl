@@ -26,7 +26,8 @@ entity fastrd2_area_flow_gen is
       AREA_FIFO_RD      : out std_logic;
       AREA_FIFO_DATA    : in std_logic_vector(71 downto 0);
       
-      AREA_INFO         : out area_info_type       
+      AREA_INFO         : out area_info_type;
+      AFULL             : in std_logic
       );  
 end fastrd2_area_flow_gen;
 
@@ -48,8 +49,7 @@ architecture rtl of fastrd2_area_flow_gen is
    signal area_info_o           : area_info_type;
    signal sreset                : std_logic;
    signal area_fifo_rd_i        : std_logic;
-   signal counter               : unsigned(9 downto 0);
-   
+   signal counter               : unsigned(9 downto 0);   
    
 begin
    
@@ -57,7 +57,7 @@ begin
    --  output map 
    ---------------------------------------------------
    AREA_FIFO_RD <= area_fifo_rd_i;
-   
+   AREA_INFO <= area_info_o;   
    
    ---------------------------------------------------
    --  input map 
@@ -98,7 +98,7 @@ begin
                when idle =>
                   counter <= to_unsigned(1, counter'length);
                   area_info_o.raw.record_valid <= '0';
-                  if AREA_FIFO_DVAL = '1'  then 
+                  if AREA_FIFO_DVAL = '1'  and AFULL = '0' then 
                      ctler_fsm <= weight_st;
                   end if;
                
@@ -109,7 +109,7 @@ begin
                   if counter >= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR(to_integer(area_info_i.clk_id)) then
                      counter <= to_unsigned(1, counter'length);
                      area_fifo_rd_i <= AREA_FIFO_DVAL;  
-                     if AREA_FIFO_DVAL = '0'  then
+                     if AREA_FIFO_DVAL = '0' or AFULL = '1'  then
                         ctler_fsm <= idle; 
                      end if;
                   end if;                  
