@@ -120,9 +120,6 @@ begin
             
          end if;
       end if;
-   end process;
-   
-   
-   
+   end process;    
    
 end rtl;

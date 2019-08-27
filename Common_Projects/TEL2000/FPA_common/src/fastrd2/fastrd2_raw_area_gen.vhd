@@ -25,13 +25,12 @@ entity fastrd2_raw_area_gen is
    port (
       ARESET            : in std_logic;
       CLK               : in std_logic; 
-      CLK_EN            : in std_logic;      
+      AFULL             : in std_logic;      
       
       RAW_AREA_CFG      : in area_cfg_type;      
       START             : in std_logic;
       
       AREA_INFO       : out area_info_type
-      --AFULL             : in std_logic
       );  
 end fastrd2_raw_area_gen;
 
@@ -69,7 +68,7 @@ architecture rtl of fastrd2_raw_area_gen is
    signal lsync_i              : std_logic;
    signal lsync_cnt            : unsigned(RAW_AREA_CFG.WINDOW_LSYNC_NUM'LENGTH-1 downto 0);
    signal pclk_cnt_edge        : std_logic;
-   signal record_valid         : std_logic := '0';
+   --  signal record_valid         : std_logic := '0';
    signal pclk_sample_last     : std_logic := '0';
    signal active_window_en     : std_logic;
    
@@ -118,7 +117,7 @@ begin
                   end if;        
                
                when readout_st => 
-                  if CLK_EN = '1' then 
+                  if AFULL = '0' then 
                      readout_in_progress <= '1';               
                      readout_fsm <= wait_readout_end_st;
                   end if;
@@ -142,7 +141,7 @@ begin
    U4: process(CLK)
    begin
       if rising_edge(CLK) then 
-         if CLK_EN = '1' then 
+         if AFULL = '0' then 
             if readout_in_progress = '1' then            
                frame_pclk_cnt <= frame_pclk_cnt + 1;  -- referentiel trame  : compteur temporel sur toute l'image
                line_pclk_cnt <= line_pclk_cnt + 1;   -- referentiel ligne  : compteur temporel sur ligne synchronisé sur celui de trame. 
@@ -166,84 +165,85 @@ begin
    begin
       if rising_edge(CLK) then  
          
-         -- if CLK_EN = '1' then 
-         
-         ----------------------------------------------
-         -- pipe 0 pour generation identificateurs 
-         ----------------------------------------------
-         if frame_pclk_cnt = 1 then                                           -- fval
-            raw_pipe(0).fval <= '1';
-         elsif frame_pclk_cnt = RAW_AREA_CFG.READOUT_PCLK_CNT_MAX then
-            raw_pipe(0).fval <= '0';
-         end if;
-         
-         if line_pclk_cnt = RAW_AREA_CFG.SOL_POSL_PCLK then          -- lval
-            raw_pipe(0).lval <= '1';
-         elsif line_pclk_cnt = RAW_AREA_CFG.EOL_POSL_PCLK_P1 then
-            raw_pipe(0).lval <= '0';
-         end if;    
-         
-         if line_pclk_cnt = RAW_AREA_CFG.SOL_POSL_PCLK then          -- sol
-            raw_pipe(0).sol <= '1';                                  
-         else
-            raw_pipe(0).sol <= '0';
-         end if;
-         
-         if line_pclk_cnt = RAW_AREA_CFG.EOL_POSL_PCLK then         -- eol
-            raw_pipe(0).eol <= '1';
-         else
-            raw_pipe(0).eol <= '0';
-         end if;
-         
-         if frame_pclk_cnt = RAW_AREA_CFG.SOF_POSF_PCLK then         -- sof
-            raw_pipe(0).sof <= '1';
-         else
-            raw_pipe(0).sof <= '0';
-         end if;
-         
-         if frame_pclk_cnt = RAW_AREA_CFG.EOF_POSF_PCLK then         -- eof
-            raw_pipe(0).eof <= '1';
-         else
-            raw_pipe(0).eof <= '0';        
-         end if;            
-         raw_pipe(0).rd_end <= raw_pipe(1).fval and not raw_pipe(0).fval; -- read_end se trouve en dehors de fval. C'est voulu. le suivre pour comprendre ce qu'il fait.
-         raw_pipe(0).line_pclk_cnt <= line_pclk_cnt;
-         raw_pipe(0).record_valid <= record_valid;
-         
-         -----------------------------------------------
-         -- pipe 1 : génération de line_cnt
-         ---------------------------------------------           
-         raw_pipe(1) <= raw_pipe(0);
-         if raw_pipe(1).sol = '0' and raw_pipe(0).sol = '1' then 
-            line_cnt <= line_cnt + 1;
-         end if;                    
-         raw_pipe(1).sol <= raw_pipe(0).sol and raw_pipe(0).fval; 
-         raw_pipe(1).lval <= raw_pipe(0).lval and raw_pipe(0).fval;        
-         raw_pipe(1).record_valid <= raw_pipe(0).fval and CLK_EN; 
-         
-         ----------------------------------------------
-         -- pipe 2 
-         ----------------------------------------------
-         raw_pipe(2) <= raw_pipe(1);
-         raw_pipe(2).line_cnt <= line_cnt;
-         if  line_cnt >= RAW_AREA_CFG.LINE_START_NUM then 
-            raw_line_en <= '1';
-         else
-            raw_line_en <= '0';
-         end if; 
-         
-         ----------------------------------
-         -- pipe 3 pour generation dval         
-         ----------------------------------
-         raw_pipe(3) <= raw_pipe(2);
-         if raw_pipe(2).line_cnt <= RAW_AREA_CFG.LINE_END_NUM then  
-            raw_pipe(3).dval   <= raw_line_en and raw_pipe(2).lval; 
-         else
-            raw_pipe(3).dval   <= '0';
-         end if;
-         raw_pipe(3).lsync <= (raw_pipe(0).sol or raw_pipe(1).sol) and raw_pipe(0).fval;
+         if AFULL = '0' then 
+            
+            ----------------------------------------------
+            -- pipe 0 pour generation identificateurs 
+            ----------------------------------------------
+            if frame_pclk_cnt = 1 then                                           -- fval
+               raw_pipe(0).fval <= '1';
+            elsif frame_pclk_cnt = RAW_AREA_CFG.READOUT_PCLK_CNT_MAX then
+               raw_pipe(0).fval <= '0';
+            end if;
+            
+            if line_pclk_cnt = RAW_AREA_CFG.SOL_POSL_PCLK then          -- lval
+               raw_pipe(0).lval <= '1';
+            elsif line_pclk_cnt = RAW_AREA_CFG.EOL_POSL_PCLK_P1 then
+               raw_pipe(0).lval <= '0';
+            end if;    
+            
+            if line_pclk_cnt = RAW_AREA_CFG.SOL_POSL_PCLK then          -- sol
+               raw_pipe(0).sol <= '1';                                  
+            else
+               raw_pipe(0).sol <= '0';
+            end if;
+            
+            if line_pclk_cnt = RAW_AREA_CFG.EOL_POSL_PCLK then         -- eol
+               raw_pipe(0).eol <= '1';
+            else
+               raw_pipe(0).eol <= '0';
+            end if;
+            
+            if frame_pclk_cnt = RAW_AREA_CFG.SOF_POSF_PCLK then         -- sof
+               raw_pipe(0).sof <= '1';
+            else
+               raw_pipe(0).sof <= '0';
+            end if;
+            
+            if frame_pclk_cnt = RAW_AREA_CFG.EOF_POSF_PCLK then         -- eof
+               raw_pipe(0).eof <= '1';
+            else
+               raw_pipe(0).eof <= '0';        
+            end if;            
+            raw_pipe(0).rd_end <= raw_pipe(1).fval and not raw_pipe(0).fval; -- read_end se trouve en dehors de fval. C'est voulu. le suivre pour comprendre ce qu'il fait.
+            raw_pipe(0).line_pclk_cnt <= line_pclk_cnt;
                 
-         -- end if;
+            -----------------------------------------------
+            -- pipe 1 : génération de line_cnt
+            ---------------------------------------------           
+            raw_pipe(1) <= raw_pipe(0);
+            if raw_pipe(1).sol = '0' and raw_pipe(0).sol = '1' then 
+               line_cnt <= line_cnt + 1;
+            end if;                    
+            raw_pipe(1).sol <= raw_pipe(0).sol and raw_pipe(0).fval; 
+            raw_pipe(1).lval <= raw_pipe(0).lval and raw_pipe(0).fval;        
+            
+            ----------------------------------------------
+            -- pipe 2 
+            ----------------------------------------------
+            raw_pipe(2) <= raw_pipe(1);
+            raw_pipe(2).line_cnt <= line_cnt;
+            if  line_cnt >= RAW_AREA_CFG.LINE_START_NUM then 
+               raw_line_en <= '1';
+            else
+               raw_line_en <= '0';
+            end if; 
+            
+            ----------------------------------
+            -- pipe 3 pour generation dval         
+            ----------------------------------
+            raw_pipe(3) <= raw_pipe(2);
+            if raw_pipe(2).line_cnt <= RAW_AREA_CFG.LINE_END_NUM then  
+               raw_pipe(3).dval   <= raw_line_en and raw_pipe(2).lval; 
+            else
+               raw_pipe(3).dval   <= '0';
+            end if;
+            raw_pipe(3).lsync <= (raw_pipe(0).sol or raw_pipe(1).sol) and raw_pipe(0).fval;
+            raw_pipe(3).record_valid <= raw_pipe(2).fval;
+            
+         else
+            raw_pipe(3).record_valid <= '0';
+         end if;
          
          global_reset <= sreset or raw_pipe(2).rd_end;
          
