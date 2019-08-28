@@ -151,13 +151,14 @@ begin
             -------------------------------------------------------
             -- pipe 3 pour generation misc signals        
             -------------------------------------------------------
-            raw_pipe(3) <= raw_pipe(2);
-            user_pipe(3) <= user_pipe(2);
-            user_pipe(3).sol <= user_pipe(2).sol and active_line;    
-            user_pipe(3).eol <= user_pipe(2).eol and active_line;
-            user_pipe(3).lval <= user_pipe(2).lval and active_line;
-            user_pipe(3).dval <= user_pipe(2).lval and active_line;
-            user_pipe(3).fval <= user_pipe(2).fval;
+            raw_pipe(3)          <= raw_pipe(2);
+            user_pipe(3)         <= user_pipe(2);
+            user_pipe(3).sol     <= user_pipe(2).sol and active_line;    
+            user_pipe(3).eol     <= user_pipe(2).eol and active_line;
+            user_pipe(3).lval    <= user_pipe(2).lval and active_line;
+            user_pipe(3).dval    <= user_pipe(2).lval and active_line;
+            user_pipe(3).fval    <= user_pipe(2).fval;
+            user_pipe(3).rd_end  <= user_pipe(2).eof;
             
          end if;
       end if;
