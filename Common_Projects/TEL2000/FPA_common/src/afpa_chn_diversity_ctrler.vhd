@@ -23,7 +23,7 @@ entity afpa_chn_diversity_ctrler is
       ARESET        : in std_logic;
       CLK           : in std_logic;
       
-      FPA_INTF_CFG  : fpa_intf_cfg_type;
+      QUAD2_ENABLED : in std_logic;
       
       QUAD1_MOSI    : in t_ll_ext_mosi72;
       QUAD1_MISO    : out t_ll_ext_miso;
@@ -197,9 +197,9 @@ begin
                
                when quad1_out_st =>                     
                   dout_mosi_i <= quad1_dout_mosi;           -- pix1, pix2, pix3, pix4            
-                  dout_mosi_i.eof <= quad1_dout_mosi.eof and not FPA_INTF_CFG.ADC_QUAD2_EN;     -- si la diversité des canaux n'est activée alors qu'on est en mode 8 canaux, c'est qu'on est en mode 8 taps (jupiter  par exemple). Dans ce cas,  pas de eof supplémentaire. Le eof proviendra des quad2
-                  dout_mosi_i.eol <= quad1_dout_mosi.eol and not FPA_INTF_CFG.ADC_QUAD2_EN;  
-                  if FPA_INTF_CFG.ADC_QUAD2_EN = '1' then 
+                  dout_mosi_i.eof <= quad1_dout_mosi.eof and not QUAD2_ENABLED;     -- si la diversité des canaux n'est activée alors qu'on est en mode 8 canaux, c'est qu'on est en mode 8 taps (jupiter  par exemple). Dans ce cas,  pas de eof supplémentaire. Le eof proviendra des quad2
+                  dout_mosi_i.eol <= quad1_dout_mosi.eol and not QUAD2_ENABLED;  
+                  if QUAD2_ENABLED = '1' then 
                      if quad1_dout_mosi.dval = '1' then   -- FPA_INTF_CFG.ADC_QUAD2_EN provient du microBlaze et dit s'il faille envoyer les pix5, pix6, pix7, pix8
                         chn_dsity_fsm <= quad2_out_st;
                         quad1_fifo_rd_en <= '1';
