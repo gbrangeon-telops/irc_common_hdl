@@ -18,9 +18,6 @@ use IEEE.NUMERIC_STD.all;
 use work.fastrd2_define.all; 
 
 entity fastrd2_clk_area_gen is
-   generic(
-      CLK_AREA_ID       : integer range 0 to FPA_MCLK_NUM_MAX-1 := 0
-      );   
    port (
       ARESET            : in std_logic;
       CLK               : in std_logic; 
@@ -109,7 +106,7 @@ begin
             area_info_pipe(2) <= area_info_pipe(1);
             if area_info_pipe(1).raw.line_pclk_cnt = CLK_AREA_CFG.SOL_POSL_PCLK then
                clk_stamp_en(2) <= clk_stamp_en(1);
-            elsif area_info_pipe(1).raw.line_pclk_cnt = CLK_AREA_CFG.EOL_POSL_PCLK_P1 then
+            elsif area_info_pipe(1).raw.line_pclk_cnt > CLK_AREA_CFG.EOL_POSL_PCLK then
                clk_stamp_en(2) <= '0';
             end if;  
             
@@ -118,7 +115,7 @@ begin
             --------------------------------------------------------
             area_info_pipe(3) <= area_info_pipe(2);
             if clk_stamp_en(2) = '1' then
-               area_info_pipe(3).clk_id <= to_unsigned(CLK_AREA_ID, area_info_pipe(3).clk_id'length);
+               area_info_pipe(3).clk_id <= CLK_AREA_CFG.CLK_ID;
             end if; 
             
             

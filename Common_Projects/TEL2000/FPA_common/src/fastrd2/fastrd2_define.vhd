@@ -67,7 +67,12 @@ package fastrd2_define is
       eof_posf_pclk                  : unsigned(23 downto 0);    --
       sol_posl_pclk                  : unsigned(9 downto 0);     --
       eol_posl_pclk                  : unsigned(12 downto 0);    --
-      eol_posl_pclk_p1               : unsigned(12 downto 0);    -- eol_posl_pclk + 1      
+      
+      -- position du debut et de la fin du pulse lsync
+      lsync_start_posl_pclk          : unsigned(12 downto 0); 
+      lsync_end_posl_pclk            : unsigned(12 downto 0);
+      lsync_num                      : unsigned(12 downto 0);    -- le nombre de pulse Lsync à generer. 
+      spare                          : unsigned(12 downto 0);    -- le nombre de pulse Lsync à generer. 
       
       -- lignes de debut et fin des zones    
       line_start_num                 : unsigned(9 downto 0);     -- 
@@ -76,7 +81,7 @@ package fastrd2_define is
       -- parametres divers
       readout_pclk_cnt_max           : unsigned(23 downto 0);   -- readout_pclk_cnt_max = taille en pclk de l'image incluant les pauses, les lignes non valides etc.. = (XSIZE/TAP_NUM + LOVH)* (YSIZE + FOVH) + 1  (un dernier PCLK pur finir)
       line_period_pclk               : unsigned(12 downto 0);    -- nombre de pclk =  XSIZE/TAP_NUM + LOVH)
-      window_lsync_num               : unsigned(12 downto 0);    -- le nombre de pulse Lsync à envoyer. Il vaut active_line_end_num puisqu'il n'y a pas de ligne non active après les lignes actives.   
+        
    end record;
    
    ----------------------------------------------								

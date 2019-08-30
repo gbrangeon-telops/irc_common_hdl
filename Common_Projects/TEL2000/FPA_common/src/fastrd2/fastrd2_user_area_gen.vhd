@@ -86,7 +86,7 @@ begin
             area_info_pipe(0) <= AREA_INFO_I;
             if AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.SOL_POSL_PCLK then          -- lval
                area_info_pipe(0).user.lval <= '1';
-            elsif AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.EOL_POSL_PCLK_P1 then
+            elsif AREA_INFO_I.RAW.LINE_PCLK_CNT > USER_AREA_CFG.EOL_POSL_PCLK then
                area_info_pipe(0).user.lval <= '0';
             end if;    
             

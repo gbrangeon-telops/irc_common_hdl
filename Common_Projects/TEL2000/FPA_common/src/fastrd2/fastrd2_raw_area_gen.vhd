@@ -67,11 +67,11 @@ architecture rtl of fastrd2_raw_area_gen is
    signal line_cnt             : unsigned(RAW_AREA_CFG.LINE_END_NUM'LENGTH-1 downto 0);
    signal sol_pipe_pclk        : std_logic_vector(1 downto 0):= (others => '0'); 
    signal lsync_i              : std_logic;
-   signal lsync_cnt            : unsigned(RAW_AREA_CFG.WINDOW_LSYNC_NUM'LENGTH-1 downto 0);
+   signal lsync_cnt            : unsigned(RAW_AREA_CFG.LSYNC_NUM'LENGTH-1 downto 0);
    signal pclk_cnt_edge        : std_logic;
    --  signal record_valid         : std_logic := '0';
    signal pclk_sample_last     : std_logic := '0';
-   signal active_window_en     : std_logic;
+   signal lsync_enabled        : std_logic;
    
    
 begin
@@ -171,7 +171,7 @@ begin
             ----------------------------------------------
             -- pipe 0 pour generation identificateurs 
             ----------------------------------------------
-            if frame_pclk_cnt = 1 then                                           -- fval
+            if frame_pclk_cnt = 1 then                                  -- fval
                raw_pipe(0).fval <= '1';
             elsif frame_pclk_cnt = RAW_AREA_CFG.READOUT_PCLK_CNT_MAX then
                raw_pipe(0).fval <= '0';
@@ -179,7 +179,7 @@ begin
             
             if line_pclk_cnt = RAW_AREA_CFG.SOL_POSL_PCLK then          -- lval
                raw_pipe(0).lval <= '1';
-            elsif line_pclk_cnt = RAW_AREA_CFG.EOL_POSL_PCLK_P1 then
+            elsif line_pclk_cnt > RAW_AREA_CFG.EOL_POSL_PCLK then
                raw_pipe(0).lval <= '0';
             end if;    
             
@@ -189,7 +189,7 @@ begin
                raw_pipe(0).sol <= '0';
             end if;
             
-            if line_pclk_cnt = RAW_AREA_CFG.EOL_POSL_PCLK then         -- eol
+            if line_pclk_cnt = RAW_AREA_CFG.EOL_POSL_PCLK then          -- eol
                raw_pipe(0).eol <= '1';
             else
                raw_pipe(0).eol <= '0';
@@ -228,21 +228,26 @@ begin
                raw_line_en <= '1';
             else
                raw_line_en <= '0';
-            end if; 
+            end if;
+            if line_cnt <= RAW_AREA_CFG.LSYNC_NUM then
+               lsync_enabled <= '1';
+            else
+               lsync_enabled <= '0';
+            end if;
             
-            ----------------------------------
-            -- pipe 3 pour generation dval         
-            ----------------------------------
+            ----------------------------------------------
+            -- pipe 3 pour generation dval et lsync         
+            ----------------------------------------------
             raw_pipe(3) <= raw_pipe(2);
             if raw_pipe(2).line_cnt <= RAW_AREA_CFG.LINE_END_NUM then  
                raw_pipe(3).dval   <= raw_line_en and raw_pipe(2).lval; 
             else
                raw_pipe(3).dval   <= '0';
-            end if;
-            if DEFINE_FPA_PIX_PER_MCLK_PER_TAP = 2 then
-               raw_pipe(3).lsync <= (raw_pipe(0).sol or raw_pipe(1).sol) and raw_pipe(0).fval;
-            else
-               raw_pipe(3).lsync <= raw_pipe(0).sol and raw_pipe(0).fval;
+            end if;     
+            if raw_pipe(2).line_pclk_cnt = RAW_AREA_CFG.LSYNC_START_POSL_PCLK then
+               raw_pipe(3).lsync <= lsync_enabled;
+            elsif raw_pipe(2).line_pclk_cnt > RAW_AREA_CFG.LSYNC_END_POSL_PCLK then
+               raw_pipe(3).lsync <= '0';
             end if;
             raw_pipe(3).record_valid <= raw_pipe(2).fval;
             
@@ -259,6 +264,7 @@ begin
             raw_line_en <= '0';
             raw_pipe(1).sol <= '0';
             line_cnt <= (others => '0');
+            lsync_enabled <= '0';
             for ii in 0 to 3 loop
                raw_pipe(ii) <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');     
             end loop;
