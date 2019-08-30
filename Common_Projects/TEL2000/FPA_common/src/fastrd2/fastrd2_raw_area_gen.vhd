@@ -51,14 +51,11 @@ architecture rtl of fastrd2_raw_area_gen is
    
    signal sreset               : std_logic;
    
-   --signal sync_flag_fsm        : sync_flag_fsm_type;
    signal readout_fsm          : readout_fsm_type;
    signal start_i              : std_logic := '0';
    signal start_last           : std_logic;
    signal frame_pclk_cnt       : unsigned(RAW_AREA_CFG.READOUT_PCLK_CNT_MAX'LENGTH-1 downto 0); 
    signal line_pclk_cnt        : unsigned(RAW_AREA_CFG.LINE_PERIOD_PCLK'LENGTH-1 downto 0);
-   signal quad_clk_copy_i      : std_logic;
-   signal quad_clk_copy_last   : std_logic;
    signal adc_sync_flag_i      : std_logic;
    signal raw_pipe             : area_pipe_type;
    signal readout_in_progress  : std_logic;
@@ -72,6 +69,7 @@ architecture rtl of fastrd2_raw_area_gen is
    --  signal record_valid         : std_logic := '0';
    signal pclk_sample_last     : std_logic := '0';
    signal lsync_enabled        : std_logic;
+   signal lval_temp            : std_logic;
    
    
 begin
@@ -176,21 +174,17 @@ begin
             elsif frame_pclk_cnt = RAW_AREA_CFG.READOUT_PCLK_CNT_MAX then
                raw_pipe(0).fval <= '0';
             end if;
-            
-            if line_pclk_cnt = RAW_AREA_CFG.SOL_POSL_PCLK then          -- lval
-               raw_pipe(0).lval <= '1';
-            elsif line_pclk_cnt > RAW_AREA_CFG.EOL_POSL_PCLK then
-               raw_pipe(0).lval <= '0';
-            end if;    
-            
+                        
             if line_pclk_cnt = RAW_AREA_CFG.SOL_POSL_PCLK then          -- sol
-               raw_pipe(0).sol <= '1';                                  
+               raw_pipe(0).sol <= '1';
+               raw_pipe(0).lval <= '1';
             else
                raw_pipe(0).sol <= '0';
-            end if;
+            end if;          
             
             if line_pclk_cnt = RAW_AREA_CFG.EOL_POSL_PCLK then          -- eol
                raw_pipe(0).eol <= '1';
+               raw_pipe(0).lval <= '0';
             else
                raw_pipe(0).eol <= '0';
             end if;
@@ -210,26 +204,26 @@ begin
             raw_pipe(0).line_pclk_cnt <= line_pclk_cnt;
             
             -----------------------------------------------
-            -- pipe 1 : génération de line_cnt
+            -- pipe 1 : génération de line_cnt, lval
             ---------------------------------------------           
             raw_pipe(1) <= raw_pipe(0);
             if raw_pipe(1).sol = '0' and raw_pipe(0).sol = '1' then 
                line_cnt <= line_cnt + 1;
             end if;                    
-            raw_pipe(1).sol <= raw_pipe(0).sol and raw_pipe(0).fval; 
-            raw_pipe(1).lval <= raw_pipe(0).lval and raw_pipe(0).fval;        
+            raw_pipe(1).sol <= raw_pipe(0).sol and raw_pipe(0).fval;
+            raw_pipe(1).lval <= (raw_pipe(0).lval or raw_pipe(0).eol) and raw_pipe(0).fval;
             
             ----------------------------------------------
             -- pipe 2 
             ----------------------------------------------
             raw_pipe(2) <= raw_pipe(1);
             raw_pipe(2).line_cnt <= line_cnt;
-            if  line_cnt >= RAW_AREA_CFG.LINE_START_NUM then 
+            if  line_cnt >= RAW_AREA_CFG.LINE_START_NUM then     -- raw_line_en
                raw_line_en <= '1';
             else
                raw_line_en <= '0';
             end if;
-            if line_cnt <= RAW_AREA_CFG.LSYNC_NUM then
+            if line_cnt <= RAW_AREA_CFG.LSYNC_NUM then           -- lsync enabled
                lsync_enabled <= '1';
             else
                lsync_enabled <= '0';
@@ -263,6 +257,7 @@ begin
          if global_reset = '1' then
             raw_line_en <= '0';
             raw_pipe(1).sol <= '0';
+            lval_temp <= '0';
             line_cnt <= (others => '0');
             lsync_enabled <= '0';
             for ii in 0 to 3 loop
