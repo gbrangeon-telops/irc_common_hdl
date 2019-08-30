@@ -15,7 +15,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
-use work.fastrd2_define.all; 
+use work.fastrd2_define.all;
+use work.fpa_define.all;
 
 entity fastrd2_raw_area_gen is
    generic(
@@ -207,7 +208,7 @@ begin
             end if;            
             raw_pipe(0).rd_end <= raw_pipe(1).fval and not raw_pipe(0).fval; -- read_end se trouve en dehors de fval. C'est voulu. le suivre pour comprendre ce qu'il fait.
             raw_pipe(0).line_pclk_cnt <= line_pclk_cnt;
-                
+            
             -----------------------------------------------
             -- pipe 1 : génération de line_cnt
             ---------------------------------------------           
@@ -238,7 +239,11 @@ begin
             else
                raw_pipe(3).dval   <= '0';
             end if;
-            raw_pipe(3).lsync <= (raw_pipe(0).sol or raw_pipe(1).sol) and raw_pipe(0).fval;
+            if DEFINE_FPA_PIX_PER_MCLK_PER_TAP = 2 then
+               raw_pipe(3).lsync <= (raw_pipe(0).sol or raw_pipe(1).sol) and raw_pipe(0).fval;
+            else
+               raw_pipe(3).lsync <= raw_pipe(0).sol and raw_pipe(0).fval;
+            end if;
             raw_pipe(3).record_valid <= raw_pipe(2).fval;
             
          else

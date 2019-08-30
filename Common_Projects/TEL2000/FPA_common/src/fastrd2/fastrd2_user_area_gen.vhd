@@ -33,7 +33,7 @@ end fastrd2_user_area_gen;
 
 architecture rtl of fastrd2_user_area_gen is   
    
-   type area_pipe_type is array (0 to 3) of area_type;
+   type area_info_pipe_type is array (0 to 3) of area_info_type;
    
    component sync_reset
       port(
@@ -43,8 +43,7 @@ architecture rtl of fastrd2_user_area_gen is
    end component; 
    
    signal sreset               : std_logic;
-   signal raw_pipe             : area_pipe_type;
-   signal user_pipe            : area_pipe_type;
+   signal area_info_pipe       : area_info_pipe_type;
    signal active_line_temp     : std_logic;
    signal active_line          : std_logic;
    
@@ -53,9 +52,7 @@ begin
    --------------------------------------------------
    -- Outputs map
    --------------------------------------------------                       
-   AREA_INFO_O.RAW <= raw_pipe(3);   -- pour fins de synchro
-   AREA_INFO_O.USER <= user_pipe(3);
-   --AREA_INFO_O.PCLK_SAMPLE <= AREA_INFO_I.PCLK_SAMPLE;  -- pas besoin de pipe
+   AREA_INFO_O <= area_info_pipe(3); 
    
    --------------------------------------------------
    -- synchro reset 
@@ -76,8 +73,8 @@ begin
          if sreset ='1' then 
             -- pragma translate_off
             for ii in 0 to 3 loop
-               raw_pipe(ii) <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');
-               user_pipe(ii) <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');
+               area_info_pipe(ii).raw <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');
+               area_info_pipe(ii).user <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');
             end loop;
             -- pragma translate_on
             
@@ -86,45 +83,44 @@ begin
             -------------------------
             -- pipe 0 pour generation identificateurs 
             -------------------------
-            raw_pipe(0) <= AREA_INFO_I.RAW;
+            area_info_pipe(0) <= AREA_INFO_I;
             if AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.SOL_POSL_PCLK then          -- lval
-               user_pipe(0).lval <= '1';
+               area_info_pipe(0).user.lval <= '1';
             elsif AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.EOL_POSL_PCLK_P1 then
-               user_pipe(0).lval <= '0';
+               area_info_pipe(0).user.lval <= '0';
             end if;    
             
             if AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.SOL_POSL_PCLK then          -- sol
-               user_pipe(0).sol <= '1';                                  
+               area_info_pipe(0).user.sol <= '1';                                  
             else
-               user_pipe(0).sol <= '0';
+               area_info_pipe(0).user.sol <= '0';
             end if;
             
             if AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.EOL_POSL_PCLK then         -- eol
-               user_pipe(0).eol <= '1';
+               area_info_pipe(0).user.eol <= '1';
             else
-               user_pipe(0).eol <= '0';
+               area_info_pipe(0).user.eol <= '0';
             end if;
             
             -- user_fval            
             if AREA_INFO_I.RAW.LINE_CNT >= USER_AREA_CFG.LINE_START_NUM then
-               user_pipe(0).fval <= AREA_INFO_I.RAW.FVAL;
+               area_info_pipe(0).user.fval <= AREA_INFO_I.RAW.FVAL;
             else
-               user_pipe(0).fval <= '0';
+               area_info_pipe(0).user.fval <= '0';
             end if;
             
             --------------------------------------------------------
             -- pipe 1 pour generation premisse dval et sof
             --------------------------------------------------------      
-            raw_pipe(1) <= raw_pipe(0);
-            user_pipe(1) <= user_pipe(0);            
+            area_info_pipe(1) <= area_info_pipe(0);           
             -- sof
-            if  raw_pipe(0).line_cnt = USER_AREA_CFG.LINE_START_NUM then 
-               user_pipe(1).sof <= user_pipe(0).sol;
+            if  area_info_pipe(0).raw.line_cnt = USER_AREA_CFG.LINE_START_NUM then 
+               area_info_pipe(1).user.sof <= area_info_pipe(0).user.sol;
             else
-               user_pipe(1).sof <= '0';
+               area_info_pipe(1).user.sof <= '0';
             end if;         
             -- premisse dval
-            if  raw_pipe(0).line_cnt >= USER_AREA_CFG.LINE_START_NUM then 
+            if  area_info_pipe(0).raw.line_cnt >= USER_AREA_CFG.LINE_START_NUM then 
                active_line_temp <= '1';            
             else                       
                active_line_temp <= '0';
@@ -133,16 +129,15 @@ begin
             -------------------------------------------------------
             -- pipe 2 pour generation active_line et eof et sync_flag        
             -------------------------------------------------------
-            raw_pipe(2) <= raw_pipe(1);
-            user_pipe(2) <= user_pipe(1);  
+            area_info_pipe(2) <= area_info_pipe(1); 
             -- eof
-            if  raw_pipe(1).line_cnt = USER_AREA_CFG.LINE_END_NUM then 
-               user_pipe(2).eof <= user_pipe(1).eol;
+            if  area_info_pipe(1).raw.line_cnt = USER_AREA_CFG.LINE_END_NUM then 
+               area_info_pipe(2).user.eof <= area_info_pipe(1).user.eol;
             else
-               user_pipe(2).eof <= '0';
+               area_info_pipe(2).user.eof <= '0';
             end if;
             -- active_line
-            if raw_pipe(1).line_cnt <= USER_AREA_CFG.LINE_END_NUM then  
+            if area_info_pipe(1).raw.line_cnt <= USER_AREA_CFG.LINE_END_NUM then  
                active_line <= active_line_temp; 
             else
                active_line <= '0';
@@ -151,14 +146,13 @@ begin
             -------------------------------------------------------
             -- pipe 3 pour generation misc signals        
             -------------------------------------------------------
-            raw_pipe(3)          <= raw_pipe(2);
-            user_pipe(3)         <= user_pipe(2);
-            user_pipe(3).sol     <= user_pipe(2).sol and active_line;    
-            user_pipe(3).eol     <= user_pipe(2).eol and active_line;
-            user_pipe(3).lval    <= user_pipe(2).lval and active_line;
-            user_pipe(3).dval    <= user_pipe(2).lval and active_line;
-            user_pipe(3).fval    <= user_pipe(2).fval;
-            user_pipe(3).rd_end  <= user_pipe(2).eof;
+            area_info_pipe(3)              <= area_info_pipe(2);
+            area_info_pipe(3).user.sol     <= area_info_pipe(2).user.sol and active_line;    
+            area_info_pipe(3).user.eol     <= area_info_pipe(2).user.eol and active_line;
+            area_info_pipe(3).user.lval    <= area_info_pipe(2).user.lval and active_line;
+            area_info_pipe(3).user.dval    <= area_info_pipe(2).user.lval and active_line;
+            area_info_pipe(3).user.fval    <= area_info_pipe(2).user.fval;
+            area_info_pipe(3).user.rd_end  <= area_info_pipe(2).user.eof;
             
          end if;
       end if;

@@ -59,7 +59,8 @@ package fastrd2_define is
       --      xstart                         : unsigned(12 downto 0); 
       --      ystart                         : unsigned(12 downto 0);
       --      xsize                          : unsigned(12 downto 0);
-      --      ysize                          : unsigned(12 downto 0);      
+      --      ysize                          : unsigned(12 downto 0);
+      clk_id                         : unsigned(3 downto 0);    -- clk_id associé à la zone decrite par la config
       
       -- delimiteurs de trames et de lignes
       sof_posf_pclk                  : unsigned(9 downto 0);     -- 
@@ -69,7 +70,7 @@ package fastrd2_define is
       eol_posl_pclk_p1               : unsigned(12 downto 0);    -- eol_posl_pclk + 1      
       
       -- lignes de debut et fin des zones    
-      line_start_num                 : unsigned(9 downto 0);    -- 
+      line_start_num                 : unsigned(9 downto 0);     -- 
       line_end_num                   : unsigned(12 downto 0);    -- 
       
       -- parametres divers
@@ -164,7 +165,7 @@ package body fastrd2_define is
    -- area_info_to_vector_func
    --------------------------------------------------------------------------------------------- 
    function area_info_to_vector_func(area_info: area_info_type) return std_logic_vector is
-      variable yy : std_logic_vector(63 downto 0);
+      variable yy : std_logic_vector(62 downto 0);
    begin
       yy := 
       
