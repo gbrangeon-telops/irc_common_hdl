@@ -25,8 +25,8 @@ entity fastrd2_user_area_gen is
       
       USER_AREA_CFG     : in area_cfg_type;
       
-      AREA_INFO_I     : in area_info_type;      
-      AREA_INFO_O     : out area_info_type    
+      AREA_INFO_I       : in area_info_type;      
+      AREA_INFO_O       : out area_info_type    
       );  
 end fastrd2_user_area_gen;
 
@@ -73,8 +73,9 @@ begin
          if sreset ='1' then 
             -- pragma translate_off
             for ii in 0 to 3 loop
-               area_info_pipe(ii).raw <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');
-               area_info_pipe(ii).user <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');
+               area_info_pipe(ii).raw <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'));
+               area_info_pipe(ii).user <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'));
+               area_info_pipe(ii).info_dval <= '0';
             end loop;
             -- pragma translate_on
             

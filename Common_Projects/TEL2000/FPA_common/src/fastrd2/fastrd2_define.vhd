@@ -105,7 +105,6 @@ package fastrd2_define is
       rd_end               : std_logic;
       line_cnt             : unsigned(12 downto 0);   -- numero de ligne
       line_pclk_cnt        : unsigned(12 downto 0);   -- compteur de coups d'horloge PCLK sur une ligne
-      record_valid         : std_logic;               -- dit tout l'enregistrement (tout le regroupement de champs de données) est valide
       
    end record;   
    
@@ -114,6 +113,9 @@ package fastrd2_define is
    ----------------------------------------------
    type area_info_type is
    record
+      
+      -- dval de area info au complet
+      info_dval            :std_logic;             -- dit si tout l'enregistrement (tout le regroupement de champs de données) est valide
       
       -- user_area info
       user                 : area_type;
@@ -170,11 +172,13 @@ package body fastrd2_define is
    -- area_info_to_vector_func
    --------------------------------------------------------------------------------------------- 
    function area_info_to_vector_func(area_info: area_info_type) return std_logic_vector is
-      variable yy : std_logic_vector(62 downto 0);
+      variable yy : std_logic_vector(63 downto 0);
    begin
       yy := 
       
-      area_info.user.spare                           
+      area_info.info_dval
+      
+      & area_info.user.spare                           
       & area_info.user.sof                  
       & area_info.user.eof                  
       & area_info.user.sol                  
@@ -209,6 +213,8 @@ package body fastrd2_define is
    function vector_to_area_info_func(yy: std_logic_vector) return area_info_type is
       variable area_info : area_info_type;
    begin      
+      
+      area_info.info_dval                           :=  yy(63);
       
       area_info.user.spare                          :=  yy(62 downto 55);
       area_info.user.sof                            :=  yy(54);

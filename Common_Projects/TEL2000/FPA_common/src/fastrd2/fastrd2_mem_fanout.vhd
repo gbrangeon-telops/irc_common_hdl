@@ -95,7 +95,7 @@ begin
             ----------------------------------------------------------
             -- conversion en std_logic_vector
             ----------------------------------------------------------
-            fifo_wr_i <= AREA_INFO.RAW.RECORD_VALID or AREA_INFO.RAW.RD_END;            
+            fifo_wr_i <= AREA_INFO.INFO_DVAL or AREA_INFO.RAW.RD_END;            
             fifo_data_i <= std_logic_vector(resize(unsigned(area_info_to_vector_func(AREA_INFO)), fifo_data_i'length));
             
          end if;

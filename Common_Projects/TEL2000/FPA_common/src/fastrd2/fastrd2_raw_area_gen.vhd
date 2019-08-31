@@ -40,7 +40,7 @@ architecture rtl of fastrd2_raw_area_gen is
    
    --type sync_flag_fsm_type is (idle, sync_flag_dly_st, sync_flag_on_st1, sync_flag_on_st2, sync_flag_on_st3);
    type readout_fsm_type is (idle, pause_st, readout_st, wait_readout_end_st);
-   type area_pipe_type is array (0 to 4) of area_type;
+   type area_info_pipe_type is array (0 to 4) of area_info_type;
    
    component sync_reset
       port(
@@ -57,7 +57,7 @@ architecture rtl of fastrd2_raw_area_gen is
    signal frame_pclk_cnt       : unsigned(RAW_AREA_CFG.READOUT_PCLK_CNT_MAX'LENGTH-1 downto 0); 
    signal line_pclk_cnt        : unsigned(RAW_AREA_CFG.LINE_PERIOD_PCLK'LENGTH-1 downto 0);
    signal adc_sync_flag_i      : std_logic;
-   signal raw_pipe             : area_pipe_type;
+   signal area_info_pipe       : area_info_pipe_type;
    signal readout_in_progress  : std_logic;
    signal raw_line_en          : std_logic;
    signal global_reset         : std_logic;
@@ -77,8 +77,7 @@ begin
    --------------------------------------------------
    -- Outputs map
    --------------------------------------------------  
-   AREA_INFO.RAW <= raw_pipe(3);   
-   AREA_INFO.CLK_ID <= to_unsigned(G_DEFAULT_CLK_ID, AREA_INFO.CLK_ID'LENGTH);
+   AREA_INFO <= area_info_pipe(3);   
    
    --------------------------------------------------
    -- synchro reset 
@@ -122,7 +121,7 @@ begin
                   end if;
                
                when wait_readout_end_st =>                  
-                  if raw_pipe(0).rd_end = '1' then 
+                  if area_info_pipe(0).raw.rd_end = '1' then     
                      readout_fsm <= idle;
                   end if;         
                
@@ -164,60 +163,62 @@ begin
    begin
       if rising_edge(CLK) then  
          
+         area_info_pipe(0).clk_id <= to_unsigned(G_DEFAULT_CLK_ID, area_info_pipe(0).clk_id'length);
+         
          if AFULL = '0' then 
             
             ----------------------------------------------
             -- pipe 0 pour generation identificateurs 
             ----------------------------------------------
             if frame_pclk_cnt = 1 then                                  -- fval
-               raw_pipe(0).fval <= '1';
+               area_info_pipe(0).raw.fval <= '1';
             elsif frame_pclk_cnt = RAW_AREA_CFG.READOUT_PCLK_CNT_MAX then
-               raw_pipe(0).fval <= '0';
+               area_info_pipe(0).raw.fval <= '0';
             end if;
-                        
+            
             if line_pclk_cnt = RAW_AREA_CFG.SOL_POSL_PCLK then          -- sol
-               raw_pipe(0).sol <= '1';
-               raw_pipe(0).lval <= '1';
+               area_info_pipe(0).raw.sol <= '1';
+               area_info_pipe(0).raw.lval <= '1';
             else
-               raw_pipe(0).sol <= '0';
+               area_info_pipe(0).raw.sol <= '0';
             end if;          
             
             if line_pclk_cnt = RAW_AREA_CFG.EOL_POSL_PCLK then          -- eol
-               raw_pipe(0).eol <= '1';
-               raw_pipe(0).lval <= '0';
+               area_info_pipe(0).raw.eol <= '1';
+               area_info_pipe(0).raw.lval <= '0';
             else
-               raw_pipe(0).eol <= '0';
+               area_info_pipe(0).raw.eol <= '0';
             end if;
             
             if frame_pclk_cnt = RAW_AREA_CFG.SOF_POSF_PCLK then         -- sof
-               raw_pipe(0).sof <= '1';
+               area_info_pipe(0).raw.sof <= '1';
             else
-               raw_pipe(0).sof <= '0';
+               area_info_pipe(0).raw.sof <= '0';
             end if;
             
             if frame_pclk_cnt = RAW_AREA_CFG.EOF_POSF_PCLK then         -- eof
-               raw_pipe(0).eof <= '1';
+               area_info_pipe(0).raw.eof <= '1';
             else
-               raw_pipe(0).eof <= '0';        
+               area_info_pipe(0).raw.eof <= '0';        
             end if;            
-            raw_pipe(0).rd_end <= raw_pipe(1).fval and not raw_pipe(0).fval; -- read_end se trouve en dehors de fval. C'est voulu. le suivre pour comprendre ce qu'il fait.
-            raw_pipe(0).line_pclk_cnt <= line_pclk_cnt;
+            area_info_pipe(0).raw.rd_end <= area_info_pipe(1).raw.fval and not area_info_pipe(0).raw.fval; -- read_end se trouve en dehors de fval. C'est voulu. le suivre pour comprendre ce qu'il fait.
+            area_info_pipe(0).raw.line_pclk_cnt <= line_pclk_cnt;
             
             -----------------------------------------------
             -- pipe 1 : génération de line_cnt, lval
             ---------------------------------------------           
-            raw_pipe(1) <= raw_pipe(0);
-            if raw_pipe(1).sol = '0' and raw_pipe(0).sol = '1' then 
+            area_info_pipe(1) <= area_info_pipe(0);
+            if area_info_pipe(0).raw.line_pclk_cnt = 1 then -- if raw_pipe(1).sol = '0' and raw_pipe(0).sol = '1' then 
                line_cnt <= line_cnt + 1;
             end if;                    
-            raw_pipe(1).sol <= raw_pipe(0).sol and raw_pipe(0).fval;
-            raw_pipe(1).lval <= (raw_pipe(0).lval or raw_pipe(0).eol) and raw_pipe(0).fval;
+            area_info_pipe(1).raw.sol <= area_info_pipe(0).raw.sol and area_info_pipe(0).raw.fval;
+            area_info_pipe(1).raw.lval <= (area_info_pipe(0).raw.lval or area_info_pipe(0).raw.eol) and area_info_pipe(0).raw.fval;
             
             ----------------------------------------------
             -- pipe 2 
             ----------------------------------------------
-            raw_pipe(2) <= raw_pipe(1);
-            raw_pipe(2).line_cnt <= line_cnt;
+            area_info_pipe(2) <= area_info_pipe(1);
+            area_info_pipe(2).raw.line_cnt <= line_cnt;
             if  line_cnt >= RAW_AREA_CFG.LINE_START_NUM then     -- raw_line_en
                raw_line_en <= '1';
             else
@@ -232,36 +233,37 @@ begin
             ----------------------------------------------
             -- pipe 3 pour generation dval et lsync         
             ----------------------------------------------
-            raw_pipe(3) <= raw_pipe(2);
-            if raw_pipe(2).line_cnt <= RAW_AREA_CFG.LINE_END_NUM then  
-               raw_pipe(3).dval   <= raw_line_en and raw_pipe(2).lval; 
+            area_info_pipe(3) <= area_info_pipe(2);
+            if area_info_pipe(2).raw.line_cnt <= RAW_AREA_CFG.LINE_END_NUM then  
+               area_info_pipe(3).raw.dval   <= raw_line_en and area_info_pipe(2).raw.lval; 
             else
-               raw_pipe(3).dval   <= '0';
+               area_info_pipe(3).raw.dval   <= '0';
             end if;     
-            if raw_pipe(2).line_pclk_cnt = RAW_AREA_CFG.LSYNC_START_POSL_PCLK then
-               raw_pipe(3).lsync <= lsync_enabled;
-            elsif raw_pipe(2).line_pclk_cnt > RAW_AREA_CFG.LSYNC_END_POSL_PCLK then
-               raw_pipe(3).lsync <= '0';
+            if area_info_pipe(2).raw.line_pclk_cnt = RAW_AREA_CFG.LSYNC_START_POSL_PCLK then
+               area_info_pipe(3).raw.lsync <= lsync_enabled;
+            elsif area_info_pipe(2).raw.line_pclk_cnt > RAW_AREA_CFG.LSYNC_END_POSL_PCLK then
+               area_info_pipe(3).raw.lsync <= '0';
             end if;
-            raw_pipe(3).record_valid <= raw_pipe(2).fval;
+            area_info_pipe(3).info_dval <= area_info_pipe(2).raw.fval;
             
          else
-            raw_pipe(3).record_valid <= '0';
+            area_info_pipe(3).info_dval <= '0';
          end if;
          
-         global_reset <= sreset or raw_pipe(2).rd_end;
+         global_reset <= sreset or area_info_pipe(2).raw.rd_end;
          
          -------------------------
          -- reset des identificateurs
          -------------------------
          if global_reset = '1' then
             raw_line_en <= '0';
-            raw_pipe(1).sol <= '0';
+            area_info_pipe(1).raw.sol <= '0';
             lval_temp <= '0';
             line_cnt <= (others => '0');
             lsync_enabled <= '0';
             for ii in 0 to 3 loop
-               raw_pipe(ii) <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0');     
+               area_info_pipe(ii).raw <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'));     
+               area_info_pipe(ii).info_dval <= '0';
             end loop;
          end if;
          
