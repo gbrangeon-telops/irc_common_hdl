@@ -30,6 +30,7 @@ package fastrd2_define is
    end record;
    
    type fastrd2_clk_array_type is array (FPA_MCLK_NUM_MAX-1 downto 0) of fpa_clk_base_info_type;
+   type fastrd2_clk_std_array_type is array (FPA_MCLK_NUM_MAX-1 downto 0) of std_logic_vector(2 downto 0);
    
    ------------------------------------------------------------
    -- type pour grouper toutes les infos des horloges detecteur

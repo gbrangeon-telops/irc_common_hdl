@@ -2,7 +2,7 @@ SCHM0104
 
 HEADER
 {
- FREEID 7825
+ FREEID 8274
  VARIABLES
  {
   #ARCHITECTURE="sch"
@@ -11,7 +11,7 @@ HEADER
   #DEFAULT_RANGE0="<range<name=\"area_fifo_din\"><left=\"71\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
   #DEFAULT_RANGE1="<range<name=\"ctled_clk_dval\"><left=\"7\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
   #DEFAULT_RANGE2="<range<name=\"ctled_clk_rd\"><left=\"7\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
-  #DEFAULT_RANGE3="<range<name=\"ctled_mclk_data_kk\"><left=\"2\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
+  #DEFAULT_RANGE3="<range<name=\"ctled_clk_rdy\"><left=\"7\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
   #DEFAULT_RANGE4="<range<name=\"fifo_dout\"><left=\"2\"><direction=\"downto\"><right=\"0\"><initial_value=\"\"><delay=\"\">>"
   #ENTITY="fastrd2_clk_info_mem"
   #LANGUAGE="VHDL"
@@ -388,260 +388,6 @@ HEADER
       #NAME="ERR"
       #NUMBER="0"
       #SIDE="right"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-   }
-  }
- }
- SYMBOL "work" "fastrd2_clk_mem_ctler" "fastrd2_clk_mem_ctler"
- {
-  HEADER
-  {
-   VARIABLES
-   {
-    #CUSTOM_NAME=""
-    #DESCRIPTION=""
-    #LANGUAGE="VHDL"
-    #MODIFIED="1566924796"
-    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="8185aff7-d243-4b06-b6d0-50c51c5d82b1"
-   }
-  }
-  PAGE "" 
-  {
-   PAGEHEADER
-   {
-    RECT (20,-40,360,340)
-    FREEID 123
-   }
-   
-   BODY
-   {
-    RECT  1, -1, 0
-    {
-     VARIABLES
-     {
-      #OUTLINE_FILLING="1"
-     }
-     AREA (40,-18,336,312)
-    }
-    TEXT  69, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (189,68,326,92)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 68
-    }
-    TEXT  75, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (229,88,326,112)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 74
-    }
-    TEXT  102, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (54,28,134,52)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 101
-    }
-    TEXT  108, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (54,48,94,72)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 107
-    }
-    TEXT  116, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (193,250,325,274)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 115
-    }
-    TEXT  118, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (233,270,325,294)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 117
-    }
-    TEXT  120, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (45,110,191,134)
-     ALIGN 4
-     MARGINS (1,1)
-     PARENT 119
-    }
-    TEXT  122, 0, 0
-    {
-     TEXT "$#NAME"
-     RECT (195,150,335,174)
-     ALIGN 6
-     MARGINS (1,1)
-     PARENT 121
-    }
-    PIN  68, 0, 0
-    {
-     COORD (360,80)
-     VARIABLES
-     {
-      #DIRECTION="OUT"
-      #DOWNTO="1"
-      #FAMILY="Fub"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #MODIFIED="1"
-      #NAME="WR_DATA(2:0)"
-      #NUMBER="0"
-      #SIDE="right"
-     }
-     LINE  1, 0, 0
-     {
-      OUTLINE 0,3, (64,92,92)
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-    PIN  74, 0, 0
-    {
-     COORD (360,100)
-     VARIABLES
-     {
-      #DIRECTION="OUT"
-      #FAMILY="Fub"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #MODIFIED="1"
-      #NAME="WR_DVAL"
-      #NUMBER="0"
-      #SIDE="right"
-     }
-     LINE  1, 0, 0
-     {
-      OUTLINE 0,1, (64,92,92)
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-    PIN  101, 0, 0
-    {
-     COORD (20,40)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #FAMILY="Fub"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #MODIFIED="1"
-      #NAME="ARESET"
-      #NUMBER="0"
-      #SIDE="left"
-     }
-     LINE  1, 0, 0
-     {
-      OUTLINE 0,1, (64,92,92)
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  107, 0, 0
-    {
-     COORD (20,60)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #FAMILY="Fub"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #MODIFIED="1"
-      #NAME="CLK"
-      #NUMBER="0"
-      #SIDE="left"
-     }
-     LINE  1, 0, 0
-     {
-      OUTLINE 0,1, (64,92,92)
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  115, 0, 0
-    {
-     COORD (360,260)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #DOWNTO="1"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #MODIFIED="1"
-      #NAME="RD_DATA(2:0)"
-      #NUMBER="0"
-      #SIDE="right"
-     }
-     LINE  1, 0, 0
-     {
-      OUTLINE 0,3, (64,92,92)
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-    PIN  117, 0, 0
-    {
-     COORD (360,280)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #MODIFIED="1"
-      #NAME="RD_DVAL"
-      #NUMBER="0"
-      #SIDE="right"
-     }
-     LINE  1, 0, 0
-     {
-      OUTLINE 0,1, (64,92,92)
-      POINTS ( (0,0), (-20,0) )
-     }
-    }
-    PIN  119, 0, 0
-    {
-     COORD (20,120)
-     VARIABLES
-     {
-      #DIRECTION="IN"
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="RAW_FPA_CLK"
-      #NUMBER="0"
-      #SIDE="left"
-     }
-     LINE  2, 0, 0
-     {
-      POINTS ( (0,0), (20,0) )
-     }
-    }
-    PIN  121, 0, 0
-    {
-     COORD (360,160)
-     VARIABLES
-     {
-      #DIRECTION="OUT"
-      #INITIAL_VALUE=""
-      #LENGTH="20"
-      #MDA_RECORD_TOKEN="OTHER"
-      #NAME="FPA_CLK_RDY"
-      #NUMBER="0"
-      #SIDE="right"
-      #VHDL_TYPE=""
      }
      LINE  2, 0, 0
      {
@@ -1745,85 +1491,32 @@ PAGE ""
     #NAME="ARESET"
    }
   }
-  INSTANCE  2546, 0, 0
-  {
-   VARIABLES
-   {
-    #COMPONENT="fastrd2_clk_mem_ctler"
-    #CUSTOM_NAME=""
-    #IMPL="rtl"
-    #LIBRARY="work"
-    #NO_CONF="1"
-    #REFERENCE="U4"
-    #SYMBOL="fastrd2_clk_mem_ctler"
-    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="8185aff7-d243-4b06-b6d0-50c51c5d82b1"
-   }
-   COORD (880,1420)
-   VERTEXES ( (101,7586), (107,7584), (119,7582), (68,7621), (74,7619), (121,7614), (115,7617), (117,7616) )
-  }
-  TEXT  2554, 0, 0
-  {
-   TEXT "$#REFERENCE"
-   RECT (917,1367,954,1400)
-   ALIGN 8
-   PARENT 2546
-  }
-  TEXT  2555, 0, 0
-  {
-   TEXT "$#COMPONENT"
-   RECT (917,1740,1212,1773)
-   PARENT 2546
-  }
-  INSTANCE  2560, 0, 0
-  {
-   VARIABLES
-   {
-    #COMPONENT="fwft_sfifo_w3_d1024"
-    #CUSTOM_NAME=""
-    #LIBRARY="work"
-    #REFERENCE="U5"
-    #SYMBOL="fwft_sfifo_w3_d1024"
-    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="eb3764be-0c3d-4e49-b2b5-b328f435c5b5"
-   }
-   COORD (1840,1400)
-   VERTEXES ( (6,7573), (2,7570), (10,7620), (14,7618), (18,7579), (22,7577), (4,7580) )
-  }
-  TEXT  2568, 0, 0
-  {
-   TEXT "$#REFERENCE"
-   RECT (1861,1365,1900,1400)
-   ALIGN 8
-   MARGINS (1,1)
-   PARENT 2560
-  }
-  TEXT  2569, 0, 0
-  {
-   TEXT "$#COMPONENT"
-   RECT (1840,1640,2106,1675)
-   MARGINS (1,1)
-   PARENT 2560
-  }
-  NET BUS  2570, 0, 0
-  NET WIRE  2572, 0, 0
-  TEXT  2574, 0, 0
-  {
-   TEXT "$#NAME"
-   RECT (1746,1430,1794,1459)
-   ALIGN 9
-   MARGINS (1,1)
-   PARENT 7651
-  }
   SIGNALASSIGN  2664, 0, 0
   {
    LABEL "SignalAssignments_2"
    TEXT 
-"-- inputs\n"+
-"MCLK_KK <= RAW_FPA_CLK.MCLK(KK).CLK;\n"+
+"g0: for KK in 0 to FPA_MCLK_NUM_MAX-1 generate\t\n"+
+"begin\n"+
+"   CTLED_FPA_CLK.MCLK(KK).SOF <=  CTLED_MCLK_DATA(KK)(2);\n"+
+"   CTLED_FPA_CLK.MCLK(KK).EOF <=  CTLED_MCLK_DATA(KK)(1);\n"+
+"   CTLED_FPA_CLK.MCLK(KK).CLK <=  CTLED_MCLK_DATA(KK)(0);\n"+
+"   \n"+
+"   Umap_KK : fastrd2_clk_base_mem\n"+
+"     port map(\n"+
+"       ARESET   => ARESET,\n"+
+"       CLK      => CLK,\n"+
+"       MCLK            => RAW_FPA_CLK.MCLK(KK).CLK,\n"+
+"       CTLED_CLK_RDY   => CTLED_CLK_RDY(KK),       \n"+
+"       CTLED_CLK_DVAL  => CTLED_CLK_DVAL(KK),\n"+
+"       CTLED_CLK_RD    => CTLED_CLK_RD(KK),\n"+
+"       CTLED_CLK_DATA  => CTLED_MCLK_DATA(KK)\n"+
+"  );\n"+
+"end generate;\n"+
 "\n"+
-"-- outputs\n"+
-"CTLED_FPA_CLK.MCLK(KK).SOF <=  CTLED_MCLK_DATA_KK(2);\n"+
-"CTLED_FPA_CLK.MCLK(KK).EOF <=  CTLED_MCLK_DATA_KK(1);\n"+
-"CTLED_FPA_CLK.MCLK(KK).CLK <=  CTLED_MCLK_DATA_KK(0);\n"+
+"\n"+
+"\n"+
+"\n"+
+"\n"+
 "\n"+
 "\n"+
 "\n"+
@@ -1831,7 +1524,7 @@ PAGE ""
 "\n"+
 "\n"+
 ""
-   RECT (900,1820,2040,2080)
+   RECT (940,1380,2080,1700)
    OUTLINE 5,1, (0,0,0)
    FILL (0,(255,255,156),0)
    MARGINS (20,20)
@@ -1841,46 +1534,6 @@ PAGE ""
    SHOWLABEL
    SHOWTEXT
    CORNER 10
-  }
-  TEXT  3124, 0, 0
-  {
-   TEXT "$#NAME"
-   RECT (765,1430,861,1459)
-   ALIGN 9
-   MARGINS (1,1)
-   PARENT 7659
-  }
-  TEXT  3128, 0, 0
-  {
-   TEXT "$#NAME"
-   RECT (792,1450,840,1479)
-   ALIGN 9
-   MARGINS (1,1)
-   PARENT 7658
-  }
-  TEXT  3169, 0, 0
-  {
-   TEXT "$#NAME"
-   RECT (2180,1491,2439,1520)
-   ALIGN 9
-   MARGINS (1,1)
-   PARENT 7654
-  }
-  TEXT  3201, 0, 0
-  {
-   TEXT "$#NAME"
-   RECT (2190,1470,2423,1499)
-   ALIGN 9
-   MARGINS (1,1)
-   PARENT 7655
-  }
-  TEXT  3220, 0, 0
-  {
-   TEXT "$#NAME"
-   RECT (2098,1511,2423,1540)
-   ALIGN 9
-   MARGINS (1,1)
-   PARENT 7653
   }
   INSTANCE  3921, 0, 0
   {
@@ -1925,14 +1578,6 @@ PAGE ""
    ALIGN 9
    MARGINS (1,1)
    PARENT 7680
-  }
-  TEXT  3974, 0, 0
-  {
-   TEXT "$#NAME"
-   RECT (1722,1410,1819,1439)
-   ALIGN 9
-   MARGINS (1,1)
-   PARENT 7652
   }
   INSTANCE  4222, 0, 0
   {
@@ -1980,32 +1625,6 @@ PAGE ""
    COLOR (0,0,192)
    PARENT 4225
   }
-  TEXT  4602, 0, 0
-  {
-   TEXT "$#NAME"
-   RECT (1244,1671,1477,1700)
-   ALIGN 9
-   MARGINS (1,1)
-   PARENT 7674
-  }
-  NET WIRE  4661, 0, 0
-  {
-   VARIABLES
-   {
-    #CUSTOM_NAME=""
-    #NAME="CTLED_CLK_DVAL(KK)"
-    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER=""
-   }
-  }
-  NET BUS  4799, 0, 0
-  {
-   VARIABLES
-   {
-    #DOWNTO="1"
-    #MDA_RECORD_TOKEN="OTHER"
-    #NAME="CTLED_MCLK_DATA_KK(2:0)"
-   }
-  }
   INSTANCE  4862, 0, 0
   {
    VARIABLES
@@ -2019,52 +1638,16 @@ PAGE ""
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER=""
     #VHDL_TYPE="fpa_clk_info_type"
    }
-   COORD (620,1700)
+   COORD (700,1540)
   }
   TEXT  4863, 0, 0
   {
    TEXT "$#REFERENCE"
-   RECT (353,1683,569,1718)
+   RECT (433,1523,649,1558)
    ALIGN 6
    MARGINS (1,1)
    PARENT 4862
    ORIENTATION 2
-  }
-  TEXT  4898, 0, 0
-  {
-   TEXT "$#NAME"
-   RECT (782,1510,894,1539)
-   ALIGN 9
-   MARGINS (1,1)
-   PARENT 7657
-  }
-  GENERATE  5252, 0, 0
-  {
-   VARIABLES
-   {
-    #GENERATE_KIND="FOR"
-    #INDEX_VARIABLE="KK"
-    #LABEL="g0"
-    #RANGE="0 to DEFINE_FPA_MCLK_NUM-1"
-   }
-   AREA (680,1320,2460,2120)
-   INSTANCES 2546, 2560
-   ASSIGNMENTS 2664
-  }
-  TEXT  5253, 0, 0
-  {
-   TEXT "@GENERATE_STATEMENT_DESCRIPTION"
-   RECT (680,1284,1485,1319)
-   ALIGN 8
-   MARGINS (1,1)
-   PARENT 5252
-  }
-  NET WIRE  5274, 0, 0
-  {
-   VARIABLES
-   {
-    #NAME="MCLK_KK"
-   }
   }
   TEXT  5839, 0, 0
   {
@@ -2188,15 +1771,6 @@ PAGE ""
    ALIGN 8
    MARGINS (1,1)
    PARENT 6315
-  }
-  NET WIRE  6450, 0, 0
-  {
-   VARIABLES
-   {
-    #CUSTOM_NAME=""
-    #NAME="CTLED_CLK_RD(KK)"
-    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER=""
-   }
   }
   NET BUS  6451, 0, 0
   {
@@ -2603,74 +2177,6 @@ PAGE ""
   {
    COORD (2800,1540)
   }
-  VTX  7570, 0, 0
-  {
-   COORD (1840,1460)
-  }
-  VTX  7571, 0, 0
-  {
-   COORD (1700,1460)
-  }
-  VTX  7572, 0, 0
-  {
-   COORD (1700,1440)
-  }
-  VTX  7573, 0, 0
-  {
-   COORD (1840,1440)
-  }
-  VTX  7574, 0, 0
-  {
-   COORD (2160,1540)
-  }
-  VTX  7575, 0, 0
-  {
-   COORD (2420,1540)
-  }
-  VTX  7576, 0, 0
-  {
-   COORD (2420,1520)
-  }
-  VTX  7577, 0, 0
-  {
-   COORD (2100,1520)
-  }
-  VTX  7578, 0, 0
-  {
-   COORD (2420,1500)
-  }
-  VTX  7579, 0, 0
-  {
-   COORD (2100,1500)
-  }
-  VTX  7580, 0, 0
-  {
-   COORD (2100,1540)
-  }
-  VTX  7581, 0, 0
-  {
-   COORD (740,1540)
-  }
-  VTX  7582, 0, 0
-  {
-   COORD (900,1540)
-  }
-  VTX  7583, 0, 0
-  {
-   COORD (740,1480)
-  }
-  VTX  7584, 0, 0
-  {
-   COORD (900,1480)
-  }
-  VTX  7585, 0, 0
-  {
-   COORD (740,1460)
-  }
-  VTX  7586, 0, 0
-  {
-   COORD (900,1460)
-  }
   VTX  7587, 0, 0
   {
    COORD (1700,780)
@@ -2774,42 +2280,6 @@ PAGE ""
   VTX  7612, 0, 0
   {
    COORD (680,780)
-  }
-  VTX  7613, 0, 0
-  {
-   COORD (1460,1580)
-  }
-  VTX  7614, 0, 0
-  {
-   COORD (1240,1580)
-  }
-  VTX  7615, 0, 0
-  {
-   COORD (1500,1700)
-  }
-  VTX  7616, 0, 0
-  {
-   COORD (1240,1700)
-  }
-  VTX  7617, 0, 0
-  {
-   COORD (1240,1680)
-  }
-  VTX  7618, 0, 0
-  {
-   COORD (1840,1520)
-  }
-  VTX  7619, 0, 0
-  {
-   COORD (1240,1520)
-  }
-  VTX  7620, 0, 0
-  {
-   COORD (1840,1500)
-  }
-  VTX  7621, 0, 0
-  {
-   COORD (1240,1500)
   }
   VTX  7622, 0, 0
   {
@@ -2920,83 +2390,6 @@ PAGE ""
     #NAMED="1"
    }
   }
-  WIRE  7651, 0, 0
-  {
-   NET 303
-   VTX 7570, 7571
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  WIRE  7652, 0, 0
-  {
-   NET 3939
-   VTX 7572, 7573
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  BUS  7653, 0, 0
-  {
-   NET 4799
-   VTX 7574, 7575
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  WIRE  7654, 0, 0
-  {
-   NET 4661
-   VTX 7576, 7577
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  WIRE  7655, 0, 0
-  {
-   NET 6450
-   VTX 7578, 7579
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  BUS  7656, 0, 0
-  {
-   NET 4799
-   VTX 7574, 7580
-  }
-  WIRE  7657, 0, 0
-  {
-   NET 5274
-   VTX 7581, 7582
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  WIRE  7658, 0, 0
-  {
-   NET 303
-   VTX 7583, 7584
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  WIRE  7659, 0, 0
-  {
-   NET 906
-   VTX 7585, 7586
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
   WIRE  7660, 0, 0
   {
    NET 6953
@@ -3077,48 +2470,6 @@ PAGE ""
    {
     #NAMED="1"
    }
-  }
-  WIRE  7673, 0, 0
-  {
-   NET 7756
-   VTX 7613, 7614
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  WIRE  7674, 0, 0
-  {
-   NET 6450
-   VTX 7615, 7616
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  VTX  7675, 0, 0
-  {
-   COORD (2160,1680)
-  }
-  BUS  7676, 0, 0
-  {
-   NET 4799
-   VTX 7574, 7675
-  }
-  BUS  7677, 0, 0
-  {
-   NET 4799
-   VTX 7675, 7617
-  }
-  WIRE  7678, 0, 0
-  {
-   NET 2572
-   VTX 7618, 7619
-  }
-  BUS  7679, 0, 0
-  {
-   NET 2570
-   VTX 7620, 7621
   }
   WIRE  7680, 0, 0
   {
@@ -3255,21 +2606,6 @@ PAGE ""
    SHOWTEXT
    CORNER 10
   }
-  NET WIRE  7756, 0, 0
-  {
-   VARIABLES
-   {
-    #NAME="CTLED_CLK_RDY"
-   }
-  }
-  TEXT  7757, 0, 0
-  {
-   TEXT "$#NAME"
-   RECT (1250,1550,1451,1579)
-   ALIGN 9
-   MARGINS (1,1)
-   PARENT 7673
-  }
   VTX  7761, 0, 0
   {
    COORD (2800,1480)
@@ -3280,7 +2616,7 @@ PAGE ""
   }
   WIRE  7764, 0, 0
   {
-   NET 7756
+   NET 8196
    VTX 7761, 7762
    VARIABLES
    {
@@ -3290,7 +2626,7 @@ PAGE ""
   TEXT  7766, 0, 0
   {
    TEXT "$#NAME"
-   RECT (2543,1451,2744,1480)
+   RECT (2528,1451,2758,1480)
    ALIGN 9
    MARGINS (1,1)
    PARENT 7764
@@ -3300,6 +2636,76 @@ PAGE ""
    TEXT "@GENERIC_ACTUAL_VALUES()"
    RECT (2800,1676,3286,1709)
    PARENT 6315
+  }
+  ARCHITECTUREDECLARATIONS  8195, 0, 0
+  {
+   LABEL "Architecture declarations"
+   TEXT 
+"component fastrd2_clk_base_mem\n"+
+"  port(\n"+
+"       ARESET           : in STD_LOGIC;\n"+
+"       CLK              : in STD_LOGIC;\n"+
+"       CTLED_CLK_RD     : in STD_LOGIC;\n"+
+"       MCLK             : in STD_LOGIC;\n"+
+"       CTLED_CLK_DVAL   : out STD_LOGIC;\n"+
+"       CTLED_CLK_RDY    : out STD_LOGIC;\n"+
+"       CTLED_CLK_DATA   : out STD_LOGIC_VECTOR(2 downto 0)\n"+
+"  );\n"+
+"end component;\n"+
+"\n"+
+"signal CTLED_MCLK_DATA : fastrd2_clk_std_array_type;\n"+
+"\n"+
+"\n"+
+"\n"+
+""
+   RECT (3460,220,4120,400)
+   MARGINS (20,20)
+   MULTILINE
+   SYNTAXCOLORED
+   SHOWLABEL
+   SHOWTEXT
+   CORNER 10
+  }
+  NET WIRE  8196, 0, 0
+  {
+   VARIABLES
+   {
+    #NAME="CTLED_CLK_RDY(0)"
+   }
+  }
+  VTX  8214, 0, 0
+  {
+   COORD (1740,1360)
+  }
+  VTX  8215, 0, 0
+  {
+   COORD (2080,1360)
+  }
+  BUS  8217, 0, 0
+  {
+   NET 8218
+   VTX 8214, 8215
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  NET BUS  8218, 0, 0
+  {
+   VARIABLES
+   {
+    #DOWNTO="1"
+    #MDA_RECORD_TOKEN="OTHER"
+    #NAME="CTLED_CLK_RDY(7:0)"
+   }
+  }
+  TEXT  8219, 0, 0
+  {
+   TEXT "$#NAME"
+   RECT (1785,1330,2035,1359)
+   ALIGN 9
+   MARGINS (1,1)
+   PARENT 8217
   }
  }
  
@@ -3326,7 +2732,7 @@ PAGE ""
  
  BODY
  {
-  TEXT  7808, 0, 0
+  TEXT  8257, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -3337,7 +2743,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  7809, 0, 0
+  TEXT  8258, 0, 0
   {
    PAGEALIGN 10
    TEXT "$CREATIONDATE"
@@ -3348,7 +2754,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  7810, 0, 0
+  TEXT  8259, 0, 0
   {
    PAGEALIGN 10
    TEXT "Title:"
@@ -3358,7 +2764,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  7811, 0, 0
+  TEXT  8260, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -3370,7 +2776,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  7812, 0, 0
+  TEXT  8261, 0, 0
   {
    PAGEALIGN 10
    TEXT 
@@ -3383,7 +2789,7 @@ PAGE ""
    FONT (12,0,0,700,0,0,0,"Arial")
    MULTILINE
   }
-  TEXT  7813, 0, 0
+  TEXT  8262, 0, 0
   {
    PAGEALIGN 10
    TEXT "Page:"
@@ -3393,7 +2799,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  7814, 0, 0
+  TEXT  8263, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
@@ -3405,7 +2811,7 @@ PAGE ""
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  7815, 0, 0
+  TEXT  8264, 0, 0
   {
    PAGEALIGN 10
    TEXT "Revision:"
@@ -3415,7 +2821,7 @@ PAGE ""
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  7816, 0, 0
+  TEXT  8265, 0, 0
   {
    PAGEALIGN 10
    TEXT "$Revision"
@@ -3426,7 +2832,7 @@ PAGE ""
    FONT (12,0,0,700,0,204,0,"Arial")
    UPDATE 0
   }
-  GROUP  7817, 0, 0
+  GROUP  8266, 0, 0
   {
    PAGEALIGN 10
    RECT (3320,1820,4201,2201)
@@ -3438,7 +2844,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  7818, 0, 0
+  GROUP  8267, 0, 0
   {
    PAGEALIGN 10
    RECT (3320,2020,4201,2021)
@@ -3450,7 +2856,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  7819, 0, 0
+  GROUP  8268, 0, 0
   {
    PAGEALIGN 10
    RECT (3320,1960,4201,1961)
@@ -3462,7 +2868,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  7820, 0, 0
+  GROUP  8269, 0, 0
   {
    PAGEALIGN 10
    RECT (3320,2080,4201,2081)
@@ -3474,7 +2880,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  7821, 0, 0
+  GROUP  8270, 0, 0
   {
    PAGEALIGN 10
    RECT (3320,2140,4201,2141)
@@ -3486,7 +2892,7 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  7822, 0, 0
+  GROUP  8271, 0, 0
   {
    PAGEALIGN 10
    RECT (3500,1820,3501,1961)
@@ -3497,7 +2903,7 @@ PAGE ""
     POINTS ( (0,0), (0,140) )
    }
   }
-  GROUP  7823, 0, 0
+  GROUP  8272, 0, 0
   {
    PAGEALIGN 10
    RECT (3500,1960,3501,2201)
@@ -3508,7 +2914,7 @@ PAGE ""
     POINTS ( (0,0), (0,240) )
    }
   }
-  BMPPICT  7824, 0, 0
+  BMPPICT  8273, 0, 0
   {
    PAGEALIGN 10
    RECT (3340,1880,3479,1925)
