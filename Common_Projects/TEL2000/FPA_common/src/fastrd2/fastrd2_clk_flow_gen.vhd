@@ -163,23 +163,28 @@ begin
                   ctled_clk_rd_i <= (others => '0');
                   ctled_clk_rd_i(clkid) <= CLKID_FIFO_DVAL;
                   clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clkid);
-                  if CTLED_FPA_CLK.MCLK(clkid).SOF = '1' and CLKID_FIFO_DVAL = '1' then
-                     clkid_latch <= clkid;
-                     ctled_clk_fsm <= active_flow_eof;                     
+                  if CTLED_FPA_CLK.MCLK(clkid).EOF = '1' and CLKID_FIFO_DVAL = '1' then
+                     ctled_clk_rd_i <= (others => '0');
+                     ctled_clk_rd_i(imminent_clkid) <= CLKID_FIFO_DVAL;
+                     -- clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clkid);
                   end if;
-               
-               when active_flow_eof =>  
-                  ctled_clk_rd_i(clkid_latch) <= CLKID_FIFO_DVAL;
-                  clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clkid_latch);
-                  if CTLED_FPA_CLK.MCLK(clkid).EOF = '1' and CLKID_FIFO_DVAL = '1' then                     
-                     if clk_flow_afull_i = '1' then  
-                        ctled_clk_fsm <= pause_st;
-                     else
-                        ctled_clk_rd_i <= (others => '0');
-                        ctled_clk_rd_i(imminent_clkid) <= '1';
-                        ctled_clk_fsm <= active_flow_sof;
-                     end if;
-                  end if;                  
+                  --if CTLED_FPA_CLK.MCLK(clkid).SOF = '1' and CLKID_FIFO_DVAL = '1' then
+                  --                     clkid_latch <= clkid;
+                  --                     ctled_clk_fsm <= active_flow_eof;                     
+                  --                  end if;
+                  --               
+                  --               when active_flow_eof =>  
+                  --                  ctled_clk_rd_i(clkid_latch) <= CLKID_FIFO_DVAL;
+                  --                  clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clkid_latch);
+                  --                  if CTLED_FPA_CLK.MCLK(clkid).EOF = '1' and CLKID_FIFO_DVAL = '1' then                     
+                  --                     if clk_flow_afull_i = '1' then  
+                  --                        ctled_clk_fsm <= pause_st;
+                  --                     else
+                  --                        ctled_clk_rd_i <= (others => '0');
+                  --                        ctled_clk_rd_i(imminent_clkid) <= '1';
+                  --                        ctled_clk_fsm <= active_flow_sof;
+                  --                     end if;
+                  --                  end if;                  
                
                when others =>                   
                
