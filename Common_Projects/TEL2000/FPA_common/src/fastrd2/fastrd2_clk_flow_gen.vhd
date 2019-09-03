@@ -105,8 +105,7 @@ begin
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then
-            clk_flow_afull_i <= '0'; 
-            
+            clk_flow_afull_i <= '0';            
             err_i <= '0';
             
          else             
@@ -137,12 +136,11 @@ begin
             ctled_clk_rd_i <= (others => '0');
             ctled_clk_fsm <= wait_rdy_st;
             clk_flow_dval_i <= '0';
+         
          else             
-            
-            
+               
             clk_flow_dval_i <= or_reduce(ctled_clk_rd_i);
-            
-            
+                    
             --------------------------------------------
             -- fsm de generation clk_flow
             --------------------------------------------             
@@ -165,26 +163,12 @@ begin
                   clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clkid);
                   if CTLED_FPA_CLK.MCLK(clkid).EOF = '1' and CLKID_FIFO_DVAL = '1' then
                      ctled_clk_rd_i <= (others => '0');
-                     ctled_clk_rd_i(imminent_clkid) <= CLKID_FIFO_DVAL;
-                     -- clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clkid);
-                  end if;
-                  --if CTLED_FPA_CLK.MCLK(clkid).SOF = '1' and CLKID_FIFO_DVAL = '1' then
-                  --                     clkid_latch <= clkid;
-                  --                     ctled_clk_fsm <= active_flow_eof;                     
-                  --                  end if;
-                  --               
-                  --               when active_flow_eof =>  
-                  --                  ctled_clk_rd_i(clkid_latch) <= CLKID_FIFO_DVAL;
-                  --                  clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clkid_latch);
-                  --                  if CTLED_FPA_CLK.MCLK(clkid).EOF = '1' and CLKID_FIFO_DVAL = '1' then                     
-                  --                     if clk_flow_afull_i = '1' then  
-                  --                        ctled_clk_fsm <= pause_st;
-                  --                     else
-                  --                        ctled_clk_rd_i <= (others => '0');
-                  --                        ctled_clk_rd_i(imminent_clkid) <= '1';
-                  --                        ctled_clk_fsm <= active_flow_sof;
-                  --                     end if;
-                  --                  end if;                  
+                     ctled_clk_rd_i(imminent_clkid) <= '1';
+                     if clk_flow_afull_i = '1' then
+                       ctled_clk_fsm <= pause_st;
+                       ctled_clk_rd_i <= (others => '0');
+                     end if;
+                  end if;               
                
                when others =>                   
                
@@ -195,47 +179,5 @@ begin
    end process;
    
    clkid_fifo_rd_i <= CTLED_FPA_CLK.MCLK(clkid).EOF;
-   
-   --   -------------------------------------------------- 
-   --   -- ctlid_fsm                               
-   --   -------------------------------------------------- 
-   --   U4: process(CLK)
-   --      variable clk_id_latch_i      : integer range 0 to FPA_MCLK_NUM_MAX-1;
-   --   begin
-   --      if rising_edge(CLK) then 
-   --         if sreset = '1' then            
-   --            ctlid_fsm <= wait_rdy_st;
-   --            
-   --         else             
-   --            
-   --            --------------------------------------------
-   --            -- fsm de mise à jour de clkid
-   --            --------------------------------------------             
-   --            case ctlid_fsm is
-   --               
-   --               when wait_rdy_st =>
-   --                  if CTLED_CLK_RDY = '1' then 
-   --                     ctlid_fsm <= pause_st;
-   --                  end if;
-   --               
-   --               when pause_st =>
-   --                  clkid_fifo_rd_i <= '0';
-   --                  if clk_flow_afull_i = '0' and CLKID_FIFO_DVAL = '1' then
-   --                     ctlid_fsm <= active_flow_st1; 
-   --                  end if;
-   --               
-   --               when active_flow_st1 =>                    
-   --                     clkid_fifo_rd_i <= CTLED_FPA_CLK.MCLK(clkid).EOF;
-   --
-   --               
-   --               when others =>                   
-   --               
-   --            end case;       
-   --            
-   --         end if;
-   --      end if;
-   --   end process; 
-   
-   
    
 end rtl;
