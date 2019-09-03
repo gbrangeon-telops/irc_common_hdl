@@ -39,6 +39,8 @@ end fastrd2_mem_fanout;
 
 architecture rtl of fastrd2_mem_fanout is  
    
+   type area_info_pipe_type is array (0 to 1) of area_info_type;
+   
    component sync_reset
       port(
          ARESET : in std_logic;
@@ -46,11 +48,11 @@ architecture rtl of fastrd2_mem_fanout is
          CLK    : in std_logic);
    end component; 
    
-   signal sreset              : std_logic;
-   signal fifo_wr_i           : std_logic;
-   signal fifo_data_i         : std_logic_vector(FIFOA_DATA'LENGTH-1 downto 0);
-   signal afull_i             : std_logic;
-   
+   signal sreset               : std_logic;
+   signal fifo_wr_i            : std_logic;
+   signal fifo_data_i          : std_logic_vector(FIFOA_DATA'LENGTH-1 downto 0);
+   signal afull_i              : std_logic;
+   signal area_info_pipe       : area_info_pipe_type;  
    
 begin                                                     
    
@@ -85,6 +87,19 @@ begin
          if sreset = '1' then
             fifo_wr_i <= '0';
             afull_i <= '0';
+            -- pragma translate_off
+            for ii in 0 to 1 loop
+               area_info_pipe(ii).raw <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'));
+               area_info_pipe(ii).user <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'));
+            end loop;
+            -- pragma translate_on
+            
+            for ii in 0 to 1 loop
+               area_info_pipe(ii).imminent_clk_id <= (others => '1');
+               area_info_pipe(ii).clk_id <= (others => '0');
+               area_info_pipe(ii).info_dval <= '0';
+            end loop;
+            
          else
             
             ----------------------------------------------------------
@@ -93,10 +108,21 @@ begin
             afull_i <= FIFOA_AFULL or FIFOB_AFULL;
             
             ----------------------------------------------------------
+            -- pipe 0
+            ----------------------------------------------------------
+            area_info_pipe(0) <= AREA_INFO;
+            
+            ----------------------------------------------------------
+            -- pipe 1 : generation de imminent_clk_id
+            ----------------------------------------------------------
+            area_info_pipe(1) <= area_info_pipe(0);
+            area_info_pipe(1).imminent_clk_id <= AREA_INFO.CLK_ID;
+            
+            ----------------------------------------------------------
             -- conversion en std_logic_vector
             ----------------------------------------------------------
-            fifo_wr_i <= AREA_INFO.INFO_DVAL or AREA_INFO.RAW.RD_END;            
-            fifo_data_i <= std_logic_vector(resize(unsigned(area_info_to_vector_func(AREA_INFO)), fifo_data_i'length));
+            fifo_wr_i <= area_info_pipe(1).info_dval or area_info_pipe(1).raw.rd_end;            
+            fifo_data_i <= std_logic_vector(resize(unsigned(area_info_to_vector_func(area_info_pipe(1))), fifo_data_i'length));
             
          end if;
       end if; 

@@ -17,6 +17,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use IEEE.std_logic_misc.all;
 use work.fastrd2_define.all;
+use work.fpa_define.all;
 
 entity fastrd2_clk_flow_gen is
    
@@ -31,7 +32,7 @@ entity fastrd2_clk_flow_gen is
       
       CLKID_FIFO_RD        : out std_logic;
       CLKID_FIFO_DVAL      : in std_logic;
-      CLKID_FIFO_DATA      : in std_logic_vector(3 downto 0);
+      CLKID_FIFO_DATA      : in std_logic_vector(7 downto 0);
       
       CTLED_CLK_RD         : out std_logic_vector(7 downto 0);
       CTLED_CLK_DVAL       : in std_logic_vector(7 downto 0);
@@ -56,16 +57,20 @@ architecture rtl of fastrd2_clk_flow_gen is
          SRESET : out std_logic;
          CLK    : in std_logic);
    end component; 
-   type ctler_fsm_type is (wait_rdy_st, idle, active_flow_st);
+   type ctled_clk_fsm_type is (wait_rdy_st, pause_st, active_flow_sof, active_flow_eof);
    
    signal sreset              : std_logic;
    signal clkid_fifo_rd_i     : std_logic;
    signal ctled_clk_rd_i      : std_logic_vector(CTLED_CLK_RD'LENGTH-1 downto 0);
    signal clk_flow_dval_i     : std_logic;
    signal clk_flow_data_i     : fpa_clk_base_info_type;   
-   signal ctler_fsm           : ctler_fsm_type;
+   signal ctled_clk_fsm       : ctled_clk_fsm_type;
+   signal ctlid_fsm           : ctled_clk_fsm_type;
    signal err_i               : std_logic;
    signal clk_flow_afull_i    : std_logic;
+   signal clkid               : integer range 0 to DEFINE_FPA_MCLK_NUM-1;
+   signal imminent_clkid      : integer range 0 to DEFINE_FPA_MCLK_NUM-1;
+   signal clkid_latch         : integer range 0 to DEFINE_FPA_MCLK_NUM-1;
    
 begin
    --------------------------------------------------
@@ -76,6 +81,12 @@ begin
    CLK_FLOW_DVAL <= clk_flow_dval_i;
    CLK_FLOW_DATA <= clk_flow_data_i.sof & clk_flow_data_i.eof & clk_flow_data_i.clk;
    ERR <= err_i;
+   
+   --------------------------------------------------
+   -- input maps
+   -------------------------------------------------- 
+   imminent_clkid <= to_integer(unsigned(CLKID_FIFO_DATA(7 downto 4)));
+   clkid <= to_integer(unsigned(CLKID_FIFO_DATA(3 downto 0)));
    
    --------------------------------------------------
    -- synchro reset 
@@ -90,20 +101,20 @@ begin
    -------------------------------------------------- 
    -- Ecriture dans le fifo                               
    -------------------------------------------------- 
-   U2: process(CLK) 
-      variable clk_id_i : integer range 0 to FPA_MCLK_NUM_MAX - 1;
+   U2: process(CLK)
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then
             clk_flow_afull_i <= '0'; 
-            clk_flow_dval_i <= '0';
-            ctler_fsm <= wait_rdy_st;
+            
             err_i <= '0';
             
          else             
             
+            err_i <= '0';
+            
             --------------------------------------------
-            -- quues signaux
+            -- outputs
             -------------------------------------------
             if unsigned(CLK_FLOW_DCNT) > G_FIFO_FULL_THRESHOLD then
                clk_flow_afull_i <= '1'; 
@@ -111,42 +122,115 @@ begin
                clk_flow_afull_i <= '0';  
             end if;
             
-            clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clk_id_i);
-            clk_flow_dval_i <= clkid_fifo_rd_i; 
-            
-            --------------------------------------------
-            -- fsm d'ecriture dans le fifo
-            --------------------------------------------             
-            case ctler_fsm is
-               
-               when wait_rdy_st =>
-                  if CTLED_CLK_RDY = '1' then 
-                     ctler_fsm <= wait_rdy_st;
-                  end if;
-               
-               when idle =>
-                  ctled_clk_rd_i <= (others => '0');
-                  clkid_fifo_rd_i <= '0';
-                  clk_id_i := to_integer(unsigned(CLKID_FIFO_DATA));
-                  if CLKID_FIFO_DVAL = '1' and CTLED_CLK_DVAL(clk_id_i) = '1' and clk_flow_afull_i =  '0' then
-                     clkid_fifo_rd_i <= '1';
-                     ctled_clk_rd_i(clk_id_i) <= '1';
-                     ctler_fsm <= active_flow_st;
-                  end if;
-               
-               when active_flow_st =>
-                  clkid_fifo_rd_i <= '0';
-                  err_i <= not and_reduce(CTLED_CLK_DVAL);  -- ne devrait jamais arriver
-                  if CTLED_FPA_CLK.MCLK(clk_id_i).EOF = '1' then
-                     ctler_fsm <= idle; 
-                  end if;
-               
-               when others =>
-               
-            end case;
-            
          end if;
       end if;
    end process;  
+   
+   -------------------------------------------------- 
+   -- ctled_clk_fsm                               
+   -------------------------------------------------- 
+   U3: process(CLK)
+      variable clk_id_latch_i      : integer range 0 to FPA_MCLK_NUM_MAX-1;
+   begin
+      if rising_edge(CLK) then 
+         if sreset = '1' then
+            ctled_clk_rd_i <= (others => '0');
+            ctled_clk_fsm <= wait_rdy_st;
+            clk_flow_dval_i <= '0';
+         else             
+            
+            
+            clk_flow_dval_i <= or_reduce(ctled_clk_rd_i);
+            
+            
+            --------------------------------------------
+            -- fsm de generation clk_flow
+            --------------------------------------------             
+            case ctled_clk_fsm is
+               
+               when wait_rdy_st =>
+                  if and_reduce(CTLED_CLK_DVAL(DEFINE_FPA_MCLK_NUM-1 downto 0)) = '1' then 
+                     ctled_clk_fsm <= pause_st;
+                  end if;
+               
+               when pause_st => 
+                  ctled_clk_rd_i <= (others => '0');
+                  if clk_flow_afull_i = '0' and CLKID_FIFO_DVAL = '1' then
+                     ctled_clk_fsm <= active_flow_sof; 
+                  end if;
+               
+               when active_flow_sof =>
+                  ctled_clk_rd_i <= (others => '0');
+                  ctled_clk_rd_i(clkid) <= CLKID_FIFO_DVAL;
+                  clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clkid);
+                  if CTLED_FPA_CLK.MCLK(clkid).SOF = '1' and CLKID_FIFO_DVAL = '1' then
+                     clkid_latch <= clkid;
+                     ctled_clk_fsm <= active_flow_eof;                     
+                  end if;
+               
+               when active_flow_eof =>  
+                  ctled_clk_rd_i(clkid_latch) <= CLKID_FIFO_DVAL;
+                  clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clkid_latch);
+                  if CTLED_FPA_CLK.MCLK(clkid).EOF = '1' and CLKID_FIFO_DVAL = '1' then                     
+                     if clk_flow_afull_i = '1' then  
+                        ctled_clk_fsm <= pause_st;
+                     else
+                        ctled_clk_rd_i <= (others => '0');
+                        ctled_clk_rd_i(imminent_clkid) <= '1';
+                        ctled_clk_fsm <= active_flow_sof;
+                     end if;
+                  end if;                  
+               
+               when others =>                   
+               
+            end case;       
+            
+         end if;
+      end if;
+   end process;
+   
+   clkid_fifo_rd_i <= CTLED_FPA_CLK.MCLK(clkid).EOF;
+   
+   --   -------------------------------------------------- 
+   --   -- ctlid_fsm                               
+   --   -------------------------------------------------- 
+   --   U4: process(CLK)
+   --      variable clk_id_latch_i      : integer range 0 to FPA_MCLK_NUM_MAX-1;
+   --   begin
+   --      if rising_edge(CLK) then 
+   --         if sreset = '1' then            
+   --            ctlid_fsm <= wait_rdy_st;
+   --            
+   --         else             
+   --            
+   --            --------------------------------------------
+   --            -- fsm de mise à jour de clkid
+   --            --------------------------------------------             
+   --            case ctlid_fsm is
+   --               
+   --               when wait_rdy_st =>
+   --                  if CTLED_CLK_RDY = '1' then 
+   --                     ctlid_fsm <= pause_st;
+   --                  end if;
+   --               
+   --               when pause_st =>
+   --                  clkid_fifo_rd_i <= '0';
+   --                  if clk_flow_afull_i = '0' and CLKID_FIFO_DVAL = '1' then
+   --                     ctlid_fsm <= active_flow_st1; 
+   --                  end if;
+   --               
+   --               when active_flow_st1 =>                    
+   --                     clkid_fifo_rd_i <= CTLED_FPA_CLK.MCLK(clkid).EOF;
+   --
+   --               
+   --               when others =>                   
+   --               
+   --            end case;       
+   --            
+   --         end if;
+   --      end if;
+   --   end process; 
+   
+   
    
 end rtl;

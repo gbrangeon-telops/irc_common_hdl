@@ -142,7 +142,7 @@ begin
          if AFULL = '0' then 
             if readout_in_progress = '1' then            
                frame_pclk_cnt <= frame_pclk_cnt + 1;  -- referentiel trame  : compteur temporel sur toute l'image
-               line_pclk_cnt <= line_pclk_cnt + 1;   -- referentiel ligne  : compteur temporel sur ligne synchronisé sur celui de trame. 
+               line_pclk_cnt <= line_pclk_cnt + 1;    -- referentiel ligne  : compteur temporel sur ligne synchronisé sur celui de trame. 
             else
                frame_pclk_cnt <= to_unsigned(0, frame_pclk_cnt'length);
                line_pclk_cnt <= (others => '0'); 

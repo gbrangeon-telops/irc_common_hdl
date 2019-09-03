@@ -79,21 +79,20 @@ begin
          else           
             
             --------------------------------------------------------
-            -- pipe 0 : 
+            -- pipe 0 : imminent_clk_change
             ------------------------------------------------
             area_info_pipe(0) <= AREA_INFO_I;                
+            if AREA_INFO_I.CLK_ID /= AREA_INFO_I.IMMINENT_CLK_ID then 
+               area_info_pipe(0).raw.imminent_clk_change <= '1';
+            else
+               area_info_pipe(0).raw.imminent_clk_change <= '0';
+            end if;   
             
             --------------------------------------------------------
-            -- pipe 1 : imminent_clk_change and imminent_aoi
+            -- pipe 1 : imminent_aoi
             --------------------------------------------------------      
-            area_info_pipe(1) <= area_info_pipe(0);        
-            if AREA_INFO_I.CLK_ID /= area_info_pipe(0).clk_id then 
-               area_info_pipe(1).raw.imminent_clk_change <= '1';
-            else
-               area_info_pipe(1).raw.imminent_clk_change <= '0';
-            end if;         
-            area_info_pipe(1).raw.imminent_aoi <= not area_info_pipe(0).user.sol and AREA_INFO_I.USER.SOL;
-                        
+            area_info_pipe(1) <= area_info_pipe(0);  
+            area_info_pipe(1).raw.imminent_aoi <= not area_info_pipe(0).user.sol and AREA_INFO_I.USER.SOL;            
             
          end if;
       end if;

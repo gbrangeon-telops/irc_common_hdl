@@ -33,7 +33,7 @@ entity fastrd2_clkid_fifo_writer is
       AREA_FIFO_AFULL  : out std_logic;
       
       CLKID_FIFO_DCNT  : in std_logic_vector(10 downto 0);
-      CLKID_FIFO_DIN   : out std_logic_vector(3 downto 0);
+      CLKID_FIFO_DIN   : out std_logic_vector(7 downto 0);
       CLKID_FIFO_WR    : out std_logic
       );
 end fastrd2_clkid_fifo_writer;
@@ -88,9 +88,10 @@ begin
       begin          
          if rising_edge(CLK) then                     
             if sreset = '1' then  
-               active_wr <= '1'; 
+               active_wr <= '1';
+               clkid_fifo_wr_i <= '0';
             else
-               clkid_fifo_din_i <= std_logic_vector(area_info.clk_id);  -- extraction du clk_id
+               clkid_fifo_din_i <= std_logic_vector(area_info.imminent_clk_id) & std_logic_vector(area_info.clk_id);  -- extraction du clk_id
                clkid_fifo_wr_i <= area_info_dval;
             end if;
          end if;
@@ -106,14 +107,15 @@ begin
       begin          
          if rising_edge(CLK) then                     
             if sreset = '1' then  
-               active_wr <= '1'; 
+               active_wr <= '1';
+               clkid_fifo_wr_i <= '0';
             else
                
                if AREA_FIFO_DVAL = '1' then                  
                   active_wr <= not active_wr;
                end if;
                clkid_fifo_wr_i  <= (active_wr or area_info.raw.rd_end) and area_info_dval;
-               clkid_fifo_din_i <= std_logic_vector(area_info.clk_id);
+               clkid_fifo_din_i <= std_logic_vector(area_info.imminent_clk_id) & std_logic_vector(area_info.clk_id);
                
             end if;   
          end if;

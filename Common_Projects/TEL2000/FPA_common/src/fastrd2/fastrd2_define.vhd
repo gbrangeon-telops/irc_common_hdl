@@ -12,7 +12,6 @@ use ieee.MATH_REAL.all;
 
 package fastrd2_define is
    
-   
    constant FPA_MCLK_NUM_MAX : integer:= 8;  --- Le max des nombres de domaines MCLK utilisés dans tous les designs 
    constant DEFINE_IMMINENT_AOI_POS : integer := 39;
    constant DEFINE_IMMINENT_CLK_CHANGE_POS : integer := 40;
@@ -62,7 +61,7 @@ package fastrd2_define is
       --      xsize                          : unsigned(12 downto 0);
       --      ysize                          : unsigned(12 downto 0);
       clk_id                         : unsigned(3 downto 0);    -- clk_id associé à la zone decrite par la config
-      
+           
       -- delimiteurs de trames et de lignes
       sof_posf_pclk                  : unsigned(9 downto 0);     -- 
       eof_posf_pclk                  : unsigned(23 downto 0);    --
@@ -116,7 +115,7 @@ package fastrd2_define is
    record
       
       -- dval de area info au complet
-      info_dval            :std_logic;             -- dit si tout l'enregistrement (tout le regroupement de champs de données) est valide
+      info_dval            : std_logic;             -- dit si tout l'enregistrement (tout le regroupement de champs de données) est valide
       
       -- user_area info
       user                 : area_type;
@@ -125,8 +124,9 @@ package fastrd2_define is
       raw                  : area_type;
       
       -- horloges associées
-      clk_id               : unsigned(3 downto 0);  -- ID de l'horloge à utiliser pour le pixel associé      
-      
+      imminent_clk_id      : unsigned(3 downto 0);    -- clk_id devancé d'un coup d'horloge
+      clk_id               : unsigned(3 downto 0);  -- ID de l'horloge à utiliser pour le pixel associé 
+            
    end record;
    
    ------------------------------------------
@@ -173,7 +173,7 @@ package body fastrd2_define is
    -- area_info_to_vector_func
    --------------------------------------------------------------------------------------------- 
    function area_info_to_vector_func(area_info: area_info_type) return std_logic_vector is
-      variable yy : std_logic_vector(63 downto 0);
+      variable yy : std_logic_vector(67 downto 0);
    begin
       yy := 
       
@@ -202,6 +202,7 @@ package body fastrd2_define is
       & std_logic_vector(area_info.raw.line_cnt)             
       & std_logic_vector(area_info.raw.line_pclk_cnt)
       
+      & std_logic_vector(area_info.imminent_clk_id)
       & std_logic_vector(area_info.clk_id);
       
       return yy;
@@ -215,30 +216,31 @@ package body fastrd2_define is
       variable area_info : area_info_type;
    begin      
       
-      area_info.info_dval                           :=  yy(63);
+      area_info.info_dval                           :=  yy(67);
       
-      area_info.user.spare                          :=  yy(62 downto 55);
-      area_info.user.sof                            :=  yy(54);
-      area_info.user.eof                            :=  yy(53);
-      area_info.user.sol                            :=  yy(52);
-      area_info.user.eol                            :=  yy(51);
-      area_info.user.fval                           :=  yy(50);
-      area_info.user.lval                           :=  yy(49);
+      area_info.user.spare                          :=  yy(66 downto 59);
+      area_info.user.sof                            :=  yy(58);
+      area_info.user.eof                            :=  yy(57);
+      area_info.user.sol                            :=  yy(56);
+      area_info.user.eol                            :=  yy(55);
+      area_info.user.fval                           :=  yy(54);
+      area_info.user.lval                           :=  yy(53);
       
-      area_info.raw.spare                           :=  yy(48 downto 41);
-      area_info.raw.imminent_clk_change             :=  yy(40);
-      area_info.raw.imminent_aoi                    :=  yy(39);
-      area_info.raw.sof                             :=  yy(38);
-      area_info.raw.eof                             :=  yy(37);
-      area_info.raw.sol                             :=  yy(36);
-      area_info.raw.eol                             :=  yy(35);
-      area_info.raw.fval                            :=  yy(34);
-      area_info.raw.lval                            :=  yy(33);
-      area_info.raw.dval                            :=  yy(32);
-      area_info.raw.lsync                           :=  yy(31);
-      area_info.raw.rd_end                          :=  yy(30);
-      area_info.raw.line_cnt                        :=  unsigned(yy(29 downto 17));    
-      area_info.raw.line_pclk_cnt                   :=  unsigned(yy(16 downto 4));      
+      area_info.raw.spare                           :=  yy(52 downto 45);
+      area_info.raw.imminent_clk_change             :=  yy(44);
+      area_info.raw.imminent_aoi                    :=  yy(43);
+      area_info.raw.sof                             :=  yy(42);
+      area_info.raw.eof                             :=  yy(41);
+      area_info.raw.sol                             :=  yy(40);
+      area_info.raw.eol                             :=  yy(39);
+      area_info.raw.fval                            :=  yy(38);
+      area_info.raw.lval                            :=  yy(37);
+      area_info.raw.dval                            :=  yy(36);
+      area_info.raw.lsync                           :=  yy(35);
+      area_info.raw.rd_end                          :=  yy(34);
+      area_info.raw.line_cnt                        :=  unsigned(yy(33 downto 21));    
+      area_info.raw.line_pclk_cnt                   :=  unsigned(yy(20 downto 8));      
+      area_info.imminent_clk_id                     :=  unsigned(yy(7 downto 4));
       area_info.clk_id                              :=  unsigned(yy(3 downto 0));
       
       return area_info;
