@@ -98,6 +98,7 @@ begin
                area_info_pipe(ii).imminent_clk_id <= (others => '1');
                area_info_pipe(ii).clk_id <= (others => '0');
                area_info_pipe(ii).info_dval <= '0';
+               area_info_pipe(ii).raw.rd_end <= '0';
             end loop;
             
          else

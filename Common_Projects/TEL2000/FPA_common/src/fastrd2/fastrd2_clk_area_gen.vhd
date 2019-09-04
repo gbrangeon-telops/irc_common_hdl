@@ -77,7 +77,8 @@ begin
             -- pragma translate_on
             
             for ii in 0 to 3 loop
-               area_info_pipe(ii).info_dval <= '0';    
+               area_info_pipe(ii).info_dval <= '0'; 
+               area_info_pipe(ii).raw.rd_end <= '0';
             end loop;
             clk_stamp_en <= (others => '0');
             

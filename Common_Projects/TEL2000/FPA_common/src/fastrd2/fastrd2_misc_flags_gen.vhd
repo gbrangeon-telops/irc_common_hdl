@@ -50,7 +50,7 @@ begin
    --------------------------------------------------
    -- Outputs map
    --------------------------------------------------                       
-   AREA_INFO_O <= area_info_pipe(1);   
+   AREA_INFO_O <= area_info_pipe(2);   
    
    --------------------------------------------------
    -- synchro reset 
@@ -76,24 +76,34 @@ begin
             end loop;
             -- pragma translate_on
             
+            for ii in 0 to 2 loop
+               area_info_pipe(ii).info_dval <= '0';
+               area_info_pipe(ii).raw.rd_end <= '0';
+            end loop;
+            
          else           
             
             --------------------------------------------------------
-            -- pipe 0 : imminent_clk_change
+            -- pipe 0 : 
             ------------------------------------------------
-            area_info_pipe(0) <= AREA_INFO_I;                
-            if AREA_INFO_I.CLK_ID /= AREA_INFO_I.IMMINENT_CLK_ID then 
-               area_info_pipe(0).raw.imminent_clk_change <= '1';
-            else
-               area_info_pipe(0).raw.imminent_clk_change <= '0';
-            end if;   
+            area_info_pipe(0) <= AREA_INFO_I;                 
             
             --------------------------------------------------------
             -- pipe 1 : imminent_aoi
             --------------------------------------------------------      
             area_info_pipe(1) <= area_info_pipe(0);  
-            area_info_pipe(1).raw.imminent_aoi <= not area_info_pipe(0).user.sol and AREA_INFO_I.USER.SOL;            
+            area_info_pipe(1).raw.imminent_aoi <= not area_info_pipe(0).user.sol and AREA_INFO_I.USER.SOL; 
+            if AREA_INFO_I.CLK_ID /= area_info_pipe(0).clk_id then 
+               area_info_pipe(1).raw.imminent_clk_change <= '1';
+            else
+               area_info_pipe(1).raw.imminent_clk_change <= '0';
+            end if; 
             
+            --------------------------------------------------------
+            -- pipe 2 : imminent_clk_change
+            --------------------------------------------------------      
+            area_info_pipe(2) <= area_info_pipe(1);  
+                        
          end if;
       end if;
    end process; 

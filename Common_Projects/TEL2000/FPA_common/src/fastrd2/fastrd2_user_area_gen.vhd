@@ -46,6 +46,7 @@ architecture rtl of fastrd2_user_area_gen is
    signal area_info_pipe       : area_info_pipe_type;
    signal active_line_temp     : std_logic;
    signal active_line          : std_logic;
+   signal user_eof_last        : std_logic;
    
 begin
    
@@ -80,14 +81,21 @@ begin
             
             for ii in 0 to 3 loop
                area_info_pipe(ii).info_dval <= '0';
+               area_info_pipe(ii).raw.rd_end <= '0';
             end loop;
+            user_eof_last <= '0';
+            active_line <= '0';
+            active_line_temp <= '0';
             
          else           
             
             -------------------------
             -- pipe 0 pour generation identificateurs 
             -------------------------
-            area_info_pipe(0) <= AREA_INFO_I;
+            area_info_pipe(0).raw         <= AREA_INFO_I.RAW;
+            area_info_pipe(0).info_dval   <= AREA_INFO_I.INFO_DVAL;
+            area_info_pipe(0).clk_id      <= AREA_INFO_I.CLK_ID;
+            --identificateurs
             if AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.SOL_POSL_PCLK then          -- lval
                area_info_pipe(0).user.lval <= '1';
             elsif AREA_INFO_I.RAW.LINE_PCLK_CNT > USER_AREA_CFG.EOL_POSL_PCLK then
@@ -116,7 +124,7 @@ begin
             --------------------------------------------------------
             -- pipe 1 pour generation premisse dval et sof
             --------------------------------------------------------      
-            area_info_pipe(1) <= area_info_pipe(0);           
+            area_info_pipe(1) <= area_info_pipe(0);
             -- sof
             if  area_info_pipe(0).raw.line_cnt = USER_AREA_CFG.LINE_START_NUM then 
                area_info_pipe(1).user.sof <= area_info_pipe(0).user.sol;
@@ -133,7 +141,7 @@ begin
             -------------------------------------------------------
             -- pipe 2 pour generation active_line et eof et sync_flag        
             -------------------------------------------------------
-            area_info_pipe(2) <= area_info_pipe(1); 
+            area_info_pipe(2) <= area_info_pipe(1);
             -- eof
             if  area_info_pipe(1).raw.line_cnt = USER_AREA_CFG.LINE_END_NUM then 
                area_info_pipe(2).user.eof <= area_info_pipe(1).user.eol;
@@ -146,17 +154,24 @@ begin
             else
                active_line <= '0';
             end if;
+            user_eof_last <= area_info_pipe(2).user.eof;
+            
             
             -------------------------------------------------------
             -- pipe 3 pour generation misc signals        
             -------------------------------------------------------
-            area_info_pipe(3)              <= area_info_pipe(2);
+            area_info_pipe(3) <= area_info_pipe(2);
+            --outputs
             area_info_pipe(3).user.sol     <= area_info_pipe(2).user.sol and active_line;    
             area_info_pipe(3).user.eol     <= area_info_pipe(2).user.eol and active_line;
             area_info_pipe(3).user.lval    <= area_info_pipe(2).user.lval and active_line;
             area_info_pipe(3).user.dval    <= area_info_pipe(2).user.lval and active_line;
-            area_info_pipe(3).user.fval    <= area_info_pipe(2).user.fval;
-            area_info_pipe(3).user.rd_end  <= area_info_pipe(2).user.eof;
+            if area_info_pipe(2).user.fval = '1' then
+               area_info_pipe(3).user.fval <= '1';
+            elsif area_info_pipe(2).user.eof = '1' then
+               area_info_pipe(3).user.fval <= '0';
+            end if;
+            area_info_pipe(3).user.rd_end  <= user_eof_last and not area_info_pipe(2).user.eof;  -- rd_end à la tombée tombée de user.eof
             
          end if;
       end if;

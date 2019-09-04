@@ -84,11 +84,12 @@ begin
          if sreset = '1' then
             ctler_fsm <= idle;
             area_info_o.info_dval <= '0';
+            area_info_o.raw.rd_end <= '0';
             area_fifo_rd_i <= '0';
             
          else 
             
-            incr := unsigned('0'& (AREA_FIFO_DVAL and not AFULL));
+            incr := unsigned('0'& AREA_FIFO_DVAL);
             
             --------------------------------------------
             -- pipe 0
@@ -104,14 +105,13 @@ begin
                
                when weight_st =>                   
                   area_info_o <= area_info_i;
-                  area_info_o.info_dval <= AREA_FIFO_DVAL and not AFULL;
+                  area_info_o.info_dval <= AREA_FIFO_DVAL;
                   counter <= counter + incr;
                   area_fifo_rd_i <= '0';
                   if counter >= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR(to_integer(area_info_i.clk_id)) then
                      counter <= to_unsigned(1, counter'length);
                      area_fifo_rd_i <= AREA_FIFO_DVAL;  
                      if AREA_FIFO_DVAL = '0' or AFULL = '1'  then
-                        area_info_o.info_dval <= '0';
                         area_fifo_rd_i <= '0';
                         ctler_fsm <= idle; 
                      end if;
