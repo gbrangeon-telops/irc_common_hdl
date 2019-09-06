@@ -178,11 +178,14 @@ begin
                   clk_flow_data_i <= CTLED_FPA_CLK.MCLK(clkid);
                   if CTLED_FPA_CLK.MCLK(clkid).EOF = '1' and CLKID_FIFO_DVAL = '1' then
                      ctled_clk_rd_i <= (others => '0');
-                     ctled_clk_rd_i(imminent_clkid) <= '1';
+                     ctled_clk_rd_i(imminent_clkid) <= IMM_CLKID_FIFO_DVAL;
                      if clk_flow_afull_i = '1' then
                         ctled_clk_fsm <= pause_st;
                         ctled_clk_rd_i <= (others => '0');
-                     end if;
+                     end if;                              
+                     if IMM_CLKID_FIFO_DVAL = '0' then   -- ie si IMM_CLKID_FIFO_DVAL = '0' et CLKID_FIFO_DVAL = '1' alors on est à la fin d'une image
+                        ctled_clk_fsm <= wait_rdy_st1;
+                     end if;   
                   end if;               
                
                when others =>                   

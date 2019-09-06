@@ -89,7 +89,8 @@ begin
             
          else 
             
-            incr := unsigned('0'& AREA_FIFO_DVAL);
+            incr := unsigned('0'& (AREA_FIFO_DVAL and not AFULL));
+            area_info_o <= area_info_i;
             
             --------------------------------------------
             -- pipe 0
@@ -97,24 +98,20 @@ begin
             case ctler_fsm is
                
                when idle =>
-                  counter <= to_unsigned(2, counter'length);
+                  counter <= to_unsigned(1, counter'length);
+                  area_fifo_rd_i <= '0';
                   area_info_o.info_dval <= '0';
                   if AREA_FIFO_DVAL = '1'  and AFULL = '0' then 
                      ctler_fsm <= weight_st;
                   end if;
                
-               when weight_st =>                   
-                  area_info_o <= area_info_i;
-                  area_info_o.info_dval <= AREA_FIFO_DVAL;
+               when weight_st =>            
+                  area_info_o.info_dval <= AREA_FIFO_DVAL and not AFULL;
                   counter <= counter + incr;
                   area_fifo_rd_i <= '0';
-                  if counter >= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR(to_integer(area_info_i.clk_id)) then
-                     counter <= to_unsigned(1, counter'length);
-                     area_fifo_rd_i <= AREA_FIFO_DVAL;  
-                     if AREA_FIFO_DVAL = '0' or AFULL = '1'  then
-                        area_fifo_rd_i <= '0';
-                        ctler_fsm <= idle; 
-                     end if;
+                  if counter >= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR_M1(to_integer(area_info_i.clk_id)) then
+                     counter <= to_unsigned(0, counter'length);
+                     area_fifo_rd_i <= '1';  
                   end if;                  
                
                when others =>
