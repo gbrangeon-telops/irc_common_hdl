@@ -129,7 +129,7 @@ begin
    -- ctled_clk_fsm                               
    -------------------------------------------------- 
    U3: process(CLK)
-      variable clk_id_latch_i      : integer range 0 to FPA_MCLK_NUM_MAX-1;
+      variable clk_id_latch_i : integer range 0 to FPA_MCLK_NUM_MAX-1;
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then
