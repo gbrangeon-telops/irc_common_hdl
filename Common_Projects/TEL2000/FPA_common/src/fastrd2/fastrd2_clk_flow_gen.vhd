@@ -34,6 +34,10 @@ entity fastrd2_clk_flow_gen is
       CLKID_FIFO_DVAL      : in std_logic;
       CLKID_FIFO_DATA      : in std_logic_vector(7 downto 0);
       
+      IMM_CLKID_FIFO_RD    : out std_logic;
+      IMM_CLKID_FIFO_DVAL  : in std_logic;
+      IMM_CLKID_FIFO_DATA  : in std_logic_vector(7 downto 0);
+      
       CTLED_CLK_RD         : out std_logic_vector(7 downto 0);
       CTLED_CLK_DVAL       : in std_logic_vector(7 downto 0);
       CTLED_FPA_CLK        : in fpa_clk_info_type;
@@ -57,7 +61,7 @@ architecture rtl of fastrd2_clk_flow_gen is
          SRESET : out std_logic;
          CLK    : in std_logic);
    end component; 
-   type ctled_clk_fsm_type is (wait_rdy_st, pause_st, active_flow_sof, active_flow_eof);
+   type ctled_clk_fsm_type is (wait_rdy_st1, wait_rdy_st2, pause_st, active_flow_sof, active_flow_eof);
    
    signal sreset              : std_logic;
    signal clkid_fifo_rd_i     : std_logic;
@@ -71,12 +75,15 @@ architecture rtl of fastrd2_clk_flow_gen is
    signal clkid               : integer range 0 to DEFINE_FPA_MCLK_NUM-1;
    signal imminent_clkid      : integer range 0 to DEFINE_FPA_MCLK_NUM-1;
    signal clkid_latch         : integer range 0 to DEFINE_FPA_MCLK_NUM-1;
+   signal init_rd             : std_logic;
    
 begin
    --------------------------------------------------
    -- output maps
    --------------------------------------------------  
    CLKID_FIFO_RD <= clkid_fifo_rd_i;
+   IMM_CLKID_FIFO_RD <= clkid_fifo_rd_i or init_rd;
+   
    CTLED_CLK_RD  <= ctled_clk_rd_i;
    CLK_FLOW_DVAL <= clk_flow_dval_i;
    CLK_FLOW_DATA <= clk_flow_data_i.sof & clk_flow_data_i.eof & clk_flow_data_i.clk;
@@ -85,7 +92,7 @@ begin
    --------------------------------------------------
    -- input maps
    -------------------------------------------------- 
-   imminent_clkid <= to_integer(unsigned(CLKID_FIFO_DATA(7 downto 4)));
+   imminent_clkid <= to_integer(unsigned(IMM_CLKID_FIFO_DATA(3 downto 0)));
    clkid <= to_integer(unsigned(CLKID_FIFO_DATA(3 downto 0)));
    
    --------------------------------------------------
@@ -134,24 +141,32 @@ begin
       if rising_edge(CLK) then 
          if sreset = '1' then
             ctled_clk_rd_i <= (others => '0');
-            ctled_clk_fsm <= wait_rdy_st;
+            ctled_clk_fsm <= wait_rdy_st1;
             clk_flow_dval_i <= '0';
-         
+            init_rd <= '0';
+            
          else             
-               
+            
             clk_flow_dval_i <= or_reduce(ctled_clk_rd_i);
-                    
+            
             --------------------------------------------
             -- fsm de generation clk_flow
             --------------------------------------------             
             case ctled_clk_fsm is
                
-               when wait_rdy_st =>
+               when wait_rdy_st1 =>
                   if and_reduce(CTLED_CLK_DVAL(DEFINE_FPA_MCLK_NUM-1 downto 0)) = '1' then 
+                     ctled_clk_fsm <= wait_rdy_st2;
+                  end if;
+               
+               when wait_rdy_st2 =>
+                  if CLKID_FIFO_DVAL = '1' and CLKID_FIFO_DVAL = '1' then
+                     init_rd <= '1';            -- en lisant IMM_FIFO, on a les imminent_clkid
                      ctled_clk_fsm <= pause_st;
                   end if;
                
-               when pause_st => 
+               when pause_st =>
+                  init_rd <= '0';
                   ctled_clk_rd_i <= (others => '0');
                   if clk_flow_afull_i = '0' and CLKID_FIFO_DVAL = '1' then
                      ctled_clk_fsm <= active_flow_sof; 
@@ -165,8 +180,8 @@ begin
                      ctled_clk_rd_i <= (others => '0');
                      ctled_clk_rd_i(imminent_clkid) <= '1';
                      if clk_flow_afull_i = '1' then
-                       ctled_clk_fsm <= pause_st;
-                       ctled_clk_rd_i <= (others => '0');
+                        ctled_clk_fsm <= pause_st;
+                        ctled_clk_rd_i <= (others => '0');
                      end if;
                   end if;               
                

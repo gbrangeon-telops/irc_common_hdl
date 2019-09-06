@@ -112,18 +112,12 @@ begin
             -- pipe 0
             ----------------------------------------------------------
             area_info_pipe(0) <= AREA_INFO;
-            
-            ----------------------------------------------------------
-            -- pipe 1 : generation de imminent_clk_id
-            ----------------------------------------------------------
-            area_info_pipe(1) <= area_info_pipe(0);
-            area_info_pipe(1).imminent_clk_id <= AREA_INFO.CLK_ID;
-            
+                        
             ----------------------------------------------------------
             -- conversion en std_logic_vector
             ----------------------------------------------------------
-            fifo_wr_i <= area_info_pipe(1).info_dval or area_info_pipe(1).raw.rd_end;            
-            fifo_data_i <= std_logic_vector(resize(unsigned(area_info_to_vector_func(area_info_pipe(1))), fifo_data_i'length));
+            fifo_wr_i <= AREA_INFO.INFO_DVAL or AREA_INFO.RAW.RD_END;            
+            fifo_data_i <= std_logic_vector(resize(unsigned(area_info_to_vector_func(AREA_INFO)), fifo_data_i'length));
             
          end if;
       end if; 
