@@ -76,6 +76,8 @@ architecture rtl of fastrd2_clk_flow_gen is
    signal imminent_clkid      : integer range 0 to DEFINE_FPA_MCLK_NUM-1;
    signal clkid_latch         : integer range 0 to DEFINE_FPA_MCLK_NUM-1;
    signal init_rd             : std_logic;
+   signal raw_rd_end          : std_logic;
+   signal imm_raw_rd_end      : std_logic;
    
 begin
    --------------------------------------------------
@@ -94,6 +96,8 @@ begin
    -------------------------------------------------- 
    imminent_clkid <= to_integer(unsigned(IMM_CLKID_FIFO_DATA(3 downto 0)));
    clkid <= to_integer(unsigned(CLKID_FIFO_DATA(3 downto 0)));
+   raw_rd_end <= CLKID_FIFO_DATA(4);
+   imm_raw_rd_end <= IMM_CLKID_FIFO_DATA(4);
    
    --------------------------------------------------
    -- synchro reset 
@@ -182,11 +186,11 @@ begin
                      if clk_flow_afull_i = '1' then
                         ctled_clk_fsm <= pause_st;
                         ctled_clk_rd_i <= (others => '0');
-                     end if;                              
-                     if IMM_CLKID_FIFO_DVAL = '0' then   -- ie si IMM_CLKID_FIFO_DVAL = '0' et CLKID_FIFO_DVAL = '1' alors on est à la fin d'une image
+                     end if;
+                     if raw_rd_end = '0' then   -- fin d'une image
                         ctled_clk_fsm <= wait_rdy_st1;
-                     end if;   
-                  end if;               
+                     end if; 
+                  end if;
                
                when others =>                   
                

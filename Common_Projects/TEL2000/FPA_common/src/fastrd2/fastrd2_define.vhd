@@ -173,7 +173,7 @@ package body fastrd2_define is
    -- area_info_to_vector_func
    --------------------------------------------------------------------------------------------- 
    function area_info_to_vector_func(area_info: area_info_type) return std_logic_vector is
-      variable yy : std_logic_vector(67 downto 0);
+      variable yy : std_logic_vector(69 downto 0);
    begin
       yy := 
       
@@ -185,7 +185,9 @@ package body fastrd2_define is
       & area_info.user.sol                  
       & area_info.user.eol                  
       & area_info.user.fval                 
-      & area_info.user.lval                 
+      & area_info.user.lval
+      & area_info.user.dval
+      & area_info.user.rd_end
       
       & area_info.raw.spare                 
       & area_info.raw.imminent_clk_change  
@@ -216,15 +218,17 @@ package body fastrd2_define is
       variable area_info : area_info_type;
    begin      
       
-      area_info.info_dval                           :=  yy(67);
+      area_info.info_dval                           :=  yy(69);
       
-      area_info.user.spare                          :=  yy(66 downto 59);
-      area_info.user.sof                            :=  yy(58);
-      area_info.user.eof                            :=  yy(57);
-      area_info.user.sol                            :=  yy(56);
-      area_info.user.eol                            :=  yy(55);
-      area_info.user.fval                           :=  yy(54);
-      area_info.user.lval                           :=  yy(53);
+      area_info.user.spare                          :=  yy(68 downto 61);
+      area_info.user.sof                            :=  yy(60);
+      area_info.user.eof                            :=  yy(59);
+      area_info.user.sol                            :=  yy(58);
+      area_info.user.eol                            :=  yy(57);
+      area_info.user.fval                           :=  yy(56);
+      area_info.user.lval                           :=  yy(55);
+      area_info.user.dval                           :=  yy(54);
+      area_info.user.rd_end                         :=  yy(53);
       
       area_info.raw.spare                           :=  yy(52 downto 45);
       area_info.raw.imminent_clk_change             :=  yy(44);

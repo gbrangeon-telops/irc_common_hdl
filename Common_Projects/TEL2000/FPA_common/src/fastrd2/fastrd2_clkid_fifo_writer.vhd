@@ -91,7 +91,7 @@ begin
                active_wr <= '1';
                clkid_fifo_wr_i <= '0';
             else
-               clkid_fifo_din_i <= std_logic_vector(area_info.imminent_clk_id) & std_logic_vector(area_info.clk_id);  -- extraction du clk_id
+               clkid_fifo_din_i <= std_logic_vector(resize(area_info.clk_id, clkid_fifo_din_i'length));  -- extraction du clk_id
                clkid_fifo_wr_i <= area_info_dval;
             end if;
          end if;
@@ -115,15 +115,14 @@ begin
                   active_wr <= not active_wr;
                end if;
                clkid_fifo_wr_i  <= (active_wr or area_info.raw.rd_end) and area_info_dval;
-               clkid_fifo_din_i <= std_logic_vector(area_info.imminent_clk_id) & std_logic_vector(area_info.clk_id);
-               
+               clkid_fifo_din_i <=  std_logic_vector(resize(area_info.raw.rd_end & area_info.clk_id, clkid_fifo_din_i'length));              
             end if;   
          end if;
       end process;       
    end generate;   
    
    -------------------------------------------------- 
-   -- Ecriture dans le fifo                                 
+   -- afull                               
    -------------------------------------------------- 
    U4: process(CLK)
    begin          

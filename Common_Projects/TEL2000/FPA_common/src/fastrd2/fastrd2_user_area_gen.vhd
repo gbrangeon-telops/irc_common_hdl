@@ -98,7 +98,7 @@ begin
             --identificateurs
             if AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.SOL_POSL_PCLK then          -- lval
                area_info_pipe(0).user.lval <= '1';
-            elsif AREA_INFO_I.RAW.LINE_PCLK_CNT > USER_AREA_CFG.EOL_POSL_PCLK then
+            elsif AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.EOL_POSL_PCLK then
                area_info_pipe(0).user.lval <= '0';
             end if;    
             
@@ -136,7 +136,8 @@ begin
                active_line_temp <= '1';            
             else                       
                active_line_temp <= '0';
-            end if;                  
+            end if;
+            area_info_pipe(1).user.lval <= (area_info_pipe(0).user.lval or area_info_pipe(0).user.eol) and area_info_pipe(0).user.fval;
             
             -------------------------------------------------------
             -- pipe 2 pour generation active_line et eof et sync_flag        
