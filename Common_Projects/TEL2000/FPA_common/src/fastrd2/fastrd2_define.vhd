@@ -124,7 +124,7 @@ package fastrd2_define is
       raw                  : area_type;
       
       -- horloges associées
-      imminent_clk_id      : unsigned(3 downto 0);    -- clk_id devancé d'un coup d'horloge
+      imminent_clk_id      : unsigned(3 downto 0);  -- clk_id devancé d'un coup d'horloge
       clk_id               : unsigned(3 downto 0);  -- ID de l'horloge à utiliser pour le pixel associé 
             
    end record;

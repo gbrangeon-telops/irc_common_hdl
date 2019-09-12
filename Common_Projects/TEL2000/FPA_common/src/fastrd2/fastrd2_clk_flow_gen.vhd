@@ -187,7 +187,7 @@ begin
                         ctled_clk_fsm <= pause_st;
                         ctled_clk_rd_i <= (others => '0');
                      end if;
-                     if raw_rd_end = '0' then   -- fin d'une image
+                     if raw_rd_end = '1' then   -- fin d'une image
                         ctled_clk_fsm <= wait_rdy_st1;
                      end if; 
                   end if;

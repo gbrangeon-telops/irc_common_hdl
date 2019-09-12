@@ -43,20 +43,18 @@ architecture rtl of fastrd2_misc_flags_gen is
          CLK : in std_logic);
    end component;
    
-   component fwft_sfifo_w72_d512
+   component fwft_sfifo_w72_d16
       port (
-         clk         : in std_logic;
-         din         : in std_logic_vector(71 downto 0);
-         rd_en       : in std_logic;
-         srst        : in std_logic;
-         wr_en       : in std_logic;
-         almost_full : out std_logic;
-         data_count  : out std_logic_vector(9 downto 0);
-         dout        : out std_logic_vector(71 downto 0);
-         empty       : out std_logic;
-         full        : out std_logic;
-         overflow    : out std_logic;
-         valid       : out std_logic
+         clk       : in std_logic;
+         srst       : in std_logic;
+         din       : in std_logic_vector(71 downto 0);
+         wr_en     : in std_logic;
+         rd_en     : in std_logic;
+         dout      : out std_logic_vector(71 downto 0);
+         valid     : out std_logic;
+         full      : out std_logic;
+         overflow  : out std_logic;
+         empty     : out std_logic
          );
    end component; 
    
@@ -101,34 +99,30 @@ begin
    ----------------------------------------------------
    -- les fifos
    ----------------------------------------------------   
-   U2A : fwft_sfifo_w72_d512
+   U2A : fwft_sfifo_w72_d16
    port map(
       clk         => CLK,
       srst        => sreset,
       din         => fifo_din,
       wr_en       => fifo1_wr,   
       dout        => fifo1_dout,
-      rd_en       => fifo1_rd,
-      valid       => fifo1_dval,   
-      almost_full => open,
-      data_count  => fifo1_dcnt,   
+      rd_en       => fifo2_dval,
+      valid       => fifo1_dval,     
       empty       => open,
       full        => open,
       overflow    => open  
       );
    area_info1 <= vector_to_area_info_func(fifo1_dout);
    
-   U2B : fwft_sfifo_w72_d512
+   U2B : fwft_sfifo_w72_d16
    port map(
       clk         => CLK,
       srst        => sreset,
       din         => fifo_din,
       wr_en       => fifo2_wr,   
       dout        => fifo2_dout,
-      rd_en       => fifo2_rd,
-      valid       => fifo2_dval,   
-      almost_full => open,
-      data_count  => open,   
+      rd_en       => fifo2_dval,
+      valid       => fifo2_dval,      
       empty       => open,
       full        => open,
       overflow    => open  
