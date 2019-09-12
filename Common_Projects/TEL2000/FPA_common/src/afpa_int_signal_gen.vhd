@@ -18,6 +18,11 @@ use work.fpa_define.all;
 --use work.tel2000.all;
 
 entity afpa_int_signal_gen is
+   
+   generic(
+      LEGACY_MODE : std_logic := '1'    -- pour conserver la compatibilité avec l'ancien mode de fonctionnement
+      );
+   
    port(
       ARESET            : in std_logic;
       MCLK_SOURCE       : in std_logic; -- doit valoir au moins 2 x FPA_MCLK_RATE
@@ -89,6 +94,8 @@ architecture rtl of afpa_int_signal_gen is
    signal int_time_dval             : std_logic;
    signal int_fdbk_dly_null         : std_logic;
    signal int_fdbk_dly_cnt          : unsigned(FPA_INTF_CFG.INT_FDBK_DLY'LENGTH-1 downto 0);
+   signal fpa_prog_trig_int_time    : unsigned(31 downto 0); 
+   signal fpa_xtra_trig_int_time    : unsigned(31 downto 0);
    
 begin
    
@@ -140,6 +147,24 @@ begin
       );
    
    --------------------------------------------------
+   --  legacy mode
+   -------------------------------------------------- 
+   -- les param proviennent de fpa_define
+   gA: if LEGACY_MODE = '1' generate
+      fpa_prog_trig_int_time <= to_unsigned(DEFINE_FPA_PROG_INT_TIME, fpa_prog_trig_int_time'length);
+      fpa_xtra_trig_int_time <= to_unsigned(DEFINE_FPA_XTRA_TRIG_INT_TIME, fpa_xtra_trig_int_time'length);
+   end generate;   
+   
+   --------------------------------------------------
+   --  non legacy mode
+   --------------------------------------------------
+   -- les param proviennent de fpa_intf_cfg
+   gB: if LEGACY_MODE = '0' generate
+      fpa_prog_trig_int_time <= FPA_INTF_CFG.COMN.FPA_PROG_TRIG_INT_TIME;
+      fpa_xtra_trig_int_time <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_INT_TIME;
+   end generate;   
+   
+   --------------------------------------------------
    --  generation de acq_int_i et fpa_int_i
    --------------------------------------------------
    -- acq_int_i
@@ -185,13 +210,13 @@ begin
                   end if;
                
                when xtra_trig_param_st =>
-                  int_cnt <= to_unsigned(DEFINE_FPA_XTRA_TRIG_INT_TIME, int_cnt'length);
-                  int_time_i <= to_unsigned(DEFINE_FPA_XTRA_TRIG_INT_TIME, int_time_i'length);
+                  int_cnt <= fpa_xtra_trig_int_time;
+                  int_time_i <= fpa_xtra_trig_int_time;
                   int_gen_fsm <= check_int_cnt_st;
                
                when post_prog_param_st =>
-                  int_cnt <= to_unsigned(DEFINE_FPA_PROG_INT_TIME, int_cnt'length);
-                  int_time_i <= to_unsigned(DEFINE_FPA_PROG_INT_TIME, int_time_i'length);
+                  int_cnt <= fpa_prog_trig_int_time;
+                  int_time_i <= fpa_prog_trig_int_time;
                   int_gen_fsm <= check_int_cnt_st;
                
                when acq_trig_param_st =>          -- pour ameliorer timings et aussi pour sortir les données avant le signal de validation qu'est acq_int.

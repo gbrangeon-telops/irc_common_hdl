@@ -156,6 +156,10 @@ package fpa_common_pkg is
       -- fpas analogiques principalement
       fpa_intf_data_source     : std_logic;                     -- permet de dire si la source de données est dans le FPGA (patron de tests telops) ou à l'extérieur du FPGA (ADC) 
       -- fpa_intf_data_source n'est utilisé/regardé par le vhd que lorsque fpa_diag_mode = 1
+      
+      -- temps d'exposition en mclk en mode xtra_trig et prog_trig
+      fpa_xtra_trig_int_time   : unsigned(31 downto 0);
+      fpa_prog_trig_int_time   : unsigned(31 downto 0);
    end record;    
    
    --------------------------------------------------------------------------------
