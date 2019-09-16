@@ -13,8 +13,8 @@ use ieee.MATH_REAL.all;
 package fastrd2_define is
    
    constant FPA_MCLK_NUM_MAX                 : integer:= 8;  --- Le max des nombres de domaines MCLK utilisés dans tous les designs 
-   constant DEFINE_IMMINENT_AOI_POS          : integer := 39;
-   constant DEFINE_IMMINENT_CLK_CHANGE_POS   : integer := 40;
+--   constant DEFINE_IMMINENT_AOI_POS          : integer := 39;
+--   constant DEFINE_IMMINENT_CLK_CHANGE_POS   : integer := 40;
    
    type fastrd2_integer_array_type is array (FPA_MCLK_NUM_MAX-1 downto 0) of natural;
    
