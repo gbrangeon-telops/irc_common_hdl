@@ -13,8 +13,7 @@ use ieee.MATH_REAL.all;
 package fastrd2_define is
    
    constant FPA_MCLK_NUM_MAX                 : integer:= 8;  --- Le max des nombres de domaines MCLK utilisés dans tous les designs 
---   constant DEFINE_IMMINENT_AOI_POS          : integer := 39;
---   constant DEFINE_IMMINENT_CLK_CHANGE_POS   : integer := 40;
+   
    
    type fastrd2_integer_array_type is array (FPA_MCLK_NUM_MAX-1 downto 0) of natural;
    
@@ -55,13 +54,9 @@ package fastrd2_define is
    ------------------------------------------------------------
    type area_cfg_type is
    record
-      --      -- parametres de window
-      --      xstart                         : unsigned(12 downto 0); 
-      --      ystart                         : unsigned(12 downto 0);
-      --      xsize                          : unsigned(12 downto 0);
-      --      ysize                          : unsigned(12 downto 0);
+      
       clk_id                         : unsigned(3 downto 0);    -- clk_id associé à la zone decrite par la config
-           
+      
       -- delimiteurs de trames et de lignes
       sof_posf_pclk                  : unsigned(9 downto 0);     -- 
       eof_posf_pclk                  : unsigned(23 downto 0);    --
@@ -81,7 +76,7 @@ package fastrd2_define is
       -- parametres divers
       readout_pclk_cnt_max           : unsigned(23 downto 0);   -- readout_pclk_cnt_max = taille en pclk de l'image incluant les pauses, les lignes non valides etc.. = (XSIZE/TAP_NUM + LOVH)* (YSIZE + FOVH) + 1  (un dernier PCLK pur finir)
       line_period_pclk               : unsigned(12 downto 0);    -- nombre de pclk =  XSIZE/TAP_NUM + LOVH)
-        
+      
    end record;
    
    ----------------------------------------------								
@@ -126,8 +121,18 @@ package fastrd2_define is
       -- horloges associées
       imminent_clk_id      : unsigned(3 downto 0);  -- clk_id devancé d'un coup d'horloge
       clk_id               : unsigned(3 downto 0);  -- ID de l'horloge à utiliser pour le pixel associé 
-            
-   end record;
+      
+   end record; 
+   
+   ----------------------------------------------								
+   -- Type double_area_info_type
+   ----------------------------------------------
+   type double_area_info_type is
+   record
+      info_dval            : std_logic;
+      present              : area_info_type;
+      future               : area_info_type;
+   end record; 
    
    ------------------------------------------
    -- functions --
