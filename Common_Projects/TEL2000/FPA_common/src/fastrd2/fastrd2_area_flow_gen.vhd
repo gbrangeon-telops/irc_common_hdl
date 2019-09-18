@@ -18,10 +18,6 @@ use work.fastrd2_define.all;
 
 entity fastrd2_area_flow_gen is
    
-   generic(
-      G_FIFO_FULL_THRESHOLD   : integer := 448
-      ); 
-   
    port(
       
       ARESET            : in std_logic;

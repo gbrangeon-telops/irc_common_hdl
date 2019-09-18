@@ -24,11 +24,8 @@ entity fastrd2_misc_flags_gen is
       CLK                  : in std_logic; 
       
       DOUBLE_AREA_INFO     : in double_area_info_type;      
-      AREA_INFO            : out area_info_type;
+      AREA_INFO            : out area_info_type
       
-      BUSY                 : out std_logic;
-      
-      AFULL                : in std_logic
       );  
 end fastrd2_misc_flags_gen;
 
@@ -54,7 +51,6 @@ begin
    -- outputs map
    --------------------------------------------------                       
    AREA_INFO <= area_info_i;
-   BUSY <= AFULL;               -- pas grave d'associer AFULL à BUSY. Le upstream le gere via ses fifos
    
    --------------------------------------------------
    -- synchro reset 
