@@ -75,7 +75,7 @@ begin
          
          -- les miscellaneous flags 
          area_info_i.raw.imminent_aoi <= DOUBLE_AREA_INFO.FUTURE.USER.SOL and not DOUBLE_AREA_INFO.PRESENT.USER.SOL; 
-         if DOUBLE_AREA_INFO.PRESENT.CLK_ID /= DOUBLE_AREA_INFO.FUTURE.CLK_ID  then 
+         if DOUBLE_AREA_INFO.PRESENT.CLK_INFO.CLK_ID /= DOUBLE_AREA_INFO.FUTURE.CLK_INFO.CLK_ID  then 
             area_info_i.raw.imminent_clk_change <= '1';
          else
             area_info_i.raw.imminent_clk_change <= '0';

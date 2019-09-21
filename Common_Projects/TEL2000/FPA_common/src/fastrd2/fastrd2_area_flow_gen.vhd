@@ -90,6 +90,7 @@ begin
             area_fifo_rd_i <= '0';
             counter <= to_unsigned(0, counter'length);
             area_info_dval_i <= '0';
+            area_info_o.clk_info.clk <= '0';
             
          else 
             
@@ -100,11 +101,12 @@ begin
             --------------------------------------------------------
             -- outputs
             --------------------------------------------------------
-            area_info_o <= area_info_i;
+            area_info_o.raw <= area_info_i.raw;
+            area_info_o.user <= area_info_i.user;
             area_info_o.info_dval <= area_info_dval_i;
             
             --------------------------------------------------------
-            -- generation horloge associee
+            -- generation de clk_info
             --------------------------------------------------------
             counter <= counter + incr;
             if counter = 1 then
@@ -113,22 +115,22 @@ begin
                area_info_o.clk_info.sof <= '0';
             end if;
             
-            if counter = DEFINE_FPA_CLK_INFO.MCLK_RATE_FACTOR_M1(to_integer(area_info_i.clk_id)) then
+            if counter = 0 then
                area_info_o.clk_info.eof <= '1';
             else
                area_info_o.clk_info.eof <= '0';
             end if;
             
-            if counter <= DEFINE_FPA_CLK_INFO.MCLK_RATE_FACTOR_DIV2(to_integer(area_info_i.clk_id)) then
+            if counter = 1 then
                area_info_o.clk_info.clk <= '1';
-            else
+            elsif counter = DEFINE_FPA_CLK_INFO.MCLK_RATE_FACTOR_DIV2(to_integer(area_info_i.clk_info.clk_id)) then
                area_info_o.clk_info.clk <= '0';
             end if;
             
             --------------------------------------------------------
             -- lecture fifo
             --------------------------------------------------------
-            if counter >= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR_M1(to_integer(area_info_i.clk_id)) then
+            if counter >= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR_M1(to_integer(area_info_i.clk_info.clk_id)) then
                counter <= to_unsigned(0, counter'length);
                area_fifo_rd_i <= '1';  
             end if;                  

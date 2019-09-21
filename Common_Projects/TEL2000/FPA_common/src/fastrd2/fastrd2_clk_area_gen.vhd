@@ -120,7 +120,7 @@ begin
             --------------------------------------------------------
             area_info_pipe(3) <= area_info_pipe(2);
             if clk_stamp_en(2) = '1' then
-               area_info_pipe(3).clk_id <= CLK_AREA_CFG.CLK_ID;
+               area_info_pipe(3).clk_info.clk_id <= CLK_AREA_CFG.CLK_ID;
             end if;            
             
          end if;

@@ -22,9 +22,10 @@ package fastrd2_define is
    ------------------------------------------------------------
    type fpa_clk_base_info_type is 
    record
-      sof : std_logic;
-      eof : std_logic;
-      clk : std_logic;   
+      sof    : std_logic;
+      eof    : std_logic;
+      clk    : std_logic;
+      clk_id : unsigned(3 downto 0);
    end record;
    
    type fastrd2_clk_array_type is array (FPA_MCLK_NUM_MAX-1 downto 0) of fpa_clk_base_info_type;
@@ -119,7 +120,6 @@ package fastrd2_define is
       raw                  : area_type;
       
       -- horloges associées
-      clk_id               : unsigned(3 downto 0);    -- ID de l'horloge à utiliser pour le pixel associé
       clk_info             : fpa_clk_base_info_type;  -- 
       
    end record; 
@@ -211,7 +211,7 @@ package body fastrd2_define is
       & std_logic_vector(area_info.raw.line_cnt)             
       & std_logic_vector(area_info.raw.line_pclk_cnt)
       
-      & std_logic_vector(area_info.clk_id)
+      & std_logic_vector(area_info.clk_info.clk_id)
       & area_info.clk_info.sof
       & area_info.clk_info.eof
       & area_info.clk_info.clk;
@@ -254,7 +254,7 @@ package body fastrd2_define is
       area_info.raw.line_cnt               :=  unsigned(yy(32 downto 20));    
       area_info.raw.line_pclk_cnt          :=  unsigned(yy(19 downto 7));
       
-      area_info.clk_id                     :=  unsigned(yy(6 downto 3));
+      area_info.clk_info.clk_id            :=  unsigned(yy(6 downto 3));
       area_info.clk_info.sof               :=  yy(2);
       area_info.clk_info.eof               :=  yy(1);
       area_info.clk_info.clk               :=  yy(0);

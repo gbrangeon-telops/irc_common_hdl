@@ -163,7 +163,7 @@ begin
    begin
       if rising_edge(CLK) then  
          
-         area_info_pipe(0).clk_id <= to_unsigned(G_DEFAULT_CLK_ID, area_info_pipe(0).clk_id'length);
+         area_info_pipe(0).clk_info.clk_id <= to_unsigned(G_DEFAULT_CLK_ID, area_info_pipe(0).clk_info.clk_id'length);
          
          if AFULL = '0' then 
             
