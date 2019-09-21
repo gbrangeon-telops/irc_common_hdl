@@ -25,21 +25,17 @@ entity fastrd2_mem_fanout is
       
       AREA_INFO         : in area_info_type;     
       
-      FIFOA_AFULL       : in std_logic;
-      FIFOA_WR          : out std_logic;
-      FIFOA_DATA        : out std_logic_vector(71 downto 0);
+      AREA_INFOA_AFULL  : in std_logic;
+      AREA_INFOA        : out area_info_type;
       
-      FIFOB_AFULL       : in std_logic;
-      FIFOB_WR          : out std_logic;
-      FIFOB_DATA        : out std_logic_vector(71 downto 0);    
+      AREA_INFOB_AFULL  : in std_logic;
+      AREA_INFOB        : out area_info_type;   
       
       AFULL             : out std_logic
       );   
 end fastrd2_mem_fanout;
 
 architecture rtl of fastrd2_mem_fanout is  
-   
-   type area_info_pipe_type is array (0 to 1) of area_info_type;
    
    component sync_reset
       port(
@@ -48,23 +44,17 @@ architecture rtl of fastrd2_mem_fanout is
          CLK    : in std_logic);
    end component; 
    
-   signal sreset               : std_logic;
-   signal fifo_wr_i            : std_logic;
-   signal fifo_data_i          : std_logic_vector(FIFOA_DATA'LENGTH-1 downto 0);
-   signal afull_i              : std_logic;
-   signal area_info_pipe       : area_info_pipe_type;  
+   signal sreset       : std_logic;
+   signal afull_i      : std_logic;
+  
    
 begin                                                     
    
    --------------------------------------------------
    -- output maps
-   --------------------------------------------------  
-   FIFOA_WR   <= fifo_wr_i;
-   FIFOA_DATA <= fifo_data_i;
-   
-   FIFOB_WR   <= fifo_wr_i;
-   FIFOB_DATA <= fifo_data_i;
-   
+   --------------------------------------------------   
+   AREA_INFOA <= AREA_INFO;
+   AREA_INFOB <= AREA_INFO;
    AFULL <= afull_i;
    
    --------------------------------------------------
@@ -85,40 +75,15 @@ begin
       
       if rising_edge(CLK) then                     
          if sreset = '1' then
-            fifo_wr_i <= '0';
             afull_i <= '0';
-            -- pragma translate_off
-            for ii in 0 to 1 loop
-               area_info_pipe(ii).raw <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'));
-               area_info_pipe(ii).user <= ((others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'));
-            end loop;
-            -- pragma translate_on
-            
-            for ii in 0 to 1 loop
-               area_info_pipe(ii).imminent_clk_id <= (others => '1');
-               area_info_pipe(ii).clk_id <= (others => '0');
-               area_info_pipe(ii).info_dval <= '0';
-               area_info_pipe(ii).raw.rd_end <= '0';
-            end loop;
             
          else
             
             ----------------------------------------------------------
             -- generation afull
             ----------------------------------------------------------
-            afull_i <= FIFOA_AFULL or FIFOB_AFULL;
-            
-            ----------------------------------------------------------
-            -- pipe 0
-            ----------------------------------------------------------
-            area_info_pipe(0) <= AREA_INFO;
-                        
-            ----------------------------------------------------------
-            -- conversion en std_logic_vector
-            ----------------------------------------------------------
-            fifo_wr_i <= AREA_INFO.INFO_DVAL or AREA_INFO.RAW.RD_END;            
-            fifo_data_i <= std_logic_vector(resize(unsigned(area_info_to_vector_func(AREA_INFO)), fifo_data_i'length));
-            
+            afull_i <= AREA_INFOA_AFULL or AREA_INFOB_AFULL;
+
          end if;
       end if; 
    end process;   

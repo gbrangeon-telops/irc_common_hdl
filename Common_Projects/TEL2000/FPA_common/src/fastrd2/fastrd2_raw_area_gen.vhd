@@ -244,7 +244,7 @@ begin
             elsif area_info_pipe(2).raw.line_pclk_cnt > RAW_AREA_CFG.LSYNC_END_POSL_PCLK then
                area_info_pipe(3).raw.lsync <= '0';
             end if;
-            area_info_pipe(3).info_dval <= area_info_pipe(2).raw.fval;
+            area_info_pipe(3).info_dval <= area_info_pipe(2).raw.fval or area_info_pipe(0).raw.rd_end;
             
          else
             area_info_pipe(3).info_dval <= '0';

@@ -50,7 +50,8 @@ architecture rtl of fastrd2_area_flow_gen is
    signal area_info_o           : area_info_type;
    signal sreset                : std_logic;
    signal area_fifo_rd_i        : std_logic;
-   signal counter               : unsigned(9 downto 0);   
+   signal counter               : unsigned(9 downto 0);
+   signal area_info_dval_i      : std_logic;
    
 begin
    
@@ -87,37 +88,51 @@ begin
             area_info_o.info_dval <= '0';
             area_info_o.raw.rd_end <= '0';
             area_fifo_rd_i <= '0';
+            counter <= to_unsigned(0, counter'length);
+            area_info_dval_i <= '0';
             
          else 
             
             incr := unsigned('0'& (AREA_FIFO_DVAL and not AFULL));
-            area_info_o <= area_info_i;
+            area_fifo_rd_i <= '0';
+            area_info_dval_i <= AREA_FIFO_DVAL and not AFULL;
             
-            --------------------------------------------
-            -- pipe 0
-            --------------------------------------------             
-            case ctler_fsm is
-               
-               when idle =>
-                  counter <= to_unsigned(1, counter'length);
-                  area_fifo_rd_i <= '0';
-                  area_info_o.info_dval <= '0';
-                  if AREA_FIFO_DVAL = '1'  and AFULL = '0' then 
-                     ctler_fsm <= weight_st;
-                  end if;
-               
-               when weight_st =>            
-                  area_info_o.info_dval <= AREA_FIFO_DVAL and not AFULL;
-                  counter <= counter + incr;
-                  area_fifo_rd_i <= '0';
-                  if counter >= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR_M1(to_integer(area_info_i.clk_id)) then
-                     counter <= to_unsigned(0, counter'length);
-                     area_fifo_rd_i <= '1';  
-                  end if;                  
-               
-               when others =>
-               
-            end case;
+            --------------------------------------------------------
+            -- outputs
+            --------------------------------------------------------
+            area_info_o <= area_info_i;
+            area_info_o.info_dval <= area_info_dval_i;
+            
+            --------------------------------------------------------
+            -- generation horloge associee
+            --------------------------------------------------------
+            counter <= counter + incr;
+            if counter = 1 then
+               area_info_o.clk_info.sof <= '1';
+            else
+               area_info_o.clk_info.sof <= '0';
+            end if;
+            
+            if counter = DEFINE_FPA_CLK_INFO.MCLK_RATE_FACTOR_M1(to_integer(area_info_i.clk_id)) then
+               area_info_o.clk_info.eof <= '1';
+            else
+               area_info_o.clk_info.eof <= '0';
+            end if;
+            
+            if counter <= DEFINE_FPA_CLK_INFO.MCLK_RATE_FACTOR_DIV2(to_integer(area_info_i.clk_id)) then
+               area_info_o.clk_info.clk <= '1';
+            else
+               area_info_o.clk_info.clk <= '0';
+            end if;
+            
+            --------------------------------------------------------
+            -- lecture fifo
+            --------------------------------------------------------
+            if counter >= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR_M1(to_integer(area_info_i.clk_id)) then
+               counter <= to_unsigned(0, counter'length);
+               area_fifo_rd_i <= '1';  
+            end if;                  
+            
             
          end if;
       end if;

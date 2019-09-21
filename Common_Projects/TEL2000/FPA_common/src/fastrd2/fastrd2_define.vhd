@@ -12,7 +12,7 @@ use ieee.MATH_REAL.all;
 
 package fastrd2_define is
    
-   constant FPA_MCLK_NUM_MAX                 : integer:= 8;  --- Le max des nombres de domaines MCLK utilisés dans tous les designs 
+   constant FPA_MCLK_NUM_MAX : integer:= 8;  --- Le max des nombres de domaines MCLK utilisés dans tous les designs 
    
    
    type fastrd2_integer_array_type is array (FPA_MCLK_NUM_MAX-1 downto 0) of natural;
@@ -38,12 +38,12 @@ package fastrd2_define is
       mclk_source_rate_khz : natural;
       
       -- master clock part
-      mclk                 : fastrd2_clk_array_type;             -- horloge avec sof et eof 
       mclk_rate_khz        : fastrd2_integer_array_type;
-      mclk_rate_factor     : fastrd2_integer_array_type; 
+      mclk_rate_factor     : fastrd2_integer_array_type;
+      mclk_rate_factor_m1  : fastrd2_integer_array_type;
+      mclk_rate_factor_div2: fastrd2_integer_array_type;
       
       -- pixel clock part
-      pclk                 : fastrd2_clk_array_type;             -- horloge avec sof et eof 
       pclk_rate_khz        : fastrd2_integer_array_type;     
       pclk_rate_factor     : fastrd2_integer_array_type;
       pclk_rate_factor_m1  : fastrd2_integer_array_type;
@@ -119,8 +119,8 @@ package fastrd2_define is
       raw                  : area_type;
       
       -- horloges associées
-      imminent_clk_id      : unsigned(3 downto 0);  -- clk_id devancé d'un coup d'horloge
-      clk_id               : unsigned(3 downto 0);  -- ID de l'horloge à utiliser pour le pixel associé 
+      clk_id               : unsigned(3 downto 0);    -- ID de l'horloge à utiliser pour le pixel associé
+      clk_info             : fpa_clk_base_info_type;  -- 
       
    end record; 
    
@@ -159,15 +159,17 @@ package body fastrd2_define is
       -- calculs
       for ii in 0 to FPA_MCLK_NUM_MAX - 1 loop
          if  yy.mclk_rate_khz(ii) /= 0 then 
-            yy.pclk_rate_khz(ii)       := pixnum_per_mclk_and_per_tap * yy.mclk_rate_khz(ii);
-            yy.mclk_rate_factor(ii)    := integer(yy.mclk_source_rate_khz / yy.mclk_rate_khz(ii));
-            yy.pclk_rate_factor(ii)    := integer(yy.mclk_source_rate_khz / yy.pclk_rate_khz(ii));
-            yy.pclk_rate_factor_m1(ii) := integer(yy.mclk_source_rate_khz / yy.pclk_rate_khz(ii)) - 1;
+            yy.pclk_rate_khz(ii)          := pixnum_per_mclk_and_per_tap * yy.mclk_rate_khz(ii);
+            yy.mclk_rate_factor(ii)       := integer(yy.mclk_source_rate_khz / yy.mclk_rate_khz(ii));
+            yy.mclk_rate_factor_div2(ii)  := yy.mclk_rate_factor(ii)/2;
+            yy.mclk_rate_factor_m1(ii)    := yy.mclk_rate_factor(ii) - 1;
+            yy.pclk_rate_factor(ii)       := integer(yy.mclk_source_rate_khz / yy.pclk_rate_khz(ii));
+            yy.pclk_rate_factor_m1(ii)    := integer(yy.mclk_source_rate_khz / yy.pclk_rate_khz(ii)) - 1;
          else
-            yy.pclk_rate_khz(ii)       := 0;
-            yy.mclk_rate_factor(ii)    := 0;
-            yy.pclk_rate_factor(ii)    := 0;
-            yy.pclk_rate_factor_m1(ii) := 0;
+            yy.pclk_rate_khz(ii)          := 0;
+            yy.mclk_rate_factor(ii)       := 0;
+            yy.pclk_rate_factor(ii)       := 0;
+            yy.pclk_rate_factor_m1(ii)    := 0;
          end if;
       end loop;      
       return yy;
@@ -178,7 +180,7 @@ package body fastrd2_define is
    -- area_info_to_vector_func
    --------------------------------------------------------------------------------------------- 
    function area_info_to_vector_func(area_info: area_info_type) return std_logic_vector is
-      variable yy : std_logic_vector(69 downto 0);
+      variable yy : std_logic_vector(68 downto 0);
    begin
       yy := 
       
@@ -209,8 +211,10 @@ package body fastrd2_define is
       & std_logic_vector(area_info.raw.line_cnt)             
       & std_logic_vector(area_info.raw.line_pclk_cnt)
       
-      & std_logic_vector(area_info.imminent_clk_id)
-      & std_logic_vector(area_info.clk_id);
+      & std_logic_vector(area_info.clk_id)
+      & area_info.clk_info.sof
+      & area_info.clk_info.eof
+      & area_info.clk_info.clk;
       
       return yy;
       
@@ -223,34 +227,37 @@ package body fastrd2_define is
       variable area_info : area_info_type;
    begin      
       
-      area_info.info_dval                           :=  yy(69);
+      area_info.info_dval                  :=  yy(68);
       
-      area_info.user.spare                          :=  yy(68 downto 61);
-      area_info.user.sof                            :=  yy(60);
-      area_info.user.eof                            :=  yy(59);
-      area_info.user.sol                            :=  yy(58);
-      area_info.user.eol                            :=  yy(57);
-      area_info.user.fval                           :=  yy(56);
-      area_info.user.lval                           :=  yy(55);
-      area_info.user.dval                           :=  yy(54);
-      area_info.user.rd_end                         :=  yy(53);
+      area_info.user.spare                 :=  yy(67 downto 60);
+      area_info.user.sof                   :=  yy(59);
+      area_info.user.eof                   :=  yy(58);
+      area_info.user.sol                   :=  yy(57);
+      area_info.user.eol                   :=  yy(56);
+      area_info.user.fval                  :=  yy(55);
+      area_info.user.lval                  :=  yy(54);
+      area_info.user.dval                  :=  yy(53);
+      area_info.user.rd_end                :=  yy(52);
       
-      area_info.raw.spare                           :=  yy(52 downto 45);
-      area_info.raw.imminent_clk_change             :=  yy(44);
-      area_info.raw.imminent_aoi                    :=  yy(43);
-      area_info.raw.sof                             :=  yy(42);
-      area_info.raw.eof                             :=  yy(41);
-      area_info.raw.sol                             :=  yy(40);
-      area_info.raw.eol                             :=  yy(39);
-      area_info.raw.fval                            :=  yy(38);
-      area_info.raw.lval                            :=  yy(37);
-      area_info.raw.dval                            :=  yy(36);
-      area_info.raw.lsync                           :=  yy(35);
-      area_info.raw.rd_end                          :=  yy(34);
-      area_info.raw.line_cnt                        :=  unsigned(yy(33 downto 21));    
-      area_info.raw.line_pclk_cnt                   :=  unsigned(yy(20 downto 8));      
-      area_info.imminent_clk_id                     :=  unsigned(yy(7 downto 4));
-      area_info.clk_id                              :=  unsigned(yy(3 downto 0));
+      area_info.raw.spare                  :=  yy(51 downto 44);
+      area_info.raw.imminent_clk_change    :=  yy(43);
+      area_info.raw.imminent_aoi           :=  yy(42);
+      area_info.raw.sof                    :=  yy(41);
+      area_info.raw.eof                    :=  yy(40);
+      area_info.raw.sol                    :=  yy(39);
+      area_info.raw.eol                    :=  yy(38);
+      area_info.raw.fval                   :=  yy(37);
+      area_info.raw.lval                   :=  yy(36);
+      area_info.raw.dval                   :=  yy(35);
+      area_info.raw.lsync                  :=  yy(34);
+      area_info.raw.rd_end                 :=  yy(33);
+      area_info.raw.line_cnt               :=  unsigned(yy(32 downto 20));    
+      area_info.raw.line_pclk_cnt          :=  unsigned(yy(19 downto 7));
+      
+      area_info.clk_id                     :=  unsigned(yy(6 downto 3));
+      area_info.clk_info.sof               :=  yy(2);
+      area_info.clk_info.eof               :=  yy(1);
+      area_info.clk_info.clk               :=  yy(0);
       
       return area_info;
       

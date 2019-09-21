@@ -19,10 +19,6 @@ use work.fastrd2_define.all;
 
 entity fastrd2_imm_flags_tool is
    
-   generic(
-      G_FIFO_FULL_THRESHOLD   : integer := 448
-      ); 
-   
    port (
       ARESET              : in std_logic;
       CLK                 : in std_logic; 
@@ -89,14 +85,13 @@ begin
             info_dval_i <= '0';
             ctrl_fsm <= idle;
             err_i <= '0';
-            -- info_dval_last <= '0';
             
          else
             
             -- pipe
             if SINGLE_AREA_INFO.INFO_DVAL = '1' then         -- chaque nouvelle enrtrée pousse la précédente vers la sortie du pipe. pas de nouvelle entrée, le pipe ne bouge pas. Ainsi, on aura certainement le présent et le futur
                area_info_pipe(0) <= SINGLE_AREA_INFO;
-               area_info_pipe(1) <= area_info_pipe(0); 
+               area_info_pipe(1) <= area_info_pipe(0);
             end if;      
             
             -- fsm de contrôle
@@ -121,11 +116,7 @@ begin
                
                when others =>
                
-            end case;
-            
-            
-            
-            
+            end case;         
             
          end if;
       end if;
