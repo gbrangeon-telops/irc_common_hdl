@@ -93,6 +93,7 @@ begin
             -- pipe 0 pour generation identificateurs 
             -------------------------
             area_info_pipe(0).raw         <= AREA_INFO_I.RAW;
+            area_info_pipe(0).clk_info    <= AREA_INFO_I.CLK_INFO;
             area_info_pipe(0).info_dval   <= AREA_INFO_I.INFO_DVAL;
             --identificateurs
             if AREA_INFO_I.RAW.LINE_PCLK_CNT = USER_AREA_CFG.SOL_POSL_PCLK then          -- lval
