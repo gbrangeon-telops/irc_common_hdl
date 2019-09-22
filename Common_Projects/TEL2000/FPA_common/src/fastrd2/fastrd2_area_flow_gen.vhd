@@ -103,10 +103,11 @@ begin
             --------------------------------------------------------
             area_info_o.raw <= area_info_i.raw;
             area_info_o.user <= area_info_i.user;
+            area_info_o.clk_info.clk_id <= area_info_i.clk_info.clk_id;
             area_info_o.info_dval <= area_info_dval_i;
             
             --------------------------------------------------------
-            -- generation de clk_info
+            -- generation du reste de clk_info
             --------------------------------------------------------
             counter <= counter + incr;
             
