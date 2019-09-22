@@ -109,22 +109,23 @@ begin
             -- generation de clk_info
             --------------------------------------------------------
             counter <= counter + incr;
+            
+            if counter > DEFINE_FPA_CLK_INFO.MCLK_RATE_FACTOR_DIV2(to_integer(area_info_i.clk_info.clk_id)) then
+               area_info_o.clk_info.clk <= '0';
+            end if;
+            
             if counter = 1 then
                area_info_o.clk_info.sof <= '1';
+               area_info_o.clk_info.clk <= '1';
             else
                area_info_o.clk_info.sof <= '0';
             end if;
             
             if counter = 0 then
                area_info_o.clk_info.eof <= '1';
+               area_info_o.clk_info.clk <= '0';
             else
                area_info_o.clk_info.eof <= '0';
-            end if;
-            
-            if counter = 1 then
-               area_info_o.clk_info.clk <= '1';
-            elsif counter = DEFINE_FPA_CLK_INFO.MCLK_RATE_FACTOR_DIV2(to_integer(area_info_i.clk_info.clk_id)) then
-               area_info_o.clk_info.clk <= '0';
             end if;
             
             --------------------------------------------------------
