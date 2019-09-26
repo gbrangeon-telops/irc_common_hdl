@@ -80,7 +80,7 @@ begin
    -- analyse et sortie des données 
    --------------------------------------------------
    U3: process(CLK) 
-      variable incr : unsigned(1 downto 0);
+      variable incr : std_logic_vector(1 downto 0);
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then
@@ -94,7 +94,7 @@ begin
             
          else 
             
-            incr := unsigned('0'& (AREA_FIFO_DVAL and not AFULL));
+            incr := '0'& (AREA_FIFO_DVAL and not AFULL);
             area_fifo_rd_i <= '0';
             area_info_dval_i <= AREA_FIFO_DVAL and not AFULL;
             
@@ -109,7 +109,7 @@ begin
             --------------------------------------------------------
             -- generation du reste de clk_info
             --------------------------------------------------------
-            counter <= counter + incr;
+            counter <= counter + unsigned(incr);
             
             if counter > DEFINE_FPA_CLK_INFO.MCLK_RATE_FACTOR_DIV2(to_integer(area_info_i.clk_info.clk_id)) then
                area_info_o.clk_info.clk <= '0';
