@@ -86,9 +86,10 @@ package fastrd2_define is
    type area_type is
    record
       
-      spare                : std_logic_vector(7 downto 0);
-      imminent_clk_change  : std_logic;               -- permet de signaler 1 CLK à l'avance un changement d'horloge. Ce qui donne le temps d'arreter l'horloge courante et activer la prochaine. 
-      imminent_aoi         : std_logic;               -- permet de signaler 1 CLK à l'avance une entrée en zone AOI. Ce qui donne le temps de se synchroniser sur l'horloge des ADCs
+      spare                : std_logic_vector(3 downto 0);
+      adc_sample_num       : unsigned(3 downto 0);          -- compteur d'échantillon d'ADC par pixel
+      imminent_clk_change  : std_logic;                     -- permet de signaler 1 CLK à l'avance un changement d'horloge. Ce qui donne le temps d'arreter l'horloge courante et activer la prochaine. 
+      imminent_aoi         : std_logic;                     -- permet de signaler 1 CLK à l'avance une entrée en zone AOI. Ce qui donne le temps de se synchroniser sur l'horloge des ADCs
       
       sof                  : std_logic;        
       eof                  : std_logic;
@@ -186,7 +187,8 @@ package body fastrd2_define is
       
       area_info.info_dval
       
-      & area_info.user.spare                           
+      & area_info.user.spare 
+      & std_logic_vector(area_info.user.adc_sample_num)                           
       & area_info.user.sof                  
       & area_info.user.eof                  
       & area_info.user.sol                  
@@ -196,7 +198,8 @@ package body fastrd2_define is
       & area_info.user.dval
       & area_info.user.rd_end
       
-      & area_info.raw.spare                 
+      & area_info.raw.spare
+      & std_logic_vector(area_info.raw.adc_sample_num)
       & area_info.raw.imminent_clk_change  
       & area_info.raw.imminent_aoi            
       & area_info.raw.sof                  
@@ -229,7 +232,8 @@ package body fastrd2_define is
       
       area_info.info_dval                  :=  yy(68);
       
-      area_info.user.spare                 :=  yy(67 downto 60);
+      area_info.user.spare                 :=  yy(67 downto 64);
+      area_info.user.adc_sample_num        :=  unsigned(yy(63 downto 60));
       area_info.user.sof                   :=  yy(59);
       area_info.user.eof                   :=  yy(58);
       area_info.user.sol                   :=  yy(57);
@@ -239,7 +243,8 @@ package body fastrd2_define is
       area_info.user.dval                  :=  yy(53);
       area_info.user.rd_end                :=  yy(52);
       
-      area_info.raw.spare                  :=  yy(51 downto 44);
+      area_info.raw.spare                  :=  yy(51 downto 48);
+      area_info.raw.adc_sample_num         :=  unsigned(yy(47 downto 44));
       area_info.raw.imminent_clk_change    :=  yy(43);
       area_info.raw.imminent_aoi           :=  yy(42);
       area_info.raw.sof                    :=  yy(41);
