@@ -83,7 +83,9 @@ begin
    -- analyse et sortie des données 
    --------------------------------------------------
    U3: process(CLK) 
-      variable incr : std_logic_vector(1 downto 0);
+      variable incr0 : std_logic_vector(1 downto 0);
+      variable incr1 : std_logic_vector(1 downto 0);
+      
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then
@@ -100,7 +102,7 @@ begin
             
          else 
             
-            incr := '0'& (AREA_FIFO_DVAL and not AFULL);
+            incr0 := '0'& (AREA_FIFO_DVAL and not AFULL);
             area_fifo_rd_i <= '0';
             area_info_dval_i <= AREA_FIFO_DVAL and not AFULL;
             
@@ -111,7 +113,7 @@ begin
             area_info_pipe(0).user <= area_info_i.user;
             area_info_pipe(0).clk_info.clk_id <= area_info_i.clk_info.clk_id;
             area_info_pipe(0).info_dval <= area_info_dval_i;
-            counter <= counter + unsigned(incr);
+            counter <= counter + unsigned(incr0);
             
             if counter > DEFINE_FPA_CLK_INFO.MCLK_RATE_FACTOR_DIV2(to_integer(area_info_i.clk_info.clk_id)) then
                area_info_pipe(0).clk_info.clk <= '0';
@@ -143,7 +145,8 @@ begin
             -- pipe(1): user.adc_sample_num
             -------------------------------------------------------- 
             area_info_pipe(1) <= area_info_pipe(0);
-            mclk_source_cnt <= mclk_source_cnt + unsigned('0' & area_info_pipe(0).info_dval);
+            incr1 := '0' & area_info_pipe(0).info_dval;
+            mclk_source_cnt <= mclk_source_cnt + unsigned(incr1);
             
             if mclk_source_cnt = DEFINE_ADC_QUAD_CLK_FACTOR then                                     
                mclk_source_cnt <=  to_unsigned(1, mclk_source_cnt'length);
