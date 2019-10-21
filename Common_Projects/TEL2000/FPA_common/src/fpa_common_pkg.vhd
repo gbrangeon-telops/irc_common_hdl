@@ -28,6 +28,7 @@ package fpa_common_pkg is
    constant FPA_ROIC_SCORPIO_MW : std_logic_vector(7 downto 0) := x"18";
    constant FPA_ROIC_ISC0804    : std_logic_vector(7 downto 0) := x"19"; 
    constant FPA_ROIC_SUPHAWK    : std_logic_vector(7 downto 0) := x"20";
+   constant FPA_ROIC_XRO3503    : std_logic_vector(7 downto 0) := x"21";
    constant FPA_ROIC_UNKNOWN    : std_logic_vector(7 downto 0) := x"FF";       --  interface inconnue 
    
    -------------------------------------------------------------------------- 
@@ -110,6 +111,7 @@ package fpa_common_pkg is
    constant  ID_ANALOG_ISC0207_INPUT_LVTTL50_COOL_20V_TO_28V_WITH_FLEGX    : freq_id_type := ( 5772,  6380);   -- 16.5 KHz, Analog ISC0207 RICOR K548/LSF with FleG-X
    constant  ID_ANALOG_SUPHAWK_INPUT_LVCMOS33_COOL_11V_TO_27V              : freq_id_type := ( 5299,  5516);   -- 18.5 KHz, Analog SUPHAWK RM2
    constant  ID_ANALOG_ISC0804_LN2_INPUT_LVCMOS33_COOL_0V_TO_28V           : freq_id_type := ( 5028,  5233);   -- 19.5 KHz, Analog ISC0804 LN2 with FleX 291
+   constant  ID_ANALOG_XRO3503_INPUT_LVCMOS33_COOL_12V_TO_28V              : freq_id_type := ( 4782,  4978);   -- 20.5 KHz, Analog XRO3503 with TEC            
    
    ----------------------------------------------------------------------------------
    -- Les frequences de reconnaissance des cartes ADC (en coups de clocks 100 MHz)   
@@ -560,7 +562,19 @@ package body fpa_common_pkg is
             flex_brd_info.cooler_on_curr_min_mA    := 0;       -- pour accommoder l'absence de refroidisseur à moteur
             flex_brd_info.cooler_off_curr_max_mA   := 100;     -- pour accommoder l'absence de refroidisseur à moteur
             flex_brd_info.flegx_brd_present        := '0';     -- flex 291 utilisé
-            flex_brd_info.chn_diversity_num        := 1;           
+            flex_brd_info.chn_diversity_num        := 1;
+            
+            -- Xenics XRO3503 (EFA-00305-001)
+         elsif (Tosc >= ID_ANALOG_XRO3503_INPUT_LVCMOS33_COOL_12V_TO_28V.freq_id_min) and (Tosc <= ID_ANALOG_XRO3503_INPUT_LVCMOS33_COOL_12V_TO_28V.freq_id_max) then
+            flex_brd_info.fpa_roic                 := FPA_ROIC_XRO3503;
+            flex_brd_info.fpa_output               := OUTPUT_ANALOG;
+            flex_brd_info.fpa_input                := LVCMOS33;
+            flex_brd_info.cooler_volt_min_mV       := 11_000;
+            flex_brd_info.cooler_volt_max_mV       := 27_000;
+            flex_brd_info.cooler_on_curr_min_mA    := 100;
+            flex_brd_info.cooler_off_curr_max_mA   := 100;
+            flex_brd_info.flegx_brd_present        := '0';
+            flex_brd_info.chn_diversity_num        := 1;
             
             -- flex_brd inconnu  
          else
