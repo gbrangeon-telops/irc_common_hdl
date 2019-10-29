@@ -231,7 +231,7 @@ begin
          -- les flags adc considérés dans le shifregister
          adc_flag(0)   <= FPA_DIN(C_AOI_LSYNC_POS); -- FPA_DIN(C_AOI_LSYNC_POS) and not aoi_line_sync_last;   -- aoi_lsync :  on considere uniqument les RE
          adc_flag(1)   <= FPA_DIN(C_NAOI_START_POS);-- FPA_DIN(C_NAOI_START_POS) and not naoi_start_last;     -- naoi_start:  on considere uniqument les RE
-         adc_flag_dval <= FPA_DIN_DVAL and aoi_init_done and naoi_init_done;--(not fpa_din_dval_last and FPA_DIN_DVAL) and aoi_init_done and naoi_init_done;  --  on considere uniqument les RE 
+         adc_flag_dval <= FPA_DIN_DVAL and global_init_done;--(not fpa_din_dval_last and FPA_DIN_DVAL) and aoi_init_done and naoi_init_done;  --  on considere uniqument les RE 
          
          -- front montant ou descendant
          if DEFINE_FPA_SYNC_FLAG_VALID_ON_FE then 
@@ -254,7 +254,7 @@ begin
    begin
       if rising_edge(CLK) then         
          if sreset = '1' then      -- tant qu'on est en mode diag, la fsm est en reset.      
-            init_fsm <= init_st1;
+            init_fsm <= init_done_st;
             aoi_init_done <= '0';
             naoi_init_done <= '0';
             aoi_flag_fifo_rst <= '1';
@@ -276,25 +276,6 @@ begin
             naoi_stop_last <= naoi_stop_i;
             
             case init_fsm is         -- ENO: 23 juillet 2014. les etats init_st sont requis pour éviter des problèmes de synchro          
-               
-               when init_st1 =>      
-                  pix_count <= (others => '0');
-                  if  FPA_DIN(C_AOI_FSYNC_POS) = '1' then  -- je vois un signal de synchro
-                     init_fsm <= init_st2;
-                  end if;                                                                       
-               
-               when init_st2 =>     
-                  if  FPA_DIN(C_AOI_FSYNC_POS) = '0' then  -- je ne vois plus le signal de synchro
-                     init_fsm <= init_st3;
-                  end if;  
-               
-               when init_st3 =>
-                  if FPA_DIN_DVAL = '1' then      
-                     pix_count <= pix_count + DEFINE_FPA_TAP_NUMBER;
-                  end if;                                           
-                  if pix_count >= 64 then   -- je vois au moins un nombre de pixels équivalent à la plus petite ligne d'image de TEL-2000. cela implique que le système en amont est actif. je m'en vais en idle et attend la prochaine synchro 
-                     init_fsm <= init_done_st;     
-                  end if;
                
                when init_done_st => 
                   if aoi_rd_end_last = '1' and aoi_rd_end_i = '0' then  -- je vois la tombée du fval d'une readout_info.aoi =>
@@ -403,7 +384,7 @@ begin
    begin
       if rising_edge(CLK) then         
          aoi_flag_fifo_din(21 downto 0) <= READOUT_INFO.AOI.SPARE & READOUT_INFO.AOI.SOF & READOUT_INFO.AOI.EOF & READOUT_INFO.AOI.SOL & READOUT_INFO.AOI.EOL & READOUT_INFO.AOI.FVAL & READOUT_INFO.AOI.LVAL & READOUT_INFO.AOI.DVAL;  -- read_end n'est plus ecrit dans les fifos
-         aoi_flag_fifo_wr <= READOUT_INFO.SAMP_PULSE and READOUT_INFO.AOI.DVAL and aoi_init_done; -- remarquer qu'on n'ecrit pas les samples d'interligne! on écrit juste les données AOI !!!!! Même pas READ_END puisqu'il n'a pas de DVAL associé à READ_END     
+         aoi_flag_fifo_wr <= READOUT_INFO.SAMP_PULSE and READOUT_INFO.AOI.DVAL and global_init_done; -- remarquer qu'on n'ecrit pas les samples d'interligne! on écrit juste les données AOI !!!!! Même pas READ_END puisqu'il n'a pas de DVAL associé à READ_END     
       end if;
    end process;        
    
@@ -433,7 +414,7 @@ begin
    begin
       if rising_edge(CLK) then         
          naoi_flag_fifo_din(17 downto 0) <= READOUT_INFO.NAOI.SPARE & READOUT_INFO.NAOI.REF_VALID & READOUT_INFO.NAOI.DVAL & READOUT_INFO.NAOI.STOP & READOUT_INFO.NAOI.START;
-         naoi_flag_fifo_wr <= READOUT_INFO.SAMP_PULSE and READOUT_INFO.NAOI.DVAL and naoi_init_done;    
+         naoi_flag_fifo_wr <= READOUT_INFO.SAMP_PULSE and READOUT_INFO.NAOI.DVAL and global_init_done;    
       end if;
    end process; 
    
@@ -468,7 +449,7 @@ begin
          else      
             
             -- ecriture des données en aval
-            dout_wr_en_o <= aoi_init_done and naoi_init_done and FPA_DIN_DVAL; -- les données sortent tout le temps. les flags permettront de distinguer le AOI du NAOI 
+            dout_wr_en_o <= global_init_done and FPA_DIN_DVAL; -- les données sortent tout le temps. les flags permettront de distinguer le AOI du NAOI 
             
             -- données écrites en aval
             if DEFINE_FPA_VIDEO_DATA_INVERTED = '1' then 

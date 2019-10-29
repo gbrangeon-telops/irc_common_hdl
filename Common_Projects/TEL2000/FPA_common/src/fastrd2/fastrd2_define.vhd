@@ -161,11 +161,11 @@ package body fastrd2_define is
       for ii in 0 to FPA_MCLK_NUM_MAX - 1 loop
          if  yy.mclk_rate_khz(ii) /= 0 then 
             yy.pclk_rate_khz(ii)          := pixnum_per_mclk_and_per_tap * yy.mclk_rate_khz(ii);
-            yy.mclk_rate_factor(ii)       := integer(yy.mclk_source_rate_khz / yy.mclk_rate_khz(ii));
+            yy.mclk_rate_factor(ii)       := integer(round(real(yy.mclk_source_rate_khz) / real(yy.mclk_rate_khz(ii))));
             yy.mclk_rate_factor_div2(ii)  := yy.mclk_rate_factor(ii)/2;
             yy.mclk_rate_factor_m1(ii)    := yy.mclk_rate_factor(ii) - 1;
-            yy.pclk_rate_factor(ii)       := integer(yy.mclk_source_rate_khz / yy.pclk_rate_khz(ii));
-            yy.pclk_rate_factor_m1(ii)    := integer(yy.mclk_source_rate_khz / yy.pclk_rate_khz(ii)) - 1;
+            yy.pclk_rate_factor(ii)       := integer(round(real(yy.mclk_source_rate_khz) / real(yy.pclk_rate_khz(ii))));
+            yy.pclk_rate_factor_m1(ii)    := integer(round(real(yy.mclk_source_rate_khz) / real(yy.pclk_rate_khz(ii)))) - 1;
          else
             yy.pclk_rate_khz(ii)          := 0;
             yy.mclk_rate_factor(ii)       := 0;

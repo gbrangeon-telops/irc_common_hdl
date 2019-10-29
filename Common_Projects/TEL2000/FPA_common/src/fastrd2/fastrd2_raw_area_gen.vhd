@@ -77,7 +77,7 @@ begin
    --------------------------------------------------
    -- Outputs map
    --------------------------------------------------  
-   AREA_INFO <= area_info_pipe(3);   
+   AREA_INFO <= area_info_pipe(4);   
    
    --------------------------------------------------
    -- synchro reset 
@@ -152,7 +152,6 @@ begin
                line_pclk_cnt <= to_unsigned(1, line_pclk_cnt'length);   
             end if;
          end if;       
-         
       end if;
    end process;   
    
@@ -244,13 +243,18 @@ begin
             elsif area_info_pipe(2).raw.line_pclk_cnt > RAW_AREA_CFG.LSYNC_END_POSL_PCLK then
                area_info_pipe(3).raw.lsync <= '0';
             end if;
-            area_info_pipe(3).info_dval <= area_info_pipe(2).raw.fval or area_info_pipe(0).raw.rd_end;
+            
+            ----------------------------------------------
+            -- pipe 4 pour generation info_dval         
+            ----------------------------------------------
+            area_info_pipe(4) <= area_info_pipe(3);
+            area_info_pipe(4).info_dval <= area_info_pipe(3).raw.fval or area_info_pipe(3).raw.rd_end;
             
          else
-            area_info_pipe(3).info_dval <= '0';
+            area_info_pipe(4).info_dval <= '0';
          end if;
          
-         global_reset <= sreset or area_info_pipe(2).raw.rd_end;
+         global_reset <= sreset or area_info_pipe(3).raw.rd_end;
          
          -------------------------
          -- reset des identificateurs
@@ -261,7 +265,7 @@ begin
             lval_temp <= '0';
             line_cnt <= (others => '0');
             lsync_enabled <= '0';
-            for ii in 0 to 3 loop
+            for ii in 0 to 4 loop
                area_info_pipe(ii).raw <= ((others => '0'), (others => '0'), '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'));     
                area_info_pipe(ii).info_dval <= '0';
                area_info_pipe(ii).raw.rd_end <= '0';

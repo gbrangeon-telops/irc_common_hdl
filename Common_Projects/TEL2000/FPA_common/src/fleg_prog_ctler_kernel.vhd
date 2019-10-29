@@ -116,6 +116,7 @@ begin
             for ii in 1 to DAC_NUM loop
                dac_actual_cfg(ii) <= DEFINE_DAC_VALUE_DEFAULT; -- dans fleg_define
             end loop;
+            dac_cnt <= 0;
             
          else    
             
@@ -159,7 +160,7 @@ begin
                   dac_cnt <= dac_cnt + 1;
                   new_data_pending_fsm <= count_limit_st;
                
-               when count_limit_st =>      -- RAZ 
+               when count_limit_st =>      -- Remise  
                   if dac_cnt > DAC_NUM then
                      dac_cnt <= 1;
                   end if;

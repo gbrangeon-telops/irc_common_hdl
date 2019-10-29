@@ -177,11 +177,11 @@ begin
          if sreset = '1' then  
             dout_mosi_i.dval <= '0';	
             chn_dsity_fsm <= quad1_out_st;
-            -- pragma translate_off
-            dout_mosi_i.sof <= '0';
-            dout_mosi_i.eof <= '0';             
             quad1_fifo_rd_en <= '0';
             quad2_fifo_rd_en <= '0';
+            -- pragma translate_off
+            dout_mosi_i.sof <= '0';
+            dout_mosi_i.eof <= '0';          
             -- pragma translate_on 
             
             

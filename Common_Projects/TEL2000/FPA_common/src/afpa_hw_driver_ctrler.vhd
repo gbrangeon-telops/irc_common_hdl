@@ -167,6 +167,7 @@ begin
             first_prog_done <= '0';
             prog_init_done_i <= '0';
             hw_cfg_in_progress_i <= '0';
+            hw_rqst_i <= '0';
             
          else                   
             
