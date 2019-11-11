@@ -22,7 +22,8 @@ entity LL8_ext_to_spi_tx is
       OUTPUT_MSB_FIRST : boolean := false;     -- si à true, alors RX_MOSI.DATA(7) est le premier bit à sortir sur le lien SPI. Cela signifie une sortie des bits 7 dowto 0
       -- si à false alors RX_MOSI.DATA(0) est le premier bit à sortir sur le lien SPI. Cela signifie une sortie des bits 0 to 7
       DATA_TO_CS_DLY : natural range 1 to 31 := 1;  -- delai en coups de SCLK entre la tombée de CS_N et la premiere donnée de SD. SCLK0 est à '0' durant ce delai
-      CS_TO_DATA_DLY : natural range 1 to 31 := 1   -- delai en coups de SCLK entre le dernier SD et la remontee de CS_N. SCLK0 est à '0' durant ce delai   
+      CS_TO_DATA_DLY : natural range 1 to 31 := 1;  -- delai en coups de SCLK entre le dernier SD et la remontee de CS_N. SCLK0 est à '0' durant ce delai   
+      SCLK0_FREE_RUNNING : boolean := false         -- à true si l'horloge SCLK0 roule tout le temps
       );
    
    port(
@@ -42,7 +43,7 @@ entity LL8_ext_to_spi_tx is
       SCLK0    : out std_logic;      -- vaut SCLKI decalé de 1CLK
       SD       : out std_logic;
       CS_N     : out std_logic;
-      FRM_DONE : out std_logic;      --indique la fin de l'envoi d'une trame commeneçant par SOF et se terminant par EOF
+      FRM_DONE : out std_logic;      -- indique la fin de l'envoi d'une trame commeneçant par SOF et se terminant par EOF
       
       --err
       ERR      : out std_logic 
@@ -358,7 +359,11 @@ begin
                
                when others =>
                
-            end case;
+            end case; 
+            
+            if SCLK0_FREE_RUNNING then
+               sclk_o <= SCLKI;
+            end if;
             
          end if;
       end if;
