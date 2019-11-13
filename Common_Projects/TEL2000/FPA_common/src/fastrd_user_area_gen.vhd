@@ -75,12 +75,10 @@ begin
    begin
       if rising_edge(CLK) then
          if sreset ='1' then 
-            -- pragma translate_off
             for ii in 0 to 3 loop
                raw_pipe(ii) <= ('0', '0', '0', '0', '0', '0', '0', '0', '0', (others => '0'), (others => '0'), '0', '0');
                user_pipe(ii) <= ('0', '0', '0', '0', '0', '0', '0', '0', '0');
             end loop;
-            -- pragma translate_on
             
          else
             
