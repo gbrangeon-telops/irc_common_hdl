@@ -109,9 +109,9 @@ architecture rtl of fpa_status_gen is
    signal stat_read_err                : std_logic;
    signal fpa_driver_dvalid_err        : std_logic;
    -- pour le power management de DAL
-   signal adc_ddc_detect_process_done    : std_logic;
-   signal adc_ddc_present                : std_logic;
-   signal flex_flegx_detect_process_done : std_logic;
+   signal adc_ddc_detect_process_done    : std_logic := '0';
+   signal adc_ddc_present                : std_logic := '0';
+   signal flex_flegx_detect_process_done : std_logic := '0';
    signal flex_flegx_present             : std_logic;
    signal acq_trig_done                  : std_logic;
    signal fpa_permit_int_change          : std_logic;
@@ -119,7 +119,7 @@ architecture rtl of fpa_status_gen is
    signal fpa_driver_cmd_in_err          : std_logic_vector(7 downto 0);
    signal flegx_present                  : std_logic;
    signal fpa_readout_err                : std_logic_vector(1 downto 0); 
-   signal cooler_param_valid             : std_logic;
+   signal cooler_param_valid             : std_logic := '0';
    signal fpa_seq_success                : std_logic;
    
    
@@ -239,7 +239,9 @@ begin
    begin
       if rising_edge(FPA_INTF_CLK) then
          
-         cooler_param_valid <= not fpa_seq_hardw_err and not fpa_seq_vhd_err and not fpa_seq_softw_err and FPA_HARDW_STAT.DVAL;
+         if fpa_seq_hardw_err = '0' and fpa_seq_vhd_err = '0' and fpa_seq_softw_err = '0' and FPA_HARDW_STAT.DVAL = '1' then 
+            cooler_param_valid <= '1';
+         end if;
          
          if cooler_param_valid = '1' then   
             cooler_volt_min_mV_out     <= cooler_volt_min_mV_in; 
@@ -266,23 +268,28 @@ begin
    UP : process(FPA_INTF_CLK) 
    begin
       if rising_edge(FPA_INTF_CLK) then
+         
          -- adc_ddc
-         adc_ddc_detect_process_done <= fpa_hw_init_done;
-         if fpa_hw_init_done ='1'and FPA_HARDW_STAT.IDDCA_INFO /= IDDCA_INFO_UNKNOWN then 
-            adc_ddc_present <= '1';
-         else                   
-            adc_ddc_present <= '0';
+         if FPA_HARDW_STAT.DVAL = '1' then
+            adc_ddc_detect_process_done <= FPA_HARDW_STAT.DVAL;
+            if FPA_HARDW_STAT.IDDCA_INFO /= IDDCA_INFO_UNKNOWN then 
+               adc_ddc_present <= '1';
+            else                   
+               adc_ddc_present <= '0';
+            end if;
          end if;
          
          -- flex ou flegx
-         flex_flegx_detect_process_done <= fpa_hw_init_done;
-         if fpa_hw_init_done = '1'and FPA_HARDW_STAT.FLEX_BRD_INFO /= FLEX_BRD_INFO_UNKNOWN then 
-            flex_flegx_present <= '1';
-            flegx_present <= FPA_HARDW_STAT.FLEX_BRD_INFO.FLEGX_BRD_PRESENT;
-         else                   
-            flex_flegx_present <= '0';
-            flegx_present <= '0';
-         end if;      
+         if FPA_HARDW_STAT.DVAL = '1' then 
+            flex_flegx_detect_process_done <= '1';
+            if FPA_HARDW_STAT.FLEX_BRD_INFO /= FLEX_BRD_INFO_UNKNOWN then 
+               flex_flegx_present <= '1';
+               flegx_present <= FPA_HARDW_STAT.FLEX_BRD_INFO.FLEGX_BRD_PRESENT;
+            else                   
+               flex_flegx_present <= '0';
+               flegx_present <= '0';
+            end if; 
+         end if;     
          
       end if;
    end process;
@@ -468,18 +475,18 @@ begin
                
                when  x"003C" =>   -- erreurs latchées
                   stat_read_reg <= error_latch;
-               
---               when  x"0040" =>   -- INTF_SEQ_STAT
---                  stat_read_reg <= resize(INTF_SEQ_STAT, 32);
---               
---               when  x"0044" =>   -- DATA_PATH_STAT
---                  stat_read_reg <= resize(DATA_PATH_STAT, 32);
---               
---               when  x"0048" =>   -- TRIG_CTLER_STAT
---                  stat_read_reg <= resize(TRIG_CTLER_STAT, 32);
---               
---               when  x"004C" =>   -- FPA_DRIVER_STAT
---                  stat_read_reg <= resize(FPA_DRIVER_STAT, 32);
+                  
+                  --               when  x"0040" =>   -- INTF_SEQ_STAT
+                  --                  stat_read_reg <= resize(INTF_SEQ_STAT, 32);
+                  --               
+                  --               when  x"0044" =>   -- DATA_PATH_STAT
+                  --                  stat_read_reg <= resize(DATA_PATH_STAT, 32);
+                  --               
+                  --               when  x"0048" =>   -- TRIG_CTLER_STAT
+                  --                  stat_read_reg <= resize(TRIG_CTLER_STAT, 32);
+                  --               
+                  --               when  x"004C" =>   -- FPA_DRIVER_STAT
+                  --                  stat_read_reg <= resize(FPA_DRIVER_STAT, 32);
                   
                -- pour le power management de DAL   
                when  x"0050" =>   -- adc_ddc_detect_process_done
@@ -539,7 +546,7 @@ begin
                when  x"0090" =>   -- cooler_off_curr_max_mA_out
                   stat_read_reg <= resize(cooler_off_curr_max_mA_out, 32);                  
                   
-                ---- watchdog data
+               ---- watchdog data
                when  x"0094" =>   -- 
                   stat_read_reg <= resize(MISC_STAT.acq_trig_cnt, 32);  
                
