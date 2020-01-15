@@ -71,154 +71,146 @@ architecture RTL of LL8_ext_fifo8 is
          CLK : in std_logic);
    end component;
    
-   component sfifo_w10_d256
+   component t_axi4_stream16_sfifo_d256
       port(
-         clk : in std_logic;
-         din : in std_logic_vector(9 downto 0);
-         rd_en : in std_logic;
-         srst : in std_logic;
-         wr_en : in std_logic;
-         data_count : out std_logic_vector(7 downto 0);
-         dout : out std_logic_vector(9 downto 0);
-         empty : out std_logic;
-         full : out std_logic;
-         overflow : out std_logic;
-         valid : out std_logic);
-   end component;  
+         s_aclk           : in std_logic;
+         s_aresetn        : in std_logic;
+         s_axis_tvalid    : in std_logic;
+         s_axis_tready    : out std_logic;
+         s_axis_tdata     : in std_logic_vector(15 downto 0);
+         s_axis_tstrb     : in std_logic_vector(1 downto 0);
+         s_axis_tkeep     : in std_logic_vector(1 downto 0);
+         s_axis_tlast     : in std_logic;
+         s_axis_tid       : in std_logic_vector(0 downto 0);
+         s_axis_tdest     : in std_logic_vector(2 downto 0);
+         s_axis_tuser     : in std_logic_vector(3 downto 0);
+         m_axis_tvalid    : out std_logic;
+         m_axis_tready    : in std_logic;
+         m_axis_tdata     : out std_logic_vector(15 downto 0);
+         m_axis_tstrb     : out std_logic_vector(1 downto 0);
+         m_axis_tkeep     : out std_logic_vector(1 downto 0);
+         m_axis_tlast     : out std_logic;
+         m_axis_tid       : out std_logic_vector(0 downto 0);
+         m_axis_tdest     : out std_logic_vector(2 downto 0);
+         m_axis_tuser     : out std_logic_vector(3 downto 0);
+         axis_data_count  : out std_logic_vector(8 downto 0);
+         axis_overflow    : out std_logic);
+   end component;
    
-   signal fifo_count_256  : std_logic_vector(7 downto 0);   
-   signal fifo_dout : std_logic_vector(9 downto 0);
-   signal fifo_din : std_logic_vector(9 downto 0);
-   signal fifo_rd_ack : std_logic;			
-   signal fifo_rd_en : std_logic;
-   
-   signal hold_dval  : std_logic;
-   signal TX_DVAL_buf: std_logic;
-   signal FULLi      : std_logic;    
-   signal AFULLi     : std_logic;    
-   signal WR_ERRi    : std_logic;
-   signal EMPTYi     : std_logic;
-   signal fifo_wr_en : std_logic;
-   
-   signal FoundGenCase : boolean;      
-   signal RESET_TX : std_logic;                  
-   signal RESET_RX : std_logic;   
-   
-   -- This signal is for debug only and will be optimized out by xst
-   signal tx_cnt     : unsigned(31 downto 0); 
-   --   attribute keep    : string; 
-   --   attribute keep of tx_cnt : signal is "true";     
+   signal areset_n        : std_logic;
+   signal s_axis_tvalid   : std_logic;
+   signal s_axis_tready   : std_logic;
+   signal s_axis_tdata    : std_logic_vector(15 downto 0);
+   signal s_axis_tstrb    : std_logic_vector(1 downto 0);
+   signal s_axis_tkeep    : std_logic_vector(1 downto 0);
+   signal s_axis_tlast    : std_logic;
+   signal s_axis_tid      : std_logic_vector(0 downto 0);
+   signal s_axis_tdest    : std_logic_vector(2 downto 0);
+   signal s_axis_tuser    : std_logic_vector(3 downto 0);
+   signal m_axis_tvalid   : std_logic;
+   signal m_axis_tready   : std_logic;
+   signal m_axis_tdata    : std_logic_vector(15 downto 0);
+   signal FoundGenCase    : boolean;
+   signal full_i          : std_logic;
+   signal empty_i         : std_logic;
+   signal wr_err_i        : std_logic;
+   signal data_cnt_i      : std_logic_vector(8 downto 0);
+   signal sreset_rx       : std_logic;
+   signal sreset_tx       : std_logic;
    
 begin      
    
-   sync_RESET_TX :  sync_reset
-   port map(ARESET => ARESET, SRESET => RESET_TX, CLK => CLK_TX); 
+   -----------------------------------------------------
+   --  signaux generiques
+   -----------------------------------------------------   
+   areset_n <= not ARESET;
+   TX_LL_MOSI.SUPPORT_BUSY <= '1';
    
-   sync_RESET_RX :  sync_reset
-   port map(ARESET => ARESET, SRESET => RESET_RX, CLK => CLK_RX);
+   U0A: sync_reset
+   port map(ARESET => ARESET, CLK => CLK_RX, SRESET => sreset_rx);
+   U0B: sync_reset
+   port map(ARESET => ARESET, CLK => CLK_TX, SRESET => sreset_tx);
    
-      
+   
+   -----------------------------------------------------
+   --  slave side map                               
+   -----------------------------------------------------
+   s_axis_tdata(15 downto 10) <= (others => '0');
+   s_axis_tdata(9 downto 0)   <= RX_LL_MOSI.SOF & RX_LL_MOSI.EOF & RX_LL_MOSI.DATA;
+   s_axis_tvalid              <= RX_LL_MOSI.DVAL;
+   s_axis_tstrb               <= (others => '1');
+   s_axis_tkeep               <= (others => '1');
+   s_axis_tlast               <= RX_LL_MOSI.EOF; 
+   s_axis_tid                 <= (others => '0');
+   s_axis_tdest               <= (others => '0');
+   s_axis_tuser               <= (others => '0');
+   RX_LL_MISO.BUSY            <= not s_axis_tready;
+   RX_LL_MISO.AFULL           <= '0';
+   WR_ERR <= '0';
+   FULL <= full_i;
+   
+   -----------------------------------------------------
+   --  master side map                               
+   -----------------------------------------------------   
+   m_axis_tready              <= not TX_LL_MISO.BUSY; 
+   TX_LL_MOSI.SOF             <= m_axis_tdata(9);
+   TX_LL_MOSI.EOF             <= m_axis_tdata(8);
+   TX_LL_MOSI.DVAL            <= m_axis_tvalid;
+   TX_LL_MOSI.DATA            <= m_axis_tdata(7 downto 0);
+   EMPTY                      <= empty_i;
+   
+   ----------------------------------------------------- 
+   --  fifo map                                   
+   ----------------------------------------------------- 
    gen_8_256 : if (FifoSize > 32 and FifoSize <= 256 and not ASYNC) generate
       begin
       FoundGenCase <= true;
-      AFULLi <= '1' when (unsigned(fifo_count_256) > (255-(Latency+1)) or FULLi = '1') else '0';
-      sfifo_w10_d256_inst : sfifo_w10_d256
+      
+      t_axi4_stream16_sfifo_d256_inst : t_axi4_stream16_sfifo_d256
       port map(
-         clk => CLK_RX,
-         din => fifo_din,
-         rd_en => fifo_rd_en,
-         srst => RESET_TX,
-         wr_en => fifo_wr_en,
-         data_count => fifo_count_256,
-         dout => fifo_dout,
-         empty => EMPTYi,
-         full => FULLi,
-         overflow => WR_ERRi,
-         valid => fifo_rd_ack
+         
+         s_aclk           =>  CLK_RX,      
+         s_aresetn        =>  areset_n,
+         
+         s_axis_tvalid    =>  s_axis_tvalid, 
+         s_axis_tready    =>  s_axis_tready, 
+         s_axis_tdata     =>  s_axis_tdata,  
+         s_axis_tstrb     =>  s_axis_tstrb,  
+         s_axis_tkeep     =>  s_axis_tkeep,  
+         s_axis_tlast     =>  s_axis_tlast,  
+         s_axis_tid       =>  s_axis_tid,    
+         s_axis_tdest     =>  s_axis_tdest,  
+         s_axis_tuser     =>  s_axis_tuser,  
+         
+         m_axis_tvalid    =>  m_axis_tvalid, 
+         m_axis_tready    =>  m_axis_tready, 
+         m_axis_tdata     =>  m_axis_tdata,  
+         m_axis_tstrb     =>  open,  
+         m_axis_tkeep     =>  open,  
+         m_axis_tlast     =>  open,  
+         m_axis_tid       =>  open,    
+         m_axis_tdest     =>  open,  
+         m_axis_tuser     =>  open,
+         
+         axis_data_count  =>  data_cnt_i,
+         axis_overflow    =>  full_i
          );
-   end generate gen_8_256;	
+      
+   end generate;
    
-   
-   TX_LL_MOSI.SUPPORT_BUSY <= '1';
-   
-   -- Fifo write control
-   fifo_wr_en <= RX_LL_MOSI.DVAL and not FULLi;
-   
-   -- Fifo read control
-   fifo_rd_en <= not TX_LL_MISO.AFULL and not (TX_LL_MISO.BUSY and TX_DVAL_buf);
-   
-   -- Write interface signals
-   fifo_din <= (RX_LL_MOSI.SOF & RX_LL_MOSI.EOF & RX_LL_MOSI.DATA);	
-   
-   -- OUTPUT MAPPING                       
-   TX_LL_MOSI.DVAL <= TX_DVAL_buf when FoundGenCase else '0';
-   TX_DVAL_buf <= fifo_rd_ack or hold_dval;
-   TX_LL_MOSI.DATA <= fifo_dout(7 downto 0) when FoundGenCase else (others => '0');
-   TX_LL_MOSI.EOF <= fifo_dout(8) when FoundGenCase else '0';	 
-   TX_LL_MOSI.SOF <= fifo_dout(9) when FoundGenCase else '0';                  
-   
-   FULL <= FULLi when FoundGenCase else '1'; 
-   --RX_LL_MISO.AFULL <= AFULLi when FoundGenCase else '1'; 
-   
-   no_latency : if Latency = 0 generate
-      RX_LL_MISO.AFULL <= '0';
-   end generate no_latency;        
-   
-   with_latency : if Latency > 0 generate   
-      -- PDU: We register AFULL to help timing closure. Anyway one extra clock cycle on 
-      -- AFULL should not matter in the vast majority of cases. Just to make sure, we
-      -- added +1 to the generic Latency.
-      process (CLK_RX)
-      begin                  
-         if rising_edge(CLK_RX) then      
-            if FoundGenCase then
-               RX_LL_MISO.AFULL <= AFULLi or RESET_RX;
-            else
-               RX_LL_MISO.AFULL <= '1';   
-            end if;    
-         end if;
-      end process;
-   end generate with_latency;      
-   
-   
-   RX_LL_MISO.BUSY <= FULLi or RESET_RX;
-   WR_ERR <= WR_ERRi when FoundGenCase else '0'; 
-   
-   -- DVALID latch (when RX is not ready, all we have to do is hold the DVal signal, the fifo interface does the rest)
-   tx_proc : process (CLK_TX)
-   begin	
+   U1A: process(CLK_TX)
+   begin
       if rising_edge(CLK_TX) then
-         if RESET_TX = '1' then
-            hold_dval <= '0';
-            tx_cnt <= (others => '0');
+         if sreset_tx = '1' then 
+            empty_i <= '1'; 
          else
-            if TX_DVAL_buf = '1' and TX_LL_MISO.BUSY = '0' then
-               tx_cnt <= tx_cnt + 1;
-            end if;
-            
-            hold_dval <= TX_LL_MISO.BUSY and TX_DVAL_buf;  
-            -- pragma translate_off   
-            assert (FoundGenCase or FifoSize = 0) report "Invalid LocalLink fifo generic settings!" severity FAILURE;
-            if FoundGenCase then
-               assert (WR_ERRi /= '1') report "LocalLink fifo overflow!!!" severity ERROR;
-            end if;
-            -- pragma translate_on
-         end if;		
-      end if;
-   end process;   
-   
-   rx_proc : process (CLK_RX)
-      variable empty_mid : std_logic;
-   begin	
-      if rising_edge(CLK_RX) then
-         if RESET_RX = '1' or EMPTYi = '0' or TX_DVAL_buf = '1' then
-            empty_mid := '0';
-            EMPTY <= '0';
-         else
-            empty_mid := EMPTYi;
-            EMPTY <= empty_mid;
-         end if;		
-      end if;
+            if unsigned(data_cnt_i) > 0 then 
+               empty_i <= '0'; 
+            else
+               empty_i <= '1'; 
+            end if;         
+         end if;
+      end if; 
    end process;
    
 end RTL;
