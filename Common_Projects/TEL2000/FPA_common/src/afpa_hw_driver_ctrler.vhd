@@ -456,7 +456,7 @@ begin
                   
                -- programmer le détecteur
                when  fpa_prog_st =>                  
-                  prog_en_i <= '1';  
+                  prog_en_i <= not readout_i;  
                   if PROG_DONE = '0' then
                      prog_ctrl_fsm <= wait_prog_end_st;
                   end if; 
