@@ -565,6 +565,18 @@ begin
                when  x"00A8" =>   -- 
                   stat_read_reg <= resize(MISC_STAT.out_pix_cnt_max, 32);
                
+               when  x"00AC" =>   -- 
+                  stat_read_reg <= resize(MISC_STAT.trig_to_int_delay_min, 32);
+               
+               when  x"00B0" =>   -- 
+                  stat_read_reg <= resize(MISC_STAT.trig_to_int_delay_max, 32);
+               
+               when  x"00B4" =>   -- 
+                  stat_read_reg <= resize(MISC_STAT.int_to_int_delay_min, 32);
+               
+               when  x"00B8" =>   -- 
+                  stat_read_reg <= resize(MISC_STAT.int_to_int_delay_max, 32);
+               
                when others  => stat_read_reg <= (others => '0');
                
             end case;

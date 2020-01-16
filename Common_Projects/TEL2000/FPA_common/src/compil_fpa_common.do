@@ -3,6 +3,16 @@
 #SetActiveLib -work
 #clearlibrary 	
 
+#signal stat
+acom \
+ "D:\Telops\FIR-00251-Proc\src\Trig\HDL\trig_define.vhd" \
+ "D:\Telops\FIR-00251-Common\VHDL\signal_stat\min_max_define.vhd" \
+ "D:\Telops\FIR-00251-Common\VHDL\signal_stat\min_max_ctrl.vhd" \
+ "D:\Telops\FIR-00251-Common\VHDL\signal_stat\delay_measurement.vhd" \
+ "D:\Telops\FIR-00251-Common\VHDL\signal_stat\trig_delay.bde" \
+ "D:\Telops\FIR-00251-Common\VHDL\signal_stat\period_duration.vhd" \
+ "D:\Telops\FIR-00251-Common\VHDL\signal_stat\trig_period.bde" \
+ "D:\Telops\FIR-00251-Common\VHDL\signal_stat\trig_period_8ch.bde"
  
 # sources FPa common 
 acom -relax d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\ad5648_driver.vhd 
