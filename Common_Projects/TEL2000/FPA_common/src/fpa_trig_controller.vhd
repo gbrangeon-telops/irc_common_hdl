@@ -24,7 +24,7 @@ use work.Proxy_define.all;
 entity fpa_trig_controller is
    port(
       ARESET          : in std_logic;
-      CLK_100M        : in std_logic;
+      CLK             : in std_logic;
       
       -- configuration
       FPA_INTF_CFG    : in fpa_intf_cfg_type;
@@ -81,10 +81,7 @@ architecture RTL of fpa_trig_controller is
    signal trig_timeout_sm              : trig_timeout_sm_type;
    signal sreset                       : std_logic;
    signal acq_trig_o                   : std_logic;
-   signal acq_trig_i                   : std_logic;
    signal xtra_trig_o                  : std_logic;
-   signal xtra_trig_i                  : std_logic;
-   signal prog_trig_i                  : std_logic;
    signal prog_trig_o                  : std_logic;
    signal done                         : std_logic;
    -- signal fpa_readout_last             : std_logic;
@@ -92,21 +89,15 @@ architecture RTL of fpa_trig_controller is
    signal dly_cnt                      : unsigned(FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_CTRL_DLY'LENGTH-1  downto 0);
    signal timeout_i                    : std_logic := '0';
    signal timeout_count                : unsigned(FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_TIMEOUT_DLY'LENGTH-1 downto 0);
-   signal acq_trig_last                : std_logic;
-   signal xtra_trig_last               : std_logic;
-   signal prog_trig_last               : std_logic;
    signal acq_trig_done                : std_logic;
    signal fpa_readout_i                : std_logic;
    signal fpa_int_feedbk_i             : std_logic;
-   signal acq_trig_in_i                : std_logic; 
-   signal xtra_trig_in_i               : std_logic; 
+   signal trig_ctler_en_i              : std_logic;
    signal prog_trig_in_i               : std_logic;
    signal apply_dly_then_check_readout : std_logic;
    
    --   -- attribute dont_touch                : string;
-   --   -- attribute dont_touch of acq_trig_i  : signal is "true";
    --   -- attribute dont_touch of acq_trig_o  : signal is "true";
-   --   -- attribute dont_touch of xtra_trig_i : signal is "true";
    --   -- attribute dont_touch of xtra_trig_o : signal is "true";
    --   -- attribute dont_touch of timeout_i       : signal is "true";
    --   -- attribute dont_touch of fpa_readout_last  : signal is "true";
@@ -134,16 +125,16 @@ begin
    U1A : sync_reset
    port map(
       ARESET => ARESET,
-      CLK    => CLK_100M,
+      CLK    => CLK,
       SRESET => sreset
-      ); 
+      );
    
    --------------------------------------------------
    -- synchro feedback 
    --------------------------------------------------    
    U1B : double_sync
    port map(
-      CLK => CLK_100M,
+      CLK => CLK,
       D   => FPA_READOUT,
       Q   => fpa_readout_i,
       RESET => sreset
@@ -151,7 +142,7 @@ begin
    
    U1C : double_sync
    port map(
-      CLK => CLK_100M,
+      CLK => CLK,
       D   => FPA_INT_FEEDBK,
       Q   => fpa_int_feedbk_i,
       RESET => sreset
@@ -159,23 +150,15 @@ begin
    
    U1D : double_sync
    port map(
-      CLK => CLK_100M,
-      D   => ACQ_TRIG_IN,
-      Q   => acq_trig_in_i,
+      CLK => CLK,
+      D   => TRIG_CTLER_EN,
+      Q   => trig_ctler_en_i,
       RESET => sreset
-      ); 
-   
-   U1E : double_sync
-   port map(
-      CLK => CLK_100M,
-      D   => XTRA_TRIG_IN,
-      Q   => xtra_trig_in_i,
-      RESET => sreset
-      ); 
+      );
    
    U1F : double_sync
    port map(
-      CLK => CLK_100M,
+      CLK => CLK,
       D   => PROG_TRIG_IN,
       Q   => prog_trig_in_i,
       RESET => sreset
@@ -185,23 +168,18 @@ begin
    -- fsm de contrôle/filtrage des trigs 
    -------------------------------------------------- 
    -- et de suivi du mode d'integration
-   U2: process(CLK_100M)
+   U2: process(CLK)
    begin
-      if rising_edge(CLK_100M) then 
+      if rising_edge(CLK) then 
          if sreset = '1' then 
             acq_trig_o <= '0';
             xtra_trig_o <= '0';
             prog_trig_o <= '0';
-            xtra_trig_i <= '0';
-            acq_trig_i <= '0';
             done <= '0';
             fpa_trig_sm <= idle;
             -- fpa_readout_last <= '0';
-            acq_trig_last <= '0';
-            xtra_trig_last <= '0';
             acq_trig_done <= '0';
             apply_dly_then_check_readout <= '0';
-            prog_trig_i <= '0';
             
          else
             
@@ -210,13 +188,13 @@ begin
             
             
             -- definition des delais en dehors de la fsm. De plus ça dure 10 clks : ce qui est convenable pour les timings)
-            if acq_trig_i = '1' then                 
+            if acq_trig_o = '1' then                 
                dly_cnt <= FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_CTRL_DLY; 
             end if;
-            if xtra_trig_i = '1' then
+            if xtra_trig_o = '1' then
                dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;   
             end if;
-            if prog_trig_i = '1' then
+            if prog_trig_o = '1' then
                dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;
             end if;             
             
@@ -228,21 +206,16 @@ begin
                   acq_trig_o <= '0';
                   xtra_trig_o <= '0';
                   prog_trig_o <= '0';
-                  xtra_trig_i <= '0';
-                  acq_trig_i <= '0';
-                  prog_trig_i <= '0';
                   done <= '1'; --! le done est utilisé uniquement par le séquenceur. Ce done est un pulse, etant donné que les extra-trig sont toujours là.Donc à bannir dans le done general envoyé au PPC
                   count <= (others => '0');
                   acq_trig_done <= '1';
-                  if TRIG_CTLER_EN = '1' then  --! TRIG_CTLER_EN = '1' ssi le détecteur/proxy est allumé ou si on est en mode diag
-                     if acq_trig_in_i = '1' then 
-                        acq_trig_i <= not prog_trig_in_i;
+                  if trig_ctler_en_i = '1' then  --! TRIG_CTLER_EN = '1' ssi le détecteur/proxy est allumé ou si on est en mode diag
+                     if ACQ_TRIG_IN = '1' then
                         acq_trig_o <= not prog_trig_in_i;
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '0';
                         done <= '0';
-                     elsif xtra_trig_in_i = '1' then   
-                        xtra_trig_i <= not prog_trig_in_i;         
+                     elsif XTRA_TRIG_IN = '1' then
                         xtra_trig_o <= not prog_trig_in_i;
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '1';
@@ -251,7 +224,6 @@ begin
                   end if;
                   
                   if prog_trig_in_i = '1' then
-                     prog_trig_i <= '1';         
                      prog_trig_o <= '1';
                      fpa_trig_sm <= int_trig_st;
                      acq_trig_done <= '1';
@@ -265,9 +237,6 @@ begin
                      xtra_trig_o <= '0';                                   
                      acq_trig_o <= '0'; 
                      prog_trig_o <= '0';
-                     xtra_trig_i <= '0';
-                     acq_trig_i <= '0';
-                     prog_trig_i <= '0';
                      fpa_trig_sm <= check_int_feedback_st;
                   end if;
                   
@@ -341,10 +310,6 @@ begin
                
             end case;
             
-            acq_trig_last <= acq_trig_i;
-            xtra_trig_last <= xtra_trig_i;
-            prog_trig_last <= prog_trig_i;
-            
          end if;         
       end if;
       
@@ -353,9 +318,9 @@ begin
    --------------------------------------------------
    -- fsm de contrôle de la periode minimale du trig
    --------------------------------------------------
-   U3: process(CLK_100M)
+   U3: process(CLK)
    begin
-      if rising_edge(CLK_100M) then 
+      if rising_edge(CLK) then 
          if sreset = '1' then  
             timeout_i <= '0';
             trig_timeout_sm <= idle;
@@ -368,7 +333,7 @@ begin
                -- etat idle
                when idle =>                   
                   timeout_count <= (others => '0');
-                  if acq_trig_i = '1' or xtra_trig_i = '1' or prog_trig_i = '1' then                 
+                  if acq_trig_o = '1' or xtra_trig_o = '1' or prog_trig_o = '1' then
                      timeout_count <= FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_TIMEOUT_DLY; -- determine la periode minimale des acq trigs 
                      trig_timeout_sm <= cnt_st;  
                      timeout_i <= '0';          
