@@ -471,7 +471,7 @@ begin
                   
                -- prise des images en mode prog_trig (le temps d'integration utilisé est defini dans le fpa_define). Pour un Hawk, il est de 0.2 usec pour eviter des problemes de saturation en windowing
                when prog_img_start_st =>        
-                  prog_trig_i <= '1';
+                  prog_trig_i <= not readout_i;         -- ENO 29 janv 2020:  not readout_i permet d'accommoder IWR aussi.
                   if readout_i = '1' then
                      prog_ctrl_fsm <= prog_img_end_st;
                      prog_trig_i <= '0';                -- ENO 18 mars 2016: absolument necessaire ici pour éviter des bugs.
