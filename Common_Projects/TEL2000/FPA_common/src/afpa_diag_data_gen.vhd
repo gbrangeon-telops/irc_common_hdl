@@ -39,7 +39,7 @@ entity afpa_diag_data_gen is
       ENABLE             : in std_logic;
       
       FPA_INT            : in std_logic;
-                         
+      
       DIAG_DATA          : out std_logic_vector(95 downto 0); --! sortie des données 
       DIAG_DVAL          : out std_logic
       );
@@ -133,6 +133,7 @@ architecture rtl of afpa_diag_data_gen is
    signal diag_eol_last     : std_logic;
    signal aoi_img_end       : std_logic;
    signal aoi_img_start     : std_logic;
+   signal img_pending_cnt   : unsigned(1 downto 0);
    --signal elec_ofs_end_i    : std_logic;
    --signal elec_ofs_dval_i   : std_logic;
    --signal elec_ofs_start_i  : std_logic;
@@ -258,6 +259,7 @@ begin
             --elec_ofs_start_i <= '0';
             --elec_ofs_dval_i <= '0';
             --elec_ofs_end_i <= '1';
+            img_pending_cnt <= (others => '0');
             
          else   
             
@@ -289,6 +291,15 @@ begin
                end loop;                        
             end if;
             
+            -- gestion des integrations (pour IWR)
+            if ENABLE = '1' then 
+               if fpa_int_last = '1' and fpa_int_i = '0' then              
+                  img_pending_cnt <= img_pending_cnt + 1;
+               end if;
+            else
+               img_pending_cnt <= (others => '0');
+            end if;      
+            
             -- machine à états
             case diag_fsm is 
                
@@ -310,10 +321,9 @@ begin
                   diag_line_gen_en <= '0';
                   aoi_sof_i <= '0';
                   aoi_eof_i <= '0';
-                  if ENABLE = '1' then 
-                     if fpa_int_last = '1' and fpa_int_i = '0' then  -- fin de l'integration
-                        diag_fsm <=  tir_dly_st;
-                     end if;
+                  if img_pending_cnt > 0 then
+                     diag_fsm <=  tir_dly_st;
+                     img_pending_cnt <= img_pending_cnt - 1;
                   end if;
                
                when tir_dly_st =>
