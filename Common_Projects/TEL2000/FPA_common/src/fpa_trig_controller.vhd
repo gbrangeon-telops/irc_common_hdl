@@ -95,6 +95,7 @@ architecture RTL of fpa_trig_controller is
    signal trig_ctler_en_i              : std_logic;
    signal prog_trig_in_i               : std_logic;
    signal apply_dly_then_check_readout : std_logic;
+   signal readout_timeout              : std_logic;
    
    --   -- attribute dont_touch                : string;
    --   -- attribute dont_touch of acq_trig_o  : signal is "true";
@@ -113,7 +114,8 @@ begin
    XTRA_TRIG_OUT <=  xtra_trig_o; --! 
    PROG_TRIG_OUT <=  prog_trig_o; --! 
    
-   TRIG_CTLER_STAT(7 downto 4) <= (others => '0');
+   TRIG_CTLER_STAT(7 downto 5) <= (others => '0');
+   TRIG_CTLER_STAT(4) <= readout_timeout;  --! à '1' pour signifier que le readout effectif n'a jamais eu lieu et que c'est le dispositif de timeout qui a permis le retour de la fsm en idle. 
    TRIG_CTLER_STAT(3) <= acq_trig_done;
    TRIG_CTLER_STAT(2) <= '0';
    TRIG_CTLER_STAT(1) <= '0';
@@ -180,6 +182,7 @@ begin
             -- fpa_readout_last <= '0';
             acq_trig_done <= '0';
             apply_dly_then_check_readout <= '0';
+            readout_timeout <= '0';
             
          else
             
@@ -209,6 +212,7 @@ begin
                   done <= '1'; --! le done est utilisé uniquement par le séquenceur. Ce done est un pulse, etant donné que les extra-trig sont toujours là.Donc à bannir dans le done general envoyé au PPC
                   count <= (others => '0');
                   acq_trig_done <= '1';
+                  readout_timeout <= '0';
                   if trig_ctler_en_i = '1' then  --! TRIG_CTLER_EN = '1' ssi le détecteur/proxy est allumé ou si on est en mode diag
                      if ACQ_TRIG_IN = '1' then
                         acq_trig_o <= not prog_trig_in_i;
@@ -270,7 +274,8 @@ begin
                -- mode_readout_end_to_trig_start : on attend le debut du readout 
                when wait_readout_start_st =>			   
                   if fpa_readout_i = '1' or timeout_i = '1' then   --! début du readout sinon timeout_i permet de retourner à idle.
-                     fpa_trig_sm <= wait_readout_end_st; 
+                     fpa_trig_sm <= wait_readout_end_st;
+                     readout_timeout <= timeout_i;
                   end if;
                   
                -- mode_readout_end_to_trig_start : on attend la fin du readout 
