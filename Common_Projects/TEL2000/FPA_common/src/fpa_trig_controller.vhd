@@ -199,7 +199,11 @@ begin
             end if;
             if prog_trig_o = '1' then
                dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;
-            end if;             
+            end if; 
+            -- en cas de readout_timeout,  
+            if readout_timeout = '1' then
+                dly_cnt <= FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_TIMEOUT_DLY;  --! la duree de readout_timeout sera de FPA_TRIG_CTRL_TIMEOUT_DLY pour que les modules utilisant readout_timeout puissent s'y synchroniser avec leur horloge
+            end if;
             
             -- séquenceur
             case fpa_trig_sm is 
@@ -296,8 +300,9 @@ begin
                   
                -- mode_trig_start_to_trig_start/ mode_itr_trig_start_to_trig_start: on observe les delais prescrits
                when apply_dly_st =>
-                  dly_cnt <= dly_cnt - 1;   -- !un compte-down est plus fiable
+                  dly_cnt <= dly_cnt - 1;   --! un compte-down est plus fiable
                   if dly_cnt = 0  then
+                     readout_timeout <= '0';  --! retour à zero avant de retourner à idle.
                      if apply_dly_then_check_readout = '0' then 
                         fpa_trig_sm <= idle;                   
                      else

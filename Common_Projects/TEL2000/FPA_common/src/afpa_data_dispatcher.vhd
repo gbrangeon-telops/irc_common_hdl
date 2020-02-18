@@ -35,6 +35,7 @@ entity afpa_data_dispatcher is
       ARESET            : in std_logic;
       CLK               : in std_logic;
       
+      FPA_INT           : in std_logic;
       ACQ_INT           : in std_logic;  -- ACQ_INT et FRAME_ID sont parfaitement synchronisés
       FRAME_ID          : in std_logic_vector(31 downto 0);
       INT_TIME          : in std_logic_vector(31 downto 0);
@@ -48,6 +49,7 @@ entity afpa_data_dispatcher is
       QUAD_FIFO_WR      : in std_logic;
       
       READOUT           : out std_logic;
+      READOUT_TIMEOUT   : in std_logic;
       
       DATA_MOSI         : out t_ll_area_mosi72;
       DATA_MISO          : in t_ll_area_miso;
@@ -60,6 +62,7 @@ entity afpa_data_dispatcher is
       
       FIFO_ERR          : out std_logic;
       SPEED_ERR         : out std_logic;
+      ASSUMP_ERR        : out std_logic;
       CFG_MISMATCH      : out std_logic;
       DONE              : out std_logic
       
@@ -113,22 +116,22 @@ architecture rtl of afpa_data_dispatcher is
          );
    end component;
    
-   component fwft_sfifo_w72_d16
+   component fwft_sfifo_w76_d16
       port (
-         clk       : in std_logic;
-         srst       : in std_logic;
-         din       : in std_logic_vector(71 downto 0);
-         wr_en     : in std_logic;
-         rd_en     : in std_logic;
-         dout      : out std_logic_vector(71 downto 0);
-         valid     : out std_logic;
-         full      : out std_logic;
-         overflow  : out std_logic;
-         empty     : out std_logic
+         clk : in std_logic;
+         srst : in std_logic;
+         din : in std_logic_vector(75 downto 0);
+         wr_en : in std_logic;
+         rd_en : in std_logic;
+         dout : out std_logic_vector(75 downto 0);
+         full : out std_logic;
+         overflow : out std_logic;
+         empty : out std_logic;
+         valid : out std_logic
          );
    end component;
    
-   type acq_fringe_fsm_type is (idle, wait_fval_st);
+   type acq_fringe_fsm_type is (idle, wait_fval_st, wait_timeout_end_st);
    type fast_hder_sm_type is (idle, exp_info_dval_st, send_hder_st, wait_acq_fringe_st);                    
    type exp_time_pipe_type is array (0 to 3) of unsigned(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_27 downto 0);
    
@@ -150,16 +153,16 @@ architecture rtl of afpa_data_dispatcher is
    signal quad_fifo_dout               : std_logic_vector(QUAD_FIFO_DIN'LENGTH-1 downto 0);
    signal acq_fringe_last              : std_logic;    
    signal quad_fifo_ovfl               : std_logic;
-   signal fringe_fifo_din              : std_logic_vector(71 downto 0);
+   signal fringe_fifo_din              : std_logic_vector(75 downto 0);
    signal fringe_fifo_wr               : std_logic;
    signal fringe_fifo_rd               : std_logic;
-   signal fringe_fifo_dout             : std_logic_vector(71 downto 0);
+   signal fringe_fifo_dout             : std_logic_vector(75 downto 0);
    signal fringe_fifo_dval             : std_logic;
    signal fringe_fifo_ovfl             : std_logic;
-   signal acq_int_sync_last            : std_logic;
+   signal fpa_int_sync_last            : std_logic;
    signal readout_i                    : std_logic;
    signal acq_fringe                   : std_logic;
-   signal acq_int_sync                 : std_logic;
+   signal fpa_int_sync                 : std_logic;
    signal frame_id_i                   : std_logic_vector(31 downto 0);
    signal int_time_assump_err          : std_logic := '0';
    signal gain_assump_err              : std_logic := '0';
@@ -189,7 +192,10 @@ architecture rtl of afpa_data_dispatcher is
    signal naoi_stop                    : std_logic;
    signal naoi_ref_valid               : std_logic_vector(1 downto 0);
    signal aoi_eof_pipe                 : std_logic_vector(C_AOI_EOF_PIPE_LEN downto 0);
-   
+   signal read_timeout_sync            : std_logic;
+   signal read_timeout_occured         : std_logic;
+   signal fringe_fifo_acq_int          : std_logic;
+   signal readout_err_i                : std_logic;
    
 begin
    
@@ -255,8 +261,16 @@ begin
    U0C: double_sync
    port map(
       CLK => CLK,
-      D   => ACQ_INT,
-      Q   => acq_int_sync,
+      D   => FPA_INT,
+      Q   => fpa_int_sync,
+      RESET => sreset
+      );
+   
+   U0D: double_sync
+   port map(
+      CLK => CLK,
+      D   => READOUT_TIMEOUT,
+      Q   => read_timeout_sync,
       RESET => sreset
       );
    
@@ -283,7 +297,7 @@ begin
    --------------------------------------------------
    -- fifo fwft pour acq fringe et l'index de intTime
    --------------------------------------------------
-   U2 : fwft_sfifo_w72_d16  
+   U2 : fwft_sfifo_w76_d16  
    port map (
       srst => sreset,
       clk => CLK,
@@ -297,12 +311,12 @@ begin
       empty => open
       );
    
+   fringe_fifo_acq_int <= fringe_fifo_din(72);
+   
    -------------------------------------------------------------------
    -- generation de acq_fringe et stockage dans un fifo fwft  
    -------------------------------------------------------------------   
-   -- il faut ecrire dans un fifo fwft le FRAME_ID, que lorsque l'image est prise avec ACQ_TRIG (image à envoyer dans la chaine) 
-   -- a) Fifo vide pendant qu'une image rentre dans le présent module => image à ne pas envoyer dans la chaine
-   -- b) Fifo contient une donnée pendant qu'une image rentre => image à envoyer dans la chaine avec FRAME_ID contenu dans le fifo
+   -- il faut ecrire dans un fifo fwft même sil'image n'est pas à envoyer dans la chaine
    U4: process(CLK)
    begin          
       if rising_edge(CLK) then         
@@ -312,17 +326,18 @@ begin
             fringe_fifo_rd <= '0';
             acq_fringe <= '0';
             readout_i <= '0';
-            acq_int_sync_last <= '1'; 
-            --acq_int_sync <= '0';
+            fpa_int_sync_last <= '1'; 
+            read_timeout_occured <= '0';
+            readout_err_i <= '0';
+            --fpa_int_sync <= '0';
             
          else         
             
-            --acq_int_sync <= ACQ_INT;
-            acq_int_sync_last <= acq_int_sync;
+            fpa_int_sync_last <= fpa_int_sync;
             
             -- ecriture de FRAME_ID dans le acq fringe fifo
-            fringe_fifo_din <= INT_INDX & INT_TIME & FRAME_ID; -- le frame_id est écrit dans le fifo que s'il s'agit d'une image à envoyer dans la chaine
-            fringe_fifo_wr <= not acq_int_sync_last and acq_int_sync;
+            fringe_fifo_din <= "000" & ACQ_INT & INT_INDX & INT_TIME & FRAME_ID; -- le frame_id est écrit dans le fifo qu'il s'agisse d'une image à envoyer dans la chaine ou non
+            fringe_fifo_wr <= not fpa_int_sync_last and fpa_int_sync;
             
             -- generation de acq_fringe et readout_i
             case acq_fringe_fsm is 
@@ -330,27 +345,38 @@ begin
                when idle =>
                   fringe_fifo_rd <= '0';
                   readout_i <= '0';
-                  acq_fringe <= fringe_fifo_dval; -- ACQ_INT de l'image k vient toujours avant le readout de l'image k. Ainsi le fifo contiendra une donnée avant le readout si l'image est à envoyer dans la chaine. Sinon, c'est une XTRA_FRINGE 
-                  if fringe_fifo_dval = '1' then  
+                  acq_fringe <= fringe_fifo_dval and fringe_fifo_acq_int; -- ACQ_INT de l'image k vient toujours avant le readout de l'image k. Ainsi le fifo contiendra une donnée avant le readout si l'image est à envoyer dans la chaine. Sinon, c'est une XTRA_FRINGE 
+                  read_timeout_occured <= '0';
+                  if fringe_fifo_dval = '1' and fringe_fifo_acq_int = '1' then  
                      frame_id_i <= fringe_fifo_dout(31 downto 0);
                      int_time_i <= unsigned(fringe_fifo_dout(63 downto 32));
                      int_indx_i <= fringe_fifo_dout(71 downto 64);
-                  else
-                     frame_id_i <= (others => '0'); -- id farfelue d'une extra_fringe provenant du module hw_driver (de toute façon, non envoyée dans la chaine)
                   end if;
                   if img_start = '1' then     -- en quittant idle, frame_id_i et acq_fringe sont implicitement latchés, donc pas besoin de latchs explicites
                      acq_fringe_fsm <= wait_fval_st;
                      fringe_fifo_rd <= '1'; -- mis à jour de la sortie du fwft pour le prochain frame
-                     readout_i <= '1'; -- signal de readout, à sortir même en mode xtra_trig
+                     readout_i <= '1';      -- signal de readout, à sortir même en mode xtra_trig
+                  elsif read_timeout_sync = '1' then
+                     acq_fringe_fsm <= wait_timeout_end_st;
+                     fringe_fifo_rd <= '1';                  -- mis à jour de la sortie du fwft pour le prochain frame
+                     readout_i <= '0';                       -- en cas de timeout, pas de readout à proprement parler
+                     readout_err_i <= acq_fringe;            -- acq_fringe à '1' alors qu'aucun readout n'ai suivi. Erreur grave qui va mettre en peril toute la chaine en aval
                   end if;                   
                
                when wait_fval_st =>
                   fringe_fifo_rd <= '0';
-                  if img_end = '1' then
+                  if read_timeout_sync = '0' then
                      readout_i <= '0';
                      acq_fringe <= '0';
                      acq_fringe_fsm <= idle;
-                  end if;      
+                  end if;
+               
+               when wait_timeout_end_st =>
+                  fringe_fifo_rd <= '0';
+                  if read_timeout_sync = '0' then
+                     acq_fringe <= '0';
+                     acq_fringe_fsm <= idle;
+                  end if;
                
                when others =>
                
@@ -537,6 +563,7 @@ begin
             CFG_MISMATCH <= '0'; 
             FIFO_ERR <= '0';
             DONE <= '0';
+            ASSUMP_ERR <= '0';
             
          else
             
@@ -548,6 +575,9 @@ begin
             
             -- done
             DONE <= not readout_i; 
+            
+            -- erreur diverses qui ne devraient point se produire
+            ASSUMP_ERR <= readout_err_i;
             
          end if;
          
