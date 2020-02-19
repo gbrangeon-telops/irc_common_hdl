@@ -95,6 +95,7 @@ architecture RTL of fpa_trig_controller is
    signal trig_ctler_en_i              : std_logic;
    signal prog_trig_in_i               : std_logic;
    signal apply_dly_then_check_readout : std_logic;
+   signal acq_mode                     : std_logic;  -- ENO. 19 fev. 2020 : ce signal reste à '1' tant qu'on est avec les ACQ_TRIG. Il descend à '0' dès qu'un prog_trig ou xtra_trig est pris en compte. 
    
    --   -- attribute dont_touch                : string;
    --   -- attribute dont_touch of acq_trig_o  : signal is "true";
@@ -113,7 +114,8 @@ begin
    XTRA_TRIG_OUT <=  xtra_trig_o; --! 
    PROG_TRIG_OUT <=  prog_trig_o; --! 
    
-   TRIG_CTLER_STAT(7 downto 4) <= (others => '0');
+   TRIG_CTLER_STAT(7 downto 5) <= (others => '0');
+   TRIG_CTLER_STAT(4) <= acq_mode;
    TRIG_CTLER_STAT(3) <= acq_trig_done;
    TRIG_CTLER_STAT(2) <= '0';
    TRIG_CTLER_STAT(1) <= '0';
@@ -180,6 +182,7 @@ begin
             -- fpa_readout_last <= '0';
             acq_trig_done <= '0';
             apply_dly_then_check_readout <= '0';
+            acq_mode <= '0';
             
          else
             
@@ -211,11 +214,13 @@ begin
                   acq_trig_done <= '1';
                   if trig_ctler_en_i = '1' then  --! TRIG_CTLER_EN = '1' ssi le détecteur/proxy est allumé ou si on est en mode diag
                      if ACQ_TRIG_IN = '1' then
+                        acq_mode <= '1';
                         acq_trig_o <= not prog_trig_in_i;
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '0';
                         done <= '0';
                      elsif XTRA_TRIG_IN = '1' then
+                        acq_mode <= '0';
                         xtra_trig_o <= not prog_trig_in_i;
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '1';
@@ -224,6 +229,7 @@ begin
                   end if;
                   
                   if prog_trig_in_i = '1' then
+                     acq_mode <= '0';
                      prog_trig_o <= '1';
                      fpa_trig_sm <= int_trig_st;
                      acq_trig_done <= '1';
