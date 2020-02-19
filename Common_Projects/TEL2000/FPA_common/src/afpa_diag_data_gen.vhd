@@ -152,7 +152,9 @@ begin
    DIAG_DATA(78)           <= '0';
    DIAG_DATA(77)           <= '0';                 -- non aoi dval = '0' pour que le patron de tests ne bousille pas le contenu des regitres de stockage des refrences de calculs de gain et offset deja existances
    
-   DIAG_DATA(76 downto 62) <= (others => '0');      -- aoi spares
+   DIAG_DATA(76 downto 63) <= (others => '0');      -- aoi spares(14 downto 1)
+   DIAG_DATA(62)           <= '1';       -- aoi_spare(0)
+   
    DIAG_DATA(61)           <= aoi_dval_i;           -- aoi_dval          
    DIAG_DATA(60)           <= aoi_eof_i;            -- eof
    DIAG_DATA(59)           <= aoi_sof_i;            -- sof

@@ -146,7 +146,7 @@ architecture rtl of afpa_data_dispatcher is
    signal aoi_eol                      : std_logic;
    signal aoi_sof                      : std_logic;
    signal aoi_eof                      : std_logic;
-   signal aoi_spare                     : std_logic_vector(14 downto 0);
+   signal aoi_spare                    : std_logic_vector(14 downto 0);
    signal aoi_dval                     : std_logic;    
    signal quad_fifo_dout               : std_logic_vector(QUAD_FIFO_DIN'LENGTH-1 downto 0);
    signal acq_fringe_last              : std_logic;    
@@ -190,6 +190,7 @@ architecture rtl of afpa_data_dispatcher is
    signal naoi_stop                    : std_logic;
    signal naoi_ref_valid               : std_logic_vector(1 downto 0);
    signal aoi_eof_pipe                 : std_logic_vector(C_AOI_EOF_PIPE_LEN downto 0);
+   signal aoi_acq_data                 : std_logic;
    
    
 begin
@@ -220,7 +221,7 @@ begin
          aoi_fval       <= quad_fifo_dout(58);
          aoi_sof        <= quad_fifo_dout(59);  
          aoi_eof        <= quad_fifo_dout(60);
-         aoi_dval       <= quad_fifo_dout(61) and quad_fifo_dval;           
+         aoi_dval       <= quad_fifo_dout(61) and quad_fifo_dval; 
          aoi_spare      <= quad_fifo_dout(76 downto 62);             
          
          -- non AOI area flags         
@@ -242,6 +243,8 @@ begin
          
       end if;
    end process;   
+   
+   aoi_acq_data   <= aoi_spare(0); -- spare(0) consacré à aoi_acq_data
    
    --------------------------------------------------
    -- synchro 
@@ -331,8 +334,8 @@ begin
                when idle =>
                   fringe_fifo_rd <= '0';
                   readout_i <= '0';
-                  acq_fringe <= fringe_fifo_dval; -- ACQ_INT de l'image k vient toujours avant le readout de l'image k. Ainsi le fifo contiendra une donnée avant le readout si l'image est à envoyer dans la chaine. Sinon, c'est une XTRA_FRINGE 
-                  if fringe_fifo_dval = '1' then  
+                  acq_fringe <= fringe_fifo_dval and aoi_acq_data; -- ACQ_INT de l'image k vient toujours avant le readout de l'image k. Ainsi le fifo contiendra une donnée avant le readout si l'image est à envoyer dans la chaine. Sinon, c'est une XTRA_FRINGE 
+                  if fringe_fifo_dval = '1' then                   -- il y a une acq integration à traiter 
                      frame_id_i <= fringe_fifo_dout(31 downto 0);
                      int_time_i <= unsigned(fringe_fifo_dout(63 downto 32));
                      int_indx_i <= fringe_fifo_dout(71 downto 64);
@@ -341,7 +344,7 @@ begin
                   end if;
                   if img_start = '1' then     -- en quittant idle, frame_id_i et acq_fringe sont implicitement latchés, donc pas besoin de latchs explicites
                      acq_fringe_fsm <= wait_fval_st;
-                     fringe_fifo_rd <= '1'; -- mis à jour de la sortie du fwft pour le prochain frame
+                     fringe_fifo_rd <= aoi_acq_data; -- ENO: 19 fev 2020. Mis à jour de la sortie du fwft pour le prochain frame si et seulement si l'image en cours est une acq image. Sinon, c'est une image acquise en XTRA_TRIG/PROG_TRIG et donc le fringe_fifo doit rester intact.
                      readout_i <= '1'; -- signal de readout, à sortir même en mode xtra_trig
                   end if;                   
                
