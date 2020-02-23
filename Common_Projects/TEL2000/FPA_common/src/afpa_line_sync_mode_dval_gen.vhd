@@ -34,6 +34,7 @@ entity afpa_line_sync_mode_dval_gen is
       
       ENABLE        : in std_logic;
       
+      FPA_DOUT_FVAL : out std_logic;
       FPA_DOUT      : out std_logic_vector(95 downto 0);
       FPA_DOUT_DVAL : out std_logic;
       
@@ -176,6 +177,7 @@ architecture rtl of afpa_line_sync_mode_dval_gen is
    signal naoi_stop_i               : std_logic;
    signal naoi_stop_last            : std_logic;
    signal global_init_done          : std_logic;
+   signal dout_fval_o               : std_logic;
    
    ---- attribute dont_touch     : string;
    ---- attribute dont_touch of dout_dval_o         : signal is "true"; 
@@ -193,7 +195,8 @@ begin
    
    --------------------------------------------------
    -- Outputs map
-   -------------------------------------------------- 
+   --------------------------------------------------
+   FPA_DOUT_FVAL <= dout_fval_o;
    FPA_DOUT_DVAL <= dout_wr_en_o; 
    FPA_DOUT <= dout_o; --
    STAT(2) <= err_i(1);
@@ -445,8 +448,12 @@ begin
       if rising_edge(CLK) then         
          if sreset = '1' then      -- tant qu'on est en mode diag, la fsm est en reset.      
             dout_wr_en_o <= '0';
+            dout_fval_o <= '0';
             
          else      
+            
+            -- fval
+            dout_fval_o          <= readout_info_o.aoi.fval and aoi_flag_fifo_dval;
             
             -- ecriture des données en aval
             dout_wr_en_o <= global_init_done and FPA_DIN_DVAL; -- les données sortent tout le temps. les flags permettront de distinguer le AOI du NAOI 

@@ -35,8 +35,12 @@ entity afpa_flow_mux is
       CLK               : in std_logic;
       
       FPA_INTF_CFG      : in fpa_intf_cfg_type;  
-      READOUT           : in std_logic;
+      
+      FPA_FVAL          : in std_logic;
+      DIAG_FVAL         : in std_logic;
+      
       DIAG_MODE_EN      : out std_logic;
+      FPA_MODE_EN       : out std_logic;
       
       FPA_QUAD_DATA     : in std_logic_vector(95 downto 0);
       FPA_QUAD_DVAL     : in std_logic; 
@@ -61,19 +65,20 @@ architecture rtl of afpa_flow_mux is
    end component;
    
    
-   type mode_fsm_type is (idle, fpa_st, diag_st);
+   type mode_fsm_type is (init_st1, init_st2, idle, fpa_st, diag_st);
    
    signal mode_fsm                     : mode_fsm_type;
    signal sreset                       : std_logic;
-   signal real_data_mode               : std_logic;
+   signal fpa_mode_en_i                : std_logic;
    signal diag_mode_en_i               : std_logic;
-   signal readout_i                    : std_logic;
    signal quad_data_reg, quad_data_i   : std_logic_vector(QUAD_DATA'length-1 downto 0);
    signal quad_dval_reg, quad_dval_i   : std_logic;
+   signal active_output_i              : std_logic;
    
 begin
    
    DIAG_MODE_EN <= diag_mode_en_i;
+   FPA_MODE_EN <= fpa_mode_en_i;
    QUAD_DATA <= quad_data_i;
    QUAD_DVAL <= quad_dval_i;
    
@@ -94,39 +99,44 @@ begin
    begin          
       if rising_edge(CLK) then 
          if sreset = '1' then
-            real_data_mode <= '0';
-            diag_mode_en_i <= '0';
-            mode_fsm <= idle;
-         else
+            fpa_mode_en_i <= '0';
+            diag_mode_en_i <= '0';   
+            mode_fsm <= init_st1;
+            active_output_i <= '0';
             
-            readout_i <= READOUT;
+         else
             
             case mode_fsm is 
                
-               when idle =>                  
-                  if  FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '1' then   -- mode diag
+               when init_st1 =>    -- premiere image sacrifiee pour raison de synchro
+                  diag_mode_en_i <= FPA_INTF_CFG.COMN.FPA_DIAG_MODE;
+                  fpa_mode_en_i  <= not FPA_INTF_CFG.COMN.FPA_DIAG_MODE;
+                  if FPA_FVAL = '1' or DIAG_FVAL = '1' then 
+                     mode_fsm <= init_st2;
+                  end if;
+               
+               when init_st2 =>    -- active_output synchronisee
+                  if FPA_FVAL = '0' and DIAG_FVAL = '0' then 
                      mode_fsm <= diag_st;
-                  else
-                     mode_fsm <= fpa_st;
-                  end if;        
+                     active_output_i <= '1';
+                  end if;                   
                
                when diag_st => 
-                  if readout_i = '0' then 
-                     real_data_mode <= '0';
-                     if FPA_INTF_CFG.COMN.FPA_INTF_DATA_SOURCE = DATA_SOURCE_INSIDE_FPGA then 
-                        diag_mode_en_i <= '1';
-                     else           --  DATA_SOURCE_OUTSIDE_FPGA alors que FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '1'. Les données de l'ADC sortent de la carte en mode diag. Celapermet de tester plein de cartes analogiques en contournant les protections inherentes à ces dernieres
+                  if DIAG_FVAL = '0' then 
+                     diag_mode_en_i <= '1';
+                     if  FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '0' or FPA_INTF_CFG.COMN.FPA_INTF_DATA_SOURCE = DATA_SOURCE_OUTSIDE_FPGA then
                         diag_mode_en_i <= '0';
-                        real_data_mode <= '1';
+                        mode_fsm <= fpa_st;
                      end if;
-                     mode_fsm <= idle;
                   end if;
                
                when fpa_st => 
-                  if readout_i = '0' then 
-                     real_data_mode <= '1';
-                     diag_mode_en_i <= '0';
-                     mode_fsm <= idle;
+                  if FPA_FVAL = '0' then 
+                     fpa_mode_en_i <= '1';
+                     if  FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '1' and FPA_INTF_CFG.COMN.FPA_INTF_DATA_SOURCE = DATA_SOURCE_INSIDE_FPGA then
+                        fpa_mode_en_i <= '0';
+                        mode_fsm <= diag_st;
+                     end if;
                   end if;
                
                when others =>                 
@@ -144,25 +154,12 @@ begin
    U9: process(CLK)
    begin          
       if rising_edge(CLK) then 
-         if real_data_mode = '1' then
-            quad_data_reg <= FPA_QUAD_DATA;
-         else 
-            quad_data_reg <= DIAG_QUAD_DATA;            
+         if fpa_mode_en_i = '1' then
+            quad_data_i <= FPA_QUAD_DATA;
+         elsif diag_mode_en_i = '1' then 
+            quad_data_i <= DIAG_QUAD_DATA;            
          end if;  
-         quad_dval_reg <= (DIAG_QUAD_DVAL and diag_mode_en_i) or (FPA_QUAD_DVAL and real_data_mode);       
-      end if;       
-   end process; 
-   
-   
-   --------------------------------------------------
-   -- sortie des données 
-   --------------------------------------------------   
-   --
-   U10: process(CLK)
-   begin          
-      if rising_edge(CLK) then 
-         quad_data_i <= quad_data_reg;
-         quad_dval_i <= quad_dval_reg;       
+         quad_dval_i <= ((DIAG_QUAD_DVAL and diag_mode_en_i) or (FPA_QUAD_DVAL and fpa_mode_en_i)) and active_output_i;       
       end if;       
    end process; 
    

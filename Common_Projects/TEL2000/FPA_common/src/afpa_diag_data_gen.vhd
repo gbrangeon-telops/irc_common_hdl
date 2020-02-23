@@ -39,7 +39,9 @@ entity afpa_diag_data_gen is
       ENABLE             : in std_logic;
       
       FPA_INT            : in std_logic;
+      ACQ_INT            : in std_logic;
       
+      DIAG_FVAL          : out std_logic;
       DIAG_DATA          : out std_logic_vector(95 downto 0); --! sortie des données 
       DIAG_DVAL          : out std_logic
       );
@@ -66,6 +68,22 @@ architecture rtl of afpa_diag_data_gen is
          Clk_div   : out std_logic);
    end component;
    
+   component fwft_sfifo_w3_d16
+      port (
+         clk         : in std_logic;
+         srst        : in std_logic;
+         din         : in std_logic_vector(2 downto 0);
+         wr_en       : in std_logic;
+         rd_en       : in std_logic;
+         dout        : out std_logic_vector(2 downto 0);
+         full        : out std_logic;
+         almost_full : out std_logic;
+         overflow    : out std_logic;
+         empty       : out std_logic;
+         valid       : out std_logic
+         );
+   end component;
+   
    component fpa_diag_line_gen
       generic (
          ANALOG_IDDCA           : boolean := false;
@@ -90,7 +108,7 @@ architecture rtl of afpa_diag_data_gen is
    constant  C_DIAG_TAP_NUMBER_M1 : integer := G_DIAG_TAP_NUMBER - 1;
    constant  C_DIAG_BASE_OFFSET   : integer := (G_DIAG_QUAD_ID - 1) * DEFINE_DIAG_DATA_INC * G_DIAG_TAP_NUMBER;
    
-   type diag_fsm_type is (idle, int_st, junk_data_st, tir_dly_st, get_line_data_st, cfg_line_gen_st, lovh_dly_st, check_end_st);
+   type diag_fsm_type is (idle, wait_int_fe_st, int_st, junk_data_st, tir_dly_st, get_line_data_st, cfg_line_gen_st, lovh_dly_st, check_end_st);
    type img_change_sm_type is (idle, change_st); 
    type data_type is array (0 to C_DIAG_TAP_NUMBER_M1) of std_logic_vector(15 downto 0);
    
@@ -134,26 +152,29 @@ architecture rtl of afpa_diag_data_gen is
    signal aoi_img_end       : std_logic;
    signal aoi_img_start     : std_logic;
    signal img_pending_cnt   : unsigned(1 downto 0);
-   --signal elec_ofs_end_i    : std_logic;
-   --signal elec_ofs_dval_i   : std_logic;
-   --signal elec_ofs_start_i  : std_logic;
-   
-   ---- attribute dont_touch     : string;
-   ---- attribute dont_touch of diag_fsm : signal is "true";
+   signal int_fifo_rd       : std_logic;
+   signal int_fifo_din      : std_logic_vector(2 downto 0);
+   signal int_fifo_wr       : std_logic;
+   signal int_fifo_dval     : std_logic;
+   signal int_fifo_dout     : std_logic_vector(2 downto 0);
+   signal acq_data_i        : std_logic;
+   signal acq_int_o         : std_logic;
    
 begin
    
    ----------------------------------------------
    -- OUTPUTS                                    
    ----------------------------------------------
-   DIAG_DATA(95)           <= '0';                 -- non_utilisé;
+   DIAG_FVAL               <= aoi_fval_i;
+   
+   DIAG_DATA(95)           <= '0';                  -- non_utilisé;
    DIAG_DATA(94 downto 80) <= (others => '0');
    DIAG_DATA(79)           <= '0';
    DIAG_DATA(78)           <= '0';
-   DIAG_DATA(77)           <= '0';                 -- non aoi dval = '0' pour que le patron de tests ne bousille pas le contenu des regitres de stockage des refrences de calculs de gain et offset deja existances
+   DIAG_DATA(77)           <= '0';                  -- non aoi dval = '0' pour que le patron de tests ne bousille pas le contenu des regitres de stockage des refrences de calculs de gain et offset deja existances
    
    DIAG_DATA(76 downto 63) <= (others => '0');      -- aoi spares(14 downto 1)
-   DIAG_DATA(62)           <= '1';       -- aoi_spare(0)
+   DIAG_DATA(62)           <= acq_data_i;                  -- aoi_spare(0)
    
    DIAG_DATA(61)           <= aoi_dval_i;           -- aoi_dval          
    DIAG_DATA(60)           <= aoi_eof_i;            -- eof
@@ -240,7 +261,25 @@ begin
       DIAG_EOL    => open,   
       DIAG_DONE   => open
       );
-   -- pragma translate_on 
+   -- pragma translate_on
+   
+   --------------------------------------------------
+   -- fifo fwft pour rising edge de l'intégration
+   --------------------------------------------------
+   Ure : fwft_sfifo_w3_d16
+   port map (
+      clk         => MCLK_SOURCE,
+      srst        => sreset,
+      din         => int_fifo_din,    
+      wr_en       => int_fifo_wr,
+      rd_en       => int_fifo_rd,
+      dout        => int_fifo_dout,   
+      full        => open,
+      almost_full => open,
+      overflow    => open,
+      empty       => open,
+      valid       => int_fifo_dval
+      );
    
    -------------------------------------------------------------------
    -- generation des données du mode diag   
@@ -262,6 +301,8 @@ begin
             --elec_ofs_dval_i <= '0';
             --elec_ofs_end_i <= '1';
             img_pending_cnt <= (others => '0');
+            int_fifo_wr <= '0';
+            int_fifo_rd <= '0';
             
          else   
             
@@ -269,6 +310,11 @@ begin
             fpa_int_i <= FPA_INT;
             fpa_int_last <= fpa_int_i; 
             diag_eol_last <= diag_eol(0);
+            
+            int_fifo_din(2) <= ACQ_INT;                         -- acq_int rentre dans le fifo
+            int_fifo_din(1) <= not fpa_int_last and fpa_int_i;  -- front montant
+            int_fifo_din(0) <= fpa_int_last and not fpa_int_i;  -- front descendant
+            int_fifo_wr     <= (fpa_int_last xor fpa_int_i) and ENABLE;          -- on ecrit les edges dans le fifo
             
             -- pragma translate_off
             if diag_frame_done = '0' then
@@ -293,54 +339,48 @@ begin
                end loop;                        
             end if;
             
-            -- gestion des integrations (pour IWR)
-            if ENABLE = '1' then 
-               if fpa_int_last = '1' and fpa_int_i = '0' then              
-                  img_pending_cnt <= img_pending_cnt + 1;
-               end if;
-            else
-               img_pending_cnt <= (others => '0');
-            end if;      
             
             -- machine à états
             case diag_fsm is 
                
                when idle =>
-                  --elec_ofs_start_i <= '1';
-                  --elec_ofs_end_i <= '0';
                   aoi_img_end <= '0';
-                  --elec_ofs_dval_i <= pixel_samp_trig;  -- on continue d'envoyer des données pour l'offset electrique
-                  for ii in 0 to C_DIAG_TAP_NUMBER_M1 loop
+                   for ii in 0 to C_DIAG_TAP_NUMBER_M1 loop
                      data(ii) <= (others => '0');                  -- offset electronique vaut 0 en mode diag
                   end loop;
                   dly_cnt <= (others => '0');
                   data_cnt <= to_unsigned(1, data_cnt'length);
                   line_cnt <= to_unsigned(1, line_cnt'length);
                   aoi_dval_i <= '0';
-                  aoi_fval_i <= '0';
-                  
+                  aoi_fval_i <= '0';                  
                   diag_frame_done <= '1';
                   diag_line_gen_en <= '0';
                   aoi_sof_i <= '0';
                   aoi_eof_i <= '0';
-                  if img_pending_cnt > 0 then
-                     diag_fsm <=  tir_dly_st;
-                     img_pending_cnt <= img_pending_cnt - 1;
+                  
+                  if int_fifo_dout(1) = '1' and int_fifo_dval = '1' then  -- front montant de int_signal via fifo. Il n'est pas en temps reel en IWR : il a eu lieu pendant un readout et enregistré dans un fifo.
+                     int_fifo_rd <= '1'; 
+                     acq_data_i <= int_fifo_dout(2);
+                     diag_fsm <= wait_int_fe_st;
+                  end if;                                                
+               
+               when wait_int_fe_st =>
+                  int_fifo_rd <= '0';
+                  if int_fifo_dout(0) = '1' and int_fifo_dval = '1' then  -- front tombant de int_signal
+                     int_fifo_rd <= '1';
+                     diag_fsm <= tir_dly_st;
                   end if;
                
                when tir_dly_st =>
-                  --elec_ofs_start_i <= '0';
-                  --elec_ofs_end_i <= '1';
+                  int_fifo_rd <= '0';
                   diag_frame_done <= '0';   
                   dly_cnt <= dly_cnt + 1;
-                  --elec_ofs_dval_i <= pixel_samp_trig;  -- on continue d'envoyer des données pour l'offset electrique
                   if dly_cnt >= to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then 
-                     diag_fsm <=  cfg_line_gen_st;
+                     diag_fsm <= cfg_line_gen_st;
                      aoi_img_start <= '1';
                   end if;                         
                
-               when cfg_line_gen_st =>
-                  --elec_ofs_dval_i <= '0'; 
+               when cfg_line_gen_st => 
                   aoi_img_start <= '0';
                   diag_line_gen_en <= '1';                              -- on active le module généateur des données diag
                   aoi_fval_i <= '1';

@@ -203,48 +203,7 @@ begin
    hder_link_rdy <= HDER_MISO.WREADY and HDER_MISO.AWREADY;
    data_link_rdy  <= not DATA_MISO.BUSY;
    
-   --quad_fifo_dval  <= quad_fifo_dval; -- les données sortent dès leur arrivée. Elle se retrouvent sur le bus PIX_MOSI. PIX_MOSI.DVAL permet de savoir que la donnée est valide pour AOI ou non. PIX_MOSI.MISC permet d'identifier les données (pour correction offset par exemple)     
-   
-   ------------------------------------------------
-   -- decodage données sortant du fifo
-   ------------------------------------------------
-   U0A: process(CLK)
-   begin          
-      if rising_edge(CLK) then
-         
-         -- data  (AOI ou non AOI data)
-         data       <= quad_fifo_dout(55 downto 0);
-         
-         -- AOI area flags
-         aoi_sol        <= quad_fifo_dout(56);  
-         aoi_eol        <= quad_fifo_dout(57);
-         aoi_fval       <= quad_fifo_dout(58);
-         aoi_sof        <= quad_fifo_dout(59);  
-         aoi_eof        <= quad_fifo_dout(60);
-         aoi_dval       <= quad_fifo_dout(61) and quad_fifo_dval; 
-         aoi_spare      <= quad_fifo_dout(76 downto 62);             
-         
-         -- non AOI area flags         
-         naoi_dval      <= quad_fifo_dout(77) and quad_fifo_dval;
-         naoi_start     <= quad_fifo_dout(78);
-         naoi_stop      <= quad_fifo_dout(79);
-         naoi_ref_valid <= quad_fifo_dout(81 downto 80);
-         naoi_spare     <= quad_fifo_dout(94 downto 82);
-         
-         -- quelques flags
-         img_start      <= aoi_sof and aoi_dval;               -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
-         if img_start = '1' then                               -- ENO: 25 septembre 2018: la regeneration de img_end pour regler un bug lorsqu'on a du suréchnatillonnage temporel d'un meme pixel (par exemple N echantillons par pixel sur un même canal analogique)
-            aoi_eof_pipe <= (others => '0');
-         else
-            aoi_eof_pipe(C_AOI_EOF_PIPE_LEN downto 0) <= aoi_eof_pipe(C_AOI_EOF_PIPE_LEN-1 downto 0) & (aoi_eof and aoi_dval);   
-         end if;
-         img_end        <= aoi_eof_pipe(C_AOI_EOF_PIPE_LEN);   -- ENO: 25 septembre 2018:  img_end retardé pour ne pas tronquer les echantillons de aoi_eof. À '1' dit que le AOI est terminée. Tous les SAMPLES de pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.  
-         
-         
-      end if;
-   end process;   
-   
-   aoi_acq_data   <= aoi_spare(0); -- spare(0) consacré à aoi_acq_data
+   --quad_fifo_dval  <= quad_fifo_dval; -- les données sortent dès leur arrivée. Elle se retrouvent sur le bus PIX_MOSI. PIX_MOSI.DVAL permet de savoir que la donnée est valide pour AOI ou non. PIX_MOSI.MISC permet d'identifier les données (pour correction offset par exemple)    
    
    --------------------------------------------------
    -- synchro 
@@ -301,6 +260,49 @@ begin
       empty => open
       );
    
+   ------------------------------------------------
+   -- flags de la fsm acq_fringe
+   ------------------------------------------------ 
+   img_start <= aoi_sof and aoi_dval;               -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
+   
+   U0A: process(CLK)
+   begin          
+      if rising_edge(CLK) then       
+         
+         -- quelques flags
+         if img_start = '1' then                               -- ENO: 25 septembre 2018: la regeneration de img_end pour regler un bug lorsqu'on a du suréchnatillonnage temporel d'un meme pixel (par exemple N echantillons par pixel sur un même canal analogique)
+            aoi_eof_pipe <= (others => '0');
+         else
+            aoi_eof_pipe(C_AOI_EOF_PIPE_LEN downto 0) <= aoi_eof_pipe(C_AOI_EOF_PIPE_LEN-1 downto 0) & (aoi_eof and aoi_dval);   
+         end if;
+         img_end <= aoi_eof_pipe(C_AOI_EOF_PIPE_LEN);   -- ENO: 25 septembre 2018:  img_end retardé pour ne pas tronquer les echantillons de aoi_eof. À '1' dit que le AOI est terminée. Tous les SAMPLES de pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.  
+         
+      end if;
+   end process; 
+   
+   ------------------------------------------------
+   -- decodage données sortant du fifo
+   ------------------------------------------------
+   -- data  (AOI ou non AOI data)
+   data           <= quad_fifo_dout(55 downto 0);
+   
+   -- AOI area flags
+   aoi_sol        <= quad_fifo_dout(56);  
+   aoi_eol        <= quad_fifo_dout(57);
+   aoi_fval       <= quad_fifo_dout(58);
+   aoi_sof        <= quad_fifo_dout(59);  
+   aoi_eof        <= quad_fifo_dout(60);
+   aoi_dval       <= quad_fifo_dout(61) and quad_fifo_dval; 
+   aoi_spare      <= quad_fifo_dout(76 downto 62);   
+   aoi_acq_data   <= quad_fifo_dout(62); -- spare(0) consacré à aoi_acq_data           
+   
+   -- non AOI area flags         
+   naoi_dval      <= quad_fifo_dout(77) and quad_fifo_dval;
+   naoi_start     <= quad_fifo_dout(78);
+   naoi_stop      <= quad_fifo_dout(79);
+   naoi_ref_valid <= quad_fifo_dout(81 downto 80);
+   naoi_spare     <= quad_fifo_dout(94 downto 82);
+   
    -------------------------------------------------------------------
    -- generation de acq_fringe et stockage dans un fifo fwft  
    -------------------------------------------------------------------   
@@ -334,7 +336,7 @@ begin
                when idle =>
                   fringe_fifo_rd <= '0';
                   readout_i <= '0';
-                  acq_fringe <= fringe_fifo_dval and aoi_acq_data; -- ACQ_INT de l'image k vient toujours avant le readout de l'image k. Ainsi le fifo contiendra une donnée avant le readout si l'image est à envoyer dans la chaine. Sinon, c'est une XTRA_FRINGE 
+                  acq_fringe <= fringe_fifo_dval;                  -- acq_fringe est utilisé par fast_hder_sm pour envoyer le header
                   if fringe_fifo_dval = '1' then                   -- il y a une acq integration à traiter 
                      frame_id_i <= fringe_fifo_dout(31 downto 0);
                      int_time_i <= unsigned(fringe_fifo_dout(63 downto 32));
@@ -345,7 +347,7 @@ begin
                   if img_start = '1' then     -- en quittant idle, frame_id_i et acq_fringe sont implicitement latchés, donc pas besoin de latchs explicites
                      acq_fringe_fsm <= wait_fval_st;
                      fringe_fifo_rd <= aoi_acq_data; -- ENO: 19 fev 2020. Mis à jour de la sortie du fwft pour le prochain frame si et seulement si l'image en cours est une acq image. Sinon, c'est une image acquise en XTRA_TRIG/PROG_TRIG et donc le fringe_fifo doit rester intact.
-                     readout_i <= '1'; -- signal de readout, à sortir même en mode xtra_trig
+                     readout_i <= '1';               -- signal de readout, à sortir même en mode xtra_trig
                   end if;                   
                
                when wait_fval_st =>
@@ -373,7 +375,7 @@ begin
          --données
          data_mosi_i.data             <= resize(data(55 downto 42),18) & resize(data(41 downto 28),18) & resize(data(27 downto 14),18) & resize(data(13 downto 0),18);            
          -- flags de données des pixels
-         data_mosi_i.aoi_dval         <= aoi_dval and acq_fringe and not sreset;
+         data_mosi_i.aoi_dval         <= aoi_dval and aoi_acq_data and not sreset; -- ENO. 22 fev 2020: les données sortent automatiquement dès qu'elles ont le tag aoi_acq_data à '1'.
          data_mosi_i.aoi_sof          <= aoi_sof;
          data_mosi_i.aoi_eof          <= aoi_eof;
          data_mosi_i.aoi_sol          <= aoi_sol;
