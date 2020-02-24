@@ -129,14 +129,14 @@ architecture rtl of afpa_data_dispatcher is
          );
    end component;
    
-   type acq_fringe_fsm_type is (idle, wait_fval_st);
-   type fast_hder_sm_type is (idle, exp_info_dval_st, send_hder_st, wait_acq_fringe_st);                    
+   type frame_fsm_type is (idle, wait_fval_st);
+   type fast_hder_sm_type is (idle, exp_info_dval_st, send_hder_st, wait_acq_hder_st);                    
    type exp_time_pipe_type is array (0 to 3) of unsigned(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_27 downto 0);
    
    signal exp_time_pipe                : exp_time_pipe_type;
    signal exp_dval_pipe                : std_logic_vector(7 downto 0) := (others => '0');
    signal fast_hder_sm                 : fast_hder_sm_type;
-   signal acq_fringe_fsm               : acq_fringe_fsm_type;
+   signal frame_fsm                    : frame_fsm_type;
    signal sreset                       : std_logic;
    signal quad_fifo_dval               : std_logic;
    signal data                         : std_logic_vector(55 downto 0); 
@@ -149,17 +149,17 @@ architecture rtl of afpa_data_dispatcher is
    signal aoi_spare                    : std_logic_vector(14 downto 0);
    signal aoi_dval                     : std_logic;    
    signal quad_fifo_dout               : std_logic_vector(QUAD_FIFO_DIN'LENGTH-1 downto 0);
-   signal acq_fringe_last              : std_logic;    
+   signal acq_hder_last                : std_logic;    
    signal quad_fifo_ovfl               : std_logic;
-   signal fringe_fifo_din              : std_logic_vector(71 downto 0);
-   signal fringe_fifo_wr               : std_logic;
-   signal fringe_fifo_rd               : std_logic;
-   signal fringe_fifo_dout             : std_logic_vector(71 downto 0);
-   signal fringe_fifo_dval             : std_logic;
-   signal fringe_fifo_ovfl             : std_logic;
+   signal acq_hder_fifo_din            : std_logic_vector(71 downto 0);
+   signal acq_hder_fifo_wr             : std_logic;
+   signal acq_hder_fifo_rd             : std_logic;
+   signal acq_hder_fifo_dout           : std_logic_vector(71 downto 0);
+   signal acq_hder_fifo_dval           : std_logic;
+   signal acq_hder_fifo_ovfl           : std_logic;
    signal acq_int_sync_last            : std_logic;
    signal readout_i                    : std_logic;
-   signal acq_fringe                   : std_logic;
+   signal acq_hder                     : std_logic;
    signal acq_int_sync                 : std_logic;
    signal frame_id_i                   : std_logic_vector(31 downto 0);
    signal int_time_assump_err          : std_logic := '0';
@@ -171,7 +171,7 @@ architecture rtl of afpa_data_dispatcher is
    signal temp_reg                     : std_logic_vector(15 downto 0);
    signal hder_mosi_i                  : t_axi4_lite_mosi;
    signal data_mosi_i                  : t_ll_area_mosi72;
-   signal data_link_rdy                 : std_logic;
+   signal data_link_rdy                : std_logic;
    signal hder_link_rdy                : std_logic;
    signal int_time_100MHz              : unsigned(31 downto 0);
    signal int_time_100MHz_dval         : std_logic;
@@ -250,18 +250,18 @@ begin
    port map (
       srst => sreset,
       clk => CLK,
-      din => fringe_fifo_din,
-      wr_en => fringe_fifo_wr,
-      rd_en => fringe_fifo_rd,
-      dout => fringe_fifo_dout,
-      valid  => fringe_fifo_dval,
+      din => acq_hder_fifo_din,
+      wr_en => acq_hder_fifo_wr,
+      rd_en => acq_hder_fifo_rd,
+      dout => acq_hder_fifo_dout,
+      valid  => acq_hder_fifo_dval,
       full => open,
-      overflow => fringe_fifo_ovfl,
+      overflow => acq_hder_fifo_ovfl,
       empty => open
       );
    
    ------------------------------------------------
-   -- flags de la fsm acq_fringe
+   -- flags de la fsm acq_hder
    ------------------------------------------------ 
    img_start <= aoi_sof and aoi_dval;               -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
    
@@ -304,7 +304,7 @@ begin
    naoi_spare     <= quad_fifo_dout(94 downto 82);
    
    -------------------------------------------------------------------
-   -- generation de acq_fringe et stockage dans un fifo fwft  
+   -- generation de acq_hder et stockage dans un fifo fwft  
    -------------------------------------------------------------------   
    -- il faut ecrire dans un fifo fwft le FRAME_ID, que lorsque l'image est prise avec ACQ_TRIG (image à envoyer dans la chaine) 
    -- a) Fifo vide pendant qu'une image rentre dans le présent module => image à ne pas envoyer dans la chaine
@@ -313,10 +313,10 @@ begin
    begin          
       if rising_edge(CLK) then         
          if sreset = '1' then 
-            acq_fringe_fsm <= idle;
-            fringe_fifo_wr <= '0';
-            fringe_fifo_rd <= '0';
-            acq_fringe <= '0';
+            frame_fsm <= idle;
+            acq_hder_fifo_wr <= '0';
+            acq_hder_fifo_rd <= '0';
+            acq_hder <= '0';
             readout_i <= '0';
             acq_int_sync_last <= '1'; 
             --acq_int_sync <= '0';
@@ -327,35 +327,37 @@ begin
             acq_int_sync_last <= acq_int_sync;
             
             -- ecriture de FRAME_ID dans le acq fringe fifo
-            fringe_fifo_din <= INT_INDX & INT_TIME & FRAME_ID; -- le frame_id est écrit dans le fifo que s'il s'agit d'une image à envoyer dans la chaine
-            fringe_fifo_wr <= not acq_int_sync_last and acq_int_sync;
+            acq_hder_fifo_din <= INT_INDX & INT_TIME & FRAME_ID; -- le frame_id est écrit dans le fifo que s'il s'agit d'une image à envoyer dans la chaine
+            acq_hder_fifo_wr <= not acq_int_sync_last and acq_int_sync;
             
-            -- generation de acq_fringe et readout_i
-            case acq_fringe_fsm is 
+            -- generation de acq_hder et readout_i
+            case frame_fsm is 
                
                when idle =>
-                  fringe_fifo_rd <= '0';
+                  acq_hder_fifo_rd <= '0';
                   readout_i <= '0';
-                  acq_fringe <= fringe_fifo_dval;                  -- acq_fringe est utilisé par fast_hder_sm pour envoyer le header
-                  if fringe_fifo_dval = '1' then                   -- il y a une acq integration à traiter 
-                     frame_id_i <= fringe_fifo_dout(31 downto 0);
-                     int_time_i <= unsigned(fringe_fifo_dout(63 downto 32));
-                     int_indx_i <= fringe_fifo_dout(71 downto 64);
+                  acq_hder <= acq_hder_fifo_dval;                  -- acq_hder est utilisé par fast_hder_sm pour envoyer le header
+                  if acq_hder_fifo_dval = '1' then                   -- il y a une acq integration à traiter 
+                     frame_id_i <= acq_hder_fifo_dout(31 downto 0);
+                     int_time_i <= unsigned(acq_hder_fifo_dout(63 downto 32));
+                     int_indx_i <= acq_hder_fifo_dout(71 downto 64);
                   else
                      frame_id_i <= (others => '0'); -- id farfelue d'une extra_fringe provenant du module hw_driver (de toute façon, non envoyée dans la chaine)
                   end if;
-                  if img_start = '1' then     -- en quittant idle, frame_id_i et acq_fringe sont implicitement latchés, donc pas besoin de latchs explicites
-                     acq_fringe_fsm <= wait_fval_st;
-                     fringe_fifo_rd <= aoi_acq_data; -- ENO: 19 fev 2020. Mis à jour de la sortie du fwft pour le prochain frame si et seulement si l'image en cours est une acq image. Sinon, c'est une image acquise en XTRA_TRIG/PROG_TRIG et donc le fringe_fifo doit rester intact.
+                  if img_start = '1' then     -- en quittant idle, frame_id_i et acq_hder sont implicitement latchés, donc pas besoin de latchs explicites
+                     frame_fsm <= wait_fval_st;
+                     acq_hder_fifo_rd <= aoi_acq_data; -- ENO: 19 fev 2020. Mis à jour de la sortie du fwft pour le prochain frame si et seulement si l'image en cours est une acq image. Sinon, c'est une image acquise en XTRA_TRIG/PROG_TRIG et donc le acq_hder_fifo doit rester intact.
                      readout_i <= '1';               -- signal de readout, à sortir même en mode xtra_trig
                   end if;                   
                
                when wait_fval_st =>
-                  fringe_fifo_rd <= '0';
+                  acq_hder_fifo_rd <= '0';
                   if img_end = '1' then
                      readout_i <= '0';
-                     acq_fringe <= '0';
-                     acq_fringe_fsm <= idle;
+					 if acq_hder = '1' and aoi_acq_data = '1' then -- ENO: pour RWI, acq_hder tombe ssi la donnee dans acq_hder_fifo a trouvé son image associee
+                        acq_hder <= '0';
+					 end if;
+                     frame_fsm <= idle;
                   end if;      
                
                when others =>
@@ -412,7 +414,7 @@ begin
             
          else            
             
-            acq_fringe_last <= acq_fringe;
+            acq_hder_last <= acq_hder;
             
             -- construction des données hder fast
             hder_param.exp_time <= int_time_100MHz; 
@@ -446,7 +448,7 @@ begin
                   hcnt <= to_unsigned(1, hcnt'length);
                   dispatch_info_i.exp_info.exp_dval <= '0';
                   pause_cnt <= (others => '0');
-                  if hder_param.rdy = '1' and acq_fringe = '1' then
+                  if hder_param.rdy = '1' and acq_hder = '1' then
                      fast_hder_sm <= exp_info_dval_st;                     
                   end if;
                
@@ -482,7 +484,7 @@ begin
                         hder_mosi_i.wdata <=  std_logic_vector(hder_param.exp_time);
                         hder_mosi_i.wvalid <= '1';
                         hder_mosi_i.wstrb <= ExposureTimeBWE;
-                        fast_hder_sm <= wait_acq_fringe_st;
+                        fast_hder_sm <= wait_acq_hder_st;
                      end if;                     
                      hcnt <= hcnt + 1;
                      --                  else
@@ -490,11 +492,11 @@ begin
                      --                     hder_mosi_i.wvalid <= '0';
                   end if;
                
-               when wait_acq_fringe_st =>
+               when wait_acq_hder_st =>
                   hder_mosi_i.awvalid <= '0';
                   hder_mosi_i.wvalid <= '0';
                   hder_mosi_i.wstrb <= (others => '0');
-                  if acq_fringe = '0' then
+                  if acq_hder = '0' then
                      fast_hder_sm <= idle;
                   end if;
                
@@ -521,7 +523,7 @@ begin
          int_time_100MHz  <= exp_time_pipe(3)(int_time_100MHz'length-1 downto 0);
          
          -- pipe pour rendre valide la donnée qques CLKs apres sa sortie
-         exp_dval_pipe(0)           <= acq_fringe and not acq_fringe_last;
+         exp_dval_pipe(0)           <= acq_hder and not acq_hder_last;
          exp_dval_pipe(1)           <= exp_dval_pipe(0); 
          exp_dval_pipe(2)           <= exp_dval_pipe(1); 
          exp_dval_pipe(3)           <= exp_dval_pipe(2);
@@ -551,7 +553,7 @@ begin
             SPEED_ERR <= data_mosi_i.aoi_dval and not data_link_rdy;           
             
             -- errer de fifo
-            FIFO_ERR <= quad_fifo_ovfl or fringe_fifo_ovfl;
+            FIFO_ERR <= quad_fifo_ovfl or acq_hder_fifo_ovfl;
             
             -- done
             DONE <= not readout_i; 
