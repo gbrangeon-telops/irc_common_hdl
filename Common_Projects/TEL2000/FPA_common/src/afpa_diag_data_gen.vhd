@@ -264,9 +264,9 @@ begin
    -- pragma translate_on
    
    --------------------------------------------------
-   -- fifo fwft pour rising edge de l'intégration
+   -- fifo fwft pour edge de l'intégration
    --------------------------------------------------
-   Ure : fwft_sfifo_w3_d16
+   Ue : fwft_sfifo_w3_d16
    port map (
       clk         => MCLK_SOURCE,
       srst        => sreset,
@@ -303,6 +303,7 @@ begin
             img_pending_cnt <= (others => '0');
             int_fifo_wr <= '0';
             int_fifo_rd <= '0';
+            fpa_int_i <= '0';
             
          else   
             

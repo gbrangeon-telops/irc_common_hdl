@@ -178,6 +178,7 @@ architecture rtl of afpa_line_sync_mode_dval_gen is
    signal naoi_stop_last            : std_logic;
    signal global_init_done          : std_logic;
    signal dout_fval_o               : std_logic;
+   signal var_eof_last              : std_logic;
    
    ---- attribute dont_touch     : string;
    ---- attribute dont_touch of dout_dval_o         : signal is "true"; 
@@ -444,37 +445,75 @@ begin
    -- synchronisateur des données sortantes
    --------------------------------------------------
    U4: process(CLK)
+   
+   variable var_sof : std_logic := '0';
+   variable var_eof : std_logic := '0';
+   
    begin
       if rising_edge(CLK) then         
          if sreset = '1' then      -- tant qu'on est en mode diag, la fsm est en reset.      
             dout_wr_en_o <= '0';
             dout_fval_o <= '0';
+            var_sof := '0';
+            var_eof := '0'; 
+            var_eof_last <= '0';
+            dout_o(58)  <= '0';
             
+         
          else      
             
-            -- fval
-            dout_fval_o          <= readout_info_o.aoi.fval and aoi_flag_fifo_dval;
+            -----------------------------------------------------------------------
+            -- quelques signaux utiles                                           
+            -----------------------------------------------------------------------
+            var_sof := readout_info_o.aoi.sof and aoi_in_progress;
+            var_eof := readout_info_o.aoi.eof and aoi_in_progress;
+            var_eof_last <= var_eof;
             
+            ----------------------------------------------------------------------
             -- ecriture des données en aval
-            dout_wr_en_o <= global_init_done and FPA_DIN_DVAL; -- les données sortent tout le temps. les flags permettront de distinguer le AOI du NAOI 
-            
+            ----------------------------------------------------------------------
+            dout_wr_en_o <= global_init_done and FPA_DIN_DVAL;                         -- les données sortent tout le temps. les flags permettront de distinguer le AOI du NAOI 
+                        
+            ----------------------------------------------------------------------
+            -- zone AOI                                                           
+            ---------------------------------------------------------------------- 
             -- données écrites en aval
             if DEFINE_FPA_VIDEO_DATA_INVERTED = '1' then 
                dout_o(55 downto 0) <= not FPA_DIN(55 downto 0);
             else
                dout_o(55 downto 0) <= FPA_DIN(55 downto 0);   
+            end if; 
+            
+            -- aoi_sol
+            dout_o(56)           <= readout_info_o.aoi.sol and aoi_in_progress;  
+            
+            -- aoi_eol                      
+            dout_o(57)           <= readout_info_o.aoi.eol and aoi_in_progress;        
+            
+            -- fval                                                       
+            if var_sof = '1' then                                         -- montee de sof
+               dout_fval_o <= '1';
+               dout_o(58)  <= '1';
+            elsif var_eof_last = '1' and var_eof = '0' then               -- tombée de eof
+               dout_o(58)  <= '0';
+               dout_fval_o <= '0';
             end if;            
             
-            -- zone AOI
-            dout_o(56)           <= readout_info_o.aoi.sol and aoi_in_progress;                       -- aoi_sol
-            dout_o(57)           <= readout_info_o.aoi.eol and aoi_in_progress;                       -- aoi_eol
-            dout_o(58)           <= readout_info_o.aoi.fval and aoi_flag_fifo_dval;                   -- aoi_fval 
-            dout_o(59)           <= readout_info_o.aoi.sof and aoi_in_progress;                       -- aoi_sof
-            dout_o(60)           <= readout_info_o.aoi.eof and aoi_in_progress;                       -- aoi_eof            
-            dout_o(61)           <= readout_info_o.aoi.dval and aoi_in_progress and FPA_DIN_DVAL;     -- aoi_dval    (nouvel ajout)
-            dout_o(76 downto 62) <= readout_info_o.aoi.spare;                                         -- aoi_spares  (nouvel ajout)
+            -- aoi_sof
+            dout_o(59)           <= var_sof; 
             
-            -- Zone NON AOI
+            -- aoi_eof                       
+            dout_o(60)           <= var_eof;    
+            
+            -- aoi_dval    (nouvel ajout)                              
+            dout_o(61)           <= readout_info_o.aoi.dval and aoi_in_progress and FPA_DIN_DVAL; 
+            
+            -- aoi_spares  (nouvel ajout)    
+            dout_o(76 downto 62) <= readout_info_o.aoi.spare;                                         
+            
+            ----------------------------------------------------------------------
+            -- Zone NON AOI                                                       
+            ----------------------------------------------------------------------
             dout_o(77)           <= readout_info_o.naoi.dval and naoi_in_progress and FPA_DIN_DVAL;   -- naoi_dval    
             dout_o(78)           <= readout_info_o.naoi.start and naoi_in_progress;                   -- naoi_start
             dout_o(79)           <= readout_info_o.naoi.stop and naoi_in_progress;                    -- naoi_stop            
