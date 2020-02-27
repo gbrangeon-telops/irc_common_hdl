@@ -577,6 +577,9 @@ begin
                when  x"00B8" =>   -- 
                   stat_read_reg <= resize(MISC_STAT.int_to_int_delay_max, 32);
                
+               when  x"00BC" =>   -- 
+                  stat_read_reg <= resize(MISC_STAT.fast_hder_cnt, 32);
+               
                when others  => stat_read_reg <= (others => '0');
                
             end case;
