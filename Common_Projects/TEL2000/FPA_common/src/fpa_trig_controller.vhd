@@ -75,7 +75,7 @@ architecture RTL of fpa_trig_controller is
          );
    end component;
    
-   type fpa_trig_sm_type is (idle, int_trig_st, check_trig_ctrl_mode_st, check_int_feedback_st, wait_readout_start_st, wait_readout_end_st, wait_int_end_st, apply_dly_st, check_readout_st);
+   type fpa_trig_sm_type is (idle, int_trig_st, check_trig_ctrl_mode_st, check_int_feedback_st, wait_readout_start_st, wait_readout_end_st, wait_int_end_st, apply_dly_st, check_readout_st, int_sanity_check_st);
    type trig_timeout_sm_type is (idle, cnt_st);
    signal fpa_trig_sm                  : fpa_trig_sm_type;
    signal trig_timeout_sm              : trig_timeout_sm_type;
@@ -95,7 +95,10 @@ architecture RTL of fpa_trig_controller is
    signal trig_ctler_en_i              : std_logic;
    signal prog_trig_in_i               : std_logic;
    signal apply_dly_then_check_readout : std_logic;
-   signal acq_mode                     : std_logic;  -- ENO. 19 fev. 2020 : ce signal reste à '1' tant qu'on est avec les ACQ_TRIG. Il descend à '0' dès qu'un prog_trig ou xtra_trig est pris en compte. 
+   signal acq_mode                     : std_logic;  -- ENO. 19 fev.  2020 : ce signal reste à '1' tant qu'on est avec les ACQ_TRIG. Il descend à '0' dès qu'un prog_trig ou xtra_trig est pris en compte. 
+   signal acq_mode_first_int           : std_logic;  -- ENO. 07 mars. 2020 : ce signal reste à '1' pendant le premier trig et son image associée lors d'une entrée en acq_mode.Tres utile pour les detecteurs en RWI.
+   signal nacq_mode_first_int          : std_logic;  -- ENO. 07 mars. 2020 : ce signal reste à '1' pendant le premier trig et son image associée lors d'une entree en non_acq_mode.Tres utile pour les detecteurs en RWI.
+   signal acq_in_progress              : std_logic;
    
    --   -- attribute dont_touch                : string;
    --   -- attribute dont_touch of acq_trig_o  : signal is "true";
@@ -110,15 +113,17 @@ begin
    --------------------------------------------------
    -- mapping des sorties
    --------------------------------------------------  
-   ACQ_TRIG_OUT  <=  acq_trig_o; --! '1' ssi l'image suivant l'integration en court doit être envoyée dans la chaine. Sinon, à '0'.
+   ACQ_TRIG_OUT  <=  acq_trig_o;  --! '1' ssi l'image suivant l'integration en court doit être envoyée dans la chaine. Sinon, à '0'.
    XTRA_TRIG_OUT <=  xtra_trig_o; --! 
    PROG_TRIG_OUT <=  prog_trig_o; --! 
    
-   TRIG_CTLER_STAT(7 downto 5) <= (others => '0');
+   TRIG_CTLER_STAT(7) <= '0';
+   TRIG_CTLER_STAT(6) <= acq_in_progress;
+   TRIG_CTLER_STAT(5) <= acq_mode_first_int;
    TRIG_CTLER_STAT(4) <= acq_mode;
    TRIG_CTLER_STAT(3) <= acq_trig_done;
    TRIG_CTLER_STAT(2) <= '0';
-   TRIG_CTLER_STAT(1) <= '0';
+   TRIG_CTLER_STAT(1) <= nacq_mode_first_int;
    TRIG_CTLER_STAT(0) <= done;
    
    --------------------------------------------------
@@ -183,6 +188,9 @@ begin
             acq_trig_done <= '0';
             apply_dly_then_check_readout <= '0';
             acq_mode <= '0';
+            acq_mode_first_int <= '0';
+            acq_in_progress <= '0';
+            nacq_mode_first_int <= '0';
             
          else
             
@@ -212,6 +220,9 @@ begin
                   done <= '1'; --! le done est utilisé uniquement par le séquenceur. Ce done est un pulse, etant donné que les extra-trig sont toujours là.Donc à bannir dans le done general envoyé au PPC
                   count <= (others => '0');
                   acq_trig_done <= '1';
+                  acq_mode_first_int <= '0';
+                  acq_in_progress <= '0';
+                  nacq_mode_first_int <= '0';
                   if trig_ctler_en_i = '1' then  --! TRIG_CTLER_EN = '1' ssi le détecteur/proxy est allumé ou si on est en mode diag
                      if ACQ_TRIG_IN = '1' then
                         acq_mode <= '1';
@@ -219,12 +230,18 @@ begin
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '0';
                         done <= '0';
+                        if acq_mode = '0' then 
+                           acq_mode_first_int <= '1';
+                        end if;
                      elsif XTRA_TRIG_IN = '1' then
                         acq_mode <= '0';
                         xtra_trig_o <= not prog_trig_in_i;
                         fpa_trig_sm <= int_trig_st;
                         acq_trig_done <= '1';
                         done <= '0';
+                        if acq_mode = '1' then 
+                           nacq_mode_first_int <= '1';
+                        end if;
                      end if;                     
                   end if;
                   
@@ -233,7 +250,10 @@ begin
                      prog_trig_o <= '1';
                      fpa_trig_sm <= int_trig_st;
                      acq_trig_done <= '1';
-                     done <= '0';                        
+                     done <= '0';
+                     if acq_mode = '1' then 
+                        nacq_mode_first_int <= '1';
+                     end if;
                   end if; 
                   
                -- pulse ordonnant l'integration  
@@ -250,6 +270,7 @@ begin
                when check_int_feedback_st =>		   
                   if fpa_int_feedbk_i = '1' then --! on attend le feedback de l'integration qui peut ne pas venir dans le cas des détecteurs numeriques (le détecteur n'est pas allumé bien que le proxy le soit).
                      fpa_trig_sm <= check_trig_ctrl_mode_st;
+                     acq_in_progress <= acq_mode;
                   else
                      if timeout_i = '1' and DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL then --! en l'absence du feedback d'intégration, le timeout_i permet de retour en idle en ayant au moins respectée la frequence minimale des trigs 
                         fpa_trig_sm <= idle; 
@@ -300,7 +321,7 @@ begin
                   dly_cnt <= dly_cnt - 1;   -- !un compte-down est plus fiable
                   if dly_cnt = 0  then
                      if apply_dly_then_check_readout = '0' then 
-                        fpa_trig_sm <= idle;                   
+                        fpa_trig_sm <= int_sanity_check_st;                   
                      else
                         fpa_trig_sm <= check_readout_st; 
                      end if;
@@ -309,8 +330,14 @@ begin
                -- check supplémentaire de la fin du readout
                when check_readout_st =>		   
                   if fpa_readout_i = '0' then --! fin du readout.
-                     fpa_trig_sm <= idle; 
+                     fpa_trig_sm <= int_sanity_check_st; 
                   end if;
+                  
+               -- il faut s'assurer de la fin de l'integration (très important pour les detecteurs RWI)
+               when int_sanity_check_st =>
+                  if fpa_int_feedbk_i = '0' then --! pour les non RWI, c'est un coup d'horloge supplementaire de delai. A priori, rien de majeur.
+                     fpa_trig_sm <= idle; 
+                  end if;                   
                
                when others =>
                

@@ -354,9 +354,9 @@ begin
                   acq_hder_fifo_rd <= '0';
                   if img_end = '1' then
                      readout_i <= '0';
-					 if acq_hder = '1' and aoi_acq_data = '1' then -- ENO: pour RWI, acq_hder tombe ssi la donnee dans acq_hder_fifo a trouvé son image associee
+                     if acq_hder = '1' and aoi_acq_data = '1' then -- ENO: pour RWI, acq_hder tombe ssi la donnee dans acq_hder_fifo a trouvé son image associee
                         acq_hder <= '0';
-					 end if;
+                     end if;
                      frame_fsm <= idle;
                   end if;      
                

@@ -53,6 +53,7 @@ entity afpa_hw_driver_ctrler is
       DAC_DONE         : in std_logic;
       
       -- statut
+      ACQ_IN_PROGRESS    : in std_logic; 
       HW_CFG_IN_PROGRESS : out std_logic;
       
       -- configs
@@ -70,6 +71,18 @@ architecture rtl of afpa_hw_driver_ctrler is
          ARESET : in std_logic;
          SRESET : out std_logic;
          CLK    : in std_logic);
+   end component; 
+   
+   component double_sync is
+      generic(
+         INIT_VALUE : bit := '0'
+         );
+      port(
+         D     : in std_logic;
+         Q     : out std_logic := '0';
+         RESET : in std_logic;
+         CLK   : in std_logic
+         );
    end component;
    
    type hw_seq_fsm_type is (idle, diag_mode_only_st, wait_client_run_st, forward_rqst_st, check_rqst_st, wait_client_done_st, pause_st);
@@ -114,6 +127,7 @@ architecture rtl of afpa_hw_driver_ctrler is
    signal hw_cfg_in_progress_i      : std_logic;
    signal wait_cnt                  : unsigned(7 downto 0);
    signal fpa_intf_cfg_up2date      : std_logic;
+   signal acq_in_progress_i         : std_logic;
    
 begin
    
@@ -129,12 +143,19 @@ begin
    --------------------------------------------------
    -- synchro reset 
    --------------------------------------------------   
-   U1 : sync_reset
+   U1A : sync_reset
    port map(
       ARESET => ARESET,
       CLK    => CLK,
       SRESET => sreset
       ); 
+   
+   --------------------------------------------------
+   -- double sync 
+   --------------------------------------------------   
+   U1B: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => READOUT, CLK => CLK, Q => readout_i);
+   U1C: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => ACQ_IN_PROGRESS, CLK => CLK, Q => acq_in_progress_i);
+   
    
    --------------------------------------------------
    --  Allumage du détecteur et dacs
@@ -169,10 +190,7 @@ begin
             hw_cfg_in_progress_i <= '0';
             hw_rqst_i <= '0';
             
-         else                   
-            
-            -- misc
-            readout_i <= READOUT;           
+         else                            
             
             valid_prog_rqst <= PROG_RQST and fpa_powered_i and dac_powered_i;  -- il faut absoluement dac_powered_i.
             valid_dac_rqst <= DAC_RQST and dac_powered_i;
@@ -325,7 +343,7 @@ begin
             fpa_intf_cfg_i.int_signal_high_time <= USER_CFG.INT_SIGNAL_HIGH_TIME;
             
             -- ENO : 25 janv 2016: mis ici pour un fonctionnement correct. Sinon, sans reprogrammation du dtecteur, la partie common est figée
-            if readout_i = '0' then 
+            if readout_i = '0' and acq_in_progress_i = '0' then 
                fpa_intf_cfg_i.comn <= USER_CFG.COMN;
             end if;
             
