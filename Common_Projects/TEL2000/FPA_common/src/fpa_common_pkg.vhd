@@ -271,9 +271,9 @@ package fpa_common_pkg is
    record      
       acq_trig_cnt            : std_logic_vector(15 downto 0);  -- compteur de acq_trig
       acq_int_cnt             : std_logic_vector(15 downto 0);
-      fpa_readout_cnt         : std_logic_vector(15 downto 0);
+      fast_hder_cnt           : std_logic_vector(15 downto 0);      
       acq_readout_cnt         : std_logic_vector(15 downto 0);
-      fast_hder_cnt           : std_logic_vector(15 downto 0);
+      fpa_readout_cnt         : std_logic_vector(15 downto 0);
       out_pix_cnt_min         : std_logic_vector(23 downto 0);
       out_pix_cnt_max         : std_logic_vector(23 downto 0);
       trig_to_int_delay_min   : std_logic_vector(31 downto 0);
