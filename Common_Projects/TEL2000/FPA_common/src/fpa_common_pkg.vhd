@@ -59,7 +59,7 @@ package fpa_common_pkg is
    constant MODE_INT_END_TO_TRIG_START          : std_logic_vector(7 downto 0) := x"02";       -- delai pris en compte = fin de l'integration jusqu'au prochain trig d'integration 
    constant MODE_ITR_TRIG_START_TO_TRIG_START   : std_logic_vector(7 downto 0) := x"03";       -- delai pris en compte = periode entre le trig actuel et le prochain. Une fois ce delai observé, on s'assure que le readout est terminé avant de considerer le prochain trig.
    constant MODE_ITR_INT_END_TO_TRIG_START      : std_logic_vector(7 downto 0) := x"04";       -- delai pris en compte = fin de l'integration jusqu'au prochain trig d'integration. Une fois ce delai observé, on s'assure que le readout est terminé avant de considerer le prochain trig.
-   
+   constant MODE_ALL_END_TO_TRIG_START          : std_logic_vector(7 downto 0) := x"05";       -- delai pris en compte = fin de l'integration / readout (selon le plus long des deux) jusqu'au prochain trig d'integration. 
    -------------------------------------------------------------------------- 
    -- les types de sortie de l,iDDCA FPA
    --------------------------------------------------------------------------

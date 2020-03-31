@@ -99,6 +99,7 @@ architecture RTL of fpa_trig_controller is
    signal acq_mode_first_int           : std_logic;  -- ENO. 07 mars. 2020 : ce signal reste à '1' pendant le premier trig et son image associée lors d'une entrée en acq_mode.Tres utile pour les detecteurs en RWI.
    signal nacq_mode_first_int          : std_logic;  -- ENO. 07 mars. 2020 : ce signal reste à '1' pendant le premier trig et son image associée lors d'une entree en non_acq_mode.Tres utile pour les detecteurs en RWI.
    signal acq_in_progress              : std_logic;
+   signal check_all_end_then_apply_dly : std_logic;
    
    --   -- attribute dont_touch                : string;
    --   -- attribute dont_touch of acq_trig_o  : signal is "true";
@@ -187,6 +188,7 @@ begin
             -- fpa_readout_last <= '0';
             acq_trig_done <= '0';
             apply_dly_then_check_readout <= '0';
+			check_all_end_then_apply_dly <= '0';
             acq_mode <= '0';
             acq_mode_first_int <= '0';
             acq_in_progress <= '0';
@@ -280,6 +282,7 @@ begin
                -- verif du mode du contrôleur de trig
                when check_trig_ctrl_mode_st =>
                   apply_dly_then_check_readout <= '0';
+				  check_all_end_then_apply_dly <= '0'; 
                   if FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE     = MODE_READOUT_END_TO_TRIG_START then  -- ENO: 10 avril 2019: ne plus utiliser le mode MODE_READOUT_END_TO_TRIG_START pour les détecteurs analogiques puisqu'il n'y a pas de timeout_i 
                      fpa_trig_sm <= wait_readout_start_st;
                   elsif  FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE = MODE_TRIG_START_TO_TRIG_START then
@@ -292,6 +295,9 @@ begin
                   elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ITR_INT_END_TO_TRIG_START then
                      fpa_trig_sm <= wait_int_end_st;
                      apply_dly_then_check_readout <= '1';                    
+				  elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ALL_END_TO_TRIG_START then      -- fait specialement pour les dtecteurs RWI
+                     fpa_trig_sm <= wait_readout_start_st;
+                     check_all_end_then_apply_dly <= '1';                    
                   end if;
                   
                -- mode_readout_end_to_trig_start : on attend le debut du readout 
@@ -302,8 +308,12 @@ begin
                   
                -- mode_readout_end_to_trig_start : on attend la fin du readout 
                when wait_readout_end_st =>			   
-                  if fpa_readout_i = '0' then                        --! fin du readout
-                     fpa_trig_sm <= apply_dly_st; 
+                  if fpa_readout_i = '0' then           --! fin du readout                     
+                     if check_all_end_then_apply_dly = '1' then
+                        fpa_trig_sm <= wait_int_end_st;
+                     else
+					    fpa_trig_sm <= apply_dly_st;
+					 end if;					 
                   end if;
                   
                -- mode_int_end_to_trig_start : on attend la fin de l'intégration 
