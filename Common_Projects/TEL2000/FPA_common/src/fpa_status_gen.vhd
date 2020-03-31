@@ -579,7 +579,11 @@ begin
                
                when  x"00BC" =>   -- 
                   stat_read_reg <= resize(MISC_STAT.fast_hder_cnt, 32);
-               
+              
+               when  x"00C0" =>   -- 
+                  stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.scd_int.scd_int_time, 32));
+              
+                  
                when others  => stat_read_reg <= (others => '0');
                
             end case;
