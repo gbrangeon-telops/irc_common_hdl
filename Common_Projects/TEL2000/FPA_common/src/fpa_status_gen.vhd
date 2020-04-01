@@ -581,7 +581,7 @@ begin
                   stat_read_reg <= resize(MISC_STAT.fast_hder_cnt, 32);
               
                when  x"00C0" =>   -- 
-                  stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.scd_int.scd_int_time, 32));
+                  stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.INT_TIME, 32));  -- temps d'expotion en MCLK présentement utilisé par le module detecteur.
               
                   
                when others  => stat_read_reg <= (others => '0');
