@@ -129,6 +129,18 @@ architecture rtl of afpa_hw_driver_ctrler is
    signal fpa_intf_cfg_up2date      : std_logic;
    signal acq_in_progress_i         : std_logic;
    
+   attribute KEEP : string;
+   attribute KEEP of readout_i : signal is "TRUE";
+   attribute KEEP of update_fpa_part_only : signal is "TRUE";
+   attribute KEEP of update_fpa_cfg : signal is "TRUE";
+   attribute KEEP of prog_ctrl_fsm : signal is "TRUE";
+   attribute KEEP of hw_seq_fsm : signal is "TRUE";
+   attribute KEEP of valid_prog_rqst : signal is "TRUE";
+   attribute KEEP of fpa_client_done : signal is "TRUE";
+   attribute KEEP of fpa_intf_cfg_up2date : signal is "TRUE";
+   attribute KEEP of run_fpa_prog_client : signal is "TRUE";
+   attribute KEEP of fpa_first_cfg_done : signal is "TRUE";
+   
 begin
    
    FPA_INTF_CFG <= fpa_intf_cfg_i;
