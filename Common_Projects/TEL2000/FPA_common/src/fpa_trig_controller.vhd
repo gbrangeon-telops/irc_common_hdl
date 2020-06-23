@@ -188,7 +188,7 @@ begin
             -- fpa_readout_last <= '0';
             acq_trig_done <= '0';
             apply_dly_then_check_readout <= '0';
-			check_all_end_then_apply_dly <= '0';
+            check_all_end_then_apply_dly <= '0';
             acq_mode <= '0';
             acq_mode_first_int <= '0';
             acq_in_progress <= '0';
@@ -282,7 +282,7 @@ begin
                -- verif du mode du contrôleur de trig
                when check_trig_ctrl_mode_st =>
                   apply_dly_then_check_readout <= '0';
-				  check_all_end_then_apply_dly <= '0'; 
+                  check_all_end_then_apply_dly <= '0'; 
                   if FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE     = MODE_READOUT_END_TO_TRIG_START then  -- ENO: 10 avril 2019: ne plus utiliser le mode MODE_READOUT_END_TO_TRIG_START pour les détecteurs analogiques puisqu'il n'y a pas de timeout_i 
                      fpa_trig_sm <= wait_readout_start_st;
                   elsif  FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE = MODE_TRIG_START_TO_TRIG_START then
@@ -295,7 +295,7 @@ begin
                   elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ITR_INT_END_TO_TRIG_START then
                      fpa_trig_sm <= wait_int_end_st;
                      apply_dly_then_check_readout <= '1';                    
-				  elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ALL_END_TO_TRIG_START then      -- fait specialement pour les dtecteurs RWI
+                  elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ALL_END_TO_TRIG_START then      -- fait specialement pour les dtecteurs RWI
                      fpa_trig_sm <= wait_readout_start_st;
                      check_all_end_then_apply_dly <= '1';                    
                   end if;
@@ -312,8 +312,8 @@ begin
                      if check_all_end_then_apply_dly = '1' then
                         fpa_trig_sm <= wait_int_end_st;
                      else
-					    fpa_trig_sm <= apply_dly_st;
-					 end if;					 
+                        fpa_trig_sm <= apply_dly_st;
+                     end if;					 
                   end if;
                   
                -- mode_int_end_to_trig_start : on attend la fin de l'intégration 
