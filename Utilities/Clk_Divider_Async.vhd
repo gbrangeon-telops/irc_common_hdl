@@ -27,7 +27,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity Clk_Divider_Async is
 	Generic(	Factor:		integer := 2);			-- Division Factor (Default: 2)
 	Port ( 	Clock: 		in std_logic;			-- Input Clock
-		Reset:		in std_logic;			-- Resets the counters to 0 (Active Low)
+		Reset:		in std_logic;			-- Resets the counters to 0 (Active High)
 		Clk_div:		out std_logic);		-- Divided Clock
 end Clk_Divider_Async;
 
