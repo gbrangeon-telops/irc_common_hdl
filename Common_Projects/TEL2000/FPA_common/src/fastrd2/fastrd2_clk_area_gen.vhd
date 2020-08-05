@@ -32,7 +32,7 @@ end fastrd2_clk_area_gen;
 
 architecture rtl of fastrd2_clk_area_gen is   
    
-   type area_info_pipe_type is array (0 to 3) of area_info_type;
+   type area_info_pipe_type is array (0 to 4) of area_info_type;
    
    component sync_reset
       port(
@@ -43,14 +43,14 @@ architecture rtl of fastrd2_clk_area_gen is
    
    signal sreset               : std_logic;
    signal area_info_pipe       : area_info_pipe_type;
-   signal clk_stamp_en         : std_logic_vector(3 downto 0);
+   signal clk_stamp_en         : std_logic_vector(4 downto 0);
    
 begin
    
    --------------------------------------------------
    -- Outputs map
    --------------------------------------------------                       
-   AREA_INFO_O <= area_info_pipe(3);   -- pour fins de synchro
+   AREA_INFO_O <= area_info_pipe(4);   -- pour fins de synchro
    
    --------------------------------------------------
    -- synchro reset 
@@ -97,25 +97,35 @@ begin
                clk_stamp_en(1) <= clk_stamp_en(0);
             else
                clk_stamp_en(1) <= '0';
-               clk_stamp_en(0) <= '0';
+               -- clk_stamp_en(0) <= '0';
             end if;         
             
             --------------------------------------------------------
-            -- pipe 2 : reperage des colonnes à marquer
+            -- pipe 2 : reperage 1ere colonne à marquer
             --------------------------------------------------------
             area_info_pipe(2) <= area_info_pipe(1);
-            if area_info_pipe(1).raw.line_pclk_cnt = CLK_AREA_CFG.SOL_POSL_PCLK then
+            if area_info_pipe(1).raw.line_pclk_cnt >= CLK_AREA_CFG.SOL_POSL_PCLK then
                clk_stamp_en(2) <= clk_stamp_en(1);
-            elsif area_info_pipe(1).raw.line_pclk_cnt > CLK_AREA_CFG.EOL_POSL_PCLK then
+            else
                clk_stamp_en(2) <= '0';
+            end if;
+            
+            --------------------------------------------------------
+            -- pipe 3 : reperage derniere colonne à marquer
+            --------------------------------------------------------
+            area_info_pipe(3) <= area_info_pipe(2);
+            if area_info_pipe(2).raw.line_pclk_cnt <= CLK_AREA_CFG.EOL_POSL_PCLK then
+               clk_stamp_en(3) <= clk_stamp_en(2);
+            else
+               clk_stamp_en(3) <= '0';
             end if;  
             
             --------------------------------------------------------
-            -- pipe 3 : marquage des zones
+            -- pipe 4 : marquage des zones
             --------------------------------------------------------
-            area_info_pipe(3) <= area_info_pipe(2);
-            if clk_stamp_en(2) = '1' then
-               area_info_pipe(3).clk_info.clk_id <= CLK_AREA_CFG.CLK_ID;
+            area_info_pipe(4) <= area_info_pipe(3);
+            if clk_stamp_en(3) = '1' then
+               area_info_pipe(4).clk_info.clk_id <= CLK_AREA_CFG.CLK_ID;
             end if;            
             
          end if;

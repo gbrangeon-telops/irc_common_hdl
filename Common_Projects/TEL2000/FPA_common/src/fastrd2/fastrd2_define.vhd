@@ -36,18 +36,19 @@ package fastrd2_define is
    ------------------------------------------------------------
    type fpa_clk_info_type is 
    record
-      mclk_source_rate_khz : natural;
+      mclk_source_rate_hz  : natural;
       
       -- master clock part
-      mclk_rate_khz        : fastrd2_integer_array_type;
+      mclk_rate_hz         : fastrd2_integer_array_type;
       mclk_rate_factor     : fastrd2_integer_array_type;
       mclk_rate_factor_m1  : fastrd2_integer_array_type;
       mclk_rate_factor_div2: fastrd2_integer_array_type;
       
       -- pixel clock part
-      pclk_rate_khz        : fastrd2_integer_array_type;     
+      pclk_rate_hz         : fastrd2_integer_array_type;     
       pclk_rate_factor     : fastrd2_integer_array_type;
       pclk_rate_factor_m1  : fastrd2_integer_array_type;
+      pclk_rate_factor_div2: fastrd2_integer_array_type;
    end record;
    
    ------------------------------------------------------------
@@ -138,7 +139,7 @@ package fastrd2_define is
    ------------------------------------------
    -- functions --
    --------------------------------------------  
-   function gen_fpa_clk_info_func(mclk_source_rate_khz: integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_khz: fastrd2_integer_array_type) return fpa_clk_info_type;
+   function gen_fpa_clk_info_func(mclk_source_rate_hz : integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_hz : fastrd2_integer_array_type) return fpa_clk_info_type;
    function area_info_to_vector_func(area_info: area_info_type) return std_logic_vector;
    function vector_to_area_info_func(yy: std_logic_vector) return area_info_type;
    
@@ -149,25 +150,28 @@ package body fastrd2_define is
    ---------------------------------------------------------------------------------------------
    -- function de generation des infos relatives aux mclk
    --------------------------------------------------------------------------------------------- 
-   function gen_fpa_clk_info_func(mclk_source_rate_khz: integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_khz: fastrd2_integer_array_type) return fpa_clk_info_type is
+   function gen_fpa_clk_info_func(mclk_source_rate_hz : integer; pixnum_per_mclk_and_per_tap : integer; mclk_rate_hz : fastrd2_integer_array_type) return fpa_clk_info_type is
       variable yy : fpa_clk_info_type;
    begin
       
       -- reconduction des données
-      yy.mclk_source_rate_khz := mclk_source_rate_khz;
-      yy.mclk_rate_khz        := mclk_rate_khz;       
+      yy.mclk_source_rate_hz  := mclk_source_rate_hz ;
+      yy.mclk_rate_hz         := mclk_rate_hz ;       
       
       -- calculs
       for ii in 0 to FPA_MCLK_NUM_MAX - 1 loop
-         if  yy.mclk_rate_khz(ii) /= 0 then 
-            yy.pclk_rate_khz(ii)          := pixnum_per_mclk_and_per_tap * yy.mclk_rate_khz(ii);
-            yy.mclk_rate_factor(ii)       := integer(round(real(yy.mclk_source_rate_khz) / real(yy.mclk_rate_khz(ii))));
+         if  yy.mclk_rate_hz(ii) /= 0 then 
+            
+            yy.mclk_rate_factor(ii)       := integer(round(real(yy.mclk_source_rate_hz ) / real(yy.mclk_rate_hz(ii))));
             yy.mclk_rate_factor_div2(ii)  := yy.mclk_rate_factor(ii)/2;
             yy.mclk_rate_factor_m1(ii)    := yy.mclk_rate_factor(ii) - 1;
-            yy.pclk_rate_factor(ii)       := integer(round(real(yy.mclk_source_rate_khz) / real(yy.pclk_rate_khz(ii))));
-            yy.pclk_rate_factor_m1(ii)    := integer(round(real(yy.mclk_source_rate_khz) / real(yy.pclk_rate_khz(ii)))) - 1;
+            
+            yy.pclk_rate_hz(ii)           := pixnum_per_mclk_and_per_tap * yy.mclk_rate_hz(ii);
+            yy.pclk_rate_factor(ii)       := integer(round(real(yy.mclk_source_rate_hz ) / real(yy.pclk_rate_hz(ii))));
+            yy.pclk_rate_factor_div2(ii)  := yy.pclk_rate_factor(ii)/2;
+            yy.pclk_rate_factor_m1(ii)    := integer(round(real(yy.mclk_source_rate_hz ) / real(yy.pclk_rate_hz(ii)))) - 1;
          else
-            yy.pclk_rate_khz(ii)          := 0;
+            yy.pclk_rate_hz(ii)           := 0;
             yy.mclk_rate_factor(ii)       := 0;
             yy.pclk_rate_factor(ii)       := 0;
             yy.pclk_rate_factor_m1(ii)    := 0;
