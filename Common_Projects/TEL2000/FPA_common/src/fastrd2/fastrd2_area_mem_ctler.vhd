@@ -53,9 +53,7 @@ architecture rtl of fastrd2_area_mem_ctler is
    
 begin
    
---   AREA_FIFO_WR   <= area_fifo_wr_i;
---   AREA_FIFO_DATA <= area_fifo_data_i;
-   
+  
    AREA_FIFO_WR <= AREA_INFO.INFO_DVAL;            
    AREA_FIFO_DATA <= std_logic_vector(resize(unsigned(area_info_to_vector_func(AREA_INFO)), area_fifo_data_i'length));
    
@@ -79,7 +77,6 @@ begin
       
       if rising_edge(CLK) then                     
          if sreset = '1' then
-            -- area_fifo_wr_i <= '0';
             afull_i <= '0';
          else
             
@@ -88,13 +85,7 @@ begin
             else
                afull_i <= '0';
             end if;            
-            
-            ----------------------------------------------------------
-            -- conversion en std_logic_vector
-            ----------------------------------------------------------
-            --            area_fifo_wr_i <= AREA_INFO.INFO_DVAL;            
-            --            area_fifo_data_i <= std_logic_vector(resize(unsigned(area_info_to_vector_func(AREA_INFO)), area_fifo_data_i'length));
-            --            
+                      
          end if;
       end if; 
    end process;   

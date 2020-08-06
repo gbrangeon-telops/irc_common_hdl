@@ -37,25 +37,43 @@ architecture rtl of fastrd2_area_flow_gen is
    
    component sync_reset
       port(
-         ARESET                 : in std_logic;
-         SRESET                 : out std_logic;
-         CLK                    : in std_logic);
+         ARESET       : in std_logic;
+         SRESET       : out std_logic;
+         CLK          : in std_logic);
    end component;
    
-   type ctler_fsm_type is (idle, weight_st);
-   type area_info_pipe_type is array (0 to 3) of area_info_type;
-   type clk_source_cnt_pipe_type is array (0 to 3) of unsigned(9 downto 0);
+   component fastrd2_area_flow_gen_core    
+      port(      
+         ARESET       : in std_logic;
+         CLK          : in std_logic;      
+         START        : in std_logic;
+         AREA_DIN     : in area_info_type;     
+         AREA_DOUT    : out area_info_type;      
+         DONE         : out std_logic
+         );  
+   end component;
    
    
-   signal ctler_fsm             : ctler_fsm_type;
+   type flow_gen_fsm_type is (idle, feed_lane0_st, feed_lane1_st);
+   type area_info_pipe_type is array (0 to 4) of area_info_type;
+   type clk_source_cnt_pipe_type is array (0 to 4) of unsigned(9 downto 0);
+   
+   
+   signal flow_gen_fsm          : flow_gen_fsm_type;
    signal area_info_i           : area_info_type;
    signal sreset                : std_logic;
    signal area_fifo_rd_i        : std_logic;
    signal area_info_dval_i      : std_logic;
    signal adc_sample_num        : unsigned(area_info_i.user.adc_sample_num'length-1 downto 0);
-   signal clk_source_cnt_pipe   : clk_source_cnt_pipe_type;
+   signal mclk_source_cnt_pipe  : clk_source_cnt_pipe_type;
    signal area_info_pipe        : area_info_pipe_type;
    signal mclk_type_is_ddr      : std_logic;
+   signal gen_start_i           : std_logic_vector(1 downto 0);
+   signal gen_done_i            : std_logic_vector(1 downto 0);
+   signal area_info_flow        : area_info_type;
+   signal gen_dout_i            : area_info_pipe_type;
+   signal gen_din_i             : area_info_type;
+   signal dly_cnt               : unsigned(9 downto 0);
    
 begin
    
@@ -68,7 +86,7 @@ begin
    ---------------------------------------------------
    --  input map 
    ---------------------------------------------------
-   area_info_i <= vector_to_area_info_func(AREA_FIFO_DATA);   
+   area_info_i <= vector_to_area_info_func(AREA_FIFO_DATA);
    
    --------------------------------------------------
    -- synchro reset 
@@ -81,64 +99,137 @@ begin
       );         
    
    --------------------------------------------------
-   -- analyse et sortie des données 
+   -- repartiteur en ping pong vers les generateurs 
    --------------------------------------------------
-   U3: process(CLK) 
-      variable incr0 : std_logic_vector(1 downto 0);
-      variable incr1 : std_logic_vector(1 downto 0);
-      
+   U2: process(CLK)      
    begin
       if rising_edge(CLK) then 
          if sreset = '1' then
-            ctler_fsm <= idle;
+            flow_gen_fsm <= idle;
             area_fifo_rd_i <= '0';
-            clk_source_cnt_pipe(0) <= to_unsigned(1, clk_source_cnt_pipe(0)'length);
-            area_info_dval_i <= '0';
-            area_info_pipe(0).clk_info.clk <= '0';
-            area_info_pipe(0).user.adc_sample_num <= to_unsigned(1, area_info_pipe(0).user.adc_sample_num'length);
+            gen_start_i <= (others => '0');
+            
+         else     
+            
+            -- default values
+            area_fifo_rd_i <= '0';
+            gen_start_i <= (others => '0');
+            
+            case flow_gen_fsm is 
+               
+               when idle =>               
+                  if AFULL = '0' then 
+                     flow_gen_fsm <= feed_lane0_st;
+                     dly_cnt <= to_unsigned(1, dly_cnt'length);
+                  end if;               
+               
+               when feed_lane0_st =>
+                  dly_cnt <= dly_cnt - 1;
+                  if AREA_FIFO_DVAL = '1' and gen_done_i(0) = '1' and dly_cnt = 1 then 
+                     flow_gen_fsm <= feed_lane1_st;
+                     gen_din_i <= area_info_i;
+                     gen_start_i(0) <= '1';
+                     area_fifo_rd_i <= '1';
+                     dly_cnt <= to_unsigned(DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR(to_integer(area_info_i.clk_info.clk_id)), dly_cnt'length);
+                  end if;
+               
+               when feed_lane1_st =>
+                  dly_cnt <= dly_cnt - 1;
+                  if AREA_FIFO_DVAL = '1'and gen_done_i(1) = '1' and dly_cnt = 1 then
+                     flow_gen_fsm <= feed_lane0_st;
+                     gen_din_i <= area_info_i;
+                     gen_start_i(1) <= '1';
+                     area_fifo_rd_i <= '1';
+                     dly_cnt <= to_unsigned(DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR(to_integer(area_info_i.clk_info.clk_id)), dly_cnt'length);
+                  end if;
+                  if AFULL = '1' then
+                     flow_gen_fsm <= idle; 
+                  end if;
+               
+               when others =>                 
+               
+            end case;
+            
+         end if;
+      end if;
+   end process; 
+   
+   --------------------------------------------------
+   -- les deux generateurs de flow en ping pong
+   --------------------------------------------------  
+   Ug0: fastrd2_area_flow_gen_core
+   port map(
+      ARESET    => ARESET,
+      CLK       => CLK,
+      START     => gen_start_i(0),
+      AREA_DIN  => gen_din_i,  
+      AREA_DOUT => gen_dout_i(0),  
+      DONE      => gen_done_i(0)      
+      ); 
+   
+   Ug1: fastrd2_area_flow_gen_core
+   port map(
+      ARESET    => ARESET,
+      CLK       => CLK,
+      START     => gen_start_i(1),
+      AREA_DIN  => gen_din_i,  
+      AREA_DOUT => gen_dout_i(1),  
+      DONE      => gen_done_i(1)      
+      ); 
+   
+   --------------------------------------------------
+   -- le merger des deux flows
+   --------------------------------------------------  
+   U3: process(CLK)      
+   begin
+      if rising_edge(CLK) then 
+         if gen_dout_i(0).info_dval = '1' then
+            area_info_flow <= gen_dout_i(0);
+         elsif gen_dout_i(1).info_dval = '1' then
+            area_info_flow <= gen_dout_i(1);
+         else
+            area_info_flow.info_dval <= '0';           
+         end if;           
+      end if;
+   end process;
+   
+   -----------------------------------------------------
+   -- generation des flags
+   -----------------------------------------------------
+   U4: process(CLK)      
+   begin
+      if rising_edge(CLK) then
+         if sreset = '1' then 
+            mclk_source_cnt_pipe(0) <=  to_unsigned(1, mclk_source_cnt_pipe(0)'length);
+            adc_sample_num <= (others => '0');
+            
             for ii in 0 to 3 loop
-               area_info_pipe(ii).info_dval <= '0';
-               area_info_pipe(ii).clk_info.clk <= '0';
+             area_info_pipe(ii).info_dval <= '0';  
             end loop;
-            mclk_type_is_ddr <= '0';
             
-         else 
+         else            
             
-            -------------------------------------------------------
-            -- misc
-            -------------------------------------------------------
-            if DEFINE_FPA_PIX_PER_MCLK_PER_TAP = 2 then
-               mclk_type_is_ddr <= '1';
-            else
-               mclk_type_is_ddr <= '0';
-            end if;
-            incr0 := '0'& (AREA_FIFO_DVAL and not AFULL);
-            area_fifo_rd_i <= '0';
-            area_info_dval_i <= AREA_FIFO_DVAL and not AFULL;
-            
-            --------------------------------------------------------
-            -- pipe(0): generation de clk_source_cnt_pipe(0)
-            --------------------------------------------------------
-            area_info_pipe(0).raw               <= area_info_i.raw;
-            area_info_pipe(0).user              <= area_info_i.user;
-            area_info_pipe(0).clk_info.clk_id   <= area_info_i.clk_info.clk_id;
-            area_info_pipe(0).info_dval         <= area_info_dval_i;
-            clk_source_cnt_pipe(0)              <= clk_source_cnt_pipe(0) + unsigned(incr0);       
-            if clk_source_cnt_pipe(0) >= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR(to_integer(area_info_i.clk_info.clk_id)) then
-               clk_source_cnt_pipe(0) <= to_unsigned(1, clk_source_cnt_pipe(0)'length);
-               area_fifo_rd_i <= '1';  
+            -----------------------------------------------------
+            -- pipe0 : compteur de mclk_source sur les données
+            -----------------------------------------------------
+            area_info_pipe(0) <= area_info_flow;
+            if area_info_flow.info_dval = '1' then                             
+               mclk_source_cnt_pipe(0) <= mclk_source_cnt_pipe(0) + 1;
+               if area_info_flow.raw.line_pclk_cnt /= area_info_pipe(0).raw.line_pclk_cnt then    -- reset du compteur à chaque debut de pixel 
+                  mclk_source_cnt_pipe(0) <=  to_unsigned(1, mclk_source_cnt_pipe(0)'length);
+               end if;
             end if;
             
             --------------------------------------------------------
             -- pipe(1): generation de clk_info.clk
             --------------------------------------------------------
             area_info_pipe(1)      <= area_info_pipe(0);
-            clk_source_cnt_pipe(1) <= clk_source_cnt_pipe(0);
+            mclk_source_cnt_pipe(1) <= mclk_source_cnt_pipe(0);
             if area_info_pipe(0).info_dval = '1' then
                if mclk_type_is_ddr = '1' then                        -- pour les fpa en mode ddr, l'horloge est à '1' pour les pixels impairs.
                   area_info_pipe(1).clk_info.clk <= area_info_pipe(0).raw.line_pclk_cnt(0);
                else                                                  -- pour les fpa en mode sdr, l'horloge est à '1' pour la moitié de la durée du pixel.
-                  if clk_source_cnt_pipe(0) <= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR_DIV2(to_integer(area_info_pipe(0).clk_info.clk_id)) then
+                  if mclk_source_cnt_pipe(0) <= DEFINE_FPA_CLK_INFO.PCLK_RATE_FACTOR_DIV2(to_integer(area_info_pipe(0).clk_info.clk_id)) then
                      area_info_pipe(1).clk_info.clk <= '1';
                   else
                      area_info_pipe(1).clk_info.clk <= '0';  
@@ -150,9 +241,9 @@ begin
             -- pipe(2): generation de adc_sample_num 
             --------------------------------------------------------
             area_info_pipe(2)      <= area_info_pipe(1);
-            clk_source_cnt_pipe(2) <= clk_source_cnt_pipe(1); 
+            mclk_source_cnt_pipe(2) <= mclk_source_cnt_pipe(1); 
             if area_info_pipe(1).info_dval = '1' then           
-               if clk_source_cnt_pipe(1) = DEFINE_ADC_QUAD_CLK_FACTOR then                                     
+               if mclk_source_cnt_pipe(1) = DEFINE_ADC_QUAD_CLK_FACTOR then                                     
                   adc_sample_num <= adc_sample_num + 1;
                end if;
                if area_info_pipe(1).raw.line_pclk_cnt /= area_info_pipe(0).raw.line_pclk_cnt then    -- reset du compteur à chaque debut de pixel 
@@ -173,6 +264,7 @@ begin
             
          end if;
       end if;
-   end process;    
+   end process;
+   
    
 end rtl;
