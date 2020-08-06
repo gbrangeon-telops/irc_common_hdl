@@ -201,13 +201,19 @@ begin
       if rising_edge(CLK) then
          if sreset = '1' then 
             mclk_source_cnt_pipe(0) <=  to_unsigned(1, mclk_source_cnt_pipe(0)'length);
-            adc_sample_num <= (others => '0');
+            adc_sample_num <= to_unsigned(1, adc_sample_num'length);
             
             for ii in 0 to 3 loop
-             area_info_pipe(ii).info_dval <= '0';  
+               area_info_pipe(ii).info_dval <= '0';  
             end loop;
             
          else            
+            
+            if DEFINE_FPA_PIX_PER_MCLK_PER_TAP = 2 then 
+               mclk_type_is_ddr <= '1';
+            else
+               mclk_type_is_ddr <= '0'; 
+            end if;
             
             -----------------------------------------------------
             -- pipe0 : compteur de mclk_source sur les données
