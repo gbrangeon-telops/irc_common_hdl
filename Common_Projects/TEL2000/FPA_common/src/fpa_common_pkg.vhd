@@ -23,7 +23,7 @@ package fpa_common_pkg is
    constant FPA_ROIC_HERCULES   : std_logic_vector(7 downto 0) := x"14";       -- 
    constant FPA_ROIC_JUPITER    : std_logic_vector(7 downto 0) := x"15";
    constant FPA_ROIC_PELICAND   : std_logic_vector(7 downto 0) := x"16";       -- pelicanD originel sur carte 254
-   constant FPA_ROIC_SCD_PROXY1 : std_logic_vector(7 downto 0) := x"16";       -- Scd proxy1 regfroupe pelicanD et blackBird sur carte 273
+   constant FPA_ROIC_SCD_PROXY1 : std_logic_vector(7 downto 0) := x"16";       -- Scd proxy1 regfroupe pelicanD et blackBird1280 sur carte 273
    constant FPA_ROIC_SCORPIO_LW : std_logic_vector(7 downto 0) := x"17";
    constant FPA_ROIC_SCORPIO_MW : std_logic_vector(7 downto 0) := x"18";
    constant FPA_ROIC_ISC0804    : std_logic_vector(7 downto 0) := x"19"; 
