@@ -1,16 +1,13 @@
 ---------------------------------------------------------------------------------------------------
 --  Copyright (c) Telops Inc. 2007
 --
---  File: spi_tx.vhd
+--  File: LL8_ext_to_spi_tx.vhd
 --  Use: general purpose spi master interface (DACs etc...)
 --  Author: ENO
 --
 --  $Revision: 16251 $
 --  $Author: enofodjie $
 --  $LastChangedDate: 2015-07-02 19:16:22 -0400 (jeu., 02 juil. 2015) $
---
---  Notes: core divides incoming clock by CLKDIV to generate SPI clock must be at least a factor
---         of 2
 ---------------------------------------------------------------------------------------------------
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -19,10 +16,10 @@ use work.fpa_common_pkg.all;
 
 entity LL8_ext_to_spi_tx is
    generic( 
-      OUTPUT_MSB_FIRST : boolean := false;     -- si à true, alors RX_MOSI.DATA(7) est le premier bit à sortir sur le lien SPI. Cela signifie une sortie des bits 7 dowto 0
+      OUTPUT_MSB_FIRST : boolean := false;     -- si à true, alors RX_MOSI.DATA(7) est le premier bit à sortir sur le lien SPI. Cela signifie une sortie des bits 7 downto 0
       -- si à false alors RX_MOSI.DATA(0) est le premier bit à sortir sur le lien SPI. Cela signifie une sortie des bits 0 to 7
-      DATA_TO_CS_DLY : natural range 1 to 31 := 1;  -- delai en coups de SCLK entre la tombée de CS_N et la premiere donnée de SD. SCLK0 est à '0' durant ce delai
-      CS_TO_DATA_DLY : natural range 1 to 31 := 1;  -- delai en coups de SCLK entre le dernier SD et la remontee de CS_N. SCLK0 est à '0' durant ce delai   
+      DATA_TO_CS_DLY : natural range 1 to 31 := 1;  -- delai en coups de SCLK entre le debut du dernier SD et la remontee de CS_N. SCLK0 fait la periode du dernier SD et reste à '0' pour le reste du delai. Mettre à 1 pour aucun delai a la fin du dernier SD
+      CS_TO_DATA_DLY : natural range 1 to 31 := 1;  -- delai en coups de SCLK entre la tombée de CS_N et la premiere donnée de SD. SCLK0 est à '0' durant ce delai
       SCLK0_FREE_RUNNING : boolean := false         -- à true si l'horloge SCLK0 roule tout le temps
       );
    
