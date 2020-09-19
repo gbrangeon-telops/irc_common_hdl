@@ -83,7 +83,6 @@ begin
    DAC_CMD <= dac_cmd_i;
    DAC_DATA <= dac_data_i;
    DAC_ID <= dac_id_i;
-   DAC_ID <= dac_id_i;
    
    --------------------------------------------------
    -- inputs mapping 
@@ -237,9 +236,10 @@ begin
             dac_cfg_fsm <= cfg_idle_st;
             dac_cfg_done <= '0';
             dac_done_last <= '0';
-            dac_done_i <= '0';            
+            dac_done_i <= '0';
             -- pragma translate_off
             dac_data_i <= (others => '0');
+            dac_id_i <= (others => '0');       -- ENO: 19 sept 2020: c'est juste pour eviter des 'X' en simuation car en fait, la config d'initialisation des DACs ne prend pas en consideration le num du DAC. En effet, dans la config d'init, le num est un un "don't care".
             -- pragma translate_on
          else    
             
