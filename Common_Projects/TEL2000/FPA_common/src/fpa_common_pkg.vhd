@@ -24,6 +24,7 @@ package fpa_common_pkg is
    constant FPA_ROIC_JUPITER    : std_logic_vector(7 downto 0) := x"15";
    constant FPA_ROIC_PELICAND   : std_logic_vector(7 downto 0) := x"16";       -- pelicanD originel sur carte 254
    constant FPA_ROIC_SCD_PROXY1 : std_logic_vector(7 downto 0) := x"16";       -- Scd proxy1 regfroupe pelicanD et blackBird1280 sur carte 273
+   constant FPA_ROIC_SCD_PROXY2 : std_logic_vector(7 downto 0) := x"16";       -- Scd proxy2 regroupe BB1920_90Hz, BB1920_115Hz, BB1920_120Hz
    constant FPA_ROIC_SCORPIO_LW : std_logic_vector(7 downto 0) := x"17";
    constant FPA_ROIC_SCORPIO_MW : std_logic_vector(7 downto 0) := x"18";
    constant FPA_ROIC_ISC0804    : std_logic_vector(7 downto 0) := x"19"; 
@@ -36,6 +37,7 @@ package fpa_common_pkg is
    --------------------------------------------------------------------------
    constant PROXY_MGLK          : std_logic_vector(2 downto 0) := "000";
    constant PROXY_SCD           : std_logic_vector(2 downto 0) := "001";
+   constant PROXY2_SCD          : std_logic_vector(2 downto 0) := "010";
    
    -------------------------------------------------------------------------- 
    -- les Gains de FPA dans le module FPA_INTF (FPAs analogiques)
@@ -341,6 +343,16 @@ package fpa_common_pkg is
       sol         : std_logic;   -- start of line
       eol         : std_logic;   -- eol of line
       data        : std_logic_vector(35 downto 0); 
+      dval        : std_logic;
+      support_busy : std_logic;
+   end record;
+   
+   type t_ll_ext_mosi56 is record
+      sof         : std_logic;
+      eof         : std_logic; 
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic_vector(55 downto 0); 
       dval        : std_logic;
       support_busy : std_logic;
    end record;
