@@ -24,7 +24,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.Fpa_Common_Pkg.all;
 use work.FPA_Define.all;
-
+use work.proxy_define.all;
 
 entity afpa_flow_mux is
    

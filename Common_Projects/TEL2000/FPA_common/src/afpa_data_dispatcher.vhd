@@ -24,6 +24,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.Fpa_Common_Pkg.all;
 use work.FPA_Define.all;
+use work.proxy_define.all;
 use work.tel2000.all;
 use work.img_header_define.all;
 

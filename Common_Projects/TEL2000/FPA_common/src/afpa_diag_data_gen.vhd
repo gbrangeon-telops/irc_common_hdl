@@ -24,6 +24,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
 use work.FPA_define.all;
 use work.fpa_common_pkg.all;
+use work.proxy_define.all;
 
 
 entity afpa_diag_data_gen is
@@ -196,7 +197,7 @@ begin
       );
    
    --------------------------------------------------
-   -- 16 channels diag data gen 
+   -- 4 channels diag data gen 
    -------------------------------------------------- 
    -- sampling clk enable
    UCa: Clk_Divider
