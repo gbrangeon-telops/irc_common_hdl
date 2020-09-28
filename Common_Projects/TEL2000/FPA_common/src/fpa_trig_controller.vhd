@@ -75,7 +75,7 @@ architecture RTL of fpa_trig_controller is
          );
    end component;
    
-   type fpa_trig_sm_type is (idle, int_trig_st, check_trig_ctrl_mode_st, check_int_feedback_st, wait_readout_start_st, wait_all_end_st, wait_readout_end_st, wait_int_end_st, apply_dly_st, check_readout_st, int_sanity_check_st);
+   type fpa_trig_sm_type is (idle, int_trig_st, check_trig_ctrl_mode_st, check_int_feedback_st, wait_readout_start_st, wait_readout_end_st, wait_int_end_st, apply_dly_st, check_readout_st, int_sanity_check_st);
    type trig_timeout_sm_type is (idle, cnt_st);
    signal fpa_trig_sm                  : fpa_trig_sm_type;
    signal trig_timeout_sm              : trig_timeout_sm_type;
@@ -91,9 +91,7 @@ architecture RTL of fpa_trig_controller is
    signal timeout_count                : unsigned(FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_TIMEOUT_DLY'LENGTH-1 downto 0);
    signal acq_trig_done                : std_logic;
    signal fpa_readout_i                : std_logic;
-   signal fpa_readout_last             : std_logic;
    signal fpa_int_feedbk_i             : std_logic;
-   signal fpa_int_feedbk_last          : std_logic;
    signal trig_ctler_en_i              : std_logic;
    signal prog_trig_in_i               : std_logic;
    signal apply_dly_then_check_readout : std_logic;
@@ -102,14 +100,6 @@ architecture RTL of fpa_trig_controller is
    signal nacq_mode_first_int          : std_logic;  -- ENO. 07 mars. 2020 : ce signal reste à '1' pendant le premier trig et son image associée lors d'une entree en non_acq_mode.Tres utile pour les detecteurs en RWI.
    signal acq_in_progress              : std_logic;
    signal check_all_end_then_apply_dly : std_logic;
-   
-   type readout_monitoring_sm_type is (idle, wait_for_readout_end);
-   signal readout_monitoring_sm                  : readout_monitoring_sm_type;
-   signal readout_ended                          : std_logic;
-   
-   type intg_monitoring_sm_type is (idle, wait_for_intg_end);
-   signal intg_monitoring_sm                     : intg_monitoring_sm_type;
-   signal intg_ended                             : std_logic; 
    
    --   -- attribute dont_touch                : string;
    --   -- attribute dont_touch of acq_trig_o  : signal is "true";
@@ -195,6 +185,7 @@ begin
             prog_trig_o <= '0';
             done <= '0';
             fpa_trig_sm <= idle;
+            -- fpa_readout_last <= '0';
             acq_trig_done <= '0';
             apply_dly_then_check_readout <= '0';
             check_all_end_then_apply_dly <= '0';
@@ -274,13 +265,7 @@ begin
                      xtra_trig_o <= '0';                                   
                      acq_trig_o <= '0'; 
                      prog_trig_o <= '0';
-                     
-                     if FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ALL_END_TO_TRIG_START then
-                        fpa_trig_sm <= wait_all_end_st;
-                     else
-                        fpa_trig_sm <= check_int_feedback_st;
-                     end if; 
-                     
+                     fpa_trig_sm <= check_int_feedback_st;
                   end if;
                   
                -- on attend le feedback d'intégration
@@ -297,6 +282,7 @@ begin
                -- verif du mode du contrôleur de trig
                when check_trig_ctrl_mode_st =>
                   apply_dly_then_check_readout <= '0';
+                  check_all_end_then_apply_dly <= '0'; 
                   if FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE     = MODE_READOUT_END_TO_TRIG_START then  -- ENO: 10 avril 2019: ne plus utiliser le mode MODE_READOUT_END_TO_TRIG_START pour les détecteurs analogiques puisqu'il n'y a pas de timeout_i 
                      fpa_trig_sm <= wait_readout_start_st;
                   elsif  FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE = MODE_TRIG_START_TO_TRIG_START then
@@ -309,8 +295,9 @@ begin
                   elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ITR_INT_END_TO_TRIG_START then
                      fpa_trig_sm <= wait_int_end_st;
                      apply_dly_then_check_readout <= '1';                    
-                  --elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ALL_END_TO_TRIG_START then      -- fait specialement pour les dtecteurs RWI
-                     --fpa_trig_sm <= wait_readout_start_st;                   
+                  elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ALL_END_TO_TRIG_START then      -- fait specialement pour les dtecteurs RWI
+                     fpa_trig_sm <= wait_readout_start_st;
+                     check_all_end_then_apply_dly <= '1';                    
                   end if;
                   
                -- mode_readout_end_to_trig_start : on attend le debut du readout 
@@ -322,25 +309,17 @@ begin
                -- mode_readout_end_to_trig_start : on attend la fin du readout 
                when wait_readout_end_st =>			   
                   if fpa_readout_i = '0' then           --! fin du readout                     
-                     fpa_trig_sm <= apply_dly_st;				 
+                     if check_all_end_then_apply_dly = '1' then
+                        fpa_trig_sm <= wait_int_end_st;
+                     else
+                        fpa_trig_sm <= apply_dly_st;
+                     end if;					 
                   end if;
                   
                -- mode_int_end_to_trig_start : on attend la fin de l'intégration 
                when wait_int_end_st =>
                   if fpa_int_feedbk_i = '0' then
                      fpa_trig_sm <= apply_dly_st;                     
-                  end if;
-               
-               -- on attend la fin de l'intégration et du readout.
-               when wait_all_end_st =>		   
-                  if timeout_i = '1' and DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL then --! en l'absence du feedback d'intégration, le timeout_i permet de retour en idle en ayant au moins respectée la frequence minimale des trigs 
-                        fpa_trig_sm <= idle; 
-                  elsif readout_ended = '1' and intg_ended = '1' then --! on attend le feedback de l'integration qui peut ne pas venir dans le cas des détecteurs numeriques (le détecteur n'est pas allumé bien que le proxy le soit).
-                     fpa_trig_sm <= apply_dly_st;
-                  end if;
-                  
-                  if fpa_int_feedbk_i = '1' then 
-                     acq_in_progress <= acq_mode;
                   end if;
                   
                   -- Dans le mode_int_end_to_trig_start : on observe le delai entre la fin de l'integration et le debut du prochain trig
@@ -424,72 +403,5 @@ begin
       end if;
       
    end process;
-
-   U4: process(CLK)
-   begin
-      if rising_edge(CLK) then 
-         if sreset = '1' then  
-            readout_ended <= '0'; 
-            fpa_readout_last <= '0';
-            readout_monitoring_sm <= idle;
-         else            
-            case readout_monitoring_sm is 
-               when idle =>  
-                  if timeout_i = '1'  and DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL then 
-                     readout_ended <= '0';
-                  elsif (acq_trig_o = '1' or xtra_trig_o = '1' or prog_trig_o = '1') and done = '1' then
-                     readout_ended <= '0';
-                     readout_monitoring_sm <= wait_for_readout_end;
-                  end if;
-
-               when wait_for_readout_end =>
-                  if timeout_i = '1'  and DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL then 
-                     readout_ended <= '0';
-                     readout_monitoring_sm <= idle; 
-                  elsif fpa_readout_i = '0' and fpa_readout_last = '1' then 
-                     readout_ended <= '1';
-                     readout_monitoring_sm <= idle; 
-                  end if;
-
-               when others =>
-               
-            end case;
-         end if;         
-      end if;
-      
-   end process;
-
-   U5: process(CLK)
-   begin
-      if rising_edge(CLK) then 
-         if sreset = '1' then  
-            intg_ended <= '0';
-            fpa_int_feedbk_last <= '0';
-            intg_monitoring_sm <= idle;
-         else            
-            case intg_monitoring_sm is 
-               
-               when idle =>  
-                  if timeout_i = '1'  and DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL then 
-                     intg_ended <= '0';
-                  elsif (acq_trig_o = '1' or xtra_trig_o = '1' or prog_trig_o = '1') and done = '1' then
-                     intg_ended <= '0';
-                     intg_monitoring_sm <= wait_for_intg_end;
-                  end if;
-
-               when wait_for_intg_end => 
-                  if timeout_i = '1'  and DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL then
-                     intg_ended <= '0';
-                     intg_monitoring_sm <= idle;   
-                  elsif fpa_int_feedbk_i = '0' and fpa_int_feedbk_last = '1' then 
-                     intg_ended <= '1';
-                     intg_monitoring_sm <= idle; 
-                  end if;
-
-               when others =>
-               
-            end case;
-         end if;
-      end if;          
-   end process;
+   
 end RTL;
