@@ -16,21 +16,22 @@ package fpa_common_pkg is
    -- les types de FPA
    --------------------------------------------------------------------------
    -- Pour toutes  les cartes EFA-00251-ZZZ, EFA-00253-ZZZ 
-   constant FPA_ROIC_MARS       : std_logic_vector(7 downto 0) := x"10";       -- 
-   constant FPA_ROIC_ISC0209    : std_logic_vector(7 downto 0) := x"11";       -- 
-   constant FPA_ROIC_ISC0207    : std_logic_vector(7 downto 0) := x"12";       -- 
-   constant FPA_ROIC_HAWK       : std_logic_vector(7 downto 0) := x"13";       -- 
-   constant FPA_ROIC_HERCULES   : std_logic_vector(7 downto 0) := x"14";       -- 
-   constant FPA_ROIC_JUPITER    : std_logic_vector(7 downto 0) := x"15";
-   constant FPA_ROIC_PELICAND   : std_logic_vector(7 downto 0) := x"16";       -- pelicanD originel sur carte 254
-   constant FPA_ROIC_SCD_PROXY1 : std_logic_vector(7 downto 0) := x"16";       -- Scd proxy1 regfroupe pelicanD et blackBird1280 sur carte 273
-   constant FPA_ROIC_SCD_PROXY2 : std_logic_vector(7 downto 0) := x"16";       -- Scd proxy2 regroupe BB1920_90Hz, BB1920_115Hz, BB1920_120Hz
-   constant FPA_ROIC_SCORPIO_LW : std_logic_vector(7 downto 0) := x"17";
-   constant FPA_ROIC_SCORPIO_MW : std_logic_vector(7 downto 0) := x"18";
-   constant FPA_ROIC_ISC0804    : std_logic_vector(7 downto 0) := x"19"; 
-   constant FPA_ROIC_SUPHAWK    : std_logic_vector(7 downto 0) := x"20";
-   constant FPA_ROIC_XRO3503    : std_logic_vector(7 downto 0) := x"21";
-   constant FPA_ROIC_UNKNOWN    : std_logic_vector(7 downto 0) := x"FF";       --  interface inconnue 
+   constant FPA_ROIC_MARS          : std_logic_vector(7 downto 0) := x"10";       -- 
+   constant FPA_ROIC_ISC0209       : std_logic_vector(7 downto 0) := x"11";       -- 
+   constant FPA_ROIC_ISC0207       : std_logic_vector(7 downto 0) := x"12";       -- 
+   constant FPA_ROIC_HAWK          : std_logic_vector(7 downto 0) := x"13";       -- 
+   constant FPA_ROIC_HERCULES      : std_logic_vector(7 downto 0) := x"14";       -- 
+   constant FPA_ROIC_JUPITER       : std_logic_vector(7 downto 0) := x"15";
+   constant FPA_ROIC_PELICAND      : std_logic_vector(7 downto 0) := x"16";       -- pelicanD originel sur carte 254
+   constant FPA_ROIC_BLACKBIRD1280 : std_logic_vector(7 downto 0) := x"16";       
+   constant FPA_ROIC_SCD_PROXY1    : std_logic_vector(7 downto 0) := x"16";       -- regroupe Pelican et BlackBird1280 sur carte 273
+   constant FPA_ROIC_SCD_PROXY2    : std_logic_vector(7 downto 0) := x"16";       -- Scd proxy2 regroupe BB1920_90Hz, BB1920_115Hz, BB1920_120Hz
+   constant FPA_ROIC_SCORPIO_LW    : std_logic_vector(7 downto 0) := x"17";
+   constant FPA_ROIC_SCORPIO_MW    : std_logic_vector(7 downto 0) := x"18";
+   constant FPA_ROIC_ISC0804       : std_logic_vector(7 downto 0) := x"19"; 
+   constant FPA_ROIC_SUPHAWK       : std_logic_vector(7 downto 0) := x"20";
+   constant FPA_ROIC_XRO3503       : std_logic_vector(7 downto 0) := x"21";
+   constant FPA_ROIC_UNKNOWN       : std_logic_vector(7 downto 0) := x"FF";       --  interface inconnue 
    
    -------------------------------------------------------------------------- 
    -- les types de PROXY (détecteurs numériques)
