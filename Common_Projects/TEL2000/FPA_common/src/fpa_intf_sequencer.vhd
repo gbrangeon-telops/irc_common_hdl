@@ -79,7 +79,7 @@ architecture RTL of fpa_intf_sequencer is
    signal fpa_sequencer_sm    : fpa_sequencer_sm_type;
    signal sreset              : std_logic;
    --signal fpa_intf_type_err_i : std_logic;
-   signal fpa_power_i           : std_logic;
+   signal fpa_power_i         : std_logic;
    signal trig_ctler_en_i     : std_logic; 
    signal fpa_driver_en_i     : std_logic;
    signal trig_ctler_done     : std_logic;
@@ -150,15 +150,7 @@ begin
                fpa_hardw_type <= failure;
                fpa_hardw_err <= '1';
             end if; 
-            
-            -- on vérifie que l'électronique est à jour
-            -- if FPA_HARDW_STAT.HARDW_UP2DATE = '1' then
             fpa_hardw_up2date <= success;
-            --   fpa_hardw_err <= '0';
-            --else
-            --   fpa_hardw_up2date <= failure;
-            --   fpa_hardw_err <= '1';
-            --end if;
             
          else                
             fpa_hardw_up2date <= not_available;
@@ -195,7 +187,6 @@ begin
                fpa_vhd_stat_i <= not_available;
                fpa_vhd_err <= '0';
             end if;
-            --
             -- on vérifie que les pilotes software (PPC/µBlaze) sont conformes à la definition dans FPA_define
             if FPA_SOFTW_STAT.DVAL = '1' then           -- dval est requis car cela prend du temps au PPC pour envoyer l'info au Hardw
                if FPA_SOFTW_STAT.FPA_ROIC = DEFINE_FPA_ROIC and FPA_SOFTW_STAT.FPA_OUTPUT = DEFINE_FPA_OUTPUT then 
@@ -303,7 +294,7 @@ begin
             fpa_power_i <= '0'; 
          else                      
             -- le proxy ou le FPA ne peut s'allumer que ssi : 
-            -- 1) le hawdware et le firmare sont conformes
+            -- 1) le hawdware et le firmware sont conformes
             -- 2) le refroidisseur est en fonction
             -- 3) la température du détecteur est conforme
             -- 4) on reçoit l'ordre d'allumage en provenance du PPC/µBlaze
