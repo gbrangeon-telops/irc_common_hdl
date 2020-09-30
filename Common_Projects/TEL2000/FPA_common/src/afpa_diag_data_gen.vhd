@@ -197,28 +197,37 @@ begin
       );
    
    --------------------------------------------------
+   -- pixel_samp_trig gen
+   --------------------------------------------------
+   UgenA : if (DEFINE_ADC_QUAD_CLK_FACTOR = 1) generate  -- cas où diag_quad_clk est identique à mclk_source
+      pixel_samp_trig <= '1';   
+   end generate;
+   
+   UgenB : if (DEFINE_ADC_QUAD_CLK_FACTOR /= 1) generate  -- cas où diag_quad_clk est issue de mclk_source divisé par un facteur > 1
+      -- sampling clk enable
+      UCa: Clk_Divider
+      Generic map(
+         Factor => DEFINE_ADC_QUAD_CLK_FACTOR
+         )
+      Port map( 
+         Clock   => MCLK_SOURCE, 
+         Reset   => sreset, 
+         Clk_div => diag_quad_clk_i   -- attention, c'est en realité un clock enable.
+         );  
+      
+      -- sampling trig en mode diag
+      UCb : process(MCLK_SOURCE)
+      begin
+         if rising_edge(MCLK_SOURCE) then
+            diag_quad_clk_last <= diag_quad_clk_i;
+            pixel_samp_trig <= not diag_quad_clk_last and diag_quad_clk_i;
+         end if;
+      end process;
+   end generate;
+   
+   --------------------------------------------------
    -- 4 channels diag data gen 
-   -------------------------------------------------- 
-   -- sampling clk enable
-   UCa: Clk_Divider
-   Generic map(
-      Factor => DEFINE_ADC_QUAD_CLK_FACTOR
-      )
-   Port map( 
-      Clock   => MCLK_SOURCE, 
-      Reset   => sreset, 
-      Clk_div => diag_quad_clk_i   -- attention, c'est en realité un clock enable.
-      );  
-   
-   -- sampling trig en mode diag
-   UCb : process(MCLK_SOURCE)
-   begin
-      if rising_edge(MCLK_SOURCE) then
-         diag_quad_clk_last <= diag_quad_clk_i;
-         pixel_samp_trig <= not diag_quad_clk_last and diag_quad_clk_i;
-      end if;
-   end process;
-   
+   --------------------------------------------------
    -- mapping avec generateur de données
    U1 : for ii in 0 to C_DIAG_TAP_NUMBER_M1 generate 
       diag_line_ii : fpa_diag_line_gen 
@@ -347,7 +356,7 @@ begin
                
                when idle =>
                   aoi_img_end <= '0';
-                   for ii in 0 to C_DIAG_TAP_NUMBER_M1 loop
+                  for ii in 0 to C_DIAG_TAP_NUMBER_M1 loop
                      data(ii) <= (others => '0');                  -- offset electronique vaut 0 en mode diag
                   end loop;
                   dly_cnt <= (others => '0');
