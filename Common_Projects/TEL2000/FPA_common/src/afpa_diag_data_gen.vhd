@@ -60,6 +60,18 @@ architecture rtl of afpa_diag_data_gen is
          CLK : in std_logic);
    end component;
    
+   component double_sync is
+      generic(
+         INIT_VALUE : bit := '0'
+         );
+      port(
+         D     : in std_logic;
+         Q     : out std_logic := '0';
+         RESET : in std_logic;
+         CLK   : in std_logic
+         );
+   end component;
+   
    component Clk_Divider is
       Generic(	
          Factor : integer := 2);		
@@ -101,7 +113,8 @@ architecture rtl of afpa_diag_data_gen is
          DIAG_DATA          : out std_logic_vector(15 downto 0);
          DIAG_DVAL          : out std_logic; 
          DIAG_SOL           : out std_logic;
-         DIAG_EOL           : out std_logic;   
+         DIAG_EOL           : out std_logic;
+         DIAG_LVAL          : out std_logic;
          DIAG_DONE          : out std_logic
          );
    end component;
@@ -144,10 +157,12 @@ architecture rtl of afpa_diag_data_gen is
    signal diag_done_last    : std_logic;
    signal diag_sol          : std_logic_vector(C_DIAG_TAP_NUMBER_M1 downto 0);
    signal diag_eol          : std_logic_vector(C_DIAG_TAP_NUMBER_M1 downto 0);
+   signal diag_lval         : std_logic_vector(C_DIAG_TAP_NUMBER_M1 downto 0);
    signal aoi_sof_i         : std_logic;
    signal aoi_eof_i         : std_logic;
    signal aoi_sol_i         : std_logic;
    signal aoi_eol_i         : std_logic;
+   signal aoi_lval_i        : std_logic;
    signal aoi_fval_i        : std_logic;
    signal diag_eol_last     : std_logic;
    signal aoi_img_end       : std_logic;
@@ -160,6 +175,10 @@ architecture rtl of afpa_diag_data_gen is
    signal int_fifo_dout     : std_logic_vector(2 downto 0);
    signal acq_data_i        : std_logic;
    signal acq_int_o         : std_logic;
+   signal acq_int_i         : std_logic;
+   signal sim_cnt           : unsigned(7 downto 0) := (others => '0');
+   signal aoi_pix_fval_i    : std_logic;
+   
    
 begin
    
@@ -174,7 +193,9 @@ begin
    DIAG_DATA(78)           <= '0';
    DIAG_DATA(77)           <= '0';                  -- non aoi dval = '0' pour que le patron de tests ne bousille pas le contenu des regitres de stockage des refrences de calculs de gain et offset deja existances
    
-   DIAG_DATA(76 downto 63) <= (others => '0');      -- aoi spares(14 downto 1)
+   DIAG_DATA(76 downto 65) <= (others => '0');      -- aoi spares(14 downto 3)
+   DIAG_DATA(64)           <= aoi_pix_fval_i;       -- pix_fval
+   DIAG_DATA(63)           <= aoi_lval_i;           -- lval
    DIAG_DATA(62)           <= acq_data_i;           -- aoi_spare(0)
    
    DIAG_DATA(61)           <= aoi_dval_i;           -- aoi_dval          
@@ -195,6 +216,25 @@ begin
       CLK    => MCLK_SOURCE,
       SRESET => sreset
       );
+   
+   --------------------------------------------------
+   -- double sync 
+   --------------------------------------------------
+   U0A: double_sync
+   port map(
+      CLK => MCLK_SOURCE,
+      D   => ACQ_INT,
+      Q   => acq_int_i,
+      RESET => sreset
+      ); 
+   
+   U0B: double_sync
+   port map(
+      CLK => MCLK_SOURCE,
+      D   => FPA_INT,
+      Q   => fpa_int_i,
+      RESET => sreset
+      ); 
    
    --------------------------------------------------
    -- pixel_samp_trig gen
@@ -246,7 +286,8 @@ begin
          DIAG_DATA     => diag_data_i(ii),
          DIAG_DVAL     => diag_dval_i(ii),
          DIAG_SOL      => diag_sol(ii),
-         DIAG_EOL      => diag_eol(ii),   
+         DIAG_EOL      => diag_eol(ii),
+         DIAG_LVAL     => diag_lval(ii),
          DIAG_DONE     => diag_done(ii)
          );
    end generate; 
@@ -268,7 +309,8 @@ begin
       DIAG_DATA   => open,
       DIAG_DVAL   => open,
       DIAG_SOL    => open,
-      DIAG_EOL    => open,   
+      DIAG_EOL    => open,
+      DIAG_LVAL   => open,
       DIAG_DONE   => open
       );
    -- pragma translate_on
@@ -301,6 +343,7 @@ begin
             diag_fsm <=  idle;
             aoi_dval_i <= '0';
             aoi_fval_i <= '0';
+            aoi_lval_i <= '0';
             diag_frame_done <= '0';
             fpa_int_last <= '0';
             diag_line_gen_en <= '0';
@@ -313,28 +356,26 @@ begin
             img_pending_cnt <= (others => '0');
             int_fifo_wr <= '0';
             int_fifo_rd <= '0';
-            fpa_int_i <= '0';
+            -- fpa_int_i <= '0';
+            aoi_pix_fval_i <= '0';
             
          else   
             
             diag_done_last <= diag_done(0);            
-            fpa_int_i <= FPA_INT;
+            -- fpa_int_i <= FPA_INT;
             fpa_int_last <= fpa_int_i; 
             diag_eol_last <= diag_eol(0);
             
-            int_fifo_din(2) <= ACQ_INT;                         -- acq_int rentre dans le fifo
+            int_fifo_din(2) <= acq_int_i;                         -- acq_int rentre dans le fifo
             int_fifo_din(1) <= not fpa_int_last and fpa_int_i;  -- front montant
             int_fifo_din(0) <= fpa_int_last and not fpa_int_i;  -- front descendant
             int_fifo_wr     <= (fpa_int_last xor fpa_int_i) and ENABLE;          -- on ecrit les edges dans le fifo
             
             -- pragma translate_off
-            if diag_frame_done = '0' then
-               if aoi_dval_i = '1' then 
-                  pix_count <= pix_count + 2;
-               end if;
-            else
-               pix_count <= (others => '0');               
-            end if;             
+            if sim_cnt < 100  then               
+               int_fifo_wr <= '0';
+               sim_cnt <= sim_cnt + 1;            
+            end if;            
             -- pragma translate_on
             
             -- configuration des generateurs de lignes
@@ -415,9 +456,6 @@ begin
                         data(ii) <= diag_data_i(ii);                      -- dégradé vers la droite 
                      end loop;
                   end if;                  
-                  --if diag_done(0) = '1' and diag_done_last = '0' then  
-                  --diag_fsm <=  check_end_st;
-                  --end if;
                   
                   -- compteur de lignes
                   if diag_eol(0) = '0' and diag_eol_last = '1' then  
@@ -427,6 +465,9 @@ begin
                   -- identificateurs de trames
                   if line_cnt = 1 then 
                      aoi_sof_i <= diag_sol(0);
+                     if diag_sol(0) = '1' then
+                        aoi_pix_fval_i <= '1';
+                     end if;
                   else
                      aoi_sof_i <= '0';
                   end if;
@@ -436,8 +477,14 @@ begin
                   else
                      aoi_eof_i <= '0';
                   end if;
+                  
+                  if aoi_eof_i = '1' and aoi_dval_i = '1' then
+                     aoi_pix_fval_i <= '0';
+                  end if;
+                  
                   aoi_sol_i <= diag_sol(0);
                   aoi_eol_i <= diag_eol(0);
+                  aoi_lval_i <= diag_lval(0);
                
                when check_end_st =>
                   if line_cnt >= to_integer(FPA_INTF_CFG.DIAG.YSIZE) then
@@ -452,14 +499,6 @@ begin
                   if lovh_dly_cnt >= to_integer(FPA_INTF_CFG.DIAG.LOVH_MCLK_SOURCE) then 
                      diag_fsm <= cfg_line_gen_st;
                   end if;
-                  
-                  -- when elec_ofs_data_st =>
-                  --                  aoi_fval_i <= '0';
-                  --                  elec_ofs_start_i <= pixel_samp_trig;
-                  --                  elec_ofs_dval_i <= pixel_samp_trig;
-                  --                  if pixel_samp_trig = '1' then       -- on s'assure que le elec_ofs_start_i est bien ecrit
-                  --                     diag_fsm <=  idle;
-                  --                  end if;
                
                when others =>
                

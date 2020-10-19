@@ -31,7 +31,7 @@ entity double_sync is
 end double_sync;
 
 architecture RTL of double_sync is
-	signal temp : std_logic;
+	signal temp : std_logic := '0';
 	component fd
 		generic ( INIT : bit := '0' );
 		port (

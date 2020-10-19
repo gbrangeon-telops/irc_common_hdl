@@ -100,6 +100,7 @@ architecture RTL of fpa_trig_controller is
    signal nacq_mode_first_int          : std_logic;  -- ENO. 07 mars. 2020 : ce signal reste à '1' pendant le premier trig et son image associée lors d'une entree en non_acq_mode.Tres utile pour les detecteurs en RWI.
    signal acq_in_progress              : std_logic;
    signal check_all_end_then_apply_dly : std_logic;
+   signal xtra_in_progress             : std_logic;
    
    --   -- attribute dont_touch                : string;
    --   -- attribute dont_touch of acq_trig_o  : signal is "true";
@@ -118,7 +119,7 @@ begin
    XTRA_TRIG_OUT <=  xtra_trig_o; --! 
    PROG_TRIG_OUT <=  prog_trig_o; --! 
    
-   TRIG_CTLER_STAT(7) <= '0';
+   TRIG_CTLER_STAT(7) <= xtra_in_progress;
    TRIG_CTLER_STAT(6) <= acq_in_progress;
    TRIG_CTLER_STAT(5) <= acq_mode_first_int;
    TRIG_CTLER_STAT(4) <= acq_mode;
@@ -193,6 +194,7 @@ begin
             acq_mode_first_int <= '0';
             acq_in_progress <= '0';
             nacq_mode_first_int <= '0';
+            xtra_in_progress <= '0';
             
          else
             
@@ -224,6 +226,7 @@ begin
                   acq_trig_done <= '1';
                   acq_mode_first_int <= '0';
                   acq_in_progress <= '0';
+                  xtra_in_progress <= '0';
                   nacq_mode_first_int <= '0';
                   if trig_ctler_en_i = '1' then  --! TRIG_CTLER_EN = '1' ssi le détecteur/proxy est allumé ou si on est en mode diag
                      if ACQ_TRIG_IN = '1' then
@@ -273,6 +276,7 @@ begin
                   if fpa_int_feedbk_i = '1' then --! on attend le feedback de l'integration qui peut ne pas venir dans le cas des détecteurs numeriques (le détecteur n'est pas allumé bien que le proxy le soit).
                      fpa_trig_sm <= check_trig_ctrl_mode_st;
                      acq_in_progress <= acq_mode;
+                     xtra_in_progress <= not acq_mode;
                   else
                      if timeout_i = '1' and DEFINE_FPA_OUTPUT = OUTPUT_DIGITAL then --! en l'absence du feedback d'intégration, le timeout_i permet de retour en idle en ayant au moins respectée la frequence minimale des trigs 
                         fpa_trig_sm <= idle; 

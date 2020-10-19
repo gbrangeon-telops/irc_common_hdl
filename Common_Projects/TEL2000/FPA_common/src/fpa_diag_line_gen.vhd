@@ -47,7 +47,8 @@ entity fpa_diag_line_gen is
       DIAG_DATA          : out std_logic_vector(15 downto 0);   --! sortie des données
       DIAG_DVAL          : out std_logic; --! signal de vaidation du bus des données
       DIAG_SOL           : out std_logic; --! Start of Line
-      DIAG_EOL           : out std_logic; --! End of Line     
+      DIAG_EOL           : out std_logic; --! End of Line
+      DIAG_LVAL          : out std_logic; --! Line valid
       DIAG_DONE          : out std_logic 
       -- absence de MISO ou AFULL car on ne peut arrêter le détecteur
       );
@@ -66,13 +67,14 @@ architecture RTL of fpa_diag_line_gen is
    
    type diag_gen_sm_type is (idle, samp_on_st, samp_off_st);
    
-   constant SAMP_NUM_PER_PIX_M1              : natural := SAMP_NUM_PER_PIX -1;
+   constant SAMP_NUM_PER_PIX_M1              : natural := SAMP_NUM_PER_PIX - 1;
    
    signal diag_gen_sm      : diag_gen_sm_type;
    signal sreset           : std_logic;
    signal diag_sol_i       : std_logic;
    signal diag_eol_i       : std_logic;
    signal diag_dval_i      : std_logic;
+   signal diag_lval_i      : std_logic;
    signal diag_data_i      : integer range -65535 to 65535;
    signal pix_cnt          : unsigned(LINE_SIZE'length-1 downto 0);
    signal done             : std_logic;
@@ -87,8 +89,9 @@ begin
    -------------------------------------------------- 
    DIAG_DATA <= std_logic_vector(to_signed(diag_data_i, DIAG_DATA'LENGTH));       
    DIAG_DVAL <= diag_dval_i;  
-   DIAG_SOL <= diag_sol_i;
-   DIAG_EOL <= diag_eol_i;   
+   DIAG_SOL  <= diag_sol_i;
+   DIAG_EOL  <= diag_eol_i;
+   DIAG_LVAL <= diag_lval_i;
    DIAG_DONE <= done;
    
    --------------------------------------------------
@@ -104,7 +107,7 @@ begin
    --------------------------------------------------
    -- generation des données diag iddca numériques
    -------------------------------------------------- 
-   d_iddca_gen : if (not ANALOG_IDDCA) generate 
+   d_iddca_gen : if (not ANALOG_IDDCA) or (SAMP_NUM_PER_PIX = 1) generate 
       
       U2: process(CLK)
       begin       
@@ -113,6 +116,7 @@ begin
                diag_sol_i <= '0';
                diag_eol_i <= '0';
                diag_dval_i <= '0';
+               diag_lval_i <= '0';
                done <= '0';
                diag_gen_sm <= idle;
             else
@@ -139,11 +143,13 @@ begin
                         diag_dval_i <= '1';
                         if pix_cnt = 1 then
                            diag_sol_i <= '1';
+                           diag_lval_i <= '1';
                         elsif pix_cnt = line_size_i then
                            diag_eol_i <= '1';                        
                         elsif pix_cnt > line_size_i then
                            diag_gen_sm <= idle;
                            diag_dval_i <= '0';
+                           diag_lval_i <= '0';
                         end if;          
                      else
                         diag_dval_i <= '0';                    
@@ -163,7 +169,7 @@ begin
    --------------------------------------------------
    -- generation des données diag iddcas analogiques
    --------------------------------------------------   
-   a_iddca_gen : if ANALOG_IDDCA generate  
+   a_iddca_gen : if ANALOG_IDDCA and (SAMP_NUM_PER_PIX > 1) generate  
       
       U2: process(CLK)
       begin       
@@ -172,7 +178,8 @@ begin
                diag_sol_i <= '0';
                diag_eol_i <= '0';
                diag_dval_i <= '0';
-               done <= '0';         
+               done <= '0';
+               diag_lval_i <= '0';
                diag_gen_sm <= idle;
             else
                
@@ -200,11 +207,12 @@ begin
                      end if;                   
                      if pix_cnt = 1 then
                         diag_sol_i <= '1';
+                        diag_lval_i <= '1';
                      elsif pix_cnt = line_size_i then
                         diag_eol_i <= '1';                     
                      end if; 
                   
-                  when samp_off_st  =>       -- l'existence de cet état suppose que  freq(CLK)/freq(PIXEL_SAMP_TRIG) = un entier > 1
+                  when samp_off_st  =>       -- l'existence de cet état suppose que  freq(CLK)/freq(PIXEL_SAMP_TRIG) = un entier pair > 1
                      diag_dval_i <= '0';  
                      samp_cnt <= samp_cnt + 1;
                      diag_gen_sm <= samp_on_st;                   
@@ -213,6 +221,7 @@ begin
                         diag_data_i <= diag_data_i + incr_value_i;
                         pix_cnt <= pix_cnt + 1;
                         if pix_cnt = line_size_i then
+                           diag_lval_i <= '0';
                            diag_gen_sm <= idle;
                         end if;
                      end if;                     
