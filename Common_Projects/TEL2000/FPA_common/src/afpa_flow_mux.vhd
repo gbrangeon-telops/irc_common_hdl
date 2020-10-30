@@ -114,8 +114,10 @@ begin
                   if FPA_FVAL = '1' or DIAG_FVAL = '1' then 
                      mode_fsm <= init_st2;
                   end if;
-                  -- pragma translate_off
-                  mode_fsm <= init_st2;
+                  -- pragma translate_off 
+                  if FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '0' or FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '1' then -- pour eviter 'U'
+                     mode_fsm <= init_st2;
+                  end if;
                   -- pragma translate_on
                
                when init_st2 =>    -- active_output synchronisee
