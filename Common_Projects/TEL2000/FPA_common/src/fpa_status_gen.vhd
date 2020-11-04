@@ -476,17 +476,17 @@ begin
                when  x"003C" =>   -- erreurs latchées
                   stat_read_reg <= error_latch;
                   
-                  --               when  x"0040" =>   -- INTF_SEQ_STAT
-                  --                  stat_read_reg <= resize(INTF_SEQ_STAT, 32);
-                  --               
-                  --               when  x"0044" =>   -- DATA_PATH_STAT
-                  --                  stat_read_reg <= resize(DATA_PATH_STAT, 32);
-                  --               
-                  --               when  x"0048" =>   -- TRIG_CTLER_STAT
-                  --                  stat_read_reg <= resize(TRIG_CTLER_STAT, 32);
-                  --               
-                  --               when  x"004C" =>   -- FPA_DRIVER_STAT
-                  --                  stat_read_reg <= resize(FPA_DRIVER_STAT, 32);
+               when  x"0040" =>   -- INTF_SEQ_STAT
+                  stat_read_reg <= resize(INTF_SEQ_STAT, 32);
+               
+               when  x"0044" =>   -- DATA_PATH_STAT
+                  stat_read_reg <= resize(DATA_PATH_STAT, 32);
+               
+               when  x"0048" =>   -- TRIG_CTLER_STAT
+                  stat_read_reg <= resize(TRIG_CTLER_STAT, 32);
+               
+               when  x"004C" =>   -- FPA_DRIVER_STAT
+                  stat_read_reg <= resize(FPA_DRIVER_STAT, 32);
                   
                -- pour le power management de DAL   
                when  x"0050" =>   -- adc_ddc_detect_process_done
