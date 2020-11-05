@@ -146,27 +146,32 @@ package fpa_common_pkg is
    
    type fpa_comn_cfg_type is
    record     
-      fpa_diag_mode            : std_logic;  --! à '1' si on est en mode diag telops
-      fpa_diag_type            : std_logic_vector(7 downto 0);  --! diag telops constant ou non (valeurs dans fpa_common_pkg 
-      fpa_pwr_on               : std_logic;  --! à '1' si on veut allumer le détecteur ou le proxy                                                              
-      fpa_init_cfg             : std_logic;  --! à '1' si la config en cours de progression est une config d'initialisation 
-      fpa_init_cfg_received    : std_logic; -- ne provient pas du µBlaze. À '1' si on a reçu une config d'initialisation de la part du pilote. Cela devrait être le cas au reset et à tout pwrUp de la carte ADC/DDC
+      fpa_diag_mode                       : std_logic;  --! à '1' si on est en mode diag telops
+      fpa_diag_type                       : std_logic_vector(7 downto 0);  --! diag telops constant ou non (valeurs dans fpa_common_pkg 
+      fpa_pwr_on                          : std_logic;  --! à '1' si on veut allumer le détecteur ou le proxy                                                              
+      fpa_init_cfg                        : std_logic;  --! à '1' si la config en cours de progression est une config d'initialisation 
+      fpa_init_cfg_received               : std_logic; -- ne provient pas du µBlaze. À '1' si on a reçu une config d'initialisation de la part du pilote. Cela devrait être le cas au reset et à tout pwrUp de la carte ADC/DDC
       
       -- config pour le contrôleur des trigs
-      fpa_trig_ctrl_mode       : std_logic_vector(7 downto 0);  -- mode d'operation du contrôleur des trigs (voir fichier fpa_common_pkg)
-      fpa_acq_trig_ctrl_dly    : unsigned(31 downto 0);         -- delai pour le contrôleur des trigs (depend des modes. Voir le trig_controller.vhd) 
-      fpa_spare                : unsigned(31 downto 0);         -- spare 
-      fpa_xtra_trig_ctrl_dly   : unsigned(31 downto 0);         -- delai pour le contrôleur des trigs (depend des modes. Voir le trig_controller.vhd) 
-      fpa_trig_ctrl_timeout_dly: unsigned(31 downto 0);         -- delay pour le timeout de fpa_trig_controller
-      fpa_stretch_acq_trig     : std_logic;                     -- permet d'utiliser une version étirée du trig pour supporter les instabilités de la roue à filtre
+      fpa_trig_ctrl_mode                  : std_logic_vector(7 downto 0);  -- mode d'operation du contrôleur des trigs (voir fichier fpa_common_pkg)
+      fpa_acq_trig_ctrl_dly               : unsigned(31 downto 0);         -- delai pour le contrôleur des trigs (depend des modes. Voir le trig_controller.vhd) 
+      fpa_spare                           : unsigned(31 downto 0);         -- spare 
+      fpa_xtra_trig_ctrl_dly              : unsigned(31 downto 0);         -- delai pour le contrôleur des trigs (depend des modes. Voir le trig_controller.vhd) 
+      fpa_trig_ctrl_timeout_dly           : unsigned(31 downto 0);         -- delay pour le timeout de fpa_trig_controller
+      fpa_stretch_acq_trig                : std_logic;                     -- permet d'utiliser une version étirée du trig pour supporter les instabilités de la roue à filtre
       
       -- fpas analogiques principalement
-      fpa_intf_data_source     : std_logic;                     -- permet de dire si la source de données est dans le FPGA (patron de tests telops) ou à l'extérieur du FPGA (ADC) 
+      fpa_intf_data_source                : std_logic;                     -- permet de dire si la source de données est dans le FPGA (patron de tests telops) ou à l'extérieur du FPGA (ADC) 
       -- fpa_intf_data_source n'est utilisé/regardé par le vhd que lorsque fpa_diag_mode = 1
       
       -- temps d'exposition en mclk en mode xtra_trig et prog_trig
-      fpa_xtra_trig_int_time   : unsigned(31 downto 0);
-      fpa_prog_trig_int_time   : unsigned(31 downto 0);
+      fpa_xtra_trig_int_time              : unsigned(31 downto 0);
+      fpa_prog_trig_int_time              : unsigned(31 downto 0);
+      
+      -- parametre de conversion du temps d'integration
+      intclk_to_clk100_conv_numerator     : unsigned(31 downto 0);         -- conversion INTCLK vers 100 MHz
+      clk100_to_intclk_conv_numerator     : unsigned(31 downto 0);         -- conversion 100 MHz vers 
+      
    end record;    
    
    --------------------------------------------------------------------------------

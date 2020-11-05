@@ -70,9 +70,10 @@ end afpa_data_dispatcher;
 
 architecture rtl of afpa_data_dispatcher is 
    
-   constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS : natural := 26;  -- log2 de FPA_EXP_TIME_CONV_DENOMINATOR  
-   constant C_EXP_TIME_CONV_DENOMINATOR  : integer := 2**C_EXP_TIME_CONV_DENOMINATOR_BIT_POS;
-   constant C_EXP_TIME_CONV_NUMERATOR    : unsigned(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 4 downto 0):= to_unsigned(integer(real(DEFINE_FPA_100M_CLK_RATE_KHZ)*real(2**C_EXP_TIME_CONV_DENOMINATOR_BIT_POS)/real(DEFINE_FPA_INTCLK_RATE_KHZ)), C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 5);     --
+   constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS       : natural := DEFINE_FPA_EXP_TIME_CONV_DENOMINATOR_BIT_POS;  -- log2 de FPA_EXP_TIME_CONV_DENOMINATOR  
+   constant C_EXP_TIME_CONV_DENOMINATOR               : integer := 2**C_EXP_TIME_CONV_DENOMINATOR_BIT_POS;
+   -- constant C_EXP_TIME_CONV_NUMERATOR              : unsigned(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 4 downto 0):= to_unsigned(integer(real(DEFINE_FPA_100M_CLK_RATE_KHZ)*real(2**C_EXP_TIME_CONV_DENOMINATOR_BIT_POS)/real(DEFINE_FPA_INTCLK_RATE_KHZ)), C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 5);     --
+   constant C_EXP_TIME_CONV_NUMERATOR_BITLEN          : integer := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 5;
    constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_27  : natural := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 27; --pour un total de 27 bits pour le temps d'integration
    constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_M_1   : natural := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS - 1; 
    
@@ -518,7 +519,7 @@ begin
          
          -- pipe pour le calcul du temps d'integration en clk de 100 MHz
          exp_time_pipe(0) <= resize(int_time_i, exp_time_pipe(0)'length) ;
-         exp_time_pipe(1) <= resize(exp_time_pipe(0) * C_EXP_TIME_CONV_NUMERATOR, exp_time_pipe(0)'length);          
+         exp_time_pipe(1) <= resize(exp_time_pipe(0) * resize(FPA_INTF_CFG.COMN.INTCLK_TO_CLK100_CONV_NUMERATOR, C_EXP_TIME_CONV_NUMERATOR_BITLEN), exp_time_pipe(0)'length);          
          exp_time_pipe(2) <= resize(exp_time_pipe(1)(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_27 downto C_EXP_TIME_CONV_DENOMINATOR_BIT_POS), exp_time_pipe(0)'length);  -- soit une division par 2^EXP_TIME_CONV_DENOMINATOR
          exp_time_pipe(3) <= exp_time_pipe(2) + resize("00"& exp_time_pipe(1)(C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_M_1), exp_time_pipe(0)'length);  -- pour l'operation d'arrondi
          int_time_100MHz  <= exp_time_pipe(3)(int_time_100MHz'length-1 downto 0);
