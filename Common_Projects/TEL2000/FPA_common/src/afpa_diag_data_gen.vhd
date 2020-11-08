@@ -30,7 +30,8 @@ use work.proxy_define.all;
 entity afpa_diag_data_gen is
    generic(
       G_DIAG_QUAD_ID     : integer range 0 to 16 := 1;   -- le numero du quad à emuler en mode diag. Si diversité de canal, alors vaut le numero du quad qui a subi la diversité de canal
-      G_DIAG_TAP_NUMBER  : integer range 1 to 64 := DEFINE_FPA_TAP_NUMBER
+      G_DIAG_TAP_NUMBER  : integer range 1 to 64 := 4;   -- le nombre de taps du mode patron de tests
+      G_FPA_TAP_NUMBER   : integer range 1 to 64 := 4    -- le nombre de taps reels du détecteur
       );
    port(      
       ARESET             : in std_logic;
@@ -387,7 +388,7 @@ begin
             else                                                       
                for ii in 0 to C_DIAG_TAP_NUMBER_M1 loop                  -- degradé lineaire constant et dégradé linéaire dynamique
                   first_value(ii) <= std_logic_vector(to_unsigned(C_DIAG_BASE_OFFSET + ii*DEFINE_DIAG_DATA_INC, first_value(0)'length));
-                  incr_value <= std_logic_vector(to_unsigned(DEFINE_FPA_TAP_NUMBER*DEFINE_DIAG_DATA_INC, first_value(0)'length));
+                  incr_value <= std_logic_vector(to_unsigned(G_FPA_TAP_NUMBER*DEFINE_DIAG_DATA_INC, first_value(0)'length));
                end loop;                        
             end if;
             
