@@ -315,6 +315,16 @@ package fpa_common_pkg is
       support_busy : std_logic;
    end record;
    
+   type t_ll_ext_mosi10 is record
+      sof         : std_logic;
+      eof         : std_logic; 
+      sol         : std_logic;   -- start of line
+      eol         : std_logic;   -- eol of line
+      data        : std_logic_vector(9 downto 0);
+      dval        : std_logic;
+      support_busy : std_logic;
+   end record;
+   
    type t_ll_ext_mosi16 is record
       sof         : std_logic;
       eof         : std_logic; 
