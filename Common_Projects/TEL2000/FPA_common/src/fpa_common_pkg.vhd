@@ -606,7 +606,7 @@ package body fpa_common_pkg is
             flex_brd_info.fpa_input                := LVCMOS33;
             flex_brd_info.cooler_volt_min_mV       := 11_000;
             flex_brd_info.cooler_volt_max_mV       := 27_000;
-            flex_brd_info.cooler_on_curr_min_mA    := 100;
+            flex_brd_info.cooler_on_curr_min_mA    := 35;      -- courant minimal de la carte 306 (TEC Controller)
             flex_brd_info.cooler_off_curr_max_mA   := 100;
             flex_brd_info.flegx_brd_present        := '0';
             flex_brd_info.chn_diversity_num        := 1;
