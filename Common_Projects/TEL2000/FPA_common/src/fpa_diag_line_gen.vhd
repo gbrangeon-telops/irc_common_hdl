@@ -26,7 +26,6 @@ use IEEE.numeric_std.all;
 
 entity fpa_diag_line_gen is
    generic (
-      ANALOG_IDDCA           : boolean := false;
       SAMP_NUM_PER_PIX       : natural range 0 to 15 := 5  --  S'applique juste pour les iDDCA analogiques. c'est le nombre d`echantillons à sortir par pixel. EN somme, le nombre d'échantillons renvoyés par l'ADC par pixel
       );
    
@@ -105,9 +104,9 @@ begin
       ); 
    
    --------------------------------------------------
-   -- generation des données diag iddca numériques
+   -- generation des données pour 1 sample/pix
    -------------------------------------------------- 
-   d_iddca_gen : if (not ANALOG_IDDCA) or (SAMP_NUM_PER_PIX = 1) generate 
+   d_iddca_gen : if SAMP_NUM_PER_PIX = 1 generate 
       
       U2: process(CLK)
       begin       
@@ -167,9 +166,9 @@ begin
    
    
    --------------------------------------------------
-   -- generation des données diag iddcas analogiques
+   -- generation des données plus que 1 samp/pix
    --------------------------------------------------   
-   a_iddca_gen : if ANALOG_IDDCA and (SAMP_NUM_PER_PIX > 1) generate  
+   a_iddca_gen : if SAMP_NUM_PER_PIX > 1 generate  
       
       U2: process(CLK)
       begin       
