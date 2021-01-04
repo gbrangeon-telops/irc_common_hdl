@@ -101,8 +101,7 @@ architecture rtl of afpa_diag_data_gen is
    component fpa_diag_line_gen
       generic (
          ANALOG_IDDCA           : boolean := false;
-         SAMP_NUM_PER_PIX       : natural range 0 to 15 := 5; 
-         ADC_QUAD_CLK_FACTOR    : natural range 0 to 15 := 5 
+         SAMP_NUM_PER_PIX       : natural range 0 to 15 := 5 
          );
       port(
          CLK                : in std_logic;
@@ -274,9 +273,8 @@ begin
    U1 : for ii in 0 to C_DIAG_TAP_NUMBER_M1 generate 
       diag_line_ii : fpa_diag_line_gen 
       generic map(
-         ANALOG_IDDCA        => true,      
-         SAMP_NUM_PER_PIX    => DEFINE_FPA_PIX_SAMPLE_NUM_PER_CH,
-         ADC_QUAD_CLK_FACTOR => DEFINE_ADC_QUAD_CLK_FACTOR
+         ANALOG_IDDCA => true,      
+         SAMP_NUM_PER_PIX => DEFINE_FPA_PIX_SAMPLE_NUM_PER_CH
          )
       port map(
          CLK           => MCLK_SOURCE,
@@ -298,9 +296,8 @@ begin
    -- pragma translate_off
    Udbg : fpa_diag_line_gen 
    generic map(
-      ANALOG_IDDCA        => true,      
-      SAMP_NUM_PER_PIX    => DEFINE_FPA_PIX_SAMPLE_NUM_PER_CH,
-      ADC_QUAD_CLK_FACTOR => DEFINE_ADC_QUAD_CLK_FACTOR
+      ANALOG_IDDCA => true,      
+      SAMP_NUM_PER_PIX => DEFINE_FPA_PIX_SAMPLE_NUM_PER_CH
       )
    port map(
       CLK         => MCLK_SOURCE,
