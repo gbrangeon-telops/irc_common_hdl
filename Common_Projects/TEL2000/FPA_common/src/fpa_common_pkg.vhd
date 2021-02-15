@@ -100,7 +100,8 @@ package fpa_common_pkg is
       freq_id_max  : natural;    -- nombre de coups d'horloges de 100 MHz de la valeur maximale de la frequence id   
    end record freq_id_type;
    
-   constant  ID_DIGITAL_PELICAND_INPUT_LVDS25_COOL_20V_TO_28V              : freq_id_type := (31746, 35088);   --  3.0 KHz, Digital PELICAND RICOR K508
+   constant  ID_DIGITAL_SCD_PROXY1_INPUT_LVDS25_COOL_20V_TO_28V            : freq_id_type := (31746, 35088);   --  3.0 KHz, Digital SCD_PROXY1
+   constant  ID_DIGITAL_SCD_PROXY2_INPUT_LVDS25_COOL_20V_TO_28V            : freq_id_type := (31746, 35088);   --  3.0 KHz, Digital SCD_PROXY2
    constant  ID_DIGITAL_HERCULES_INPUT_LVDS25_COOL_20V_TO_28V              : freq_id_type := (27211, 30075);   --  3.5 KHz, Digital HERCULES RICOR K548
    constant  ID_DIGITAL_SCORPIO_LW_INPUT_LVDS25_COOL_23V_TO_25V            : freq_id_type := (23810, 26316);   --  4.0 KHz, Digital SCORPIO LW RM3 (w MGLK)
    constant  ID_ANALOG_SCORPIO_LW_INPUT_LVTTL50_COOL_23V_TO_25V            : freq_id_type := (21164, 23392);   --  4.5 KHz, Analog SCORPIO LW RM3  (wo MGLK)
@@ -771,7 +772,7 @@ package body fpa_common_pkg is
          
       else                                     
          -- pelicanD or scd_proxy1
-         if (Tosc > ID_DIGITAL_PELICAND_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_min) and (Tosc < ID_DIGITAL_PELICAND_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_max) then 
+         if (Tosc > ID_DIGITAL_SCD_PROXY1_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_min) and (Tosc < ID_DIGITAL_SCD_PROXY1_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_max) then 
             ddc_brd_info.fpa_roic                  := FPA_ROIC_SCD_PROXY1;
             ddc_brd_info.fpa_output                := OUTPUT_DIGITAL;
             ddc_brd_info.fpa_input                 := LVDS25;
@@ -783,6 +784,16 @@ package body fpa_common_pkg is
             -- herculesD
          elsif (Tosc > ID_DIGITAL_HERCULES_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_min) and (Tosc < ID_DIGITAL_HERCULES_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_max) then 
             ddc_brd_info.fpa_roic                  := FPA_ROIC_HERCULES;
+            ddc_brd_info.fpa_output                := OUTPUT_DIGITAL;
+            ddc_brd_info.fpa_input                 := LVDS25;
+            ddc_brd_info.cooler_volt_min_mV        := 20_000;
+            ddc_brd_info.cooler_volt_max_mV        := 28_000;
+            ddc_brd_info.cooler_on_curr_min_mA     := 100;
+            ddc_brd_info.cooler_off_curr_max_mA    := 100;
+            
+            -- scd_proxy2
+         elsif (Tosc > ID_DIGITAL_SCD_PROXY2_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_min) and (Tosc < ID_DIGITAL_SCD_PROXY2_INPUT_LVDS25_COOL_20V_TO_28V.freq_id_max) then 
+            ddc_brd_info.fpa_roic                  := FPA_ROIC_SCD_PROXY2;
             ddc_brd_info.fpa_output                := OUTPUT_DIGITAL;
             ddc_brd_info.fpa_input                 := LVDS25;
             ddc_brd_info.cooler_volt_min_mV        := 20_000;

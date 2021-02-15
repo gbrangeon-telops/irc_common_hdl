@@ -43,8 +43,7 @@ end dfpa_cfg_dpram_writer;
 architecture rtl of dfpa_cfg_dpram_writer is
    
    
-   component fwft_afifo_w32_d16
-      
+   component fwft_afifo_w32_d16      
       port (
          rst         : in std_logic;
          wr_clk      : in std_logic;
