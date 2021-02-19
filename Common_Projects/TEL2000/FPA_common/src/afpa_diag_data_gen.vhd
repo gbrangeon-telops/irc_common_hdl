@@ -122,7 +122,7 @@ architecture rtl of afpa_diag_data_gen is
    constant  C_DIAG_TAP_NUMBER_M1 : integer := G_DIAG_TAP_NUMBER - 1;
    constant  C_DIAG_BASE_OFFSET   : integer := (G_DIAG_QUAD_ID - 1) * DEFINE_DIAG_DATA_INC * G_DIAG_TAP_NUMBER;
    
-   type diag_fsm_type is (idle, wait_int_fe_st, int_st, junk_data_st, tir_dly_st, get_line_data_st, cfg_line_gen_st, lovh_dly_st, check_end_st);
+   type diag_fsm_type is (idle, fifo_rd_st, int_st, junk_data_st, tir_dly_st, get_line_data_st, cfg_line_gen_st, lovh_dly_st, check_end_st);
    type img_change_sm_type is (idle, change_st); 
    type data_type is array (0 to C_DIAG_TAP_NUMBER_M1) of std_logic_vector(15 downto 0);
    
@@ -364,10 +364,11 @@ begin
             fpa_int_last <= fpa_int_i; 
             diag_eol_last <= diag_eol(0);
             
-            int_fifo_din(2) <= acq_int_i;                         -- acq_int rentre dans le fifo
-            int_fifo_din(1) <= not fpa_int_last and fpa_int_i;  -- front montant
+            if fpa_int_last = '0' and fpa_int_i = '1' then   -- front montant
+               int_fifo_din(2) <= acq_int_i;                    -- on latche acq_int_i
+            end if;
             int_fifo_din(0) <= fpa_int_last and not fpa_int_i;  -- front descendant
-            int_fifo_wr     <= (fpa_int_last xor fpa_int_i) and ENABLE;          -- on ecrit les edges dans le fifo
+            int_fifo_wr     <= (fpa_int_last and not fpa_int_i) and ENABLE;          -- on ecrit le front desecendant dans le fifo
             
             -- pragma translate_off
             if sim_cnt < 100  then               
@@ -408,18 +409,14 @@ begin
                   aoi_sof_i <= '0';
                   aoi_eof_i <= '0';
                   
-                  if int_fifo_dout(1) = '1' and int_fifo_dval = '1' then  -- front montant de int_signal via fifo. Il n'est pas en temps reel en IWR : il a eu lieu pendant un readout et enregistré dans un fifo.
-                     int_fifo_rd <= '1'; 
-                     acq_data_i <= int_fifo_dout(2);
-                     diag_fsm <= wait_int_fe_st;
+                  if int_fifo_dval = '1' then  --
+                     diag_fsm <= fifo_rd_st;
                   end if;                                                
                
-               when wait_int_fe_st =>
-                  int_fifo_rd <= '0';
-                  if int_fifo_dout(0) = '1' and int_fifo_dval = '1' then  -- front tombant de int_signal
-                     int_fifo_rd <= '1';
-                     diag_fsm <= tir_dly_st;
-                  end if;
+               when fifo_rd_st =>
+                  acq_data_i <= int_fifo_dout(2);
+                  int_fifo_rd <= '1';
+                  diag_fsm <= tir_dly_st;
                
                when tir_dly_st =>
                   int_fifo_rd <= '0';

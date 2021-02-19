@@ -101,6 +101,7 @@ architecture RTL of fpa_trig_controller is
    signal acq_in_progress              : std_logic;
    signal check_all_end_then_apply_dly : std_logic;
    signal xtra_in_progress             : std_logic;
+   signal trig_mode                    : std_logic_vector(FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_MODE'LENGTH-1 downto 0);
    
    --   -- attribute dont_touch                : string;
    --   -- attribute dont_touch of acq_trig_o  : signal is "true";
@@ -204,13 +205,16 @@ begin
             
             -- definition des delais en dehors de la fsm. De plus ça dure 10 clks : ce qui est convenable pour les timings)
             if acq_trig_o = '1' then                 
-               dly_cnt <= FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_CTRL_DLY; 
+               dly_cnt <= FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_CTRL_DLY;
+               trig_mode <= FPA_INTF_CFG.COMN.FPA_ACQ_TRIG_MODE;
             end if;
             if xtra_trig_o = '1' then
-               dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;   
+               dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;
+               trig_mode <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_MODE;
             end if;
             if prog_trig_o = '1' then
                dly_cnt <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_CTRL_DLY;
+               trig_mode <= FPA_INTF_CFG.COMN.FPA_XTRA_TRIG_MODE;
             end if;             
             
             -- séquenceur
@@ -287,19 +291,19 @@ begin
                when check_trig_ctrl_mode_st =>
                   apply_dly_then_check_readout <= '0';
                   check_all_end_then_apply_dly <= '0'; 
-                  if FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE     = MODE_READOUT_END_TO_TRIG_START then  -- ENO: 10 avril 2019: ne plus utiliser le mode MODE_READOUT_END_TO_TRIG_START pour les détecteurs analogiques puisqu'il n'y a pas de timeout_i 
+                  if trig_mode     = MODE_READOUT_END_TO_TRIG_START then  -- ENO: 10 avril 2019: ne plus utiliser le mode MODE_READOUT_END_TO_TRIG_START pour les détecteurs analogiques puisqu'il n'y a pas de timeout_i 
                      fpa_trig_sm <= wait_readout_start_st;
-                  elsif  FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE = MODE_TRIG_START_TO_TRIG_START then
+                  elsif  trig_mode = MODE_TRIG_START_TO_TRIG_START then
                      fpa_trig_sm <= apply_dly_st;
-                  elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_INT_END_TO_TRIG_START then 
+                  elsif trig_mode  = MODE_INT_END_TO_TRIG_START then 
                      fpa_trig_sm <= wait_int_end_st;
-                  elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ITR_TRIG_START_TO_TRIG_START then 
+                  elsif trig_mode  = MODE_ITR_TRIG_START_TO_TRIG_START then 
                      fpa_trig_sm <= apply_dly_st;
                      apply_dly_then_check_readout <= '1';
-                  elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ITR_INT_END_TO_TRIG_START then
+                  elsif trig_mode  = MODE_ITR_INT_END_TO_TRIG_START then
                      fpa_trig_sm <= wait_int_end_st;
                      apply_dly_then_check_readout <= '1';                    
-                  elsif FPA_INTF_CFG.COMN.FPA_TRIG_CTRL_MODE  = MODE_ALL_END_TO_TRIG_START then      -- fait specialement pour les dtecteurs RWI
+                  elsif trig_mode  = MODE_ALL_END_TO_TRIG_START then      -- fait specialement pour les dtecteurs RWI
                      fpa_trig_sm <= wait_readout_start_st;
                      check_all_end_then_apply_dly <= '1';                    
                   end if;
