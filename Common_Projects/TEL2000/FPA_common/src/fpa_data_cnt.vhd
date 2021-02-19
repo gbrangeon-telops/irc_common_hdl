@@ -82,7 +82,7 @@ begin
             
          else 
             
-            tlast_pipe(0) <= TLAST and DVAL; 
+            tlast_pipe(0) <= TLAST; 
             tlast_pipe(1) <= tlast_pipe(0);
             tlast_pipe(2) <= tlast_pipe(1);
             --
