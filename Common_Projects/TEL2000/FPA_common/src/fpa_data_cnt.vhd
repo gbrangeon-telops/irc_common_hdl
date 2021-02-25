@@ -96,7 +96,7 @@ begin
             end if; 
             
             --
-            DONE <= tlast_pipe(0);
+            DONE <= tlast_pipe(0) and not tlast_pipe(1);
             
             
          end if;
