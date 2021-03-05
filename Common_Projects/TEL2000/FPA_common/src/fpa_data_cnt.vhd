@@ -26,15 +26,16 @@ use IEEE.NUMERIC_STD.all;
 entity fpa_data_cnt is 
    
    generic(
-       G_INCR      : integer range 1 to 8 := 4
+      G_INCR              : integer range 1 to 8 := 4;
+      TLAST_DVAL_REQUIRED : boolean := true    -- à "true" lorsque le TLAST doit être aligné sur son DVAL
       );   
    port(
-      ARESET      : in STD_LOGIC;
-      CLK         : in STD_LOGIC;
-      DVAL        : in STD_LOGIC;
-      TLAST       : in STD_LOGIC;
-      HIGH_LENGTH : out STD_LOGIC_VECTOR(31 downto 0);
-      DONE        : out STD_LOGIC
+      ARESET      : in std_logic;
+      CLK         : in std_logic;
+      DVAL        : in std_logic;
+      TLAST       : in std_logic;
+      HIGH_LENGTH : out std_logic_vector(31 downto 0);
+      DONE        : out std_logic
       );
 end fpa_data_cnt;
 
@@ -80,11 +81,17 @@ begin
             DONE <= '0';
             tlast_pipe <= (others => '0');
             
-         else 
+         else
             
-            tlast_pipe(0) <= TLAST; 
+            --
+            if TLAST_DVAL_REQUIRED then
+               tlast_pipe(0) <= TLAST and DVAL;
+            else
+               tlast_pipe(0) <= TLAST;
+            end if;
             tlast_pipe(1) <= tlast_pipe(0);
             tlast_pipe(2) <= tlast_pipe(1);
+            
             --
             if DVAL = '1' then 
                meas_count <= meas_count + G_INCR;
