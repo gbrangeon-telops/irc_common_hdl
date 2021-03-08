@@ -48,7 +48,7 @@ entity afpa_data_dispatcher is
       QUAD_FIFO_DIN     : in std_logic_vector(95 downto 0);      
       QUAD_FIFO_WR      : in std_logic;
       
-      READOUT           : out std_logic;
+      READOUT           : out std_logic;   -- ENO: 06 mars 2021.  READOUT monte à '1' avec SOF et tombe à '0' juste après EOF. Donc en tenir compte lorsqu'on utilise le mode READOUT_END_TO_TRIG_START 
       
       DATA_MOSI         : out t_ll_area_mosi72;
       DATA_MISO          : in t_ll_area_miso;
