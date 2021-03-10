@@ -552,10 +552,14 @@ begin
          else
             
             -- erreur grave de vitesse
-            SPEED_ERR <= data_mosi_i.aoi_dval and not data_link_rdy;           
+            if (data_mosi_i.aoi_dval and not data_link_rdy) = '1' then 
+               SPEED_ERR <= '1';
+            end if;
             
             -- errer de fifo
-            FIFO_ERR <= quad_fifo_ovfl or acq_hder_fifo_ovfl;
+            if (quad_fifo_ovfl or acq_hder_fifo_ovfl) = '1' then
+               FIFO_ERR <= '1';
+            end if;
             
             -- done
             DONE <= not readout_i; 
