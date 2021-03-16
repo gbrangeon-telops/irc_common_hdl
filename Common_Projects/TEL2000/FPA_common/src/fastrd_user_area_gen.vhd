@@ -87,10 +87,11 @@ begin
             -- pipe 0 pour generation identificateurs 
             -------------------------
             raw_pipe(0) <= WINDOW_INFO_I.RAW;
-            if WINDOW_INFO_I.RAW.LINE_PCLK_CNT = FPA_INTF_CFG.USER_AREA.SOL_POSL_PCLK then          -- lval
+            
+            user_pipe(0).lval <= '0';        -- lval par defaut
+            if WINDOW_INFO_I.RAW.LINE_PCLK_CNT >= FPA_INTF_CFG.USER_AREA.SOL_POSL_PCLK 
+               and WINDOW_INFO_I.RAW.LINE_PCLK_CNT <= FPA_INTF_CFG.USER_AREA.EOL_POSL_PCLK then
                user_pipe(0).lval <= '1';
-            elsif WINDOW_INFO_I.RAW.LINE_PCLK_CNT = FPA_INTF_CFG.USER_AREA.EOL_POSL_PCLK_P1 then
-               user_pipe(0).lval <= '0';
             end if;    
             
             if WINDOW_INFO_I.RAW.LINE_PCLK_CNT = FPA_INTF_CFG.USER_AREA.SOL_POSL_PCLK then          -- sol
@@ -99,7 +100,7 @@ begin
                user_pipe(0).sol <= '0';
             end if;
             
-            if WINDOW_INFO_I.RAW.LINE_PCLK_CNT = FPA_INTF_CFG.USER_AREA.EOL_POSL_PCLK then         -- eol
+            if WINDOW_INFO_I.RAW.LINE_PCLK_CNT = FPA_INTF_CFG.USER_AREA.EOL_POSL_PCLK then          -- eol
                user_pipe(0).eol <= '1';
             else
                user_pipe(0).eol <= '0';
