@@ -118,7 +118,7 @@ begin
             case flow_gen_fsm is 
                
                when idle =>               
-                  if AFULL = '0' then 
+                  if AFULL = '0' and AREA_FIFO_DVAL = '1' then 
                      flow_gen_fsm <= feed_lane0_st;
                      dly_cnt <= to_unsigned(1, dly_cnt'length);
                   end if;               
