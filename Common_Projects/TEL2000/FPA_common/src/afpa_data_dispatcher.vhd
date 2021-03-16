@@ -77,7 +77,7 @@ architecture rtl of afpa_data_dispatcher is
    constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_P_27  : natural := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS + 27; --pour un total de 27 bits pour le temps d'integration
    constant C_EXP_TIME_CONV_DENOMINATOR_BIT_POS_M_1   : natural := C_EXP_TIME_CONV_DENOMINATOR_BIT_POS - 1; 
    
-   constant C_AOI_EOF_PIPE_LEN : integer := integer(real(DEFINE_FPA_100M_CLK_RATE_KHZ)/real(DEFINE_FPA_PCLK_RATE_KHZ));
+   constant C_AOI_PIPE_LEN : integer := integer(real(DEFINE_FPA_100M_CLK_RATE_KHZ)/real(DEFINE_FPA_PCLK_RATE_KHZ));
    
    component sync_reset
       port(
@@ -191,7 +191,8 @@ architecture rtl of afpa_data_dispatcher is
    signal naoi_start                   : std_logic;
    signal naoi_stop                    : std_logic;
    signal naoi_ref_valid               : std_logic_vector(1 downto 0);
-   signal aoi_eof_pipe                 : std_logic_vector(C_AOI_EOF_PIPE_LEN downto 0);
+   signal aoi_eof_pipe                 : std_logic_vector(C_AOI_PIPE_LEN downto 0);
+   signal aoi_sof_pipe                 : std_logic_vector(C_AOI_PIPE_LEN downto 0);
    signal aoi_acq_data                 : std_logic;
    
    
@@ -265,19 +266,18 @@ begin
    ------------------------------------------------
    -- flags de la fsm acq_hder
    ------------------------------------------------ 
-   img_start <= aoi_sof and aoi_dval;               -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent 
+   
    
    U0A: process(CLK)
    begin          
       if rising_edge(CLK) then       
          
-         -- quelques flags
-         if img_start = '1' then                               -- ENO: 25 septembre 2018: la regeneration de img_end pour regler un bug lorsqu'on a du suréchnatillonnage temporel d'un meme pixel (par exemple N echantillons par pixel sur un même canal analogique)
-            aoi_eof_pipe <= (others => '0');
-         else
-            aoi_eof_pipe(C_AOI_EOF_PIPE_LEN downto 0) <= aoi_eof_pipe(C_AOI_EOF_PIPE_LEN-1 downto 0) & (aoi_eof and aoi_dval);   
-         end if;
-         img_end <= aoi_eof_pipe(C_AOI_EOF_PIPE_LEN);   -- ENO: 25 septembre 2018:  img_end retardé pour ne pas tronquer les echantillons de aoi_eof. À '1' dit que le AOI est terminée. Tous les SAMPLES de pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.  
+         -- quelques pipes : -- ENO: 25 septembre 2018: la regeneration de img_end pour regler un bug lorsqu'on a du suréchnatillonnage temporel d'un meme pixel (par exemple N echantillons par pixel sur un même canal analogique) 
+         aoi_sof_pipe(C_AOI_PIPE_LEN downto 0) <= aoi_sof_pipe(C_AOI_PIPE_LEN-1 downto 0) & (aoi_sof and aoi_dval); 
+         aoi_eof_pipe(C_AOI_PIPE_LEN downto 0) <= aoi_eof_pipe(C_AOI_PIPE_LEN-1 downto 0) & (aoi_eof and aoi_dval);   
+         -- flags de prise de decision
+         img_start <= aoi_sof_pipe(C_AOI_PIPE_LEN);               -- img_start. À '1' dit qu'une image s'en vient. les pixels ne sont pas encore lus mais ils s'en viennent. 
+         img_end <= aoi_eof_pipe(C_AOI_PIPE_LEN);                 -- ENO: 25 septembre 2018:  img_end retardé pour ne pas tronquer les echantillons de aoi_eof. À '1' dit que le AOI est terminée. Tous les SAMPLES de pixels de l'AOI sont lus. Attention, peut monter à '1' bien après le dernier pixel de l'AOI.  
          
       end if;
    end process; 
@@ -349,7 +349,7 @@ begin
                   if img_start = '1' then     -- en quittant idle, frame_id_i et acq_hder sont implicitement latchés, donc pas besoin de latchs explicites
                      frame_fsm <= wait_fval_st;
                      acq_hder_fifo_rd <= aoi_acq_data; -- ENO: 19 fev 2020. Mis à jour de la sortie du fwft pour le prochain frame si et seulement si l'image en cours est une acq image. Sinon, c'est une image acquise en XTRA_TRIG/PROG_TRIG et donc le acq_hder_fifo doit rester intact.
-                     readout_i <= '1';               -- signal de readout, à sortir même en mode xtra_trig
+                     readout_i <= '1';                 -- signal de readout, à sortir même en mode xtra_trig
                   end if;                   
                
                when wait_fval_st =>
