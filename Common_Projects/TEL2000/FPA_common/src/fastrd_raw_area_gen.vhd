@@ -73,7 +73,7 @@ architecture rtl of fastrd_raw_area_gen is
    signal pclk_cnt_edge        : std_logic;
    signal pclk_watchdog        : std_logic := '0';
    signal pclk_sample_last     : std_logic := '0';
-   signal active_window_en     : std_logic;
+   -- signal active_window_en     : std_logic;
    
    
    
@@ -215,6 +215,7 @@ begin
             rd_end_pipe(0) <= raw_pipe(1).fval and not raw_pipe(0).fval; -- read_end se trouve en dehors de fval. C'est voulu. le suivre pour comprendre ce qu'il fait.
             raw_pipe(0).line_pclk_cnt <= line_pclk_cnt;                  
             raw_pipe(0).pclk_sample <= pclk_watchdog;
+            
             -----------------------------------------------
             -- pipe 1 : génération de line_cnt
             ---------------------------------------------           
@@ -232,16 +233,11 @@ begin
             raw_pipe(2) <= raw_pipe(1);
             raw_pipe(2).line_cnt <= line_cnt;
             rd_end_pipe(2) <= rd_end_pipe(1);
-            if  line_cnt >= FPA_INTF_CFG.RAW_AREA.LINE_START_NUM then 
+            if  line_cnt >= FPA_INTF_CFG.RAW_AREA.LINE_START_NUM and line_cnt <= FPA_INTF_CFG.RAW_AREA.LINE_END_NUM then 
                raw_line_en <= '1';
             else
                raw_line_en <= '0';
             end if; 
-            if  line_cnt >= FPA_INTF_CFG.USER_AREA.LINE_START_NUM then 
-               active_window_en <= '1';
-            else
-               active_window_en <= '0';
-            end if;
           
             ----------------------------------
             -- pipe 3 pour generation dval         
@@ -249,12 +245,12 @@ begin
             raw_pipe(3) <= raw_pipe(2);
             rd_end_pipe(3) <= rd_end_pipe(2);
             if raw_pipe(2).line_cnt <= FPA_INTF_CFG.RAW_AREA.LINE_END_NUM then  
-               raw_pipe(3).dval   <= raw_line_en and raw_pipe(2).lval; 
+               raw_pipe(3).dval <= raw_line_en and raw_pipe(2).lval; 
             else
-               raw_pipe(3).dval   <= '0';
+               raw_pipe(3).dval <= '0';
             end if;
-            if  line_cnt <= FPA_INTF_CFG.USER_AREA.LINE_END_NUM then 
-               raw_pipe(3).active_window <= active_window_en;
+            if  raw_pipe(2).line_cnt >= FPA_INTF_CFG.USER_AREA.LINE_START_NUM and raw_pipe(2).line_cnt <= FPA_INTF_CFG.USER_AREA.LINE_END_NUM then 
+               raw_pipe(3).active_window <= '1';
             else
                raw_pipe(3).active_window <= '0';
             end if;
