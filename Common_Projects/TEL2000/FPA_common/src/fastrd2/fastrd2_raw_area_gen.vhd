@@ -99,7 +99,8 @@ begin
          if sreset = '1' then            
             readout_fsm <= idle;
             readout_in_progress <= '0';
-            start_last <= '1';
+            start_last <= '0';
+            start_i <= '0';
          else           
             
             start_i <= START;
