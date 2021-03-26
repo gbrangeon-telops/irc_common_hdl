@@ -24,7 +24,6 @@ entity afpa_readout_flags_delay is
       MCLK_SOURCE    : in std_logic;
       
       FPA_INTF_CFG   : in fpa_intf_cfg_type;
-      FPA_DIN_DVAL   : in std_logic;          --  requis pour la synchro
       
       READOUT_INFO_I : in readout_info_type;
       READOUT_INFO_O : out readout_info_type;
@@ -196,7 +195,7 @@ begin
                   
                --  on decale la lecture du fifo 
                when dly_st =>
-                  if FPA_DIN_DVAL = '1' then
+                  if READOUT_INFO_I.SAMP_PULSE = '1' then   -- SAMP_PULSE est issue d'une horloge de reference qui a une phase constante avec celle des ADCs
                      aoi_dly_cnt <= aoi_dly_cnt + 1;                     
                      if aoi_dly_cnt >= to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then    
                         aoi_fsm <= rd_st;
@@ -295,7 +294,7 @@ begin
                      
                   --  on decale la lecture du fifo 
                   when dly_st =>
-                     if FPA_DIN_DVAL = '1' then
+                  if READOUT_INFO_I.SAMP_PULSE = '1' then
                         naoi_dly_cnt <= naoi_dly_cnt + 1;                     
                         if naoi_dly_cnt >= to_integer(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY) then    
                            naoi_fsm <= rd_st;
