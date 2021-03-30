@@ -69,8 +69,8 @@ begin
    --  generation des identificateurs de trames 
    --------------------------------------------------
    U5: process(CLK)
-   variable user_rd_end : std_logic;
-   
+      variable user_rd_end : std_logic;
+      
    begin
       if rising_edge(CLK) then
          if sreset ='1' then 
@@ -158,6 +158,9 @@ begin
             user_rd_end := user_fval_last and not area_info_pipe(3).user.fval;
             area_info_pipe(3).user.rd_end  <= user_rd_end;  -- rd_end à la tombée tombée de user.eof
             area_info_pipe(3).info_dval    <= area_info_pipe(2).info_dval or user_rd_end;
+            if (area_info_pipe(2).user.lval and area_info_pipe(2).user.fval) = '1' then
+               area_info_pipe(3).clk_info.clk_id <= resize(unsigned(USER_AREA_CFG.CLK_ID), area_info_pipe(0).clk_info.clk_id'length);  
+            end if;
             
          end if;
       end if;

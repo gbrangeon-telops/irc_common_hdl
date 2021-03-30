@@ -19,19 +19,16 @@ use work.fastrd2_define.all;
 use work.fpa_define.all;
 
 entity fastrd2_raw_area_gen is
-   generic(
-      G_DEFAULT_CLK_ID : integer range 0 to FPA_MCLK_NUM_MAX-1 := 0 
-      ); 
    
    port (
-      ARESET            : in std_logic;
-      CLK               : in std_logic; 
-      AFULL             : in std_logic;      
-      
-      RAW_AREA_CFG      : in area_cfg_type;      
-      START             : in std_logic;
-      
-      AREA_INFO       : out area_info_type
+      ARESET               : in std_logic;
+      CLK                  : in std_logic; 
+      AFULL                : in std_logic;
+            
+      RAW_AREA_CFG         : in area_cfg_type;      
+      START                : in std_logic;
+                           
+      AREA_INFO            : out area_info_type
       );  
 end fastrd2_raw_area_gen;
 
@@ -163,7 +160,7 @@ begin
    begin
       if rising_edge(CLK) then  
          
-         area_info_pipe(0).clk_info.clk_id <= to_unsigned(G_DEFAULT_CLK_ID, area_info_pipe(0).clk_info.clk_id'length);
+         area_info_pipe(0).clk_info.clk_id <= resize(unsigned(RAW_AREA_CFG.CLK_ID), area_info_pipe(0).clk_info.clk_id'length); -- horloge de la zone raw
          
          if AFULL = '0' then 
             
