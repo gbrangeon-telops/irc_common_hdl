@@ -51,7 +51,7 @@ architecture rtl of afpa_chn_diversity_ctrler is
          );
    end component;
    
-   component fwft_sfifo_w76_d16
+   component fwft_sfifo_w76_d256
       port (
          clk : in std_logic;
          srst : in std_logic;
@@ -135,7 +135,7 @@ begin
    --------------------------------------------------
    -- fifo fwft quad1_DATA 
    -------------------------------------------------- 
-   U2A : fwft_sfifo_w76_d16
+   U2A : fwft_sfifo_w76_d256
    port map (
       srst => sreset,
       clk => CLK,
@@ -153,7 +153,7 @@ begin
    --------------------------------------------------
    -- fifo fwft quad1_DATA 
    -------------------------------------------------- 
-   U2B : fwft_sfifo_w76_d16
+   U2B : fwft_sfifo_w76_d256
    port map (
       srst => sreset,
       clk => CLK,
@@ -183,11 +183,13 @@ begin
             dout_mosi_i.sof <= '0';
             dout_mosi_i.eof <= '0';          
             -- pragma translate_on 
-            
+            err_i <= '0';
             
          else
             
-            err_i <= DOUT_MISO.BUSY and (QUAD1_MOSI.DVAL or QUAD2_MOSI.DVAL);
+            if (DOUT_MISO.BUSY and (QUAD1_MOSI.DVAL or QUAD2_MOSI.DVAL))= '1' or quad1_fifo_ovfl = '1' or quad2_fifo_ovfl = '1' then
+               err_i <= '1';
+            end if;
             
             -- valeurs par defaut
             quad1_fifo_rd_en <= '0';
