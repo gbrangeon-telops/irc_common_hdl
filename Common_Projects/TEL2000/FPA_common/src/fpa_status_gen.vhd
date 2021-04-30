@@ -192,10 +192,10 @@ begin
    -----------------------------------------------
    -- Inputs maps: FPA_SERDES_STAT 
    -----------------------------------------------
-   fpa_serdes_done <= FPA_SERDES_STAT.done;
-   fpa_serdes_success <= FPA_SERDES_STAT.success;
-   fpa_serdes_delay <= FPA_SERDES_STAT.delay;
-   fpa_serdes_edges <= FPA_SERDES_STAT.edges;
+   fpa_serdes_done    <= FPA_SERDES_STAT.DONE;
+   fpa_serdes_success <= FPA_SERDES_STAT.SUCCESS;
+   fpa_serdes_delay   <= FPA_SERDES_STAT.DELAY;
+   fpa_serdes_edges   <= FPA_SERDES_STAT.EDGES;
    
    -----------------------------------------------
    -- Inputs maps:  TRIG_CTLER_STAT
@@ -282,7 +282,7 @@ begin
          -- flex ou flegx
          if FPA_HARDW_STAT.DVAL = '1' then 
             flex_flegx_detect_process_done <= '1';
-            if FPA_HARDW_STAT.FLEX_BRD_INFO /= FLEX_BRD_INFO_UNKNOWN then 
+            if FPA_HARDW_STAT.FLEX_BRD_INFO /= FLEX_BRD_INFO_UNKNOWN  and DEFINE_FPA_OUTPUT = OUTPUT_ANALOG then 
                flex_flegx_present <= '1';
                flegx_present <= FPA_HARDW_STAT.FLEX_BRD_INFO.FLEGX_BRD_PRESENT;
             else                   
