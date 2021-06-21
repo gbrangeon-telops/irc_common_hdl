@@ -238,12 +238,12 @@ begin
                   if fpa_mclk_rising_edge = '1' then                   
                      int_cnt <= int_cnt - 1;     -- un countdown est toujours plus fiable
                      fpa_int_i <= '1'; 
-                     acq_int_i <= acq_frame;   -- le module digio_intf decidera s'il faille l'envoyer au detecteur ou pas.           
+                     acq_int_i <= acq_frame;     -- le module digio_intf decidera s'il faille l'envoyer au detecteur ou pas.           
                      int_gen_fsm <= check_end_st;
                   end if;
                
-               when check_end_st =>           -- l'introduction de cet état ameliorera les timings mais suppose que MCLK_SOURCE doit valoir au moins 2 x FPA_MCLK_RATE
-                  if int_cnt = 0 then    -- INT_HIGH_TIME est la durée pendant laquelle lever le signal d'integration pour avoir le temps d'integration souhaiteé. Il depnd des offsets de temps d'integration
+               when check_end_st =>              -- l'introduction de cet état ameliorera les timings mais suppose que MCLK_SOURCE doit valoir au moins 2 x FPA_MCLK_RATE
+                  if int_cnt = 0 then            -- INT_HIGH_TIME est la durée pendant laquelle lever le signal d'integration pour avoir le temps d'integration souhaiteé. Il depnd des offsets de temps d'integration
                      int_gen_fsm <= end_st;
                   else
                      int_gen_fsm <= int_gen_st;

@@ -97,11 +97,6 @@ begin
             
             -- erreur
             err_i(0)<= TX_MISO.BUSY and tx_mosi_i.dval;
-            if FPA_INTF_CFG.PIX_SAMP_NUM_PER_CH /= DEFINE_FPA_PIX_SAMPLE_NUM_PER_CH then
-               err_i(1)<= '1';
-            else
-               err_i(1)<= '0'; 
-            end if;
             
          end if;           
       end if;			

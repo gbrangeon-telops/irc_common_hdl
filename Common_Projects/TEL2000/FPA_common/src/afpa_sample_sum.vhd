@@ -54,7 +54,7 @@ architecture rtl of afpa_sample_sum is
    signal samp_pixel          : pixel_samp_sum_type;
    signal sreset			      : std_logic;
    signal err_i               : std_logic;
-   signal samp_count          : integer range 0 to DEFINE_FPA_PIX_SAMPLE_NUM_PER_CH + 1;
+   signal samp_count          : integer range 0 to 2**SAMP_SUM_NUM'LENGTH;
    signal pixel_samp_sum_sof  : std_logic;
    signal pixel_samp_sum_eof  : std_logic;
    signal pixel_samp_sum_sol  : std_logic;

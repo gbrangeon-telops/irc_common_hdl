@@ -272,7 +272,7 @@ begin
    U1 : for ii in 0 to C_DIAG_TAP_NUMBER_M1 generate 
       diag_line_ii : fpa_diag_line_gen 
       generic map(    
-         SAMP_NUM_PER_PIX => DEFINE_FPA_PIX_SAMPLE_NUM_PER_CH
+         SAMP_NUM_PER_PIX => DEFINE_DIAG_PIX_SAMPLE_NUM_PER_CH
          )
       port map(
          CLK           => MCLK_SOURCE,
@@ -294,7 +294,7 @@ begin
    -- pragma translate_off
    Udbg : fpa_diag_line_gen 
    generic map(    
-      SAMP_NUM_PER_PIX => DEFINE_FPA_PIX_SAMPLE_NUM_PER_CH
+      SAMP_NUM_PER_PIX => DEFINE_DIAG_PIX_SAMPLE_NUM_PER_CH
       )
    port map(
       CLK         => MCLK_SOURCE,
