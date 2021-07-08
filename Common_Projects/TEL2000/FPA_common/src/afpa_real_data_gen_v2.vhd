@@ -47,7 +47,7 @@ begin
    ----------------------------------------------------------------------
    -- outputs
    ----------------------------------------------------------------------
-   FPA_DOUT_DVAL          <= FPA_DIN_DVAL;                              -- les données sortent tout le temps. les flags permettront de distinguer le AOI du NAOI 
+   FPA_DOUT_DVAL          <= FPA_DIN_DVAL; -- READOUT_INFO.SAMP_PULSE;                              -- les données sortent tout le temps. les flags permettront de distinguer le AOI du NAOI 
    FPA_DOUT_FVAL          <= READOUT_INFO.AOI.FVAL;
    
    

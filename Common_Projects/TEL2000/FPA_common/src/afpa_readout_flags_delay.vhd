@@ -114,9 +114,14 @@ begin
             readout_info_s.aoi.dval        <= '0';
             readout_info_s.naoi.samp_pulse <= '0';
             readout_info_s.naoi.dval       <= '0';
+            readout_info_s.samp_pulse      <= '0';
             
          else
             
+            
+            readout_info_s.samp_pulse <= READOUT_INFO_I.SAMP_PULSE;
+            
+            -- aoi flag fifo out
             readout_info_s.aoi.spare         <= aoi_fifo_dout(22 downto 8);
             readout_info_s.aoi.samp_pulse    <= aoi_fifo_dout(7);
             readout_info_s.aoi.sof           <= aoi_fifo_dout(6);
