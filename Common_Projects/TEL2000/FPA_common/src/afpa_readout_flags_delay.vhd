@@ -75,13 +75,13 @@ architecture rtl of afpa_readout_flags_delay is
    signal aoi_dly_cnt          : unsigned(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY'LENGTH-1 downto 0);
    signal aoi_rst_cnt          : unsigned(7 downto 0);
    
-   signal naoi_fifo_dval       : std_logic;
-   signal naoi_fifo_dout       : std_logic_vector(31 downto 0);
-   signal naoi_fifo_din        : std_logic_vector(31 downto 0);
-   signal naoi_fifo_wr         : std_logic;
-   signal naoi_fifo_rd         : std_logic;
-   signal naoi_fifo_ovfl       : std_logic;                                    
-   signal naoi_fifo_rst        : std_logic;
+   signal naoi_fifo_dval       : std_logic := '0';
+   signal naoi_fifo_dout       : std_logic_vector(31 downto 0) := (others =>'0');
+   signal naoi_fifo_din        : std_logic_vector(31 downto 0) := (others =>'0');
+   signal naoi_fifo_wr         : std_logic := '0';
+   signal naoi_fifo_rd         : std_logic := '0';
+   signal naoi_fifo_ovfl       : std_logic := '0';                                    
+   signal naoi_fifo_rst        : std_logic := '0';
    signal naoi_dly_cnt         : unsigned(FPA_INTF_CFG.REAL_MODE_ACTIVE_PIXEL_DLY'LENGTH-1 downto 0);
    signal naoi_rst_cnt         : unsigned(7 downto 0);
    

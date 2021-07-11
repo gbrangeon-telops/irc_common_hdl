@@ -63,7 +63,7 @@ begin
    
    
    ----------------------------------------------------------------------
-   -- Zone NAOI                                                       
+   -- Zone AOI                                                       
    ----------------------------------------------------------------------
    FPA_DOUT(76 downto 62) <= READOUT_INFO.AOI.SPARE;                    -- aoi_spares  (nouvel ajout)
    FPA_DOUT(61)           <= READOUT_INFO.AOI.DVAL;                     -- aoi_dval    (nouvel ajout) 
