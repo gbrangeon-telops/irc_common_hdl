@@ -51,7 +51,7 @@ architecture RTL of fpa_data_cnt is
    end component;   
    
    signal meas_count : unsigned(31 downto 0);
-   signal tlast_pipe : std_logic_vector(2 downto 0); 
+   signal tlast_pipe : std_logic_vector(7 downto 0); 
    signal sreset     : std_logic;
    
    
@@ -89,8 +89,7 @@ begin
             else
                tlast_pipe(0) <= TLAST;
             end if;
-            tlast_pipe(1) <= tlast_pipe(0);
-            tlast_pipe(2) <= tlast_pipe(1);
+            tlast_pipe(7 downto 1) <= tlast_pipe(6 downto 0);
             
             --
             if DVAL = '1' then 
@@ -98,7 +97,7 @@ begin
             end if;                  
             
             --
-            if tlast_pipe(2) = '1' then 
+            if tlast_pipe(7) = '1' then 
                meas_count <= (others => '0'); 
             end if; 
             

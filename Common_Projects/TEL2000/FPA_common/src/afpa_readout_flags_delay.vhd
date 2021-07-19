@@ -226,7 +226,7 @@ begin
                when rst_fifo_st =>
                   aoi_fifo_rst <= '1';
                   aoi_rst_cnt  <= aoi_rst_cnt + 1;
-                  if aoi_rst_cnt(4) = '1' then
+                  if aoi_rst_cnt(3) = '1' then
                      aoi_fsm <= idle;
                   end if;              
                

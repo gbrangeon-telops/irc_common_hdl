@@ -50,11 +50,12 @@ begin
    FPA_DOUT_DVAL          <= FPA_DIN_DVAL; -- READOUT_INFO.SAMP_PULSE;                              -- les données sortent tout le temps. les flags permettront de distinguer le AOI du NAOI 
    FPA_DOUT_FVAL          <= READOUT_INFO.AOI.FVAL;
    
+   FPA_DOUT(95)           <= '0';                                       -- non utilisé
+   
    
    ----------------------------------------------------------------------
    -- Zone NAOI                                                       
    ----------------------------------------------------------------------                                                       
-   FPA_DOUT(95)           <= '0';                                       -- non utilisé
    FPA_DOUT(94 downto 82) <= READOUT_INFO.NAOI.SPARE;                   -- naoi_spares
    FPA_DOUT(81 downto 80) <= READOUT_INFO.NAOI.REF_VALID;               -- naoi_ref_valid
    FPA_DOUT(79)           <= READOUT_INFO.NAOI.STOP;                    -- naoi_stop 
