@@ -72,6 +72,9 @@ acom -nowarn DAGGEN_0523 -incr \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\dfpa_cfg_dpram_writer.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_readout_flags_delay.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_real_data_gen_v2.vhd \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\fpa_min_max_ctrl.vhd \
+ d:\Telops\FIR-00251-Common\VHDL\signal_stat\high_duration.vhd \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\fpa_signal_length_min_max.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_dval_gen_v2.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\fpa_data_cnt_min_max.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\fpa_watchdog_module.bde \
