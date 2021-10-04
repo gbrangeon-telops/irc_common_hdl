@@ -59,6 +59,18 @@ architecture RTL of fpa_intf_sequencer is
          SRESET : out STD_LOGIC;
          CLK    : in STD_LOGIC);
    end component;
+  
+	component double_sync is
+      generic(
+         INIT_VALUE : bit := '0'
+         );
+      port(
+         D     : in std_logic;
+         Q     : out std_logic := '0';
+         RESET : in std_logic;
+         CLK   : in std_logic
+         );
+   end component;
    
    component Clk_Divider is
       Generic(	Factor:		integer := 2);		
@@ -84,7 +96,9 @@ architecture RTL of fpa_intf_sequencer is
    signal fpa_driver_en_i     : std_logic;
    signal trig_ctler_done     : std_logic;
    signal fpa_driver_done     : std_logic;
-   signal fpa_driver_rqst     : std_logic; -- permet de saboir si le pilote hw requiert de reprogrammer le FPA
+   signal fpa_driver_done_i   : std_logic;
+   signal fpa_driver_rqst     : std_logic; -- permet de savoir si le pilote hw requiert de reprogrammer le FPA		  
+   signal fpa_driver_rqst_i   : std_logic;
    signal fpa_cooler_on       : std_logic;
    signal fpa_seq_init_done   : std_logic; 
    signal fpa_hardw_err       : std_logic;
@@ -130,8 +144,14 @@ begin
    --------------------------------------------------
    -- Sync reset
    -------------------------------------------------- 
-   U1 : sync_reset
+   U1A : sync_reset
    port map(ARESET => ARESET, CLK => CLK, SRESET => sreset); 
+
+   --------------------------------------------------
+   -- Double sync du statut fpa_driver
+   -------------------------------------------------- 
+   U1B: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => fpa_driver_rqst, CLK => CLK, Q => fpa_driver_rqst_i);
+   U1C: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => fpa_driver_done, CLK => CLK, Q => fpa_driver_done_i);
    
    -----------------------------------------------------------
    -- Vérification des statuts des cartes électroniques 
@@ -355,7 +375,7 @@ begin
                   end if;                  
                   if fpa_power_i = '1' then      -- certes fpa_power_i est l'ordre d'allumage mais ne dit pas si le fpa est allumé réellement ou pas. Mais ce n'est pas grave car fpa éteint => fpa_driver_rqst = '0'
                      diag_mode_only_i <= '0';    -- le mode diag n'est plus le seul mode une fois que le détecteur est allumé
-                     if fpa_driver_rqst = '1' then 
+                     if fpa_driver_rqst_i = '1' then 
                         fpa_sequencer_sm <= trig_ctrl_st;
                      end if;
                   else                         
@@ -383,13 +403,13 @@ begin
                
                when active_prog_st =>                -- on programme le FPA
                   fpa_driver_en_i <= '1';
-                  if fpa_driver_done = '0' then 
+                  if fpa_driver_done_i = '0' then 
                      fpa_sequencer_sm <= wait_prog_end_st;
                   end if;    
                
                when wait_prog_end_st =>        -- on attend la fin de la programmation                
                   fpa_driver_en_i <= '0';    
-                  if fpa_driver_done = '1' then 
+                  if fpa_driver_done_i = '1' then 
                      fpa_sequencer_sm <= trig_en_st;
                   end if;
                

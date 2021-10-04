@@ -105,6 +105,7 @@ architecture rtl of afpa_hw_driver_ctrler is
    signal valid_dac_rqst            : std_logic;
    signal valid_rqst_pending        : std_logic;
    signal readout_i                 : std_logic;
+   signal diag_mode_only_i          : std_logic;
    signal img_cnt                   : unsigned(3 downto 0);
    signal vdac_value                : fleg_vdac_value_type;
    signal post_update_img           : std_logic;
@@ -128,6 +129,7 @@ architecture rtl of afpa_hw_driver_ctrler is
    signal wait_cnt                  : unsigned(7 downto 0);
    signal fpa_intf_cfg_up2date      : std_logic;
    signal acq_in_progress_i         : std_logic;
+   signal hw_driver_en_i            : std_logic;
    
 --   attribute KEEP : string;
 --   attribute KEEP of readout_i : signal is "TRUE";
@@ -167,7 +169,8 @@ begin
    --------------------------------------------------   
    U1B: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => READOUT, CLK => CLK, Q => readout_i);
    U1C: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => ACQ_IN_PROGRESS, CLK => CLK, Q => acq_in_progress_i);
-   
+   U1D: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => DIAG_MODE_ONLY, CLK => CLK, Q => diag_mode_only_i);
+   U1E: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => HW_DRIVER_EN, CLK => CLK, Q => hw_driver_en_i);
    
    --------------------------------------------------
    --  Allumage du détecteur et dacs
@@ -222,7 +225,7 @@ begin
                   update_whole_cfg <= '0';
                   prog_init_done_i <= first_prog_done;    -- Par principe pour le scorpiomwA, la premiere config est celle d'initialisation.
                   wait_cnt <= (others => '0');
-                  if DIAG_MODE_ONLY = '1' then
+                  if diag_mode_only_i = '1' then
                      hw_seq_fsm <= diag_mode_only_st;
                   elsif valid_prog_rqst = '1' then 
                      hw_seq_fsm <= forward_rqst_st;
@@ -237,7 +240,7 @@ begin
                -- diag mode only
                when diag_mode_only_st =>
                   update_whole_cfg <= '1';
-                  if DIAG_MODE_ONLY = '0' then
+                  if diag_mode_only_i = '0' then
                      hw_seq_fsm <= idle;
                   end if;                  
                   
@@ -245,7 +248,7 @@ begin
                when forward_rqst_st =>
                   hw_rqst_i <= '1';                                 -- fpa_rqst est le signal de demande d'autorisation au contrôleur principal.
                   hw_cfg_in_progress_i <= '1';
-                  if HW_DRIVER_EN = '1' then                        -- suppose que le trig_controller est arrêté par le contrôleur principal
+                  if hw_driver_en_i = '1' then                      -- suppose que le trig_controller est arrêté par le contrôleur principal
                      hw_seq_fsm <= check_rqst_st;
                   end if;
                   
