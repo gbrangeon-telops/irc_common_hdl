@@ -262,7 +262,7 @@ begin
                   cfg_word_fsm <= current_src_st3;
                
                when current_src_st3 =>    
-                  if DEFINE_FPA_TEMP_DIODE_CURRENT_uA = 1000 or DEFINE_FPA_TEMP_DIODE_CURRENT_uA = 150 then     -- courant de 1000uA ou 150uA sur EFA-00253-411 (xro3503A)
+                  if DEFINE_FPA_TEMP_DIODE_CURRENT_uA = 1000 then     -- courant de 1000uA
                      switch_cfg_word(2 downto 1) <= "11";
                   end if;
                   cfg_word_fsm <= flex_psp_st1;          
