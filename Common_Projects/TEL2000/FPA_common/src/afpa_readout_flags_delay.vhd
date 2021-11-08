@@ -89,8 +89,8 @@ architecture rtl of afpa_readout_flags_delay is
    
 begin
    
-   
-   READOUT_INFO_O <= readout_info_s;
+   READOUT_INFO_O <= READOUT_INFO_I;
+   -- READOUT_INFO_O <= readout_info_s;
    ERR <= err_i;
    
    --------------------------------------------------
@@ -209,7 +209,7 @@ begin
                   
                --  on permet la lecture des données du fifo
                when rd_st =>
-                  aoi_fifo_rd <= '1';
+                  aoi_fifo_rd <= aoi_fifo_dval;
                   if readout_info_s.aoi.fval = '1' then
                      aoi_fsm <= wait_end_st;
                   end if;
@@ -308,7 +308,7 @@ begin
                      
                   --  on permet la lecture des données du fifo
                   when rd_st =>
-                     naoi_fifo_rd <= '1';
+                     naoi_fifo_rd <= naoi_fifo_dval;
                      if readout_info_s.naoi.stop = '1' then
                         naoi_fsm <= wait_end_st;
                      end if;
