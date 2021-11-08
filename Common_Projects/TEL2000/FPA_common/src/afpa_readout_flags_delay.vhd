@@ -89,8 +89,8 @@ architecture rtl of afpa_readout_flags_delay is
    
 begin
    
-   READOUT_INFO_O <= READOUT_INFO_I;
-   -- READOUT_INFO_O <= readout_info_s;
+   
+   READOUT_INFO_O <= readout_info_s;
    ERR <= err_i;
    
    --------------------------------------------------
