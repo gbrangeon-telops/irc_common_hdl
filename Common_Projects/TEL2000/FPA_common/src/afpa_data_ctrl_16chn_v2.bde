@@ -2,7 +2,7 @@ SCHM0104
 
 HEADER
 {
- FREEID 51790
+ FREEID 51980
  VARIABLES
  {
   #ARCHITECTURE="sch"
@@ -604,6 +604,252 @@ HEADER
      {
       OUTLINE 0,1, (128,128,128)
       POINTS ( (0,0), (20,0) )
+     }
+    }
+   }
+  }
+ }
+ SYMBOL "#default" "afpa_cropping" "afpa_cropping"
+ {
+  HEADER
+  {
+   VARIABLES
+   {
+    #CUSTOM_NAME=""
+    #DESCRIPTION=""
+    #GENERIC0="G_GEN_CROPPING_CHAIN:STD_LOGIC:='0'"
+    #HDL_ENTRIES=
+"library IEEE,WORK;\n"+
+"use ieee.std_logic_1164.all,work.FPA_define.all,work.fpa_common_pkg.all;"
+    #LANGUAGE="VHDL"
+    #MODIFIED="1641852043"
+    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="39f73d20-2c9c-4c2a-8cda-8f7c6d60e477"
+   }
+  }
+  PAGE "" 
+  {
+   PAGEHEADER
+   {
+    RECT (0,0,300,220)
+    FREEID 18
+   }
+   
+   BODY
+   {
+    RECT  1, -1, 0
+    {
+     VARIABLES
+     {
+      #OUTLINE_FILLING="1"
+     }
+     AREA (20,0,280,220)
+    }
+    TEXT  3, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (25,30,105,54)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 2
+    }
+    TEXT  5, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (232,50,275,74)
+     ALIGN 6
+     MARGINS (1,1)
+     PARENT 4
+    }
+    TEXT  7, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (25,50,65,74)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 6
+    }
+    TEXT  9, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (25,170,114,194)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 8
+     ORIENTATION 2
+    }
+    TEXT  11, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (25,90,171,114)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 10
+    }
+    TEXT  13, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (188,150,275,174)
+     ALIGN 6
+     MARGINS (1,1)
+     PARENT 12
+    }
+    TEXT  15, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (25,150,114,174)
+     ALIGN 4
+     MARGINS (1,1)
+     PARENT 14
+    }
+    TEXT  17, 0, 0
+    {
+     TEXT "$#NAME"
+     RECT (188,170,275,194)
+     ALIGN 6
+     MARGINS (1,1)
+     PARENT 16
+     ORIENTATION 2
+    }
+    PIN  2, 0, 0
+    {
+     COORD (0,40)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="ARESET"
+      #NUMBER="0"
+      #VHDL_TYPE="STD_LOGIC"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  4, 0, 0
+    {
+     COORD (300,60)
+     VARIABLES
+     {
+      #DIRECTION="OUT"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="ERR"
+      #NUMBER="0"
+      #SIDE="right"
+      #VHDL_TYPE="STD_LOGIC"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (-20,0), (0,0) )
+     }
+    }
+    PIN  6, 0, 0
+    {
+     COORD (0,60)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="OTHER"
+      #NAME="CLK"
+      #NUMBER="0"
+      #SIDE="left"
+      #VHDL_TYPE="STD_LOGIC"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  8, 0, 0
+    {
+     COORD (0,180)
+     VARIABLES
+     {
+      #DIRECTION="OUT"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="RECORD"
+      #NAME="RX_MISO"
+      #NUMBER="0"
+      #SIDE="left"
+      #VHDL_TYPE="T_LL_EXT_MISO"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (20,0), (0,0) )
+     }
+    }
+    PIN  10, 0, 0
+    {
+     COORD (0,100)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="RECORD"
+      #NAME="FPA_INTF_CFG"
+      #NUMBER="0"
+      #SIDE="left"
+      #VHDL_TYPE="FPA_INTF_CFG_TYPE"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  12, 0, 0
+    {
+     COORD (300,160)
+     VARIABLES
+     {
+      #DIRECTION="OUT"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="RECORD"
+      #NAME="TX_MOSI"
+      #NUMBER="0"
+      #SIDE="right"
+      #VHDL_TYPE="T_LL_EXT_MOSI72"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (-20,0), (0,0) )
+     }
+    }
+    PIN  14, 0, 0
+    {
+     COORD (0,160)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="RECORD"
+      #NAME="RX_MOSI"
+      #NUMBER="0"
+      #VHDL_TYPE="T_LL_EXT_MOSI72"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (20,0) )
+     }
+    }
+    PIN  16, 0, 0
+    {
+     COORD (300,180)
+     VARIABLES
+     {
+      #DIRECTION="IN"
+      #LENGTH="20"
+      #MDA_RECORD_TOKEN="RECORD"
+      #NAME="TX_MISO"
+      #NUMBER="0"
+      #SIDE="right"
+      #VHDL_TYPE="T_LL_EXT_MISO"
+     }
+     LINE  2, 0, 0
+     {
+      POINTS ( (0,0), (-20,0) )
      }
     }
    }
@@ -2741,7 +2987,7 @@ PAGE ""
 {
  PAGEHEADER
  {
-  PAGESIZE (8400,4600)
+  PAGESIZE (8800,4600)
   MARGINS (200,200,200,200)
   RECT (0,0,0,0)
  }
@@ -4653,7 +4899,7 @@ PAGE ""
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="2b9d90a7-7fcf-4cae-b896-0c574c937564"
    }
    COORD (6540,2200)
-   VERTEXES ( (2,49727), (8,49729), (27,49798), (12,49738), (18,49740), (14,49745), (20,49742), (22,49784), (16,49780) )
+   VERTEXES ( (2,49727), (8,49729), (27,49798), (12,49738), (18,49740), (14,49745), (20,49742), (22,51907), (16,51910) )
   }
   TEXT  40933, 0, 0
   {
@@ -4902,14 +5148,14 @@ PAGE ""
   RECT  42178, 0, 0
   {
    OUTLINE 0,4, (0,4,255)
-   AREA (6360,2120,6960,2760)
+   AREA (6360,2120,6880,2760)
    FILL (1,(255,255,156),0)
   }
   TEXT  42179, 0, 0
   {
    OUTLINE 5,1, (255,4,0)
    TEXT "chn_diversity  or Mux"
-   RECT (6420,2080,6824,2126)
+   RECT (6360,2080,6764,2126)
    MARGINS (1,1)
    COLOR (0,4,255)
    FONT (16,0,0,700,1,0,0,"Arial")
@@ -5069,13 +5315,13 @@ PAGE ""
     #SYMBOL="afpa_data_ctrl_map"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="9eb1aaa4-6362-4139-842a-39a126cb7870"
    }
-   COORD (7060,2340)
-   VERTEXES ( (2,49779), (6,49783), (10,49785), (4,49781), (12,49787), (18,49789) )
+   COORD (7600,2340)
+   VERTEXES ( (2,51918), (6,51920), (12,51922), (18,51924), (10,51941), (4,51944) )
   }
   TEXT  42872, 0, 0
   {
    TEXT "$#REFERENCE"
-   RECT (7080,2305,7135,2340)
+   RECT (7620,2305,7675,2340)
    ALIGN 8
    MARGINS (1,1)
    PARENT 42871
@@ -5083,37 +5329,37 @@ PAGE ""
   TEXT  42873, 0, 0
   {
    TEXT "$#COMPONENT"
-   RECT (7080,2520,7339,2555)
+   RECT (7620,2520,7879,2555)
    MARGINS (1,1)
    PARENT 42871
   }
   TEXT  42894, 0, 0
   {
    TEXT "$#NAME"
-   RECT (6929,2351,7025,2380)
+   RECT (7469,2351,7565,2380)
    ALIGN 9
    MARGINS (1,1)
-   PARENT 50031
+   PARENT 51933
   }
   TEXT  42896, 0, 0
   {
    TEXT "$#NAME"
-   RECT (6934,2371,7024,2400)
+   RECT (7474,2371,7564,2400)
    ALIGN 9
    MARGINS (1,1)
-   PARENT 50033
+   PARENT 51934
   }
   RECT  43078, 0, 0
   {
    OUTLINE 0,4, (0,4,255)
-   AREA (7020,2120,7440,2740)
+   AREA (7440,2120,7920,2760)
    FILL (1,(255,255,156),0)
   }
   TEXT  43079, 0, 0
   {
    OUTLINE 5,1, (255,4,0)
    TEXT "pixel_map"
-   RECT (7020,2080,7213,2126)
+   RECT (7440,2080,7633,2126)
    MARGINS (1,1)
    COLOR (0,4,255)
    FONT (16,0,0,700,1,0,0,"Arial")
@@ -5215,7 +5461,7 @@ PAGE ""
    RECT (6853,2450,7008,2479)
    ALIGN 9
    MARGINS (1,1)
-   PARENT 50032
+   PARENT 51912
   }
   TEXT  43571, 0, 0
   {
@@ -5223,7 +5469,7 @@ PAGE ""
    RECT (6853,2430,7008,2459)
    ALIGN 9
    MARGINS (1,1)
-   PARENT 50034
+   PARENT 51909
   }
   NET RECORD  43584, 0, 0
   {
@@ -5991,13 +6237,13 @@ PAGE ""
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER=""
     #VHDL_TYPE="t_axi4_stream_mosi64"
    }
-   COORD (7920,2460)
-   VERTEXES ( (2,49775) )
+   COORD (8440,2460)
+   VERTEXES ( (2,51928) )
   }
   TEXT  47299, 0, 0
   {
    TEXT "$#REFERENCE"
-   RECT (7972,2443,8100,2478)
+   RECT (8492,2443,8620,2478)
    ALIGN 4
    MARGINS (1,1)
    PARENT 47298
@@ -6016,14 +6262,14 @@ PAGE ""
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER=""
     #VHDL_TYPE="t_axi4_stream_miso"
    }
-   COORD (7920,2480)
+   COORD (8440,2480)
    ORIENTATION 2
-   VERTEXES ( (2,49777) )
+   VERTEXES ( (2,51930) )
   }
   TEXT  47301, 0, 0
   {
    TEXT "$#REFERENCE"
-   RECT (7971,2463,8099,2498)
+   RECT (8491,2463,8619,2498)
    ALIGN 4
    MARGINS (1,1)
    PARENT 47300
@@ -6032,18 +6278,18 @@ PAGE ""
   TEXT  47395, 0, 0
   {
    TEXT "$#NAME"
-   RECT (7448,2351,7544,2380)
+   RECT (7988,2351,8084,2380)
    ALIGN 9
    MARGINS (1,1)
-   PARENT 50027
+   PARENT 51931
   }
   TEXT  47397, 0, 0
   {
    TEXT "$#NAME"
-   RECT (7452,2371,7542,2400)
+   RECT (7992,2371,8082,2400)
    ALIGN 9
    MARGINS (1,1)
-   PARENT 50028
+   PARENT 51932
   }
   INSTANCE  47423, 0, 0
   {
@@ -6057,13 +6303,13 @@ PAGE ""
     #SYMBOL="afpa_saturation_ctrl"
     #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="9eb1aaa4-6362-4139-842a-39a126cb7870"
    }
-   COORD (7560,2340)
-   VERTEXES ( (2,49771), (6,49773), (20,49790), (10,49786), (4,49788), (12,49774), (18,49776) )
+   COORD (8100,2340)
+   VERTEXES ( (2,51914), (6,51916), (20,51925), (10,51921), (4,51923), (12,51927), (18,51929) )
   }
   TEXT  47424, 0, 0
   {
    TEXT "$#REFERENCE"
-   RECT (7580,2305,7635,2340)
+   RECT (8120,2305,8175,2340)
    ALIGN 8
    MARGINS (1,1)
    PARENT 47423
@@ -6071,7 +6317,7 @@ PAGE ""
   TEXT  47428, 0, 0
   {
    TEXT "$#COMPONENT"
-   RECT (7580,2520,7838,2555)
+   RECT (8120,2520,8378,2555)
    MARGINS (1,1)
    PARENT 47423
   }
@@ -6098,14 +6344,14 @@ PAGE ""
   RECT  47499, 0, 0
   {
    OUTLINE 0,4, (0,4,255)
-   AREA (7500,2120,7920,2740)
+   AREA (7940,2120,8420,2760)
    FILL (1,(255,255,156),0)
   }
   TEXT  47500, 0, 0
   {
    OUTLINE 5,1, (255,4,0)
    TEXT "saturation control"
-   RECT (7500,2080,7835,2126)
+   RECT (7940,2080,8275,2126)
    MARGINS (1,1)
    COLOR (0,4,255)
    FONT (16,0,0,700,1,0,0,"Arial")
@@ -6114,10 +6360,10 @@ PAGE ""
   TEXT  47583, 0, 0
   {
    TEXT "$#NAME"
-   RECT (7407,2390,7574,2419)
+   RECT (7947,2390,8114,2419)
    ALIGN 9
    MARGINS (1,1)
-   PARENT 50037
+   PARENT 51937
   }
   NET WIRE  47588, 0, 0
   {
@@ -6130,7 +6376,7 @@ PAGE ""
   {
    LABEL "SignalAssignments_1"
    TEXT "SAT_CTRL_EN <= FPA_INTF_CFG.SAT_CTRL_EN;"
-   RECT (7200,2880,7940,2960)
+   RECT (7880,2840,8620,2920)
    OUTLINE 5,1, (0,0,0)
    FILL (0,(255,255,156),0)
    MARGINS (20,20)
@@ -7614,94 +7860,6 @@ PAGE ""
   VTX  49769, 0, 0
   {
    COORD (1580,3660)
-  }
-  VTX  49770, 0, 0
-  {
-   COORD (7440,2380)
-  }
-  VTX  49771, 0, 0
-  {
-   COORD (7560,2380)
-  }
-  VTX  49772, 0, 0
-  {
-   COORD (7440,2400)
-  }
-  VTX  49773, 0, 0
-  {
-   COORD (7560,2400)
-  }
-  VTX  49774, 0, 0
-  {
-   COORD (7860,2460)
-  }
-  VTX  49775, 0, 0
-  {
-   COORD (7920,2460)
-  }
-  VTX  49776, 0, 0
-  {
-   COORD (7860,2480)
-  }
-  VTX  49777, 0, 0
-  {
-   COORD (7920,2480)
-  }
-  VTX  49778, 0, 0
-  {
-   COORD (6920,2380)
-  }
-  VTX  49779, 0, 0
-  {
-   COORD (7060,2380)
-  }
-  VTX  49780, 0, 0
-  {
-   COORD (6860,2480)
-  }
-  VTX  49781, 0, 0
-  {
-   COORD (7060,2480)
-  }
-  VTX  49782, 0, 0
-  {
-   COORD (6920,2400)
-  }
-  VTX  49783, 0, 0
-  {
-   COORD (7060,2400)
-  }
-  VTX  49784, 0, 0
-  {
-   COORD (6860,2460)
-  }
-  VTX  49785, 0, 0
-  {
-   COORD (7060,2460)
-  }
-  VTX  49786, 0, 0
-  {
-   COORD (7560,2460)
-  }
-  VTX  49787, 0, 0
-  {
-   COORD (7360,2460)
-  }
-  VTX  49788, 0, 0
-  {
-   COORD (7560,2480)
-  }
-  VTX  49789, 0, 0
-  {
-   COORD (7360,2480)
-  }
-  VTX  49790, 0, 0
-  {
-   COORD (7560,2420)
-  }
-  VTX  49791, 0, 0
-  {
-   COORD (7420,2420)
   }
   VTX  49792, 0, 0
   {
@@ -9316,105 +9474,6 @@ PAGE ""
    NET 46518
    VTX 49768, 49769
   }
-  WIRE  50027, 0, 0
-  {
-   NET 629
-   VTX 49770, 49771
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  WIRE  50028, 0, 0
-  {
-   NET 43250
-   VTX 49772, 49773
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  RECORD  50029, 0, 0
-  {
-   NET 47432
-   VTX 49774, 49775
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  RECORD  50030, 0, 0
-  {
-   NET 47436
-   VTX 49776, 49777
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  WIRE  50031, 0, 0
-  {
-   NET 629
-   VTX 49778, 49779
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  RECORD  50032, 0, 0
-  {
-   NET 43585
-   VTX 49780, 49781
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  WIRE  50033, 0, 0
-  {
-   NET 43250
-   VTX 49782, 49783
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  RECORD  50034, 0, 0
-  {
-   NET 43584
-   VTX 49784, 49785
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  RECORD  50035, 0, 0
-  {
-   NET 43344
-   VTX 49786, 49787
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  RECORD  50036, 0, 0
-  {
-   NET 43358
-   VTX 49788, 49789
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
-  WIRE  50037, 0, 0
-  {
-   NET 47588
-   VTX 49790, 49791
-   VARIABLES
-   {
-    #NAMED="1"
-   }
-  }
   RECORD  50038, 0, 0
   {
    NET 48252
@@ -9817,6 +9876,377 @@ PAGE ""
    AREA (280,2260,1320,2740)
    FILL (1,(255,255,156),0)
   }
+  INSTANCE  51823, 0, 0
+  {
+   VARIABLES
+   {
+    #COMPONENT="afpa_cropping"
+    #CUSTOM_NAME=""
+    #GENERIC0="G_GEN_CROPPING_CHAIN : STD_LOGIC := DEFINE_GENERATE_CROPPING_CHAIN"
+    #LIBRARY="#default"
+    #NO_CONF="1"
+    #PRAGMED_GENERICS=""
+    #REFERENCE="U16"
+    #SYMBOL="afpa_cropping"
+    #SYMBOL_GLOBALLY_UNIQUE_IDENTIFIER="39f73d20-2c9c-4c2a-8cda-8f7c6d60e477"
+   }
+   COORD (7100,2300)
+   VERTEXES ( (2,51892), (6,51896), (10,51895), (14,51908), (8,51911), (12,51940), (16,51943) )
+  }
+  TEXT  51829, 0, 0
+  {
+   TEXT "$#REFERENCE"
+   RECT (7100,2264,7155,2299)
+   ALIGN 8
+   MARGINS (1,1)
+   PARENT 51823
+  }
+  TEXT  51830, 0, 0
+  {
+   TEXT "$#COMPONENT"
+   RECT (7100,2520,7286,2555)
+   MARGINS (1,1)
+   PARENT 51823
+  }
+  TEXT  51831, 0, 0
+  {
+   TEXT "@GENERIC_ACTUAL_VALUES()"
+   RECT (6700,2760,7683,2793)
+   PARENT 51823
+  }
+  TEXT  51832, 0, 0
+  {
+   TEXT "$#NAME"
+   RECT (6992,2311,7088,2340)
+   ALIGN 9
+   MARGINS (1,1)
+   PARENT 51902
+  }
+  TEXT  51834, 0, 0
+  {
+   TEXT "$#NAME"
+   RECT (6933,2373,7108,2400)
+   ALIGN 9
+   PARENT 51903
+  }
+  TEXT  51836, 0, 0
+  {
+   TEXT "$#NAME"
+   RECT (6995,2331,7085,2360)
+   ALIGN 9
+   MARGINS (1,1)
+   PARENT 51904
+  }
+  RECT  51838, 0, 0
+  {
+   OUTLINE 0,4, (0,4,255)
+   AREA (6900,2120,7420,2760)
+   FILL (1,(255,255,156),0)
+  }
+  TEXT  51839, 0, 0
+  {
+   OUTLINE 5,1, (255,4,0)
+   TEXT "cropping"
+   RECT (6900,2080,7070,2126)
+   MARGINS (1,1)
+   COLOR (0,4,255)
+   FONT (16,0,0,700,1,0,0,"Arial")
+   FILL (1,(255,255,156),0)
+  }
+  NET RECORD  51846, 0, 0
+  {
+   VARIABLES
+   {
+    #MDA_RECORD_TOKEN="RECORD"
+    #NAME="RECORD49652"
+    #VHDL_TYPE="t_ll_ext_mosi72"
+    RECORD=""
+    T_LL_EXT_MOSI72=""
+   }
+  }
+  NET RECORD  51849, 0, 0
+  {
+   VARIABLES
+   {
+    #MDA_RECORD_TOKEN="RECORD"
+    #NAME="RECORD49660"
+    #VHDL_TYPE="t_ll_ext_miso"
+    RECORD=""
+    T_LL_EXT_MISO=""
+   }
+  }
+  VTX  51892, 0, 0
+  {
+   COORD (7100,2340)
+  }
+  VTX  51893, 0, 0
+  {
+   COORD (6980,2340)
+  }
+  VTX  51894, 0, 0
+  {
+   COORD (6920,2400)
+  }
+  VTX  51895, 0, 0
+  {
+   COORD (7100,2400)
+  }
+  VTX  51896, 0, 0
+  {
+   COORD (7100,2360)
+  }
+  VTX  51897, 0, 0
+  {
+   COORD (6980,2360)
+  }
+  WIRE  51902, 0, 0
+  {
+   NET 629
+   VTX 51892, 51893
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  RECORD  51903, 0, 0
+  {
+   NET 75
+   VTX 51894, 51895
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  WIRE  51904, 0, 0
+  {
+   NET 43250
+   VTX 51896, 51897
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  VTX  51907, 0, 0
+  {
+   COORD (6860,2460)
+  }
+  VTX  51908, 0, 0
+  {
+   COORD (7100,2460)
+  }
+  RECORD  51909, 0, 0
+  {
+   NET 43584
+   VTX 51907, 51908
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  VTX  51910, 0, 0
+  {
+   COORD (6860,2480)
+  }
+  VTX  51911, 0, 0
+  {
+   COORD (7100,2480)
+  }
+  RECORD  51912, 0, 0
+  {
+   NET 43585
+   VTX 51910, 51911
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  VTX  51913, 0, 0
+  {
+   COORD (7980,2380)
+  }
+  VTX  51914, 0, 0
+  {
+   COORD (8100,2380)
+  }
+  VTX  51915, 0, 0
+  {
+   COORD (7980,2400)
+  }
+  VTX  51916, 0, 0
+  {
+   COORD (8100,2400)
+  }
+  VTX  51917, 0, 0
+  {
+   COORD (7460,2380)
+  }
+  VTX  51918, 0, 0
+  {
+   COORD (7600,2380)
+  }
+  VTX  51919, 0, 0
+  {
+   COORD (7460,2400)
+  }
+  VTX  51920, 0, 0
+  {
+   COORD (7600,2400)
+  }
+  VTX  51921, 0, 0
+  {
+   COORD (8100,2460)
+  }
+  VTX  51922, 0, 0
+  {
+   COORD (7900,2460)
+  }
+  VTX  51923, 0, 0
+  {
+   COORD (8100,2480)
+  }
+  VTX  51924, 0, 0
+  {
+   COORD (7900,2480)
+  }
+  VTX  51925, 0, 0
+  {
+   COORD (8100,2420)
+  }
+  VTX  51926, 0, 0
+  {
+   COORD (7960,2420)
+  }
+  VTX  51927, 0, 0
+  {
+   COORD (8400,2460)
+  }
+  VTX  51928, 0, 0
+  {
+   COORD (8440,2460)
+  }
+  VTX  51929, 0, 0
+  {
+   COORD (8400,2480)
+  }
+  VTX  51930, 0, 0
+  {
+   COORD (8440,2480)
+  }
+  WIRE  51931, 0, 0
+  {
+   NET 629
+   VTX 51913, 51914
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  WIRE  51932, 0, 0
+  {
+   NET 43250
+   VTX 51915, 51916
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  WIRE  51933, 0, 0
+  {
+   NET 629
+   VTX 51917, 51918
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  WIRE  51934, 0, 0
+  {
+   NET 43250
+   VTX 51919, 51920
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  RECORD  51935, 0, 0
+  {
+   NET 43344
+   VTX 51921, 51922
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  RECORD  51936, 0, 0
+  {
+   NET 43358
+   VTX 51923, 51924
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  WIRE  51937, 0, 0
+  {
+   NET 47588
+   VTX 51925, 51926
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  RECORD  51938, 0, 0
+  {
+   NET 47432
+   VTX 51927, 51928
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  RECORD  51939, 0, 0
+  {
+   NET 47436
+   VTX 51929, 51930
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  VTX  51940, 0, 0
+  {
+   COORD (7400,2460)
+  }
+  VTX  51941, 0, 0
+  {
+   COORD (7600,2460)
+  }
+  RECORD  51942, 0, 0
+  {
+   NET 51846
+   VTX 51940, 51941
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
+  VTX  51943, 0, 0
+  {
+   COORD (7400,2480)
+  }
+  VTX  51944, 0, 0
+  {
+   COORD (7600,2480)
+  }
+  RECORD  51945, 0, 0
+  {
+   NET 51849
+   VTX 51943, 51944
+   VARIABLES
+   {
+    #NAMED="1"
+   }
+  }
  }
  
 }
@@ -9825,7 +10255,7 @@ PAGE ""
 {
  PAGEHEADER
  {
-  PAGESIZE (8400,4600)
+  PAGESIZE (8800,4600)
   MARGINS (200,200,200,200)
   RECT (0,0,0,0)
   VARIABLES
@@ -9842,110 +10272,110 @@ PAGE ""
  
  BODY
  {
-  TEXT  51773, 0, 0
+  TEXT  51963, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
    TEXT "Created:"
-   RECT (7340,4166,7457,4219)
+   RECT (7740,4166,7857,4219)
    ALIGN 4
    MARGINS (1,10)
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  51774, 0, 0
+  TEXT  51964, 0, 0
   {
    PAGEALIGN 10
    TEXT "$CREATIONDATE"
-   RECT (7514,4162,8184,4222)
+   RECT (7914,4162,8584,4222)
    ALIGN 4
    MARGINS (1,1)
    COLOR (0,0,0)
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  51775, 0, 0
+  TEXT  51965, 0, 0
   {
    PAGEALIGN 10
    TEXT "Title:"
-   RECT (7338,4226,7409,4279)
+   RECT (7738,4226,7809,4279)
    ALIGN 4
    MARGINS (1,10)
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  51776, 0, 0
+  TEXT  51966, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
    TEXT "$TITLE"
-   RECT (7511,4222,8181,4282)
+   RECT (7911,4222,8581,4282)
    ALIGN 4
    MARGINS (1,1)
    COLOR (0,0,0)
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  51777, 0, 0
+  TEXT  51967, 0, 0
   {
    PAGEALIGN 10
    TEXT 
 "(C)ALDEC. Inc\n"+
 "2260 Corporate Circle\n"+
 "Henderson, NV 89074"
-   RECT (7540,4040,7835,4141)
+   RECT (7940,4040,8235,4141)
    MARGINS (1,1)
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
    MULTILINE
   }
-  TEXT  51778, 0, 0
+  TEXT  51968, 0, 0
   {
    PAGEALIGN 10
    TEXT "Page:"
-   RECT (7338,4344,7417,4397)
+   RECT (7738,4344,7817,4397)
    ALIGN 4
    MARGINS (1,10)
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  51779, 0, 0
+  TEXT  51969, 0, 0
   {
    PAGEALIGN 10
    OUTLINE 5,1, (0,0,0)
    TEXT "$PAGENUMBER / $PAGECOUNT     $PAGENAME"
-   RECT (7510,4340,8180,4400)
+   RECT (7910,4340,8580,4400)
    ALIGN 4
    MARGINS (1,1)
    COLOR (0,0,0)
    FONT (12,0,0,700,0,128,0,"Arial")
    UPDATE 0
   }
-  TEXT  51780, 0, 0
+  TEXT  51970, 0, 0
   {
    PAGEALIGN 10
    TEXT "Revision:"
-   RECT (7336,4284,7464,4337)
+   RECT (7736,4284,7864,4337)
    ALIGN 4
    MARGINS (1,10)
    COLOR (0,0,0)
    FONT (12,0,0,700,0,0,0,"Arial")
   }
-  TEXT  51781, 0, 0
+  TEXT  51971, 0, 0
   {
    PAGEALIGN 10
    TEXT "$Revision"
-   RECT (7510,4294,8170,4329)
+   RECT (7910,4294,8570,4329)
    ALIGN 4
    MARGINS (1,1)
    COLOR (0,0,0)
    FONT (12,0,0,700,0,204,0,"Arial")
    UPDATE 0
   }
-  GROUP  51782, 0, 0
+  GROUP  51972, 0, 0
   {
    PAGEALIGN 10
-   RECT (7320,4020,8201,4401)
+   RECT (7720,4020,8601,4401)
    FREEID 1
    LINE  594, 0, 0
    {
@@ -9954,10 +10384,10 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  51783, 0, 0
+  GROUP  51973, 0, 0
   {
    PAGEALIGN 10
-   RECT (7320,4220,8201,4221)
+   RECT (7720,4220,8601,4221)
    FREEID 1
    LINE  578, 0, 0
    {
@@ -9966,10 +10396,10 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  51784, 0, 0
+  GROUP  51974, 0, 0
   {
    PAGEALIGN 10
-   RECT (7320,4160,8201,4161)
+   RECT (7720,4160,8601,4161)
    FREEID 1
    LINE  577, 0, 0
    {
@@ -9978,10 +10408,10 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  51785, 0, 0
+  GROUP  51975, 0, 0
   {
    PAGEALIGN 10
-   RECT (7320,4280,8201,4281)
+   RECT (7720,4280,8601,4281)
    FREEID 1
    LINE  583, 0, 0
    {
@@ -9990,10 +10420,10 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  51786, 0, 0
+  GROUP  51976, 0, 0
   {
    PAGEALIGN 10
-   RECT (7320,4340,8201,4341)
+   RECT (7720,4340,8601,4341)
    FREEID 1
    LINE  582, 0, 0
    {
@@ -10002,10 +10432,10 @@ PAGE ""
     FILL (1,(0,0,0),0)
    }
   }
-  GROUP  51787, 0, 0
+  GROUP  51977, 0, 0
   {
    PAGEALIGN 10
-   RECT (7500,4020,7501,4161)
+   RECT (7900,4020,7901,4161)
    FREEID 1
    LINE  581, 0, 0
    {
@@ -10013,10 +10443,10 @@ PAGE ""
     POINTS ( (0,0), (0,140) )
    }
   }
-  GROUP  51788, 0, 0
+  GROUP  51978, 0, 0
   {
    PAGEALIGN 10
-   RECT (7500,4160,7501,4401)
+   RECT (7900,4160,7901,4401)
    FREEID 1
    LINE  579, 0, 0
    {
@@ -10024,10 +10454,10 @@ PAGE ""
     POINTS ( (0,0), (0,240) )
    }
   }
-  BMPPICT  51789, 0, 0
+  BMPPICT  51979, 0, 0
   {
    PAGEALIGN 10
-   RECT (7340,4080,7479,4125)
+   RECT (7740,4080,7879,4125)
    TEXT
    "ezE1QTMzOEZELTk0QjYtNGZmNC1BMUUwLTZCREEwNTg1QzkwRH0A/EkAACgAAACLAAAALQAAAAEAGAAAAAAA1kkAABILAAASCwAAAAAAAAAAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8+vX28OHu5Mji0KDYv37QsmTLqlTKqFHNrFjStWrbxInn16/y6tT69u3///////////////////////////////////////////////////////////////////8AAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////749Onw5sziz5/Wu3bPsGHNrFjLqlTKp07GoULBmTO+kye5ixazgQKygAC3iBDHo0bbxIju5Mj8+vX///////////////////////////////////////////////////////8AAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+/vz28eLt4sXr377v5cr38uX+/fv////////////////////69+7x6NDm1avVunXDnDmygACygACzgQLGoUPfy5b69u3///////////////////////////////////////////////8AAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////78+/b+/vz////////////////////////////////////////////////////7+PHu48bStWu4ihSygACygAC+lCjhzZr9+/f///////////////////////////////////////8AAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////179/Wu3a3iBGygACygADGoULw5sz///////////////////////////////////8AAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////v5MnIpEmygACygAC5ixbhzpz///////////////////////////////8AAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////9/frZwIC0gweygACygADWu3b+/fv///////////////////////8AAAD////q3Ljv5cr////n2LHx6NH////m1q328ODq3LjXvHnWvHjy6dP////////k0qXYv3/fy5b59er////m1avXvnzYv37r377cxYrbxIn48+f07dvm1av////w5s3awYPcxYv07Nnu5Mju48f////p2rXq3bv////////////x6NDfy5b////9/PjfypXXvHnbxInz69bm1av9+/fo2bPw5szn2LD07drl1ar+/fv////t4sTr377////q3LjXvXviz57p27fu48b////z69fn167y6tXo2bL////w5szq3Lj////v5cvYvn3iz57+/vz1797o2bL////x6NDk0qT+/vz////////49Ojdx47XvXvx6ND9/frfypTZwYLz69b8+vXm1av69+7q3Lj69u3s37/w5szn2LH179/////p2rXw5sz////x6NHo2bLs4MDw5s3////m1avt4sX////n167z7Nj////////////////////////////////////k06a3iBGygACygADUuHD9/fr///////////////////8AAAD////Orl3awoX////Jpkziz5/////Ho0bp27bMq1bStGnm1qz28OD////+/fvAly7awoTWu3fHo0f69+/GoULUuHDo2bPr3r3gzJjWvHjNrVvm1qzKp0/t4cLAly/fy5bQsmTVuXPZwIHbxIj59eq3iBHUuHH////////////Ttm2ygAD07dv59uy9kSPfypXq3brp2rXFoED179/EnTvp27fIpEjm1avEnj3////////Wu3bVunTm1avAmDDdx47n2LHdx47Jpk338uTQsWPWu3bk06bJpkz////cxYrRs2fw5s3CmjTeyZLNrVvWu3fn2LDLqlT+/vzEnjzEnTr9/Pj////69+7GoEHPsGDhzZrv5cvQsmTPr1/eyJHFnz/r3r3Jpk3t4sW4iRPp27fTt27eyZPJpkzo2bL////dxo3LqlT38uTNrVvawYPVunXdyJD49OiygAHawoX////IpEjl1Kn////////////////////////////////////////n2LG2hw6ygACygADYv3////////////////////8AAAD////Rs2bcxoz////NrVrPr1/l1KjCmjTs4MHOr17UuXLq3Lj7+fP////9/frEnTvy6tX////IpUrhzp3NrFnXvHnp27f///759uzUuXLNrFjo2bLOrlzQsmXawoX9/PnLqlTUuXLbxIneyJHawoW8kCHawYP////////38uXKp07MqlXbw4f8+/bAly7hzpzu48fu5MjAly/Orl3NrFj8+/bHo0fo2rTDnDjgy5fx6NDbxIjVunXIpUrm1qz////////28OHAly7MqlW5jBjx58/m1q3Mq1b////dyJDVunTWvHjVunT////28OHDnDjcxYrUt2/m1au9kiXOr178+vT////j0aLFnz/////////v5cu/lSv6+PD////StWvStWrStGndxo3BmTLawoTTtmzk06bLqVPKp07j0aLx58++lCnKqFC7jx7w5szXvXrgy5fVuXO+kyfeyZP////GoUPk06f////////////////////////////////////////////l1Km0hAiygACygADk06f///////////////8AAAD////TtmzeyZP////Pr1/EnjzVunW9kiXt4sXPsGDMqlXgy5f59uz////9/frEnTvy6dP////Pr1/cxYvOrl3Orlzhzp3x6NHGoULUuHD38uXn16/NrVrRs2bcxoz9/Pnn2LH07dvcxYvLqVLNrFjbw4fWu3b////////o2rTKp07v5MnIpUr7+PHAly/Wu3bo2bLt4sXCmjXcxYrMq1fy6tTJpk3p2rXCmzbYvn3t4sTcxYrVunTIpEnr3rz////////////QsWLeyZLJpk39/Pnn167NrVr////eyZPVunXUuXLZwID////69u3DnDjcxYrNrFjJpUvfypXNrFn7+fL////hzp3Ho0f////////u48fAmDD9+/f////Wu3fRs2bUt2/GoEHk0qXStGnHokTo2bLLqlTeyZPNrFncxYrTtm3dyJDKp0/8+vTZwYLKp0/QsWPawYPcxoz07du+kyfQsmT////////////////////////////////////////////////aw4aygACygAC6jhz07Nn///////////8AAADy6dPGoUPPsGH17t3JpUvhzpz////GoUPq3LjLqVPawoXy6tX7+fL////+/fu/lizk06fm1qzAli3x58/HokXcxYvz7Njn16++lCns37/48+fk06fJpUvr377BmDHl1Knw5s39+/faw4aygADs4MHdx4/QsmX////////NrVvWvHj////DnDnl1arBmTPp27f17t3r377BmTPs37/BmTPp2rXHo0fm1q3BmTLt4sX38ePWu3fVunTiz5/FoEDq3Lnt4cP+/v3iz5+2hw7XvHn38ePVunTCmzby6tXZwYLStWrs37/Cmzbr3rzWu3bMq1fq3buygADcxYrs4MHGoUL7+fL////38+bEnTrawoXt4sXz69fKqFDYv3/q3brAmDDs4MHLqVO4ihT7+fPYv3+zgQPs4MHHokTj0aPQsWLawoThzp23iBHYv37////UuXKygADx6NDcxYvWu3fNrFnhzpzNrVrhzZr////////////////////////////////////////////+/vzJpUuygACygADNrFj+/v3///////8AAADVunXNrVvMq1beyZPfypTt4sX////dx47y6tThzpzMqlXPr1/z69b////////bxIjQsmTTtm3s37/////cxozNrVrQsWL07dvj0KHMq1fn16/x6dLcxoz////q3brQsmTOrl3z7Njp27fVunX////p27fk0qT///////7ZwIHw5sz////hzp3l1KnXvXrNrVvWvHj179/UuXLQsWLi0KD8+vXcxYry6tTUuHHMq1bfypXn2LDl1Kj////hzp3OrlzVunX9+/f48+fPsGHx6NDiz5/NrFjNrFnXvXrk0qTj0aP////o2bLPsGDVunT49On07NnPsGD8+vT07Nndx479+/f////////07NnUuHDNrFnr37759uzVunXPr1/n167////cxozawoX////y6dPRtGj28OHgzJjPsGDZwID6+PD07tzRs2bx6ND////j0aLbw4f////q3LndyJDYvn39/Pjt4cPbw4f///7////////////////////////////////////////////x6dK4ihWygAC0gwbp27b///////8AAAD///////////////////////////////////////////////////////////////////7///////////////////////////////////////////////////////////////////////////////////////////////7///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7////////////////////////////////////////////////XvnyygACygADHo0f///7///8AAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////38uW6jRqygACzgQLt4sX///8AAADs37/n2LHo2rTo2rTo2rTn16/z7Nj////////////////////////////////////////////////////////49Ojo2bLo2rTo2rTo2rTo2rTp27b49Onq3bro2bPo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2bL07Nn////t4sXn2LDo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTr3rzy6tX+/vz////////////////8+vXr377n2LHo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2rTo2bPq3Ln8+vX////////////////9/Pnt4cPi0KDdx47bw4fZwIDYvn3Yvn3Yvn3Yvn3Yvn3XvnzZwIDbw4fdx47hzpzq3Lj48+f////////////w587l1arp2rX9+/f////////////////////////////////////UuHCygACygADStWv///8AAADYv36zggS0gwe0gwe0gwe0ggXBmTL48+f////////////////////////////////////////////////////Wu3a0gwa0gwe0gwe0gwe0gwfCmjTw5866jRu0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwbStWr////Ho0e0gwa0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe1hQq4ihTBmDHdx479+/f////////48+fAli20gwa0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe0gwe1hAnx58/////////////o2bPCmjW2hg2ygACygACygACygACygACygACygACygACygACygACygACygACygACygAC1hAm6jhzStWr49Oj59uzeyJHbxIjcxYrp27f////////////////////////////////////v5cuzgQOygADAli369+4AAAD48+e/lSqygACygACygACygACygADVunX////////////////////////////////////////////////69u26jBmygACygACygACygACygADZwYL7+fK9kiWygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADKp07////NrVuygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADIpUr49On////9/frBmTKygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACy"+
 "gACygACygADq3br////////l1aq1hAmygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADBmDHo2bLm1qzTtmziz5/l1ar////////////////////////////////////8+vTDnDmygAC2hgzs4MEAAAD////k0qSzgQKygACygACygACygAC2hg3q3bv38uX28OH28OH28OH28OH179/07Nnz7Njz7Njz7Nj17t3dx4+ygACygACygACygACygAC3hw/v5cv////Enj2ygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADEnTr////VunSygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADStGn////////JpUuygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADk06b////59eu8kCCygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADIpEjk0qXdx47cxYr07dr////////////////////////////////////////UuXKygACygADgzJgAAAD////////IpEiygACygACygACygACygAC0gwa3iRK3iBC3iBC3iBC3iBC3hw+1hQu1hQq1hQq1hQq1hQuzgQKygACygACygACygACygADHokT+/v3///7LqVKygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygAC7jx7+/v3cxYuygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygAC0ggXx6dL////PsGGygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADbxIj////j0KGygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADr3rz49Oj69+/////////////////////////////////////////////j0aOygACygADUuHAAAAD////////v5cu2hgyygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADfypX////////Rs2aygACygACygACygACygAC6jBm9kya9kSO9kSO9kSO9kSO9kSO9kSO9kSO9kSO8kCHCmjX7+fLk0qWygACygACygACygACygAC2hgy7jh26jRu6jRu6jRu6jRu5ixe5ixa6jRu6jRq0gweygACygACygACygACygACygACygADawYP////Wu3eygACygACygACygACygAC5ixa9kya9kSO9kSO9kSO9kSO9kSO9kSO9kSO9kSO9kSO9kSO9kSO9kSO7jx/awoX////Wu3aygACygACygACygACygACygACygACzggS9kSPAli2/liy/liy/lizAli2+lCm3iRKygACygACygACygACygACygACygADVunT////////////////////////////////////////////////////s4MG2hgyygADNrFgAAAD////////////UuHCygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygAC4iRP38+b////////XvHmygACygACygACygACygADgzJj38uX38uT38uT38uT38uT38uT38uT38uT38uT38eP38uX+/v3q3bqzggSygACygACygACygADMq1b28OD28OD28OD28OD28OD179717t328OD179/y6dPYv361hQuygACygACygACygACygADJpkz////dx46ygACygACygACygACygADZwIH38uX38uT38uT38uT38uT38uT38uT38uT38uT38uT38uT38uT38uT28eL69+/////Rs2aygACygACygACygACygACygAHRtGjx58/38eP49Oj49Oj49Oj49Oj49Oj38+b07dvj0aK7jx+ygACygACygACygACygADHokT////////////////////////////////////////////////////z69a7jh2ygADIpUoAAAD////////////28OG9kiSygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADPsGD////////////eyJGygACygACygACygACygADfypT////////////////////////////////////////////////x58+0gweygACygACygACygADKqFD////////////////////////////////////////////dxo2zgQKygACygACygACygADAly/////l1KmygACygACygACygACygADXvXr////////////////////////////////////////////////////////////////StWuygACygACygACygACygADEnjz///7////////////////////////////////////////k0qSzgQKygACygACygACygAC9kiX9/Pj////////////////////////////////////////////////38eO+kyeygADGoEEAAAD////////////////fypWygACygACygACygACygACygAC2hg23hw+2hgy1hQu0gwa0ggW0gwa0gweygACygACygACygACygACygADp27f////////////k06eygACygACygACygACygADXvXr////////////////////////////////////////////////38eO3hw+ygACygACygACygADCmzb+/v3////////////////////////////////////////69+66jRqygACygACygACygAC7jx/7+fPt4cKzgQKygACygACygACygADPr1/////////////////////////////////////////////////////////////////Yvn2ygACygACygACygACygADTtmz////////////////////////////////////////////38uW7jx61hAm2hgy2hgy0hAi9kyb59uz////////////////////////////////////////////////38+a+lCiygADIpEgAAAD////////////////+/fvEnjyygACygACygACygACygADPr1/38uX17t307dvy6tTy6tT07drRs2aygACygACygACygACygADAly/69u3////////////p27e0gweygACygACygACygADQsWP////////////////////////////////////////////////7+fO8kCGygACygACygACygAC9kiT6+PD////////////////////////////////////////////Enj2ygACygACygACygAC5ixb07tz07du0gwaygACygACygACygAC4iRPFnz/Fnz7Fnz7Fnz7Fnz7Fnz7Fnz7Fnz7Fnz7Fnz7Fnz7Fnz7DnDjQsmX7+fP////eyZOygACygACygACygACygADTtm3////////////////////////////////////////////////28OD07dv07tz07tz07dv28OD+/fv////////////////////////////////////////////////38uW+kyeygADMqlUAAAD////////////////////r3r21hAmygACygACygACygAC5jBjy6tT////////////////////BmTKygACygACygACygACygADXvXv////////////////u5Mi4ihSygACygACygACygADIpUr+/fv///////////////////////////////////////////////7CmjSygACygACygACygAC6jRv179/////////////////////////////////////////////LqlSygACygACygACygAC2hw7u48f7+PG4ihSygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygAC7jh338uX////l1aqzgQOygACygACygACygADMq1f////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////07du8kCCygADStWoAAAD///////////////////////7QsWKygACygACygACygACygADNrFj////////////////s4MCzgQOygACygACygACygAC2hw7u5Mj////////////////07dq8kCGygACygACygACygADCmjT9+/f////////////////////////////////////////////////IpUqygACygACygACygAC3iRLv5cv////////////////////////////////////////////TtmyygACygACygACygAC0gwbn2LH///69kiWygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygAC3iBH1797////s4MG0hAiygACygACygACygADFnz/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////u5Mi3iBCygADdxo0AAAD////////////////////////07Nm6jRuygACygACygACygACzgQLq3Ln////////////TtmyygACygACygACygACygADGoUL////////////////////59eu/liyygACygACygACygAC8kCD7+PH////////////////////////////////////////////////QsWOygACygACygACygAC0hAjp27b////////////////////////////////////////////awoWygACygACygACygACygADhzpz////EnTqygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADu5Mj////z7Ni2hgyygACygACygACygAC/lSr9/Pj////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////n166ygACzggTp27cAAAD////////////////////////////bxIiygACygACygACygACygADGoEH8+vT////59evAli2ygACygACygACygACygADgzJj////////////////////9/frDnDmygACygACygACygAC3hw/28OH////////////////////////////////////////////////XvXuygACygACygACygACygAHk0qT////////////////////////////////////////////hzp2ygACygACygACygACygADbxIn////KqFGygACygACygACygACzggTCmjXIpUrHo0bHo0bHo0bHo0bHo0bHo0bHo0bHo0bHo0bHo0bHo0bGoUPv5cv////49Om5ixaygACygACygACygAC6jRv38+b////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////awoSygAC8kSL38eMAAAD////////////////////////////8+vTBmDGygACygACygACygACygADi0KD////m1q2zgQKygACygACygACygAC4ihT38+b////////////////////////Jpk2ygACygACygACygACygAHw587////////////////////////////////////////////////eyZOygACygACygACygACygADdyJD////////////////////////////////////////////fy5aygACygACygACygACygADUuHH////StWuygACygACygACygAC0hAjn2LD9/Pj9+/f9+/f9+/f9+/f9+/f9+/f9+/f9+/f9+/f9+/f9+/f8+/b+/vz////9/Pm+lCiygACygACygACygAC1hQvs4MD////////////////////////////////////////////q3brVuXPWu3fWu3fWu3bWu3bu48f////////////////////////////////////////////9/frKp06ygADLqlT///8AAAD////////////////////////////////n1660hAiygACygACygACygAC/lSr6+PDRtGiygACygACygACygACygADQsWL///7////////////////////////QsmWygACygACygACygACygADp27f////////////////////////////////////////////////l1KmygACygACygACygACygADXvnz////////////////////////////////////////8+vXFnz6ygACygACygACygACygADOrlz////awoSygACygACygACygACygADk06b////////////////////////////////////////////////////////////////Ho0aygACygACygACygACygADUt2/////////////////////////////////////////////StGmygACygACygACygACygADZwIH////////////////////////////////////////////179+4iROygADl1Kj///8AAAD////////////////////////////////9/frLqlSygACygACygACygACygADPsGC8kSKygACygACygACygACzgQLo2bL////////////////////////////XvHmygACygACygACygACygADi0KD////////////////////////////////////////////////s37+ygACygACygACygACygADLqlTz69by6tXy6tTy6tTx6NDx58/y6tTy6tXx6NHk06bHokWygACygACygACygACygACygADMq1b////hzZqygACygACygACygACygADYv3/69+738+b38uX38uX38uX38uX38uX38uX38uX38uX38uX38uX38uX38uT7+fP////Wu3aygACygACygACygACygAC1hQvWvHjx6ND69u38+vT8+vT8+vT8+vT8+vT8+vX69+/n16+5jBiygACygACygACygACygADVunX////////////////////////////////////////////hzpyygAC9kiX7+fP///8AAAD////////////////////////////////////x6NG3iBCygACygACygACygACygACygACygACygACygACygADBmTL59uz////////////////////////////eyJGygACygACygACygACygADbxIj////////////////////////////////////////////////x6dK1hQuygACygACygACygACzgQK0hAi0hAi0gwe0gwe0gwe0gwe0gwe0hAi0gweygACygACygACygACygACygACygACygADRs2b////n2LCygACygACygACygACygAC1hAm4ihW4iRO4iRO4iRO4iRO4iRO4iRO4iRO4iRO4iRO4iRO4iRO3iRK2hgzZwID////q3LiygACygACygACygACygACygACygAC0hAi6jBm9kSO8kSK8kSK8kSK8kSK9kiS6jRqzgQKygACygACygACygACygACygADUuHD////////////////////////////////////////+/vzDnDiygADdx4////////8AAAD////////////////////////////////////////XvXqygACygACygACygACygACygACygACygACygACygADXvHn////////////////////////////////l1KmygACygACygACygACygADTt27////////////////////////////////////////////////07ty6jhyygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADfy5b////t4cKzgQKygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADOrlz////7+fLBmTOygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADZwYL////////////////////////////////////////o2bOygAG9kiX59er///////8AAAD////////////////////////////////////////49Oi+lCmygACygACygACygACygACygACygACygAC1hQrx58/////////////////////////////////s4MCzgQKygACygACygACygADNrFn////////////////////////////////////////////////48+fAly+ygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygAC8kSL48+f////x6NG3iBGygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygADIpUr///7////k06eygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygAHp27b////////////////////////////////////9/PjFoECygADj0aP///////////8AAAD////////////////////////////////////////////i0KCzggSygACygACygACygACygACygACygADGoUL////////////////////////////////////z69a0gwaygACygACygACygADGoUL////////////////////////////////////////////////7+fLGoEGygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygACygAC8kCHr"+
