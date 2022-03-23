@@ -133,7 +133,7 @@ begin
                area_info_pipe(1).user.eof <= '0';
             end if;
             -- active_line
-            if  area_info_pipe(0).raw.line_cnt >= USER_AREA_CFG.LINE_START_NUM and area_info_pipe(1).raw.line_cnt <= USER_AREA_CFG.LINE_END_NUM then 
+            if  area_info_pipe(0).raw.line_cnt >= USER_AREA_CFG.LINE_START_NUM and area_info_pipe(0).raw.line_cnt <= USER_AREA_CFG.LINE_END_NUM then 
                active_line <= '1';            
             else                     
                active_line <= '0';
