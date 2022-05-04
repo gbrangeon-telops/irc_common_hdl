@@ -20,7 +20,8 @@ use work.fpa_define.all;
 entity afpa_int_signal_gen is
    
    generic(
-      LEGACY_MODE : std_logic := '1'    -- pour conserver la compatibilité avec l'ancien mode de fonctionnement
+      LEGACY_MODE       : std_logic := '1';             -- pour conserver la compatibilité avec l'ancien mode de fonctionnement
+      PROG_INT_DLY_MCLK : unsigned(3 downto 0):= (others => '0')    -- delai additionnel entre le lprog_trig et le debut de l'integration, en coups d'horloge MCLK
       );
    
    port(
@@ -70,7 +71,7 @@ architecture rtl of afpa_int_signal_gen is
          );
    end component;
    
-   type int_gen_fsm_type is (idle, post_prog_param_st, xtra_trig_param_st, acq_trig_param_st, check_int_cnt_st, int_gen_st, check_end_st, end_st);
+   type int_gen_fsm_type is (idle, prog_trig_param_st, xtra_trig_param_st, acq_trig_param_st, check_int_cnt_st, int_gen_st, check_end_st, end_st);
    type int_fdbk_fsm_type is (idle, int_fdbk_dly_st, check_dly_end_st, int_fdbk_gen_st, check_int_fdbk_end_st, int_fdbk_end_st);
    
    signal int_gen_fsm               : int_gen_fsm_type;
@@ -96,6 +97,7 @@ architecture rtl of afpa_int_signal_gen is
    signal int_fdbk_dly_cnt          : unsigned(FPA_INTF_CFG.INT_FDBK_DLY'LENGTH-1 downto 0);
    signal fpa_prog_trig_int_time    : unsigned(31 downto 0); 
    signal fpa_xtra_trig_int_time    : unsigned(31 downto 0);
+   signal int_dly_cnt               : unsigned(PROG_INT_DLY_MCLK'LENGTH-1 downto 0);
    
 begin
    
@@ -180,6 +182,7 @@ begin
             permit_int_change_i <= '0';  
             fpa_int_i <= '0';
             int_time_dval <= '0';
+            int_dly_cnt <= (others => '0'); 
             
          else
             
@@ -195,6 +198,7 @@ begin
                   acq_frame <= '0';
                   fpa_int_i <= '0';
                   int_time_dval <= '0';
+                  int_dly_cnt <= (others => '0'); 
                   permit_int_change_i <= not acq_trig_i and not xtra_trig_i and not prog_trig_i;
                   if acq_trig_i = '1' then        -- acq_trig_i uniquement car ne jamais envoyer acq_int_i en mode xtra_trig_i
                      acq_frame <= '1';
@@ -206,7 +210,7 @@ begin
                   end if;
                   if prog_trig_i = '1' then    --                      
                      acq_frame <= '0';
-                     int_gen_fsm <= post_prog_param_st;
+                     int_gen_fsm <= prog_trig_param_st;
                   end if;
                
                when xtra_trig_param_st =>
@@ -214,10 +218,15 @@ begin
                   int_time_i <= fpa_xtra_trig_int_time;
                   int_gen_fsm <= check_int_cnt_st;
                
-               when post_prog_param_st =>
+               when prog_trig_param_st =>
                   int_cnt <= fpa_prog_trig_int_time;
-                  int_time_i <= fpa_prog_trig_int_time;
-                  int_gen_fsm <= check_int_cnt_st;
+                  int_time_i <= fpa_prog_trig_int_time;  
+                  if fpa_mclk_rising_edge = '1' then                   
+                     int_dly_cnt <= int_dly_cnt + 1;    
+                  end if;
+                  if int_dly_cnt >= PROG_INT_DLY_MCLK then 
+                     int_gen_fsm <= check_int_cnt_st;        
+                  end if;
                
                when acq_trig_param_st =>          -- pour ameliorer timings et aussi pour sortir les données avant le signal de validation qu'est acq_int.
                   frame_id_i <= frame_id_i + 1;   -- on ne change pas d'ID en xtraTrig pour que le client ne voit aucune discontinuité dans les ID
