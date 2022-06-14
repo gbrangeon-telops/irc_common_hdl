@@ -358,15 +358,10 @@ begin
             fpa_intf_cfg_i.int_signal_high_time <= USER_CFG.INT_SIGNAL_HIGH_TIME;
             
             -- ENO : 25 janv 2016: mis ici pour un fonctionnement correct. Sinon, sans reprogrammation du dtecteur, la partie common est figée
-            if readout_i = '0' and acq_in_progress_i = '0' then 
+            if acq_in_progress_i = '0' then  -- ENO 14 juin 2022: il ne reste que acq_in_progress_i comme condition car cfg.comn ne touche que principalemnt le trig control 
                fpa_intf_cfg_i.comn <= USER_CFG.COMN;
             end if;
-            
-            -- ENO : 05 avril 2016: mis ici pour que les ajustements se fassent en temps réel4 
-            -- fpa_intf_cfg_i.adc_clk_source_phase <= USER_CFG.ADC_CLK_SOURCE_PHASE;
-            -- --fpa_intf_cfg_i.adc_clk_phase <= USER_CFG.ADC_CLK_PHASE;
-            --            fpa_intf_cfg_i.real_mode_active_pixel_dly <= USER_CFG.REAL_MODE_ACTIVE_PIXEL_DLY;
-            --            
+           
             -------------------------------------
             -- ENO: 8 juillet 2018
             ------------------------------------
