@@ -64,6 +64,18 @@ architecture rtl of afpa_flow_mux is
          CLK : in std_logic);
    end component;
    
+   component double_sync is
+      generic(
+         INIT_VALUE : bit := '0'
+         );
+      port(
+         D : in STD_LOGIC;
+         Q : out STD_LOGIC := '0';
+         RESET : in STD_LOGIC;
+         CLK : in STD_LOGIC
+         );
+   end component double_sync;
+   
    
    type mode_fsm_type is (init_st1, init_st2, idle, fpa_st, diag_st);
    
@@ -74,22 +86,41 @@ architecture rtl of afpa_flow_mux is
    signal quad_data_reg, quad_data_i   : std_logic_vector(QUAD_DATA'length-1 downto 0);
    signal quad_dval_reg, quad_dval_i   : std_logic;
    signal active_output_i              : std_logic;
+   signal diag_mode_i                  : std_logic;
+   signal data_source_i                : std_logic;
+   
    
 begin
    
-   DIAG_MODE_EN <= diag_mode_en_i;
-   FPA_MODE_EN <= fpa_mode_en_i;
-   QUAD_DATA <= quad_data_i;
-   QUAD_DVAL <= quad_dval_i;
+   DIAG_MODE_EN   <= diag_mode_en_i;
+   FPA_MODE_EN    <= fpa_mode_en_i;
+   QUAD_DATA      <= quad_data_i;
+   QUAD_DVAL      <= quad_dval_i;
    
    --------------------------------------------------
    -- synchro reset 
    --------------------------------------------------   
-   U0: sync_reset
+   U0A: sync_reset
    port map(
       ARESET => ARESET,
       CLK    => CLK,
       SRESET => sreset
+      ); 
+   
+   U0B: double_sync 
+   port map (
+      D     => FPA_INTF_CFG.COMN.FPA_DIAG_MODE, 
+      Q     => diag_mode_i,  
+      RESET => sreset, 
+      CLK   => CLK
+      );   
+   
+   U0C: double_sync 
+   port map (
+      D     => FPA_INTF_CFG.COMN.FPA_INTF_DATA_SOURCE, 
+      Q     => data_source_i,  
+      RESET => sreset, 
+      CLK   => CLK
       );
    
    -------------------------------------------------------------------
@@ -109,13 +140,13 @@ begin
             case mode_fsm is 
                
                when init_st1 =>    -- premiere image sacrifiee pour raison de synchro
-                  diag_mode_en_i <= FPA_INTF_CFG.COMN.FPA_DIAG_MODE;
-                  fpa_mode_en_i  <= not FPA_INTF_CFG.COMN.FPA_DIAG_MODE;
+                  diag_mode_en_i <= diag_mode_i;
+                  fpa_mode_en_i  <= not diag_mode_i;
                   if FPA_FVAL = '1' or DIAG_FVAL = '1' then 
                      mode_fsm <= init_st2;
                   end if;
                   -- pragma translate_off 
-                  if FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '0' or FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '1' then -- pour eviter 'U'
+                  if diag_mode_i = '0' or diag_mode_i = '1' then -- pour eviter 'U'
                      mode_fsm <= init_st2;
                   end if;
                   -- pragma translate_on
@@ -129,7 +160,7 @@ begin
                when diag_st => 
                   if DIAG_FVAL = '0' then 
                      diag_mode_en_i <= '1';
-                     if  FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '0' or FPA_INTF_CFG.COMN.FPA_INTF_DATA_SOURCE = DATA_SOURCE_OUTSIDE_FPGA then
+                     if  diag_mode_i = '0' or data_source_i = DATA_SOURCE_OUTSIDE_FPGA then
                         diag_mode_en_i <= '0';
                         mode_fsm <= fpa_st;
                      end if;
@@ -138,7 +169,7 @@ begin
                when fpa_st => 
                   if FPA_FVAL = '0' then 
                      fpa_mode_en_i <= '1';
-                     if  FPA_INTF_CFG.COMN.FPA_DIAG_MODE = '1' and FPA_INTF_CFG.COMN.FPA_INTF_DATA_SOURCE = DATA_SOURCE_INSIDE_FPGA then
+                     if  diag_mode_i = '1' and data_source_i = DATA_SOURCE_INSIDE_FPGA then
                         fpa_mode_en_i <= '0';
                         mode_fsm <= diag_st;
                      end if;
