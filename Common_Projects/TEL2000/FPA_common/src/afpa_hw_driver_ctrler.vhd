@@ -55,6 +55,8 @@ entity afpa_hw_driver_ctrler is
       -- statut
       ACQ_IN_PROGRESS    : in std_logic; 
       HW_CFG_IN_PROGRESS : out std_logic;
+      FPA_PROG_MODE      : out std_logic; -- à '1' si le FPA va être en programmation et revient à '0' lorsque terminé
+      DAC_PROG_MODE      : out std_logic; -- à '1' si le DAC va être en programmation et revient à '0' lorsque terminé
       
       -- configs
       USER_CFG         : in fpa_intf_cfg_type;
@@ -130,18 +132,20 @@ architecture rtl of afpa_hw_driver_ctrler is
    signal fpa_intf_cfg_up2date      : std_logic;
    signal acq_in_progress_i         : std_logic;
    signal hw_driver_en_i            : std_logic;
+   signal fpa_prog_mode_i           : std_logic;
+   signal dac_prog_mode_i           : std_logic;
    
---   attribute KEEP : string;
---   attribute KEEP of readout_i : signal is "TRUE";
---   attribute KEEP of update_fpa_part_only : signal is "TRUE";
---   attribute KEEP of update_fpa_cfg : signal is "TRUE";
---   attribute KEEP of prog_ctrl_fsm : signal is "TRUE";
---   attribute KEEP of hw_seq_fsm : signal is "TRUE";
---   attribute KEEP of valid_prog_rqst : signal is "TRUE";
---   attribute KEEP of fpa_client_done : signal is "TRUE";
---   attribute KEEP of fpa_intf_cfg_up2date : signal is "TRUE";
---   attribute KEEP of run_fpa_prog_client : signal is "TRUE";
---   attribute KEEP of fpa_first_cfg_done : signal is "TRUE";
+   --   attribute KEEP : string;
+   --   attribute KEEP of readout_i : signal is "TRUE";
+   --   attribute KEEP of update_fpa_part_only : signal is "TRUE";
+   --   attribute KEEP of update_fpa_cfg : signal is "TRUE";
+   --   attribute KEEP of prog_ctrl_fsm : signal is "TRUE";
+   --   attribute KEEP of hw_seq_fsm : signal is "TRUE";
+   --   attribute KEEP of valid_prog_rqst : signal is "TRUE";
+   --   attribute KEEP of fpa_client_done : signal is "TRUE";
+   --   attribute KEEP of fpa_intf_cfg_up2date : signal is "TRUE";
+   --   attribute KEEP of run_fpa_prog_client : signal is "TRUE";
+   --   attribute KEEP of fpa_first_cfg_done : signal is "TRUE";
    
 begin
    
@@ -153,6 +157,8 @@ begin
    HW_DONE <= hw_done_i;
    PROG_INIT_DONE <= prog_init_done_i;
    HW_CFG_IN_PROGRESS <= hw_cfg_in_progress_i;
+   FPA_PROG_MODE <= fpa_prog_mode_i;
+   DAC_PROG_MODE <= dac_prog_mode_i;
    
    --------------------------------------------------
    -- synchro reset 
@@ -204,6 +210,8 @@ begin
             prog_init_done_i <= '0';
             hw_cfg_in_progress_i <= '0';
             hw_rqst_i <= '0';
+            fpa_prog_mode_i <= '0';
+            dac_prog_mode_i <= '0';
             
          else                            
             
@@ -225,14 +233,18 @@ begin
                   update_whole_cfg <= '0';
                   prog_init_done_i <= first_prog_done;    -- Par principe pour le scorpiomwA, la premiere config est celle d'initialisation.
                   wait_cnt <= (others => '0');
+                  fpa_prog_mode_i <= '0';
+                  dac_prog_mode_i <= '0';                  
                   if diag_mode_only_i = '1' then
                      hw_seq_fsm <= diag_mode_only_st;
-                  elsif valid_prog_rqst = '1' then 
+                  elsif valid_prog_rqst = '1' then
+                     fpa_prog_mode_i <= '1';
                      hw_seq_fsm <= forward_rqst_st;
                   elsif valid_dac_rqst = '1' then
+                     dac_prog_mode_i <= '1';
                      if prog_init_done_i = '0' then       -- on fait ceci juste pour être compatible avec l'existant. Sinon, le dac n'a pas besoin de cela. Il peut être tout le temps programmé à la volée, sans blocage des trigs d'integration
                         hw_seq_fsm <= forward_rqst_st; 
-                     else                                           -- programmation sans interruption des trigs d'integration
+                     else                                 -- programmation sans interruption des trigs d'integration
                         hw_seq_fsm <= check_rqst_st; 
                      end if;
                   end if;
@@ -284,7 +296,7 @@ begin
                -- pause 
                when pause_st =>
                   wait_cnt <= wait_cnt + 1;
-                  if wait_cnt(4) = '1' then 
+                  if wait_cnt(4) = '1' then
                      hw_seq_fsm <= idle; -- pour donner le temps que le signal valid_rqst_pending tombe après mise à jour de la config
                   end if;
                
@@ -361,7 +373,7 @@ begin
             if acq_in_progress_i = '0' then  -- ENO 14 juin 2022: il ne reste que acq_in_progress_i comme condition car cfg.comn ne touche que principalemnt le trig control 
                fpa_intf_cfg_i.comn <= USER_CFG.COMN;
             end if;
-           
+            
             -------------------------------------
             -- ENO: 8 juillet 2018
             ------------------------------------
@@ -484,7 +496,7 @@ begin
                   
                -- programmer le détecteur
                when  fpa_prog_st =>                  
-                  prog_en_i <= not readout_i;  
+                  prog_en_i <= not readout_i;                   
                   if PROG_DONE = '0' then
                      prog_ctrl_fsm <= wait_prog_end_st;
                   end if; 
