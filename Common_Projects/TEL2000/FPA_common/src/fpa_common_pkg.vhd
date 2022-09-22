@@ -139,7 +139,7 @@ package fpa_common_pkg is
    constant  ID_ADC_BRD_16CHN_FREQMAX_65MHZ                     : freq_id_type := ( 5772,  6380);   -- 4 quads LTC2172 soudés sur le board
    
    -- SADC EFA-00276
-   constant  ID_SADC_BRD_8CHN_FREQMAX_25MHZ                     : freq_id_type := ( 4782,  4978);   -- 1 octal LTM9006 soudé sur le board          
+   constant  ID_SADC_BRD_16CHN_FREQMAX_25MHZ                    : freq_id_type := ( 4782,  4978);   -- 2 octals LTM9006 soudés sur le board          
    
    
    --------------------------------------------------------------------------------
@@ -739,11 +739,11 @@ package body fpa_common_pkg is
             --------------------------------------------------------
             --  EFA-00276-XYZ
             --------------------------------------------------------     
-            -- 8 canaux 25MHz max (1 octal LTM9006 ) détectés 
-         elsif (Tosc > ID_SADC_BRD_8CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_SADC_BRD_8CHN_FREQMAX_25MHZ.freq_id_max) then
+            -- 16 canaux 25MHz max (2 octals LTM9006 ) détectés 
+         elsif (Tosc > ID_SADC_BRD_16CHN_FREQMAX_25MHZ.freq_id_min) and (Tosc < ID_SADC_BRD_16CHN_FREQMAX_25MHZ.freq_id_max) then
             adc_brd_info.brd_assy_number        := 276;
             adc_brd_info.adc_oper_freq_max_khz  := 25_000; 
-            adc_brd_info.analog_channel_num     := 8;            
+            adc_brd_info.analog_channel_num     := 16;            
             adc_brd_info.adc_resolution         := 14;           
             
          else
