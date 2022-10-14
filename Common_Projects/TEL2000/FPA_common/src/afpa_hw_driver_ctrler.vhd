@@ -210,8 +210,8 @@ begin
             prog_init_done_i <= '0';
             hw_cfg_in_progress_i <= '0';
             hw_rqst_i <= '0';
-            fpa_prog_mode_i <= '0';
-            dac_prog_mode_i <= '0';
+            fpa_prog_mode_i <= '1';
+            dac_prog_mode_i <= '1';
             
          else                            
             
@@ -233,7 +233,7 @@ begin
                   update_whole_cfg <= '0';
                   prog_init_done_i <= first_prog_done;    -- Par principe pour le scorpiomwA, la premiere config est celle d'initialisation.
                   wait_cnt <= (others => '0');
-                  fpa_prog_mode_i <= '0';
+                  fpa_prog_mode_i <= not fpa_first_cfg_done;
                   dac_prog_mode_i <= '0';                  
                   if diag_mode_only_i = '1' then
                      hw_seq_fsm <= diag_mode_only_st;
