@@ -108,8 +108,8 @@ begin
       begin                  
       U2 : LL_ext_sync_flow
       port map(
-         RX0_DVAL  => RX2_MOSI.DVAL,
-         RX0_BUSY  => RX2_MISO.BUSY,
+         RX0_DVAL  => RX1_MOSI.DVAL,
+         RX0_BUSY  => RX1_MISO.BUSY,
          
          RX1_DVAL  => RX2_MOSI.DVAL,
          RX1_BUSY  => RX2_MISO.BUSY,
@@ -128,6 +128,7 @@ begin
       begin                  
       RX1_MISO <= TX_MISO;
       RX2_MISO <= TX_MISO;
+      sync_dval_i <= RX1_MOSI.DVAL;
    end generate;           
    
    --------------------------------------------------    
