@@ -30,11 +30,12 @@ entity afpa_readout_flags_delay is
       ERR            : out std_logic
       );
 end afpa_readout_flags_delay;
-
-
+ 
 
 architecture rtl of afpa_readout_flags_delay is
-   
+
+constant C_FIFO_RST_CNT_BIT_POS :integer := 3; -- position du bit du compteur de rst
+
    component sync_reset
       port(
          ARESET : in std_logic;
@@ -226,7 +227,7 @@ begin
                when rst_fifo_st =>
                   aoi_fifo_rst <= '1';
                   aoi_rst_cnt  <= aoi_rst_cnt + 1;
-                  if aoi_rst_cnt(3) = '1' then
+                  if aoi_rst_cnt(C_FIFO_RST_CNT_BIT_POS) = '1' then
                      aoi_fsm <= idle;
                   end if;              
                
@@ -325,7 +326,7 @@ begin
                   when rst_fifo_st =>
                      naoi_fifo_rst <= '1';
                      naoi_rst_cnt  <= naoi_rst_cnt + 1;
-                     if naoi_rst_cnt(4) = '1' then
+                     if naoi_rst_cnt(C_FIFO_RST_CNT_BIT_POS) = '1' then
                         naoi_fsm <= idle;
                      end if;              
                   
