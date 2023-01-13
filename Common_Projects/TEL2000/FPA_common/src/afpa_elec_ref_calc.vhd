@@ -75,6 +75,7 @@ architecture rtl of afpa_elec_ref_calc is
    signal temp_result         : temp_result_type;
    signal ref_feedbk_i        : std_logic := '0';
    signal result_dval_pipe    : std_logic_vector(7 downto 0) := (others => '0');
+   signal forced_val_enabled  : std_logic;
      
 begin
    
@@ -166,6 +167,7 @@ begin
          
          -- passage dans des registres 
          numerator <= unsigned(FPA_INTF_CFG.ELCORR_REF_CFG(REF_ID).SAMP_MEAN_NUMERATOR);
+         forced_val_enabled <= FPA_INTF_CFG.ELCORR_REF_CFG(REF_ID).FORCED_VAL_ENABLED;
          
          -- latch des sommes
          if samp_sum_dval = '1' then 
@@ -178,14 +180,20 @@ begin
          -- division
          for ii in 1 to 4 loop
             temp_result(ii) <= resize(samp_sum_data_latch(ii) * numerator, temp_result(1)'length);
-            result(ii) <= temp_result(ii)(C_RESULT_MSB_POS downto C_DENOM_CONV_BIT_POS) + resize("00" & temp_result(ii)(C_DENOM_CONV_BIT_POS_M1), result(ii)'length);       -- soit une division par 2^denom_conv_bit_pos avec arrondi
+            if forced_val_enabled = '0' then
+               result(ii) <= temp_result(ii)(C_RESULT_MSB_POS downto C_DENOM_CONV_BIT_POS) + resize("00" & temp_result(ii)(C_DENOM_CONV_BIT_POS_M1), result(ii)'length);       -- soit une division par 2^denom_conv_bit_pos avec arrondi
+            else
+               -- In FORCED_VAL_ENABLED mode, FORCED_VAL replaces the result
+               result(ii) <= resize(FPA_INTF_CFG.ELCORR_REF_CFG(REF_ID).FORCED_VAL, result(ii)'length);
+            end if;
          end loop;
          result_dval_pipe(7 downto 1) <= result_dval_pipe(6 downto 0);
          
          -- feedbacks
-         if unsigned(result_dval_pipe) /= 0 then
+         if unsigned(result_dval_pipe) /= 0 and forced_val_enabled = '0' then
             ref_feedbk_i <= '1';
          else
+            -- In FORCED_VAL_ENABLED mode, REF_FEEDBK is always 0
             ref_feedbk_i <= '0';  
          end if;
          
