@@ -29,9 +29,9 @@ library STD;
 use STD.TEXTIO.all;
 
 
-library Common_HDL;
-use Common_HDL.Telops.all;
-use Common_HDL.telops_testing.all;
+--library Common_HDL;
+--use Common_HDL.Telops.all;
+--use Common_HDL.telops_testing.all;
 use work.tel2000.all;
 
 entity AXIS_file_output_64 is
