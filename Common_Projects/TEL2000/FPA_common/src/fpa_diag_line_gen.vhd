@@ -36,14 +36,14 @@ entity fpa_diag_line_gen is
       -- config
       LINE_SIZE          : in std_logic_vector(15 downto 0);
       START_PULSE        : in std_logic; --! Pulse qui permet de générer une ligne complète même s'il dure 1 CLK
-      FIRST_VALUE        : in std_logic_vector(15 downto 0);  --! Premiere valeur à sortir 
-      INCR_VALUE         : in std_logic_vector(15 downto 0); --! Increment sur les valeurs 
+      FIRST_VALUE        : in std_logic_vector(23 downto 0);  --! Premiere valeur à sortir 
+      INCR_VALUE         : in std_logic_vector(23 downto 0); --! Increment sur les valeurs 
       
       -- sampling rate (used with analog iddca only)
       PIX_SAMP_TRIG      : in std_logic;      -- parfaitement synchrone sur CLK. En fait CLK = ADC_CLK_SOURCE qui vaut aussi MCLK_SOURCE pour les iddcas analogiques. C'est un pulse de durée 1CLK qui permet d'envoyer un echantillons de pixel
       
       -- Sorties 
-      DIAG_DATA          : out std_logic_vector(15 downto 0);   --! sortie des données
+      DIAG_DATA          : out std_logic_vector(23 downto 0);   --! sortie des données
       DIAG_DVAL          : out std_logic; --! signal de vaidation du bus des données
       DIAG_SOL           : out std_logic; --! Start of Line
       DIAG_EOL           : out std_logic; --! End of Line
@@ -74,7 +74,7 @@ architecture RTL of fpa_diag_line_gen is
    signal diag_eol_i       : std_logic;
    signal diag_dval_i      : std_logic;
    signal diag_lval_i      : std_logic;
-   signal diag_data_i      : integer range -65535 to 65535;
+   signal diag_data_i      : integer;
    signal pix_cnt          : unsigned(LINE_SIZE'length-1 downto 0);
    signal done             : std_logic;
    signal line_size_i      : natural;
