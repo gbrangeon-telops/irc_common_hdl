@@ -34,6 +34,7 @@ package fpa_common_pkg is
    constant FPA_ROIC_ISC0804       : std_logic_vector(7 downto 0) := x"19"; 
    constant FPA_ROIC_SUPHAWK       : std_logic_vector(7 downto 0) := x"20";
    constant FPA_ROIC_XRO3503       : std_logic_vector(7 downto 0) := x"21";
+   constant FPA_ROIC_CALCIUM       : std_logic_vector(7 downto 0) := x"22";
    constant FPA_ROIC_UNKNOWN       : std_logic_vector(7 downto 0) := x"FF";       --  interface inconnue 
    
    -------------------------------------------------------------------------- 
@@ -84,6 +85,7 @@ package fpa_common_pkg is
    constant LVTTL50          : std_logic_vector(7 downto 0) := x"03";    -- single ended LVTTL 5.0V  
    constant LVCMOS33         : std_logic_vector(7 downto 0) := x"04";    -- single ended LVCMOS 3.3V
    constant LVCMOS25         : std_logic_vector(7 downto 0) := x"06";    -- single ended LVCMOS 2.5V
+   constant LVCMOS18         : std_logic_vector(7 downto 0) := x"07";    -- single ended LVCMOS 1.8V
    
    --------------------------------------------------------------------------
    -- les sources de données  
@@ -119,6 +121,7 @@ package fpa_common_pkg is
    constant  ID_ANALOG_SUPHAWK_INPUT_LVCMOS33_COOL_11V_TO_27V              : freq_id_type := ( 5299,  5516);   -- 18.5 KHz, Analog SUPHAWK RM2
    constant  ID_ANALOG_ISC0804_LN2_INPUT_LVCMOS33_COOL_0V_TO_28V           : freq_id_type := ( 5028,  5233);   -- 19.5 KHz, Analog ISC0804 LN2 with FleX 291
    constant  ID_ANALOG_XRO3503_INPUT_LVCMOS33_COOL_12V_TO_28V              : freq_id_type := ( 4782,  4978);   -- 20.5 KHz, Analog XRO3503 with TEC            
+   constant  ID_DIGITAL_CALCIUM_INPUT_LVCMOS18_COOL_20V_TO_28V             : freq_id_type := ( 4560,  4746);   -- 21.5 KHz, Digital Calcium
    
    ----------------------------------------------------------------------------------
    -- Les frequences de reconnaissance des cartes ADC (en coups de clocks 100 MHz)   
@@ -834,6 +837,16 @@ package body fpa_common_pkg is
             ddc_brd_info.cooler_on_curr_min_mA     := 100;
             ddc_brd_info.cooler_off_curr_max_mA    := 100;
             
+            -- calciumD
+         elsif (Tosc > ID_DIGITAL_CALCIUM_INPUT_LVCMOS18_COOL_20V_TO_28V.freq_id_min) and (Tosc < ID_DIGITAL_CALCIUM_INPUT_LVCMOS18_COOL_20V_TO_28V.freq_id_max) then 
+            ddc_brd_info.fpa_roic                  := FPA_ROIC_CALCIUM;
+            ddc_brd_info.fpa_output                := OUTPUT_DIGITAL;
+            ddc_brd_info.fpa_input                 := LVCMOS18;
+            ddc_brd_info.cooler_volt_min_mV        := 20_000;
+            ddc_brd_info.cooler_volt_max_mV        := 28_000;
+            ddc_brd_info.cooler_on_curr_min_mA     := 100;
+            ddc_brd_info.cooler_off_curr_max_mA    := 100;
+            
             -- ddc_brd inconnu 
          else
             ddc_brd_info.fpa_roic                  := FPA_ROIC_UNKNOWN;
@@ -902,6 +915,11 @@ package body fpa_common_pkg is
          fpa_digio_input_type := LVCMOS25;         
          
          -- toute autre combinaison n'est pas possible avec la carte EFA-00253 d'origine.
+         
+         -- LVCMOS 1.8V (seulement sur la carte EFA-00331 pour le Calcium)
+      elsif (voltage_mV > 1600) and (voltage_mV < 2000) then
+         fpa_digio_input_type := LVCMOS18;
+         
       else
          fpa_digio_input_type := INPUT_UNKNOWN;         
       end if;
