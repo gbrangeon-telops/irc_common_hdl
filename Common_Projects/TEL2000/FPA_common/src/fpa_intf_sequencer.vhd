@@ -106,7 +106,8 @@ architecture RTL of fpa_intf_sequencer is
    signal fpa_softw_err       : std_logic;
    signal fpa_vhd_err         : std_logic;
    signal fpa_init_cfg_rdy    : std_logic;
-   signal data_path_done      : std_logic := '0';
+   signal data_path_done      : std_logic;
+   signal data_path_done_i    : std_logic := '0';
    signal fpa_seq_success     : std_logic;
    
    
@@ -152,6 +153,12 @@ begin
    -------------------------------------------------- 
    U1B: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => fpa_driver_rqst, CLK => CLK, Q => fpa_driver_rqst_i);
    U1C: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => fpa_driver_done, CLK => CLK, Q => fpa_driver_done_i);
+
+   --------------------------------------------------
+   -- Double sync du statut du data_path
+   --------------------------------------------------
+   U1D: double_sync generic map(INIT_VALUE => '0') port map (RESET => sreset, D => data_path_done, CLK => CLK, Q => data_path_done_i);
+      
    
    -----------------------------------------------------------
    -- Vérification des statuts des cartes électroniques 
@@ -397,7 +404,7 @@ begin
                   end if;
                
                when wait_dpath_done_st =>
-                  if data_path_done = '1' then 
+                  if data_path_done_i = '1' then 
                      fpa_sequencer_sm <= active_prog_st;
                   end if;
                
