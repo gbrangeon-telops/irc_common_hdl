@@ -86,7 +86,6 @@ signal phase_delay_time_table : phase_delay_time_array_type;
 signal clkout_id : natural := 0;
 signal pll_reset_i : std_logic := '1';
 signal pll_locked_i : std_logic;
-signal pll_rdy_i : std_logic := '0';
 signal drp_rd_addr_i : std_logic_vector(6 downto 0) := (others=>'0');
 signal drp_wr_addr_i : std_logic_vector(6 downto 0) := (others=>'0');
 signal drp_addr_i : std_logic_vector(6 downto 0) := (others=>'0');
