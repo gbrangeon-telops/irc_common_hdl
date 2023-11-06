@@ -9,7 +9,7 @@
 --!   $Id$
 --!   $URL$
 -- 
--- Reference: Application Note XAPP888 de Xilinx, "MMCM and PLL DynamicReconfiguration", 2019.
+-- Reference: Application Note XAPP888 de Xilinx, "MMCM and PLL Dynamic Reconfiguration", 2019.
 ------------------------------------------------------------------
 
 library IEEE;
