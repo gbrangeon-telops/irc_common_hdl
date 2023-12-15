@@ -17,6 +17,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
 use work.fpa_define.all;
+use work.proxy_define.all;
 
 entity afpa_readout_flags_delay is
    port(

@@ -13,6 +13,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use work.fpa_define.all;
+use work.proxy_define.all;
 
 entity afpa_real_data_gen_v2 is
    port(

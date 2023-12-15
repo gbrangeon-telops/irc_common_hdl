@@ -12,9 +12,10 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE. numeric_std.all;
+use IEEE.numeric_std.all;
 use work.fpa_common_pkg.all;
 use work.FPA_define.all;
+use work.proxy_define.all;
 
 
 entity afpa_services_ctrl is

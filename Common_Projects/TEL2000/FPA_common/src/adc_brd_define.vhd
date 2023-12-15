@@ -19,7 +19,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all; 
-use work.FPA_define.all; 
+use work.FPA_define.all;
+use work.proxy_define.all; 
 
 
 package adc_brd_define is    

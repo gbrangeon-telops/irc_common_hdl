@@ -18,6 +18,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.NUMERIC_STD.all;
 use work.fpa_define.all;
+use work.proxy_define.all;
 
 entity afpa_line_sync_mode_dval_gen is
    port(

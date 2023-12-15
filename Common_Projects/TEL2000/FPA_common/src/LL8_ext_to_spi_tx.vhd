@@ -11,7 +11,7 @@
 ---------------------------------------------------------------------------------------------------
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE. numeric_std.all;
+use IEEE.numeric_std.all;
 use work.fpa_common_pkg.all;
 
 entity LL8_ext_to_spi_tx is

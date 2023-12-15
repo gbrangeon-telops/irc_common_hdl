@@ -13,7 +13,7 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE. numeric_std.all;
+use IEEE.numeric_std.all;
 use work.fpa_common_pkg.all;
 --use work.fpa_define.all;
 --use work.tel2000.all;

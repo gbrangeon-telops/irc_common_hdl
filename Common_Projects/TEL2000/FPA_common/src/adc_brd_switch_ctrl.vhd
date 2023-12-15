@@ -12,9 +12,10 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE. numeric_std.all;
+use IEEE.numeric_std.all;
 use work.fpa_common_pkg.all;
 use work.fpa_define.all;
+use work.proxy_define.all;
 
 entity adc_brd_switch_ctrl is
    port(

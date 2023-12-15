@@ -15,6 +15,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.fpa_define.all;
+use work.proxy_define.all;
 use work.fleg_brd_define.all;
 
 entity afpa_hw_driver_ctrler is

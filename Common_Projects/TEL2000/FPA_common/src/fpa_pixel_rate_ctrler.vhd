@@ -17,6 +17,7 @@ use IEEE.numeric_std.all;
 use work.fpa_common_pkg.all;
 use work.tel2000.all;
 use work.FPA_define.all;
+use work.proxy_define.all;
 
 entity fpa_pixel_rate_ctrler is
    port(

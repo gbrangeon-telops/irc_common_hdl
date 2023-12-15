@@ -16,6 +16,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
 use work.fpa_common_pkg.all; 
 use work.FPA_Define.all;
+use work.proxy_define.all;
 use work.fleg_brd_define.all; 
 
 entity fleg_prog_ctler_kernel is

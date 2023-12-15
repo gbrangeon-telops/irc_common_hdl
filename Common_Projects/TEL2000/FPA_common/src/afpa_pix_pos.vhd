@@ -13,6 +13,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
 use work.FPA_Define.all;
+use work.proxy_define.all;
 use work.fpa_common_pkg.all;  
 
 entity afpa_pix_pos is

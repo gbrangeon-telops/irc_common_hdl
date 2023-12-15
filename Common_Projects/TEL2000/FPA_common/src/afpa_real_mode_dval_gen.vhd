@@ -16,6 +16,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.NUMERIC_STD.all;
 use work.fpa_define.all;
+use work.proxy_define.all;
 use work.fpa_common_pkg.all; 
 
 entity afpa_real_mode_dval_gen is
