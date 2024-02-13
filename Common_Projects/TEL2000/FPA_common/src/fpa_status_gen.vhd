@@ -131,6 +131,18 @@ architecture rtl of fpa_status_gen is
          );
    end component;
    
+   component double_sync
+      generic (
+         INIT_VALUE : bit := '0'
+      );
+      port (
+         D     : in STD_LOGIC;
+         Q     : out STD_LOGIC := '0';
+         RESET : in STD_LOGIC;
+         CLK   : in STD_LOGIC
+      );
+   end component;
+   
    --   component ram_dp is
    --      generic(
    --         D_WIDTH : integer := 16;
@@ -165,7 +177,21 @@ begin
    U1A : sync_reset
    port map(ARESET => ARESET, SRESET => sreset_fpa_intf_clk, CLK => FPA_INTF_CLK); 	
    U1B : sync_reset
-   port map(ARESET => ARESET, SRESET => sreset_mb_clk, CLK => MB_CLK); 	
+   port map(ARESET => ARESET, SRESET => sreset_mb_clk, CLK => MB_CLK);
+   
+   --------------------------------------------------
+   -- Double sync 
+   --------------------------------------------------   
+   U1C : double_sync
+   generic map (
+      INIT_VALUE => '0'
+   )
+   port map (
+      RESET => sreset_fpa_intf_clk,
+      D => RESET_ERR,
+      CLK => FPA_INTF_CLK,
+      Q => reset_err_i
+   ); 	
    
    -----------------------------------------------
    -- Inputs maps: INTF_SEQ_STAT 
@@ -307,10 +333,10 @@ begin
             error_latch <= (others => '0');
             error <= (others => '0');
             error_found <= '0';
-            reset_err_i <= '0';
+            --reset_err_i <= '0';
          else 
             
-            reset_err_i <= RESET_ERR;
+            --reset_err_i <= RESET_ERR;
             
             -- statut : signal done  
             global_done <= acq_trig_done;-- fpa_seq_done, fpa_driver_done, trig_ctler_done ne comptent pas parmi le global_done
