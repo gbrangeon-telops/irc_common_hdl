@@ -21,7 +21,8 @@ entity LL8_ext_to_spi_tx_v2 is
       DATA_TO_CS_DLY : natural range 1 to 31 := 1;  -- delai en coups de SCLK entre le debut du dernier SD et la remontee de CS_N. SCLK0 fait la periode du dernier SD et reste à '0' pour le reste du delai. Mettre à 1 pour aucun delai a la fin du dernier SD
       CS_TO_DATA_DLY : natural range 0 to 31 := 1;  -- delai en coups de SCLK entre la tombée de CS_N et la premiere donnée de SD. SCLK0 est à '0' durant ce delai
       SCLK0_FREE_RUNNING : boolean := false;        -- à true si l'horloge SCLK0 roule tout le temps
-      SCLK0_INVERTED : std_logic := '0'             -- à '0' la polarité de SCLK0 est la même que SCLKI et SD change sur front montant
+      SCLK0_INVERTED : std_logic := '0';            -- à '0' la polarité de SCLK0 est la même que SCLKI et SD change sur front montant
+      SD_IDLE_VALUE : std_logic := '0'              -- valeur de la sortie SD quand elle n'est pas utilisée (pendant l'init et entre les messages)
       );
    
    port(
@@ -276,7 +277,7 @@ begin
             frm_done_i <= '0';
             sclk_last <= '1';
             sclk_o <= '0';
-            sd_o <= '0';    -- ENO 22 dec 2015 : fait expres car requis pour plusieurs detecteurs (indigo surtout)
+            sd_o <= SD_IDLE_VALUE;    -- ODI 2024-02-13: la valeur en Idle est configurable
          else                    
             
             sclk_last <= SCLKI;
@@ -355,7 +356,7 @@ begin
                
                when inactive_cs_st =>                  
                   if SCLKI = '1' and sclk_last = '0' then 
-                     sd_o <= '0';    -- ENO 22 dec 2015 : fait expres car requis pour plusieurs detecteurs (indigo surtout)
+                     sd_o <= SD_IDLE_VALUE;    -- ODI 2024-02-13: la valeur en Idle est configurable
                      cs_n_o <= '1';
                      frm_done_i <= '1';
                      spi_fsm <= wait_data_st;
