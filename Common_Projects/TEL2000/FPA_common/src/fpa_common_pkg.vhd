@@ -936,7 +936,7 @@ package body fpa_common_pkg is
    begin
       
       -- tension 5V
-      if (voltage_mV > 4500) and (voltage_mV < 5500) then 
+      if (voltage_mV > 4500) and (voltage_mV < 5250) then 
          flex_psp_mV := 5_000;
          
          -- tension 6.5V            
@@ -948,6 +948,11 @@ package body fpa_common_pkg is
          flex_psp_mV := 8_000;         
          
          -- toute autre combinaison n'est pas possible avec la carte EFA-00253 d'origine.
+         
+         -- tension 5.5V (seulement sur la carte EFA-00331 pour le Calcium)
+      elsif (voltage_mV > 5250) and (voltage_mV < 6000) then 
+         flex_psp_mV := 5_500;
+         
       else
          flex_psp_mV := 0;         
       end if;
