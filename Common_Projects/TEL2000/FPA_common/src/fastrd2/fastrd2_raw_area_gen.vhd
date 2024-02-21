@@ -48,23 +48,19 @@ architecture rtl of fastrd2_raw_area_gen is
    end component; 
    
    signal sreset               : std_logic;
-   
    signal readout_fsm          : readout_fsm_type;
    signal start_i              : std_logic := '0';
    signal start_last           : std_logic;
-   signal frame_pclk_cnt       : unsigned(RAW_AREA_CFG.READOUT_PCLK_CNT_MAX'LENGTH-1 downto 0); 
-   signal line_pclk_cnt        : unsigned(RAW_AREA_CFG.LINE_PERIOD_PCLK'LENGTH-1 downto 0);
+   signal frame_pclk_cnt       : unsigned(RAW_AREA_CFG.READOUT_PCLK_CNT_MAX'LENGTH-1 downto 0) := (others => '0');
+   signal line_pclk_cnt        : unsigned(RAW_AREA_CFG.LINE_PERIOD_PCLK'LENGTH-1 downto 0) := (others => '0');
    signal adc_sync_flag_i      : std_logic;
    signal area_info_pipe       : area_info_pipe_type;
    signal readout_in_progress  : std_logic;
    signal raw_line_en          : std_logic;
    signal global_reset         : std_logic;
-   signal line_cnt             : unsigned(RAW_AREA_CFG.LINE_END_NUM'LENGTH-1 downto 0);
+   signal line_cnt             : unsigned(RAW_AREA_CFG.LINE_END_NUM'LENGTH-1 downto 0) := (others => '0');
    signal sol_pipe_pclk        : std_logic_vector(1 downto 0):= (others => '0'); 
-   signal lsync_i              : std_logic;
-   signal lsync_cnt            : unsigned(RAW_AREA_CFG.LSYNC_NUM'LENGTH-1 downto 0);
    signal pclk_cnt_edge        : std_logic;
-   --  signal record_valid         : std_logic := '0';
    signal pclk_sample_last     : std_logic := '0';
    signal lsync_enabled        : std_logic;
    signal lval_temp            : std_logic;
@@ -142,13 +138,16 @@ begin
    --------------------------------------------------
    U4: process(CLK)
    begin
-      if rising_edge(CLK) then 
-         if AFULL = '0' then 
+      if rising_edge(CLK) then
+		 if sreset = '1' then            
+	         frame_pclk_cnt <= (others => '0');
+             line_pclk_cnt <= (others => '0'); 
+		 elsif AFULL = '0' then 
             if readout_in_progress = '1' then            
                frame_pclk_cnt <= frame_pclk_cnt + 1;  -- referentiel trame  : compteur temporel sur toute l'image
                line_pclk_cnt <= line_pclk_cnt + 1;    -- referentiel ligne  : compteur temporel sur ligne synchronisé sur celui de trame. 
             else
-               frame_pclk_cnt <= to_unsigned(0, frame_pclk_cnt'length);
+               frame_pclk_cnt <= (others => '0');
                line_pclk_cnt <= (others => '0'); 
             end if;         
             
