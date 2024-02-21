@@ -72,13 +72,6 @@ architecture RTL of fpa_intf_sequencer is
          );
    end component;
    
-   component Clk_Divider is
-      Generic(	Factor:		integer := 2);		
-      Port ( Clock  : in std_logic;
-         Reset  : in std_logic;		
-         Clk_div: out std_logic);
-   end component;
-   
    type status_type is (not_available, success, failure);
    type fpa_sequencer_sm_type is (init_st1, init_st2, idle, trig_ctrl_st, active_prog_st, wait_trig_done_st, wait_dpath_done_st, wait_prog_end_st, trig_en_st);
    signal fpa_hardw_up2date   : status_type;

@@ -143,21 +143,6 @@ architecture rtl of fpa_status_gen is
       );
    end component;
    
-   --   component ram_dp is
-   --      generic(
-   --         D_WIDTH : integer := 16;
-   --         A_WIDTH : integer := 8);
-   --      port (
-   --         clk   : in std_logic;
-   --         we    : in std_logic;                              -- Synchronous Write Enable (Active High)
-   --         add   : in std_logic_vector(A_WIDTH-1 downto 0);   -- Write Address/Primary Read Address
-   --         dpra  : in std_logic_vector(A_WIDTH-1 downto 0);   -- Dual Read Address
-   --         din   : in std_logic_vector(D_WIDTH-1 downto 0);   -- Data Input
-   --         dout  : out std_logic_vector(D_WIDTH-1 downto 0);  -- Primary Output Port
-   --         dpo   : out std_logic_vector(D_WIDTH-1 downto 0)); -- Dual Output Port 
-   --   end component;
-   --   
-   
 begin                 
    
    
