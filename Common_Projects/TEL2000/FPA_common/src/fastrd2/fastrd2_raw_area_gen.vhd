@@ -36,7 +36,6 @@ end fastrd2_raw_area_gen;
 
 architecture rtl of fastrd2_raw_area_gen is   
    
-   --type sync_flag_fsm_type is (idle, sync_flag_dly_st, sync_flag_on_st1, sync_flag_on_st2, sync_flag_on_st3);
    type readout_fsm_type is (idle, pause_st, readout_st, wait_readout_end_st);
    type area_info_pipe_type is array (0 to 4) of area_info_type;
    
@@ -260,7 +259,7 @@ begin
             area_info_pipe(4).info_dval <= '0';
          end if;
          
-         global_reset <= sreset or area_info_pipe(3).raw.rd_end;
+         global_reset <= sreset or (area_info_pipe(3).raw.rd_end and not AFULL);
          
          -------------------------
          -- reset des identificateurs
