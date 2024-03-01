@@ -67,15 +67,14 @@ architecture rtl of afpa_services_ctrl is
    end component;
    
    type services_ctrl_sm_type  is (wait_adc_brd_id_st, check_adc_brd_data_st1, check_adc_brd_data_st2, wait_flex_brd_id_st, check_flex_brd_data_st1, check_flex_brd_data_st2, launch_decision_maker_st);
-   type decision_sm_type is(idle, chn_diversity_st1, chn_diversity_st2, quad_adc_st, prog_sw_st, wait_sw_st1, wait_sw_st2, send_status_st, wait_timeout_st, wait_feedback_st1, wait_feedback_st2, 
-   check_feedback_st1, check_feedback_st2, success_status_st, failure_status_st, check_sw_reprogr_st, reset_param_st);
+   type decision_sm_type is (idle, chn_diversity_st1, chn_diversity_st2, quad_adc_st, prog_sw_st, wait_sw_st1, wait_sw_st2, wait_timeout_st, wait_feedback_st1, wait_feedback_st2, 
+      check_feedback_st1, check_feedback_st2, success_status_st, failure_status_st, check_sw_reprogr_st, reset_param_st);
    type fpa_temp_sm_type is (idle, check_temp_max_st, check_temp_min_st, temp_rdy_st);
-   type adc_alive_sm_type is (idle, check_rate_st, timeout_st);
+   type adc_alive_sm_type is (check_rate_st, timeout_st);
    
    signal timeout_cnt                : natural range 0 to C_TEMP_ADC_TIMEOUT_FACTOR;
    signal sreset                     : std_logic;
    signal services_ctrl_sm           : services_ctrl_sm_type;
-   signal fpa_hardw_stat_i           : fpa_hardw_stat_type;
    signal decision_sm                : decision_sm_type;
    signal adc_brd_err                : std_logic;
    signal flex_brd_err               : std_logic;
@@ -119,9 +118,6 @@ begin
       );
    
    
-   --------------------------------------------------
-   -- synchro reset 
-   --------------------------------------------------   
    --ETAPE1 : lire ID flex et ID ADC
    --ETAPE2 : programmer les switches selon ID et FPA_Define
    --ETAPE3 : lancer monitoring_adc pour relire valeurs  programmées   
@@ -140,7 +136,6 @@ begin
       if rising_edge(CLK) then 
          if sreset = '1' then 
             services_ctrl_sm <= wait_adc_brd_id_st;
-            fpa_hardw_stat_i <= HARDW_STAT_UNKNOWN;
             adc_brd_err <= '0';
             flex_brd_err <= '0';
             decision_maker <= '0';  			
@@ -197,8 +192,6 @@ begin
    -- Prise de décisions au sujet de ADC et FLEX
    ----------------------------------------------------------------------------
    U2: process(CLK) 
-      variable iddca_info: iddca_info_type; 
-      
    begin          
       if rising_edge(CLK) then 
          if sreset = '1' then 
