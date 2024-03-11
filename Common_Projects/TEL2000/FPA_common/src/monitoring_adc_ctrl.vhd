@@ -88,7 +88,7 @@ architecture rtl of monitoring_adc_ctrl is
          );
    end component;
    
-   type monit_adc_sm_type is (idle, rqst_st, check_ch_st0, check_ch_st1, check_ch_st2, check_ch_st3, check_ch_stf, start_meas_st, run_sample_st, wait_sample_st, inc_meas_cnt_st);
+   type monit_adc_sm_type is (idle, rqst_st, check_ch_st1, check_ch_st2, check_ch_st3, check_ch_st4, check_ch_st5, check_ch_st6, check_ch_st7, check_ch_st8, start_meas_st, run_sample_st, wait_sample_st, inc_meas_cnt_st);
    type sample_fsm_type is (idle, sample_sum_st, check_enough_st, comput_data_st, output_data_st, output_dval_st1, output_dval_st2, output_dval_st3, output_dval_st4, output_dval_st5, data_mean_st);  
    
    signal sreset                : std_logic;
@@ -270,34 +270,61 @@ begin
                      monit_adc_sm <= check_ch_st2; 
                   end if;
                
-               when check_ch_st2 =>                             -- FLEX_PSP : 8 mesures consecutives sur 64 (soit 8 echantillons)
+               when check_ch_st2 =>                             -- FPA_TEMP : 8 mesures consecutives sur 64 (soit 8 echantillons)
                   if meas_cnt <= 15 then                        -- subitilé: compte-tenu de l'état précédent, cela revient à (meas_cnt > 7 and meas_cnt <= 15)
+                     adc_ch_to_read <= x"00";
+                     adc_ch_gain_factor_to_use <= DEFINE_FPA_TEMP_CONV_FACTOR_X_1024;
+                     monit_adc_sm <= start_meas_st;
+                  else
+                     monit_adc_sm <= check_ch_st3; 
+                  end if;
+               
+               when check_ch_st3 =>                             -- FLEX_PSP : 8 mesures consecutives sur 64 (soit 8 echantillons)
+                  if meas_cnt <= 23 then
                      adc_ch_to_read <= x"02";
                      adc_ch_gain_factor_to_use <= DEFINE_FLEX_PSP_CONV_FACTOR_X_1024;
                      monit_adc_sm <= start_meas_st;
                   else
-                     monit_adc_sm <= check_ch_st3; 
+                     monit_adc_sm <= check_ch_st4; 
+                  end if;
+               
+               when check_ch_st4 =>                             -- FPA_TEMP : 8 mesures consecutives sur 64 (soit 8 echantillons)
+                  if meas_cnt <= 31 then
+                     adc_ch_to_read <= x"00";
+                     adc_ch_gain_factor_to_use <= DEFINE_FPA_TEMP_CONV_FACTOR_X_1024;
+                     monit_adc_sm <= start_meas_st;
+                  else
+                     monit_adc_sm <= check_ch_st5; 
                   end if;  
                
-               when check_ch_st3 =>                             -- TEST_POINT : 8 mesures consecutives sur 64 (soit 8 echantillons)
-                  if meas_cnt <= 23 then
+               when check_ch_st5 =>                             -- TEST_POINT : 8 mesures consecutives sur 64 (soit 8 echantillons)
+                  if meas_cnt <= 39 then
                      adc_ch_to_read <= x"03";
                      adc_ch_gain_factor_to_use <= DEFINE_TP_MEAS_CONV_FACTOR_X_1024;
                      monit_adc_sm <= start_meas_st;
                   else
-                     monit_adc_sm <= check_ch_stf; 
+                     monit_adc_sm <= check_ch_st6; 
+                  end if;
+               
+               when check_ch_st6 =>                             -- FPA_TEMP : 8 mesures consecutives sur 64 (soit 8 echantillons)
+                  if meas_cnt <= 47 then
+                     adc_ch_to_read <= x"00";
+                     adc_ch_gain_factor_to_use <= DEFINE_FPA_TEMP_CONV_FACTOR_X_1024;
+                     monit_adc_sm <= start_meas_st;
+                  else
+                     monit_adc_sm <= check_ch_st7; 
                   end if;   
                
-               when check_ch_stf =>                             -- PCB_TEMP : 8 mesures consecutives sur 64 (soit 8 echantillons)
-                  if meas_cnt <= 31 then
+               when check_ch_st7 =>                             -- PCB_TEMP : 8 mesures consecutives sur 64 (soit 8 echantillons)
+                  if meas_cnt <= 55 then
                      adc_ch_to_read <= x"FF";
                      adc_ch_gain_factor_to_use <= DEFINE_PCB_TEMP_CONV_FACTOR_X_1024;
                      monit_adc_sm <= start_meas_st;
                   else
-                     monit_adc_sm <= check_ch_st0; 
+                     monit_adc_sm <= check_ch_st8; 
                   end if; 
                
-               when check_ch_st0 =>                             -- FPA_TEMP : 32 mesures sur 64
+               when check_ch_st8 =>                             -- FPA_TEMP : 8 mesures consecutives sur 64 (soit 8 echantillons)
                   adc_ch_to_read <= x"00";
                   adc_ch_gain_factor_to_use <= DEFINE_FPA_TEMP_CONV_FACTOR_X_1024;
                   monit_adc_sm <= start_meas_st;
