@@ -150,7 +150,7 @@ begin
             sol_i  <= RX1_MOSI.SOL;
             eol_i  <= RX1_MOSI.EOL;
             dval_i <= RX1_MOSI.DVAL;
-            if OP_SEL = "11" then                                 -- operation normale: soustraction de l'offset electronique. Utilisation des valeyrs signées
+            if OP_SEL = "11" then                                 -- operation normale: soustraction de l'offset electronique. Utilisation des valeurs signées
                data_i(3) <= std_logic_vector(signed(RX1_MOSI.DATA(71 downto 54)) - signed(RX2_MOSI.DATA(71 downto 54)));
                data_i(2) <= std_logic_vector(signed(RX1_MOSI.DATA(53 downto 36)) - signed(RX2_MOSI.DATA(53 downto 36)));
                data_i(1) <= std_logic_vector(signed(RX1_MOSI.DATA(35 downto 18)) - signed(RX2_MOSI.DATA(35 downto 18)));
