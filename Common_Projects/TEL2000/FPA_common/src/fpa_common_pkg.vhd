@@ -8,6 +8,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all; 
 use ieee.numeric_std.all;
+use IEEE.math_real.all;
 
 package fpa_common_pkg is
    
@@ -148,7 +149,6 @@ package fpa_common_pkg is
    --------------------------------------------------------------------------------
    -- Configuration partie commune du Bloc FPA_interface
    --------------------------------------------------------------------------------
-   
    type fpa_comn_cfg_type is
    record     
       fpa_diag_mode                       : std_logic;  --! à '1' si on est en mode diag telops
@@ -179,7 +179,25 @@ package fpa_common_pkg is
       intclk_to_clk100_conv_numerator     : unsigned(31 downto 0);         -- conversion INTCLK vers 100 MHz
       clk100_to_intclk_conv_numerator     : unsigned(31 downto 0);         -- conversion 100 MHz vers 
       
-   end record;    
+   end record;
+   
+   --------------------------------------------------------------------------------
+   -- Définitions pour fpa_status_gen
+   --    Le AXIL MISO du module FPA est partagé entre le mblaze_intf et le fpa_status_gen.
+   --    De plus, le fpa_status_gen se partage entre les statuts communs à tous les détecteurs et le feedback de la FPA_INTF_CFG.
+   --    Chaque partage divise l'espace disponible en 2, ce qui donne les adresses ARADDR suivantes:
+   --       mblaze_intf       : 0x000 - 0x3FF
+   --       fpa_status_gen
+   --          commun         : 0x400 - 0x5FF
+   --          FPA_INTF_CFG   : 0x600 - 0x7FF
+   --------------------------------------------------------------------------------
+   constant STATUS_BASE_ARADDR                  : integer := to_integer(unsigned(x"400"));               -- adresse de départ du STATUS. Doit être une puissance de 2
+   constant STATUS_BASE_ARADDR_WIDTH            : integer := integer(log2(real(STATUS_BASE_ARADDR)));    -- largeur du bus d'adresse de STATUS
+   constant STATUS_FPA_INTF_CFG_ARADDR_WIDTH    : integer := STATUS_BASE_ARADDR_WIDTH-1;                 -- largeur du bus d'adresse pour le feedback de la FPA_INTF_CFG
+   constant STATUS_FPA_INTF_CFG_ARY_LEN         : integer := 2**STATUS_FPA_INTF_CFG_ARADDR_WIDTH / 4;    -- nombre de champs pour le feedback de la FPA_INTF_CFG. Division par 4 puisque chaque adresse occupe 4 bytes
+   -- Pour transférer la FPA_INTF_CFG par AXIL vers le microBlaze, on la convertit en array de slv32 (voir fonction dans FPA/Proxy define).
+   -- L'array a une dimension fixe qui couvre l'espace d'adresses au complet.
+   type fpa_intf_cfg_slv_array_type is array (0 to STATUS_FPA_INTF_CFG_ARY_LEN-1) of std_logic_vector(31 downto 0);
    
    --------------------------------------------------------------------------------
    -- flex_brd_info_type                                                              

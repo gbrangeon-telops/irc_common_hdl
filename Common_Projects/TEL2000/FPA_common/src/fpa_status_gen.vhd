@@ -122,6 +122,9 @@ architecture rtl of fpa_status_gen is
    signal cooler_param_valid             : std_logic := '0';
    signal fpa_seq_success                : std_logic;
    
+   signal fpa_intf_cfg_slv_array       : fpa_intf_cfg_slv_array_type;
+   signal fpa_intf_cfg_index           : integer range 0 to STATUS_FPA_INTF_CFG_ARY_LEN-1;
+   
    
    component sync_reset
       port (
@@ -372,50 +375,13 @@ begin
       end if;
    end process;  
    
-   ---------------------------------------------
-   -- MAPPING Adresses des statuts
-   ---------------------------------------------
-   -- 0x0000 à 0x00FF reservées aux statuts communs à tous les détecteurs
-   -- 0x0100 à RAM_END reservées aux statuts spécifiques aux détecteurs (numériques principalement) Non implémenté pour le moment
-   
-   -- Mapping partie commune (0x0000 à 0x00FC)
-   
-   --    0x0000 -> adc board rev                   -- voir fpa_hardw_stat_type dans fichier fpa_common_pkg pour details sur la donnée
-   --    0x0004 -> adc board firw revision         --
-   --    0x0008 -> adc board bootup tests status   --
-   --    0x000C -> adc status spare                --
-   
-   --    0x0010 -> ddc board rev                   -- voir fpa_hardw_stat_type dans fichier fpa_common_pkg pour details sur la donnée
-   --    0x0014 -> ddc board firw revision         --
-   --    0x0018 -> ddc bootup tests status         --
-   --    0x001C -> ddc status spare                --
-   
-   
-   --    0x0020 -> flex board rev                  -- voir fpa_hardw_stat_type dans fichier fpa_common_pkg pour details sur la donnée
-   --
-   --    0x0024 -> cooler_volt_min_out             -- Tension Minimale au-dessus duquel allumer Cooler. Provient du fichier FPA_define puis redefini dans le présent fichier
-   --    0x0028 -> cooler_volt_max_out             -- Tension Maximale en-dessous duquel allumer Cooler. Provient du fichier FPA_define puis redefini dans le présent fichier 
-   --    0x002C -> fpa temperature raw             -- temperature raw du FPA
-   
-   --    0x0030 -> Global done                     -- defini dans le présent fichier
-   --    0x0034 -> FPA Powered                     -- defini dans le présent fichier
-   --    0x0038 -> Cooler Powered                  -- 
-   --    0x003C -> erreurs latchées                -- definies dans le présent fichier
-   
-   --    0x0040 -> INTF_SEQ_STAT                   -- definies dans le présent fichier
-   --    0x0044 -> DATA_PATH_STAT                  -- definies dans le présent fichier
-   --    0x0048 -> TRIG_CTLER_STAT                 -- definies dans le présent fichier
-   --    0x004C -> FPA_DRIVER_STAT                 -- definies dans le présent fichier
-   
-   --    0x0050 -> non utilisé (et donc disponible)
-   --    ...    -> non utilisé (et donc disponible)
-   --    0x00FC -> non utilisé (et donc disponible)
    
    -----------------------------------------------
    -- Adresses des statuts
    -----------------------------------------------
-   -- MOSI
-   stat_read_add <= STATUS_MOSI.ARADDR(15 downto 0);
+   stat_read_add <= resize(STATUS_MOSI.ARADDR(STATUS_BASE_ARADDR_WIDTH-1 downto 0), stat_read_add'length);
+   fpa_intf_cfg_index <= to_integer(unsigned(STATUS_MOSI.ARADDR(STATUS_FPA_INTF_CFG_ARADDR_WIDTH-1 downto 2)));   -- les adresses incrémentent par 4 donc on divise par 4 pour avoir l'index
+   fpa_intf_cfg_slv_array <= fpa_intf_cfg_to_slv_array(FPA_INTF_CFG);   -- mapping de la FPA_INTF_CFG en array de slv32. voir fonction dans FPA/Proxy define
    
    U4 : process(MB_CLK) 
    begin
@@ -430,182 +396,183 @@ begin
             -- erreur grave
             stat_read_err <= stat_read_dval and not STATUS_MOSI.RREADY; -- le microblaze n'a pas écouté la réponse.
             
-            case  stat_read_add is
-               -- ADC BRD
-               when  x"0000" =>   -- frequence maximale d'operation des adcs soudées sur la carte EFA-00253-XXX  (lié à l'ID)
-                  stat_read_reg <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.ADC_BRD_INFO.ADC_OPER_FREQ_MAX_KHZ,32));
-                  -- pragma translate_off
-                  stat_read_reg <= std_logic_vector(to_unsigned(60,32));
-                  -- pragma translate_on
+            if stat_read_add(STATUS_FPA_INTF_CFG_ARADDR_WIDTH) = '0' then
                
-               when  x"0004" =>    -- nombre de canaux au total disponible sur la carte (lié à l'ID)
-                  stat_read_reg <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.ADC_BRD_INFO.ANALOG_CHANNEL_NUM,32));
-               
-               when  x"0008" =>   -- résoltuion des ADC soudés sur la carte (provient du mode diagnostic des adcs)
-                  stat_read_reg <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.ADC_BRD_INFO.ADC_RESOLUTION,32));
-               
-               when  x"000C" =>   --  status spare for promimity electronics
-                  stat_read_reg(31 downto 1) <= (others => '0');
-                  stat_read_reg(0) <= flegx_present;
+               -- 0x0000 à 0x01FF reservées aux statuts communs à tous les détecteurs
+               case  stat_read_add is
+                  -- ADC BRD
+                  when  x"0000" =>   -- frequence maximale d'operation des adcs soudées sur la carte EFA-00253-XXX  (lié à l'ID)
+                     stat_read_reg <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.ADC_BRD_INFO.ADC_OPER_FREQ_MAX_KHZ,32));
+                     -- pragma translate_off
+                     stat_read_reg <= std_logic_vector(to_unsigned(60,32));
+                     -- pragma translate_on
                   
-               -- DDC_BRD 
-               when  x"0010" =>   -- fpa roic
-                  stat_read_reg <= resize(FPA_HARDW_STAT.DDC_BRD_INFO.FPA_ROIC, 32);
-               
-               when  x"0014" =>   -- ddc spare
-                  stat_read_reg <=  (others => '0');
+                  when  x"0004" =>    -- nombre de canaux au total disponible sur la carte (lié à l'ID)
+                     stat_read_reg <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.ADC_BRD_INFO.ANALOG_CHANNEL_NUM,32));
                   
-               -- FLEX_BRD 
-               when  x"0018" =>   -- fpa_roic
-                  stat_read_reg <= resize(FPA_HARDW_STAT.FLEX_BRD_INFO.FPA_ROIC, 32);
-               
-               when  x"001C" =>   -- fpa_input
-                  stat_read_reg <= resize(FPA_HARDW_STAT.FLEX_BRD_INFO.FPA_INPUT, 32);
-               
-               when  x"0020" =>   -- chn_diversity_num
-                  stat_read_reg <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.FLEX_BRD_INFO.CHN_DIVERSITY_NUM, 32));
+                  when  x"0008" =>   -- résoltuion des ADC soudés sur la carte (provient du mode diagnostic des adcs)
+                     stat_read_reg <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.ADC_BRD_INFO.ADC_RESOLUTION,32));
                   
-               -- COOLER
-               when  x"0024" =>   -- cooler voltage min
-                  stat_read_reg <= resize(cooler_volt_min_mV_out, 32);
-               
-               when  x"0028" =>   -- cooler voltage max
-                  stat_read_reg <= resize(cooler_volt_max_mV_out, 32);
-               
-               when  x"002C" =>   -- fpa_temperature_raw
-                  stat_read_reg <=  fpa_temperature_raw;
-               
-               when  x"0030" =>   -- global done
-                  stat_read_reg <= resize('0' & global_done, 32);
-               
-               when  x"0034" =>   -- FPA powered
-                  stat_read_reg <= resize('0' & fpa_powered, 32);
-               
-               when  x"0038" =>   -- cooler powered
-                  stat_read_reg <= resize('0' & cooler_powered, 32);
-               
-               when  x"003C" =>   -- erreurs latchées
-                  stat_read_reg <= error_latch;
+                  when  x"000C" =>   --  status spare for promimity electronics
+                     stat_read_reg(31 downto 1) <= (others => '0');
+                     stat_read_reg(0) <= flegx_present;
+                     
+                  -- DDC_BRD 
+                  when  x"0010" =>   -- fpa roic
+                     stat_read_reg <= resize(FPA_HARDW_STAT.DDC_BRD_INFO.FPA_ROIC, 32);
                   
-               when  x"0040" =>   -- INTF_SEQ_STAT
-                  stat_read_reg <= resize(INTF_SEQ_STAT, 32);
-               
-               when  x"0044" =>   -- DATA_PATH_STAT
-                  stat_read_reg <= resize(DATA_PATH_STAT, 32);
-               
-               when  x"0048" =>   -- TRIG_CTLER_STAT
-                  stat_read_reg <= resize(TRIG_CTLER_STAT, 32);
-               
-               when  x"004C" =>   -- FPA_DRIVER_STAT
-                  stat_read_reg <= resize(FPA_DRIVER_STAT, 32);
+                  when  x"0014" =>   -- ddc spare
+                     stat_read_reg <=  (others => '0');
+                     
+                  -- FLEX_BRD 
+                  when  x"0018" =>   -- fpa_roic
+                     stat_read_reg <= resize(FPA_HARDW_STAT.FLEX_BRD_INFO.FPA_ROIC, 32);
                   
-               -- pour le power management de DAL   
-               when  x"0050" =>   -- adc_ddc_detect_process_done
-                  stat_read_reg <= resize('0'& adc_ddc_detect_process_done, 32); 
-               
-               when  x"0054" =>   -- adc_ddc_present
-                  stat_read_reg <= resize('0'& adc_ddc_present, 32);
-               
-               when  x"0058" =>   -- flex_flegx_detect_process_done
-                  stat_read_reg <= resize('0'& flex_flegx_detect_process_done, 32); 
-               
-               when  x"005C" =>   -- flex_flegx_present
-                  stat_read_reg <= resize('0'& flex_flegx_present, 32);
-                  -----------------------------------
-               
-               when  x"0060" =>   -- cmd en erreur
-                  stat_read_reg <= resize(fpa_driver_cmd_in_err, 32);
+                  when  x"001C" =>   -- fpa_input
+                     stat_read_reg <= resize(FPA_HARDW_STAT.FLEX_BRD_INFO.FPA_INPUT, 32);
                   
-               -- FPA_SERDES_STAT
-               when  x"0064" =>   -- fpa serdes done
-                  stat_read_reg <=  resize(fpa_serdes_done, 32);
-               
-               when  x"0068" =>   -- fpa serdes success
-                  stat_read_reg <=  resize(fpa_serdes_success, 32);
-               
-               when  x"006C" =>   -- fpa serdes delay
-                  stat_read_reg <=  resize(fpa_serdes_delay(3), 8) & 
-                  resize(fpa_serdes_delay(2), 8) & 
-                  resize(fpa_serdes_delay(1), 8) & 
-                  resize(fpa_serdes_delay(0), 8);
-               
-               when  x"0070" =>   -- fpa serdes edges ch0
-                  stat_read_reg <=  resize(fpa_serdes_edges(0), 32);
-               
-               when  x"0074" =>   -- fpa serdes edges ch1
-                  stat_read_reg <=  resize(fpa_serdes_edges(1), 32);
-               
-               when  x"0078" =>   -- fpa serdes edges ch2
-                  stat_read_reg <=  resize(fpa_serdes_edges(2), 32);
-               
-               when  x"007C" =>   -- fpa serdes edges ch3
-                  stat_read_reg <=  resize(fpa_serdes_edges(3), 32);
+                  when  x"0020" =>   -- chn_diversity_num
+                     stat_read_reg <= std_logic_vector(to_unsigned(FPA_HARDW_STAT.FLEX_BRD_INFO.CHN_DIVERSITY_NUM, 32));
+                     
+                  -- COOLER
+                  when  x"0024" =>   -- cooler voltage min
+                     stat_read_reg <= resize(cooler_volt_min_mV_out, 32);
                   
-               -- FPA init status
-               when  x"0080" =>   -- fpa init done
-                  stat_read_reg <=  (0 => fpa_hw_init_done, others => '0');
-               
-               when  x"0084" =>   -- fpa init success
-                  stat_read_reg <=  (0 => fpa_hw_init_success, others => '0');
-               
-               when  x"0088" =>   -- prog_init_done
-                  stat_read_reg <=  (0 => fpa_prog_init_done, others => '0');
-               
-               when  x"008C" =>   -- cooler_on_curr_min_mA_out
-                  stat_read_reg <= resize(cooler_on_curr_min_mA_out, 32);
-               
-               when  x"0090" =>   -- cooler_off_curr_max_mA_out
-                  stat_read_reg <= resize(cooler_off_curr_max_mA_out, 32);                  
+                  when  x"0028" =>   -- cooler voltage max
+                     stat_read_reg <= resize(cooler_volt_max_mV_out, 32);
                   
-               ---- watchdog data
-               when  x"0094" =>   -- 
-                  stat_read_reg <= resize(MISC_STAT.acq_trig_cnt, 32);  
-               
-               when  x"0098" =>   -- 
-                  stat_read_reg <= resize(MISC_STAT.acq_int_cnt, 32);                        
-               
-               when  x"009C" =>   --                                                           
-                  stat_read_reg <= resize(MISC_STAT.fpa_readout_cnt, 32);                     
-               
-               when  x"00A0" =>   --                                                           
-                  stat_read_reg <= resize(MISC_STAT.acq_readout_cnt, 32);
-               
-               when  x"00A4" =>   -- 
-                  stat_read_reg <= resize(MISC_STAT.out_pix_cnt_min, 32);
-               
-               when  x"00A8" =>   -- 
-                  stat_read_reg <= resize(MISC_STAT.out_pix_cnt_max, 32);
-               
-               when  x"00AC" =>   -- 
-                  stat_read_reg <= resize(MISC_STAT.trig_to_int_delay_min, 32);
-               
-               when  x"00B0" =>   -- 
-                  stat_read_reg <= resize(MISC_STAT.trig_to_int_delay_max, 32);
-               
-               when  x"00B4" =>   -- 
-                  stat_read_reg <= resize(MISC_STAT.int_to_int_delay_min, 32);
-               
-               when  x"00B8" =>   -- 
-                  stat_read_reg <= resize(MISC_STAT.int_to_int_delay_max, 32);
-               
-               when  x"00BC" =>   -- 
-                  stat_read_reg <= resize(MISC_STAT.fast_hder_cnt, 32);
-              
-               when  x"00C0" =>   -- 
-                  stat_read_reg <= std_logic_vector(resize(FPA_INTF_CFG.INT_TIME, 32));  -- temps d'expotion en MCLK présentement utilisé par le module detecteur.
-              
+                  when  x"002C" =>   -- fpa_temperature_raw
+                     stat_read_reg <=  fpa_temperature_raw;
                   
-               when others  => stat_read_reg <= (others => '0');
-               
-            end case;
+                  when  x"0030" =>   -- global done
+                     stat_read_reg <= resize('0' & global_done, 32);
+                  
+                  when  x"0034" =>   -- FPA powered
+                     stat_read_reg <= resize('0' & fpa_powered, 32);
+                  
+                  when  x"0038" =>   -- cooler powered
+                     stat_read_reg <= resize('0' & cooler_powered, 32);
+                  
+                  when  x"003C" =>   -- erreurs latchées
+                     stat_read_reg <= error_latch;
+                     
+                  when  x"0040" =>   -- INTF_SEQ_STAT
+                     stat_read_reg <= resize(INTF_SEQ_STAT, 32);
+                  
+                  when  x"0044" =>   -- DATA_PATH_STAT
+                     stat_read_reg <= resize(DATA_PATH_STAT, 32);
+                  
+                  when  x"0048" =>   -- TRIG_CTLER_STAT
+                     stat_read_reg <= resize(TRIG_CTLER_STAT, 32);
+                  
+                  when  x"004C" =>   -- FPA_DRIVER_STAT
+                     stat_read_reg <= resize(FPA_DRIVER_STAT, 32);
+                     
+                  -- pour le power management de DAL   
+                  when  x"0050" =>   -- adc_ddc_detect_process_done
+                     stat_read_reg <= resize('0'& adc_ddc_detect_process_done, 32); 
+                  
+                  when  x"0054" =>   -- adc_ddc_present
+                     stat_read_reg <= resize('0'& adc_ddc_present, 32);
+                  
+                  when  x"0058" =>   -- flex_flegx_detect_process_done
+                     stat_read_reg <= resize('0'& flex_flegx_detect_process_done, 32); 
+                  
+                  when  x"005C" =>   -- flex_flegx_present
+                     stat_read_reg <= resize('0'& flex_flegx_present, 32);
+                     -----------------------------------
+                  
+                  when  x"0060" =>   -- cmd en erreur
+                     stat_read_reg <= resize(fpa_driver_cmd_in_err, 32);
+                     
+                  -- FPA_SERDES_STAT
+                  when  x"0064" =>   -- fpa serdes done
+                     stat_read_reg <=  resize(fpa_serdes_done, 32);
+                  
+                  when  x"0068" =>   -- fpa serdes success
+                     stat_read_reg <=  resize(fpa_serdes_success, 32);
+                  
+                  when  x"006C" =>   -- fpa serdes delay
+                     stat_read_reg <=  resize(fpa_serdes_delay(3), 8) & 
+                     resize(fpa_serdes_delay(2), 8) & 
+                     resize(fpa_serdes_delay(1), 8) & 
+                     resize(fpa_serdes_delay(0), 8);
+                  
+                  when  x"0070" =>   -- fpa serdes edges ch0
+                     stat_read_reg <=  resize(fpa_serdes_edges(0), 32);
+                  
+                  when  x"0074" =>   -- fpa serdes edges ch1
+                     stat_read_reg <=  resize(fpa_serdes_edges(1), 32);
+                  
+                  when  x"0078" =>   -- fpa serdes edges ch2
+                     stat_read_reg <=  resize(fpa_serdes_edges(2), 32);
+                  
+                  when  x"007C" =>   -- fpa serdes edges ch3
+                     stat_read_reg <=  resize(fpa_serdes_edges(3), 32);
+                     
+                  -- FPA init status
+                  when  x"0080" =>   -- fpa init done
+                     stat_read_reg <=  (0 => fpa_hw_init_done, others => '0');
+                  
+                  when  x"0084" =>   -- fpa init success
+                     stat_read_reg <=  (0 => fpa_hw_init_success, others => '0');
+                  
+                  when  x"0088" =>   -- prog_init_done
+                     stat_read_reg <=  (0 => fpa_prog_init_done, others => '0');
+                  
+                  when  x"008C" =>   -- cooler_on_curr_min_mA_out
+                     stat_read_reg <= resize(cooler_on_curr_min_mA_out, 32);
+                  
+                  when  x"0090" =>   -- cooler_off_curr_max_mA_out
+                     stat_read_reg <= resize(cooler_off_curr_max_mA_out, 32);                  
+                     
+                  ---- watchdog data
+                  when  x"0094" =>   -- 
+                     stat_read_reg <= resize(MISC_STAT.acq_trig_cnt, 32);  
+                  
+                  when  x"0098" =>   -- 
+                     stat_read_reg <= resize(MISC_STAT.acq_int_cnt, 32);                        
+                  
+                  when  x"009C" =>   --                                                           
+                     stat_read_reg <= resize(MISC_STAT.fpa_readout_cnt, 32);                     
+                  
+                  when  x"00A0" =>   --                                                           
+                     stat_read_reg <= resize(MISC_STAT.acq_readout_cnt, 32);
+                  
+                  when  x"00A4" =>   -- 
+                     stat_read_reg <= resize(MISC_STAT.out_pix_cnt_min, 32);
+                  
+                  when  x"00A8" =>   -- 
+                     stat_read_reg <= resize(MISC_STAT.out_pix_cnt_max, 32);
+                  
+                  when  x"00AC" =>   -- 
+                     stat_read_reg <= resize(MISC_STAT.trig_to_int_delay_min, 32);
+                  
+                  when  x"00B0" =>   -- 
+                     stat_read_reg <= resize(MISC_STAT.trig_to_int_delay_max, 32);
+                  
+                  when  x"00B4" =>   -- 
+                     stat_read_reg <= resize(MISC_STAT.int_to_int_delay_min, 32);
+                  
+                  when  x"00B8" =>   -- 
+                     stat_read_reg <= resize(MISC_STAT.int_to_int_delay_max, 32);
+                  
+                  when  x"00BC" =>   -- 
+                     stat_read_reg <= resize(MISC_STAT.fast_hder_cnt, 32);
+                  
+                  
+                  when others  => stat_read_reg <= (others => '0');
+                  
+               end case;
+            
+            else
+               -- 0x0200 à 0x03FF reservées au feedback de la FPA_INTF_CFG
+               stat_read_reg <= fpa_intf_cfg_slv_array(fpa_intf_cfg_index);
+            end if;
             
          end if;
       end if;
    end process;
-   
-   
-   -- Mapping partie specifique (0x0100 à 0x03FC)
-   --    Pour l'instant, pas mplémenté. Mais si cela doit l'être, y mettre les headers complets des images des detecteurs numériques 
    
    
    
