@@ -191,7 +191,7 @@ package fpa_common_pkg is
    --          commun         : 0x400 - 0x5FF
    --          FPA_INTF_CFG   : 0x600 - 0x7FF
    --------------------------------------------------------------------------------
-   constant STATUS_BASE_ARADDR                  : integer := to_integer(unsigned(x"400"));               -- adresse de départ du STATUS. Doit être une puissance de 2
+   constant STATUS_BASE_ARADDR                  : integer := to_integer(unsigned'(x"400"));              -- adresse de départ du STATUS. Doit être une puissance de 2
    constant STATUS_BASE_ARADDR_WIDTH            : integer := integer(log2(real(STATUS_BASE_ARADDR)));    -- largeur du bus d'adresse de STATUS
    constant STATUS_FPA_INTF_CFG_ARADDR_WIDTH    : integer := STATUS_BASE_ARADDR_WIDTH-1;                 -- largeur du bus d'adresse pour le feedback de la FPA_INTF_CFG
    constant STATUS_FPA_INTF_CFG_ARY_LEN         : integer := 2**STATUS_FPA_INTF_CFG_ARADDR_WIDTH / 4;    -- nombre de champs pour le feedback de la FPA_INTF_CFG. Division par 4 puisque chaque adresse occupe 4 bytes
