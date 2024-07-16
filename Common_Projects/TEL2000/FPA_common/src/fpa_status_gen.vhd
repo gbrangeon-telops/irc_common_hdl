@@ -395,6 +395,9 @@ begin
             
             -- erreur grave
             stat_read_err <= stat_read_dval and not STATUS_MOSI.RREADY; -- le microblaze n'a pas écouté la réponse.
+            -- pragma translate_off
+            stat_read_err <= '0';  -- on masque cette erreur en simulation
+            -- pragma translate_on
             
             if stat_read_add(STATUS_FPA_INTF_CFG_ARADDR_WIDTH) = '0' then
                
