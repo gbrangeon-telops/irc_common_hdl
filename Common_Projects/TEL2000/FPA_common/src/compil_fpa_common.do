@@ -94,6 +94,9 @@ acom -nowarn DAGGEN_0523 -incr \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_pix_sel.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_cropping_core.vhd \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_cropping.bde \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_line_pos.vhd \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_offset_corr_core.vhd \
+ d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_offset_corr.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_data_ctrl.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_data_ctrl_v2.bde \
  d:\Telops\Common_HDL\Common_Projects\TEL2000\FPA_common\src\afpa_data_ctrl_16chn.bde \
