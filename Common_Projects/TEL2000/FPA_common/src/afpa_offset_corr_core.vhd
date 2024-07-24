@@ -134,20 +134,51 @@ begin
          ERR         => err_i
       );
    
-   -- Apply correction only when needed
-   op_sel_i <= "11" when corr_active = '1' else "01";  
-   
-   -- Incoming pixels
-   rx1_mosi_i <= rx_mosi_i;  
-   
-   -- Coeff0
-   rx2_mosi_i.sof <= rx1_mosi_i.sof;
-   rx2_mosi_i.eof <= rx1_mosi_i.eof;
-   rx2_mosi_i.sol <= rx1_mosi_i.sol;
-   rx2_mosi_i.eol <= rx1_mosi_i.eol;
-   rx2_mosi_i.data <= X"0" & coeff0_i & X"0" & coeff0_i & X"0" & coeff0_i & X"0" & coeff0_i;
-   rx2_mosi_i.dval <= rx1_mosi_i.dval;
-   rx2_mosi_i.misc <= rx1_mosi_i.misc;
-   rx2_mosi_i.support_busy <= rx1_mosi_i.support_busy;
-   
+   --------------------------------------------------
+   -- Registration      
+   --------------------------------------------------
+   U3 : process(CLK)
+   begin
+      if rising_edge(CLK) then
+         if sreset = '1' then
+            rx1_mosi_i.sof <= '0';
+            rx1_mosi_i.eof <= '0';
+            rx1_mosi_i.sol <= '0';
+            rx1_mosi_i.eol <= '0';
+            rx1_mosi_i.data <= (others=>'0');
+            rx1_mosi_i.dval <= '0';
+            rx1_mosi_i.misc <= (others=>'0');
+            rx1_mosi_i.support_busy <= '0';
+            rx2_mosi_i.sof <= '0';
+            rx2_mosi_i.eof <= '0';
+            rx2_mosi_i.sol <= '0';
+            rx2_mosi_i.eol <= '0';
+            rx2_mosi_i.data <= (others=>'0');
+            rx2_mosi_i.dval <= '0';
+            rx2_mosi_i.misc <= (others=>'0');
+            rx2_mosi_i.support_busy <= '0';
+            op_sel_i <= "01";
+         else
+            -- Incoming pixels
+            rx1_mosi_i <= rx_mosi_i;  
+
+            -- Coeff0
+            rx2_mosi_i.sof <= rx_mosi_i.sof;
+            rx2_mosi_i.eof <= rx_mosi_i.eof;
+            rx2_mosi_i.sol <= rx_mosi_i.sol;
+            rx2_mosi_i.eol <= rx_mosi_i.eol;
+            rx2_mosi_i.data <= X"0" & coeff0_i & X"0" & coeff0_i & X"0" & coeff0_i & X"0" & coeff0_i;
+            rx2_mosi_i.dval <= rx_mosi_i.dval;
+            rx2_mosi_i.misc <= rx_mosi_i.misc;
+            rx2_mosi_i.support_busy <= rx_mosi_i.support_busy;
+
+            -- Apply correction only when needed
+            if corr_active = '1' then
+               op_sel_i <= "11";
+            else
+               op_sel_i <= "01";
+            end if;
+         end if;
+      end if;
+   end process;
 end rtl;
