@@ -1,4 +1,4 @@
-SetActiveLib -work
+setactivelib work
 asim TESTBENCH_FOR_serdes 
 wave 
 wave -noreg TCLK

@@ -1,7 +1,7 @@
-SetActiveLib -work
-comp -include "$DSN\..\i2c_master.vhd"
-comp -include "$DSN\..\i2c_slave.vhd" 
-comp -include "$DSN\..\TestBench\i2c_TB.vhd" 
+setactivelib work
+comp -include "$DSN/../i2c_master.vhd"
+comp -include "$DSN/../i2c_slave.vhd" 
+comp -include "$DSN/../TestBench/i2c_TB.vhd" 
 asim TESTBENCH_FOR_i2c
 wave 
 wave -noreg CLK
@@ -50,5 +50,5 @@ run 40us
 
 # The following lines can be used for timing simulation
 # acom <backannotated_vhdl_file_name>
-# comp -include "$DSN\src\TestBench\i2c_TB_tim_cfg.vhd" 
+# comp -include "$DSN/src/TestBench/i2c_TB_tim_cfg.vhd" 
 # asim TIMING_FOR_i2c 

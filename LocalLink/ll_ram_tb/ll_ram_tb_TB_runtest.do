@@ -1,6 +1,6 @@
-SetActiveLib -work			  
+setactivelib work			  
 
-cd $DSN\..\LocalLink\ll_ram_tb
+cd $DSN/../LocalLink/ll_ram_tb
 comp -include ll_ram_tb.bde
 comp -include ll_ram_tb_TB.vhd 
 

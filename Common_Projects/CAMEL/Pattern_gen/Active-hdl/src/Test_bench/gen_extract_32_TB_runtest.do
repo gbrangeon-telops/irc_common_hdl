@@ -1,7 +1,7 @@
-SetActiveLib -work
-comp -include "$DSN\src\FIR_00142\pattern_gen_32.vhd"
-comp -include "$DSN\src\FIR_00142\Header_Extractor32.vhd" 
-comp -include "$DSN\src\TestBench\Misc_Test\gen_extract_32_TB.vhd" 
+setactivelib work
+comp -include "$DSN/src/FIR_00142/pattern_gen_32.vhd"
+comp -include "$DSN/src/FIR_00142/Header_Extractor32.vhd" 
+comp -include "$DSN/src/TestBench/Misc_Test/gen_extract_32_TB.vhd" 
 asim gen_extract_32_tb 
 wave
 

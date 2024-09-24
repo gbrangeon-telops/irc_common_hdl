@@ -1,1 +1,1 @@
-acom  "D:\telops\Common_HDL\DDR_Ctrl\ddr_wrapper_128d_27a_r1\ddr_wrapper_128d_27a_r1.vhm"
+acom  "$COMMON_HDL/DDR_Ctrl/ddr_wrapper_128d_27a_r1/ddr_wrapper_128d_27a_r1.vhm"

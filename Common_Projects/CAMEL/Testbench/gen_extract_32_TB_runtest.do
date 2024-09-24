@@ -1,4 +1,4 @@
-SetActiveLib -work
+setactivelib work
 
 asim gen_extract_32_tb 
 wave

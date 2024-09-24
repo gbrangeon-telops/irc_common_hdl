@@ -4,7 +4,7 @@ goto end
 }
 
 savealltabs
-SetActiveLib -work
+setactivelib work
 clearlibrary
 
 adel uc2_model
@@ -16,34 +16,34 @@ addsc uc2_model.dll
 
  # chemins  explicites
   
-do D:\Telops\Common_HDL\Common_Projects\CAMEL\Pattern_gen\build\compile_rtl.do
+do $COMMON_HDL/Common_Projects/CAMEL/Pattern_gen/build/compile_rtl.do
 
-do D:\Telops\Common_HDL\Common_Projects\CAMEL\Header_extractor\build\compile_rtl.do
-acom "D:\Telops\Common_HDL\Wishbone\ARB0001a.VHD"
-acom "D:\Telops\Common_HDL\Wishbone\rs232_syscon\rs232_syscon.VHD"
-acom "D:\Telops\Common_HDL\Wishbone\wb_intercon_8s.vhd"
-acom "D:\Telops\Common_HDL\Wishbone\uc2_wb_master.vhd"
-acom "D:\Telops\Common_HDL\Active-HDL\compile\uc2_block_8s.vhd"
+do $COMMON_HDL/Common_Projects/CAMEL/Header_extractor/build/compile_rtl.do
+acom "$COMMON_HDL/Wishbone/ARB0001a.VHD"
+acom "$COMMON_HDL/Wishbone/rs232_syscon/rs232_syscon.VHD"
+acom "$COMMON_HDL/Wishbone/wb_intercon_8s.vhd"
+acom "$COMMON_HDL/Wishbone/uc2_wb_master.vhd"
+acom "$COMMON_HDL/Active-HDL/compile/uc2_block_8s.vhd"
 
-acom "D:\Telops\Common_HDL\Wishbone\MEM0001a.VHD" 
-acom "D:\Telops\Common_HDL\LocalLink\LL_RandomBusy32.vhd"
+acom "$COMMON_HDL/Wishbone/MEM0001a.VHD" 
+acom "$COMMON_HDL/LocalLink/LL_RandomBusy32.vhd"
 
-acom "D:\Telops\Common_HDL\LocalLink\LL_SW_1_2_32.vhd"   			
+acom "$COMMON_HDL/LocalLink/LL_SW_1_2_32.vhd"   			
 
-acom D:\Telops\Common_HDL\LocalLink\LL_Hole.vhd
-
-
-acom "D:\Telops\Common_HDL\LocalLink\LL_16_to_32.vhd"
-acom "D:\Telops\Common_HDL\LocalLink\LL_32_to_16.vhd"
+acom $COMMON_HDL/LocalLink/LL_Hole.vhd
 
 
-acom "D:\Telops\Common_HDL\Common_Projects\CAMEL\Header_extractor\Active-HDL\src\Test_bench\Test_bench_files\LL_randomDREM_32.vhd"
+acom "$COMMON_HDL/LocalLink/LL_16_to_32.vhd"
+acom "$COMMON_HDL/LocalLink/LL_32_to_16.vhd"
 
-acom "D:\Telops\Common_HDL\Common_Projects\CAMEL\Header_extractor\Active-HDL\src\Test_bench\Test_bench_files\PatternGen_Extract_TB.bde"	
+
+acom "$COMMON_HDL/Common_Projects/CAMEL/Header_extractor/Active-HDL/src/Test_bench/Test_bench_files/LL_randomDREM_32.vhd"
+
+acom "$COMMON_HDL/Common_Projects/CAMEL/Header_extractor/Active-HDL/src/Test_bench/Test_bench_files/PatternGen_Extract_TB.bde"	
 
 asim -ses patterngen_extract_tb
 
-open -wave "D:\Telops\Common_HDL\Common_Projects\CAMEL\Header_extractor\Active-HDL\src\Test_bench\Simulation\PG_HX_RTL_simul.awf"
+open -wave "$COMMON_HDL/Common_Projects/CAMEL/Header_extractor/Active-HDL/src/Test_bench/Simulation/PG_HX_RTL_simul.awf"
 force -freeze U9/RANDOM 0 
 force -freeze -r 10.000000 ns CLK 0 0 ns 1 5 ns
 force -deposit HEXTRACTOR/HX_32_KERNEL/TX_LL_MISO.AFULL 0

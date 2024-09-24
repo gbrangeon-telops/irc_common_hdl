@@ -1,17 +1,17 @@
-acom "D:/Telops/Common_HDL/Common_Projects/camel_define.vhd"
-acom "D:/Telops/Common_HDL/Common_Projects/CAMEL/dpb_define.vhd"
+acom "$COMMON_HDL/Common_Projects/camel_define.vhd"
+acom "$COMMON_HDL/Common_Projects/CAMEL/dpb_define.vhd"
 
-acom "D:/Telops/Common_HDL/zbt_ctrl/active-hdl/src/zbt_models/idt71v65803/conversions.vhd"
-acom "D:/Telops/Common_HDL/zbt_ctrl/active-hdl/src/zbt_models/idt71v65803/gen_utils.vhd"
-acom "D:/Telops/Common_HDL/zbt_ctrl/active-hdl/src/zbt_models/cy7c1372c/package_utility.vhd"
-acom "D:/Telops/Common_HDL/zbt_ctrl/active-hdl/src/zbt_models/cy7c1372c/cy7c1372c.vhd"
-acom "D:/Telops/Common_HDL/zbt_ctrl/active-hdl/src/zbt_models/idt71v65803/idt71v65803.vhd"
-acom "D:/Telops/Common_HDL/zbt_ctrl/active-hdl/src/Testbench/mt55l256l32p.vhd"
-acom "D:/Telops/Common_HDL/zbt_ctrl/active-hdl/src/zbt_models/generic_zbt.vhd"	
-acom "D:/Telops/Common_HDL/zbt_ctrl/active-hdl/src/zbt_models/zbt_wrapper.vhd"	
-acom "D:\Telops\Common_HDL\Utilities/wiredly.vhd"	
+acom "$COMMON_HDL/zbt_ctrl/active-hdl/src/zbt_models/idt71v65803/conversions.vhd"
+acom "$COMMON_HDL/zbt_ctrl/active-hdl/src/zbt_models/idt71v65803/gen_utils.vhd"
+acom "$COMMON_HDL/zbt_ctrl/active-hdl/src/zbt_models/cy7c1372c/package_utility.vhd"
+acom "$COMMON_HDL/zbt_ctrl/active-hdl/src/zbt_models/cy7c1372c/cy7c1372c.vhd"
+acom "$COMMON_HDL/zbt_ctrl/active-hdl/src/zbt_models/idt71v65803/idt71v65803.vhd"
+acom "$COMMON_HDL/zbt_ctrl/active-hdl/src/Testbench/mt55l256l32p.vhd"
+acom "$COMMON_HDL/zbt_ctrl/active-hdl/src/zbt_models/generic_zbt.vhd"	
+acom "$COMMON_HDL/zbt_ctrl/active-hdl/src/zbt_models/zbt_wrapper.vhd"	
+acom "$COMMON_HDL/Utilities/wiredly.vhd"	
 
-do D:\telops\Common_HDL\DDR_Ctrl\src\Model\compile_ddr_model.do
+do $COMMON_HDL/DDR_Ctrl/src/Model/compile_ddr_model.do
 
 acom "$DSN/src/rs232_driver.vhd"
 acom "$DSN/src/caml_receiver.vhd"

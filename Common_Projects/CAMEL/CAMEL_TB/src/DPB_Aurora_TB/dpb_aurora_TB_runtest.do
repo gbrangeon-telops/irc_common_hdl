@@ -1,4 +1,4 @@
-SetActiveLib -work
+setactivelib work
 acom $DSN/src/DPB_Aurora_TB/dpb_aurora.bde
 acom $DSN/src/DPB_Aurora_TB/dpb_aurora_TB.vhd
 open -wave $DSN/src/DPB_Aurora_TB/dpb_aurora_TB.awf

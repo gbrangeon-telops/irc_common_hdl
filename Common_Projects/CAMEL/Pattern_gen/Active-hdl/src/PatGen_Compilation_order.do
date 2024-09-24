@@ -4,7 +4,7 @@ goto end
 }
 
 savealltabs
-SetActiveLib -work
+setactivelib work
 clearlibrary
 
 adel uc2_model

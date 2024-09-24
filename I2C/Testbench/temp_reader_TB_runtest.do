@@ -1,6 +1,6 @@
-SetActiveLib -work
-comp -include "$DSN\..\temp_reader.vhd" 
-comp -include "$DSN\..\TestBench\temp_reader_TB.vhd" 
+setactivelib work
+comp -include "$DSN/../temp_reader.vhd" 
+comp -include "$DSN/../TestBench/temp_reader_TB.vhd" 
 asim TESTBENCH_FOR_temp_reader 
 wave 
 wave -noreg CLK
@@ -49,5 +49,5 @@ run 50us
   
 # The following lines can be used for timing simulation
 # acom <backannotated_vhdl_file_name>
-# comp -include "$DSN\src\TestBench\temp_reader_TB_tim_cfg.vhd" 
+# comp -include "$DSN/src/TestBench/temp_reader_TB_tim_cfg.vhd" 
 # asim TIMING_FOR_temp_reader 

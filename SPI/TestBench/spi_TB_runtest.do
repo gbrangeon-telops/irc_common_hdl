@@ -1,4 +1,4 @@
-SetActiveLib -work
+setactivelib work
 asim TESTBENCH_FOR_spi 
 wave 
 wave -noreg CLK
@@ -12,5 +12,5 @@ wave -noreg SPI_MISO
 wave -noreg SPI_SSn
 # The following lines can be used for timing simulation
 # acom <backannotated_vhdl_file_name>
-# comp -include "$DSN\src\TestBench\spi_slave_TB_tim_cfg.vhd" 
+# comp -include "$DSN/src/TestBench/spi_slave_TB_tim_cfg.vhd" 
 # asim TIMING_FOR_spi_slave 
