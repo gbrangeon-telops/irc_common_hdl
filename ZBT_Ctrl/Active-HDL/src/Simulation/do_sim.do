@@ -28,8 +28,8 @@ acom  "$dsn/src/Testbench/top_level_tb.bde"
 
 asim -ses top_level_tb	 
 
---do "$dsn/src/Testbench/wave_signals.do"
---do "$dsn/src/Testbench/stimulators.do"
+-- do "$dsn/src/Testbench/wave_signals.do"
+-- do "$dsn/src/Testbench/stimulators.do"
 
 run 800 ns
 

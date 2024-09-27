@@ -17,7 +17,7 @@ acom "$DSN/../../../camel_define.vhd"
 acom "$DSN/../../dpb_define.vhd"
 acom "$DSN/../src/pattern_gen_32.vhd"
 acom "$DSN/../src/patgen_wb_interface.vhd"
---acom "$DSN/src/pixel_decoder.vhd"
+-- acom "$DSN/src/pixel_decoder.vhd"
 acom "$DSN/../src/patgen_32_wb.bde"
 
 acom "$DSN/../../../../wishbone/mem0001a.vhd"

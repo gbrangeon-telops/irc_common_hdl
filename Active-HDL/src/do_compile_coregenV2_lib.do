@@ -44,7 +44,7 @@ setlibrarymode -rw Common_HDL
 #acom  -work Common_HDL "$LIBPATH/CoreGen/fwft_fifo_w21_d16.vhd"
 #acom  -work Common_HDL "$LIBPATH/CoreGen/fwft_fifo_w29_d16.vhd"
 #acom  -work Common_HDL "$LIBPATH/CoreGen/fwft_fifo_w128_d16.vhd"
---acom  -work Common_HDL "$LIBPATH/CoreGen/mult_20x22_42o.vhd" -- Conflicts with the Virtex-4 version.
+-- acom  -work Common_HDL "$LIBPATH/CoreGen/mult_20x22_42o.vhd" -- Conflicts with the Virtex-4 version.
 #acom  -work Common_HDL "$LIBPATH/CoreGen/s_fifo_w6_d32.vhd"
 #acom  -work Common_HDL "$LIBPATH/CoreGen/s_fifo_w8_d16.vhd"
 #acom  -work Common_HDL "$LIBPATH/CoreGen/s_fifo_w8_d1024.vhd"
@@ -80,4 +80,4 @@ edfcomp -work Common_HDL "$LIBPATH/CoreGen/ddr_core.edn"
 label end     
 #runscript "$LIBPATH/Active-HDL/src/beep.tcl"
 
---setactivelib work
+-- setactivelib work

@@ -19,7 +19,7 @@ set OPT -dbg
 #alib Common_HDL "$LIBPATH/Active-HDL/Common_HDL.lib"
 #amap -global Common_HDL "$LIBPATH/Active-HDL/Common_HDL.lib"
 #setlibrarymode -rw Common_HDL 
---clearlibrary Common_HDL
+-- clearlibrary Common_HDL
 
 -- Coregen														   
 ## For DDR_Ctrl
@@ -54,7 +54,7 @@ acom  -work Common_HDL "$LIBPATH/coregen_V4/as_fifo_w36_d32767.vhd"
 
 -- other fifos
 #acom  -work Common_HDL "$LIBPATH/coregen_V4/as_fifo_w128_d511.vhd"  
---acom  -work Common_HDL "$LIBPATH/coregen_V4/as_fifo_w128_d64.vhd"  
+-- acom  -work Common_HDL "$LIBPATH/coregen_V4/as_fifo_w128_d64.vhd"  
 #acom  -work Common_HDL "$LIBPATH/coregen_V4/as_fifo_w144_d64.vhd" 
 #acom  -work Common_HDL "$LIBPATH/coregen_V4/as_fifo_w155_d32.vhd" 
 #acom  -work Common_HDL "$LIBPATH/coregen_V4/as_fifo_w16_d15.vhd"  
@@ -110,7 +110,7 @@ acom  -work Common_HDL "$LIBPATH/coregen_V4/s_fifo_w36_d512.vhd"
 #acom  -work Common_HDL "$LIBPATH/coregen_V4/s_fifo_w42_d128.vhd" 
 #acom  -work Common_HDL "$LIBPATH/coregen_V4/s_fifo_w44_d64.vhd"  
 #acom  -work Common_HDL "$LIBPATH/coregen_V4/s_fifo_w64_d16.vhd"
---acom  -work Common_HDL "$LIBPATH/coregen_V4/s_fifo_w8_d1024.vhd" -- la lib xilinxcorelib de active-hdl 8.1 sp1 ne supporte pas fifo_generator_v2_3
+-- acom  -work Common_HDL "$LIBPATH/coregen_V4/s_fifo_w8_d1024.vhd" -- la lib xilinxcorelib de active-hdl 8.1 sp1 ne supporte pas fifo_generator_v2_3
 acom  -work Common_HDL "$LIBPATH/coregen_V4/s_fifo_w8_d2048.vhd"  
 acom  -work Common_HDL "$LIBPATH/coregen_V4/s_fifo_w8_d16.vhd"
 #acom  -work Common_HDL "$LIBPATH/coregen_V4/s_fifo_w10_d16.vhd" 
@@ -167,9 +167,9 @@ acom  -work Common_HDL "$LIBPATH/coregen_V4/mult_20x22_42o.vhd"
 
 
 -- dividers 
---acom  -work Common_HDL "$LIBPATH/coregen_V4/div_w21x6.vhd" -- la lib xilinxcorelib de active-hdl 8.1 sp1 ne supporte pas sdivider_v3_0
+-- acom  -work Common_HDL "$LIBPATH/coregen_V4/div_w21x6.vhd" -- la lib xilinxcorelib de active-hdl 8.1 sp1 ne supporte pas sdivider_v3_0
 acom  -work Common_HDL "$COMMON_HDL/LocalLink/coregen_V4/div_w24x9.vhd"
---acom  -work Common_HDL "$LIBPATH/coregen_V4/div_w21x6.vhd"
+-- acom  -work Common_HDL "$LIBPATH/coregen_V4/div_w21x6.vhd"
 
 #do "$LIBPATH/Active-HDL/src/do_compile_lib.do"
 

@@ -136,7 +136,7 @@ acom  -work Common_HDL "$LIBPATH/SPI/new_spi_master.vhd"
 -- McBSP
 acom  -work Common_HDL "$LIBPATH/McBSP/mcbsp_rx.vhd"
 acom  -work Common_HDL "$LIBPATH/McBSP/mcbsp_tx.vhd"
---acom  -work Common_HDL "$LIBPATH/McBSP/mcbsp_fast_tx.vhd"	  
+-- acom  -work Common_HDL "$LIBPATH/McBSP/mcbsp_fast_tx.vhd"	  
 
 -- SerDes
 acom  -work Common_HDL "$LIBPATH/SerDes/sync_des.vhd"	  
@@ -144,7 +144,7 @@ acom  -work Common_HDL "$LIBPATH/SerDes/sync_ser.vhd"
 acom  -work Common_HDL "$LIBPATH/SerDes/serializer.vhd"
 acom  -work Common_HDL "$LIBPATH/SerDes/deserializer.vhd"
 
---TMI FIFO
+-- TMI FIFO
 #acom "$COMMON_HDL/Telops_Memory_Interface/TMI_aFifo.vhd"
 #acom "$COMMON_HDL/Telops_Memory_Interface/TMI_aFifo_a10_d21.vhd"
 

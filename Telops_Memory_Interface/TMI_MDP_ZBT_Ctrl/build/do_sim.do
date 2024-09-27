@@ -40,6 +40,6 @@ do "$dsn/src/wave_more_signals.do"
 #do "$dsn/src/wave_signals_zbt_ctrl.do"
 do "$dsn/src/stimulators.do"
 
---run 475ns
+-- run 475ns
 run 540us
 
